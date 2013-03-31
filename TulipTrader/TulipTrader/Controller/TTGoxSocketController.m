@@ -9,8 +9,10 @@
 #import "TTGoxSocketController.h"
 #import "RUConstants.h"
 
-NSString* const kTTGoxWebSocketURL  = @"websocket.mtgox.com";
-NSString* const kTTGoxSocketIOURL  = @"socketio.mtgox.com";
+NSString* const kTTGoxWebSocketURL  = @"wss://websocket.mtgox.com";
+NSString* const kTTGoxSocketIOURL  = @"wss://socketio.mtgox.com";
+
+#define kTTUseWebSocketURL 1
 
 @interface TTGoxSocketController ()
 {
@@ -29,7 +31,15 @@ RU_SYNTHESIZE_SINGLETON_FOR_CLASS_WITH_ACCESSOR(TTGoxSocketController, sharedIns
 
 -(void)open
 {
-
+    if (!_socketConn)
+    {
+        if (kTTUseWebSocketURL)
+            _socketConn = [[SRWebSocket alloc]initWithURL:[NSURL URLWithString:kTTGoxWebSocketURL]];
+        else
+            _socketConn = [[SRWebSocket alloc]initWithURL:[NSURL URLWithString:kTTGoxSocketIOURL]];
+    }
+    [_socketConn setDelegate:self];
+    [_socketConn open];
 }
 
 #pragma mark Private Methods
@@ -38,22 +48,22 @@ RU_SYNTHESIZE_SINGLETON_FOR_CLASS_WITH_ACCESSOR(TTGoxSocketController, sharedIns
 
 -(void)webSocketDidOpen:(SRWebSocket *)webSocket
 {
-    
+    RUDLog(@"%@ did open", webSocket);
 }
 
 -(void)webSocket:(SRWebSocket *)webSocket didCloseWithCode:(NSInteger)code reason:(NSString *)reason wasClean:(BOOL)wasClean
 {
-    
+    RUDLog(@"%@ Closed with code %li and reason %@ and is clean %i", webSocket, code, reason, wasClean);
 }
 
 -(void)webSocket:(SRWebSocket *)webSocket didReceiveMessage:(id)message
 {
-    
+    RUDLog(@"%@ %@ Message Recieved %@", webSocket, [message class], message);
 }
 
 -(void)webSocket:(SRWebSocket *)webSocket didFailWithError:(NSError *)error
 {
-    RUDLog(@"Websocked Failed: %@")
+    RUDLog(@"%@ %@ Failed With Error %@", webSocket, [webSocket class], error.localizedDescription);
 }
 
 @end
