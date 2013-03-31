@@ -8,6 +8,8 @@
 
 #import "TTAppDelegate.h"
 
+#import "TTGoxSocketController.h"
+
 @implementation TTAppDelegate
 
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
@@ -17,6 +19,8 @@
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {
     // Insert code here to initialize your application
+    TTGoxSocketController* socketController = [TTGoxSocketController sharedInstance];
+    [socketController open];
 }
 
 // Returns the directory the application uses to store the Core Data store file. This code uses a directory named "co.resplendent.TulipTrader" in the user's Application Support directory.
