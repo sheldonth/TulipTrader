@@ -42,8 +42,6 @@
     [_socketController setRemarkDelegate:self];
     
     _subscriptionsController = [TTGoxSubscriptionsController new];
-
-    [_socketController open];
 }
 
 // Returns the directory the application uses to store the Core Data store file. This code uses a directory named "co.resplendent.TulipTrader" in the user's Application Support directory.
