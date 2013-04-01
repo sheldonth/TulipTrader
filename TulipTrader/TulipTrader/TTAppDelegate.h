@@ -7,8 +7,8 @@
 //
 
 #import <Cocoa/Cocoa.h>
-#import "TTGoxSocketController.h"
-@interface TTAppDelegate : NSObject <NSApplicationDelegate, TTGoxSocketControllerMessageDelegate>
+
+@interface TTAppDelegate : NSObject <NSApplicationDelegate>
 
 @property (assign) IBOutlet NSWindow *window;
 

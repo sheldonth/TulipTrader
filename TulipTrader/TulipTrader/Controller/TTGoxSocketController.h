@@ -34,6 +34,8 @@ typedef enum{
 
 -(void)subscribe:(TTGoxSubscriptionChannel)channel;
 
+-(void)open;
+
 @property (assign) id <TTGoxSocketControllerMessageDelegate> subscribeDelegate;
 @property (assign) id <TTGoxSocketControllerMessageDelegate> remarkDelegate;
 @property (assign) id <TTGoxSocketControllerMessageDelegate> privateDelegate;
