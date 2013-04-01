@@ -8,21 +8,11 @@
 
 #import "TTGoxSubscriptionsController.h"
 #import "RUConstants.h"
+#import "JSONKit.h"
 
 NSString* const kTTGoxChannelKey = @"channel";
 
-NSString* const kTTGoxSocketTradesChannelID  = @"dbf1dee9-4f2e-4a08-8cb7-748919a71b21";
-NSString* const kTTGoxSocketTickerChannelID  = @"d5f06780-30a8-4a48-a2f8-7ed181b4a13f";
-NSString* const kTTGoxSocketDepthChannelID  = @"24e67e0d-1cad-4cc0-9e7a-f8523ef460fe";
-
 @implementation TTGoxSubscriptionsController
-
-#pragma mark public methods
-
--(void)subscribe:(TTGoxSubscriptionChannel)channel
-{
-    
-}
 
 #pragma mark private methods
 

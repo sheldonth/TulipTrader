@@ -11,6 +11,12 @@
 		47D2008C1708AC5300AEA412 /* TTGoxSocketController.m in Sources */ = {isa = PBXBuildFile; fileRef = 47D2008A1708AC5300AEA412 /* TTGoxSocketController.m */; };
 		47D20099170935AC00AEA412 /* TTGoxSubscriptionsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 47D20098170935AC00AEA412 /* TTGoxSubscriptionsController.m */; };
 		47D2009A170935AC00AEA412 /* TTGoxSubscriptionsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 47D20098170935AC00AEA412 /* TTGoxSubscriptionsController.m */; };
+		47D200A01709584200AEA412 /* CHANGELOG.md in Resources */ = {isa = PBXBuildFile; fileRef = 47D2009C1709584200AEA412 /* CHANGELOG.md */; };
+		47D200A11709584200AEA412 /* CHANGELOG.md in Resources */ = {isa = PBXBuildFile; fileRef = 47D2009C1709584200AEA412 /* CHANGELOG.md */; };
+		47D200A21709584200AEA412 /* JSONKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 47D2009E1709584200AEA412 /* JSONKit.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		47D200A31709584200AEA412 /* JSONKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 47D2009E1709584200AEA412 /* JSONKit.m */; };
+		47D200A41709584200AEA412 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 47D2009F1709584200AEA412 /* README.md */; };
+		47D200A51709584200AEA412 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 47D2009F1709584200AEA412 /* README.md */; };
 		47D2FD261702764300AEA412 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 47D2FD251702764300AEA412 /* Cocoa.framework */; };
 		47D2FD301702764300AEA412 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 47D2FD2E1702764300AEA412 /* InfoPlist.strings */; };
 		47D2FD321702764300AEA412 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 47D2FD311702764300AEA412 /* main.m */; };
@@ -68,6 +74,10 @@
 		47D2008A1708AC5300AEA412 /* TTGoxSocketController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTGoxSocketController.m; sourceTree = "<group>"; };
 		47D20097170935AC00AEA412 /* TTGoxSubscriptionsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTGoxSubscriptionsController.h; sourceTree = "<group>"; };
 		47D20098170935AC00AEA412 /* TTGoxSubscriptionsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTGoxSubscriptionsController.m; sourceTree = "<group>"; };
+		47D2009C1709584200AEA412 /* CHANGELOG.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CHANGELOG.md; sourceTree = "<group>"; };
+		47D2009D1709584200AEA412 /* JSONKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSONKit.h; sourceTree = "<group>"; };
+		47D2009E1709584200AEA412 /* JSONKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSONKit.m; sourceTree = "<group>"; };
+		47D2009F1709584200AEA412 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
 		47D2FD221702764300AEA412 /* TulipTrader.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TulipTrader.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		47D2FD251702764300AEA412 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		47D2FD281702764300AEA412 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -134,6 +144,17 @@
 				47D20098170935AC00AEA412 /* TTGoxSubscriptionsController.m */,
 			);
 			path = Controller;
+			sourceTree = "<group>";
+		};
+		47D2009B1709584200AEA412 /* JSONKit */ = {
+			isa = PBXGroup;
+			children = (
+				47D2009C1709584200AEA412 /* CHANGELOG.md */,
+				47D2009D1709584200AEA412 /* JSONKit.h */,
+				47D2009E1709584200AEA412 /* JSONKit.m */,
+				47D2009F1709584200AEA412 /* README.md */,
+			);
+			path = JSONKit;
 			sourceTree = "<group>";
 		};
 		47D2FD191702764300AEA412 = {
@@ -241,6 +262,7 @@
 		47D2FE2B1708A94000AEA412 /* Library */ = {
 			isa = PBXGroup;
 			children = (
+				47D2009B1709584200AEA412 /* JSONKit */,
 				47D2007D1708AB7C00AEA412 /* RUClassOrNilUtil.h */,
 				47D2007E1708AB7C00AEA412 /* RUConstants.h */,
 				47D2007F1708AB7C00AEA412 /* RUDebug.h */,
@@ -328,6 +350,8 @@
 				47D2FD301702764300AEA412 /* InfoPlist.strings in Resources */,
 				47D2FD361702764300AEA412 /* Credits.rtf in Resources */,
 				47D2FD3C1702764300AEA412 /* MainMenu.xib in Resources */,
+				47D200A01709584200AEA412 /* CHANGELOG.md in Resources */,
+				47D200A41709584200AEA412 /* README.md in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -336,6 +360,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				47D2FD501702764300AEA412 /* InfoPlist.strings in Resources */,
+				47D200A11709584200AEA412 /* CHANGELOG.md in Resources */,
+				47D200A51709584200AEA412 /* README.md in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -370,6 +396,7 @@
 				47D2FE1F170376DB00AEA412 /* SRWebSocket.m in Sources */,
 				47D2008B1708AC5300AEA412 /* TTGoxSocketController.m in Sources */,
 				47D20099170935AC00AEA412 /* TTGoxSubscriptionsController.m in Sources */,
+				47D200A21709584200AEA412 /* JSONKit.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -383,6 +410,7 @@
 				47D2FE20170376DB00AEA412 /* SRWebSocket.m in Sources */,
 				47D2008C1708AC5300AEA412 /* TTGoxSocketController.m in Sources */,
 				47D2009A170935AC00AEA412 /* TTGoxSubscriptionsController.m in Sources */,
+				47D200A31709584200AEA412 /* JSONKit.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

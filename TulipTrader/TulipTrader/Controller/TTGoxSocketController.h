@@ -12,11 +12,16 @@
 typedef enum{
     TTGoxSocketMessageTypeNone = 0,
     TTGoxSocketMessageTypeRemark = 1,
-    TTGoxSocketMessageTypeSubscribe = 2,
-    TTGoxSocketMessageTypeUnsubscribe = 3,
-    TTGoxSocketMessageTypePrivate = 4,
-    TTGoxSocketMessageTypeResult = 5
+    TTGoxSocketMessageTypePrivate = 2,
+    TTGoxSocketMessageTypeResult = 3
 }TTGoxSocketMessageType;
+
+typedef enum{
+    TTGoxSubscriptionChannelNone = 0,
+    TTGoxSubscriptionChannelTrades,
+    TTGoxSubscriptionChannelTicker,
+    TTGoxSubscriptionChannelDepth
+}TTGoxSubscriptionChannel;
 
 @protocol TTGoxSocketControllerMessageDelegate <NSObject>
 
@@ -27,8 +32,7 @@ typedef enum{
 
 @interface TTGoxSocketController : NSObject <SRWebSocketDelegate>
 
--(void)open;
--(void)write:(NSString*)utfString;
+-(void)subscribe:(TTGoxSubscriptionChannel)channel;
 
 @property (assign) id <TTGoxSocketControllerMessageDelegate> subscribeDelegate;
 @property (assign) id <TTGoxSocketControllerMessageDelegate> remarkDelegate;

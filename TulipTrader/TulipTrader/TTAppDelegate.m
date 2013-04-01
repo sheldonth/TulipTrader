@@ -10,6 +10,14 @@
 
 #import "TTGoxSocketController.h"
 #import "TTGoxSubscriptionsController.h"
+#import "RUConstants.h"
+
+@interface TTAppDelegate ()
+{
+    TTGoxSocketController* _socketController;
+    TTGoxSubscriptionsController* _subscriptionsController;
+}
+@end
 
 @implementation TTAppDelegate
 
@@ -17,13 +25,25 @@
 @synthesize managedObjectModel = _managedObjectModel;
 @synthesize managedObjectContext = _managedObjectContext;
 
+-(void)shouldExamineResponseDictionary:(NSDictionary *)dictionary ofMessageType:(TTGoxSocketMessageType)type
+{
+    RUDLog(@"");
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        [_subscriptionsController subscribe:TTGoxSubscriptionChannelTrades];
+    });
+}
+
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {
     // Insert code here to initialize your application
-    TTGoxSocketController* socketController = [TTGoxSocketController sharedInstance];
-    [socketController open];
+    _socketController = [TTGoxSocketController sharedInstance];
     
-    TTGoxSubscriptionsController* subscriptionsController = [TTGoxSubscriptionsController new];
+    [_socketController setRemarkDelegate:self];
+    
+    _subscriptionsController = [TTGoxSubscriptionsController new];
+
+    [_socketController open];
 }
 
 // Returns the directory the application uses to store the Core Data store file. This code uses a directory named "co.resplendent.TulipTrader" in the user's Application Support directory.

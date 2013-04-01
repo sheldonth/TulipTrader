@@ -8,9 +8,10 @@
 
 #import "TTGoxSocketController.h"
 #import "RUConstants.h"
+#import "JSONKit.h"
 
-NSString* const kTTGoxWebSocketURL  = @"wss://websocket.mtgox.com";
-NSString* const kTTGoxSocketIOURL  = @"wss://socketio.mtgox.com";
+NSString* const kTTGoxWebSocketURL  = @"wss://websocket.mtgox.com/mtgox";
+NSString* const kTTGoxSocketIOURL  = @"wss://socketio.mtgox.com/mtgox";
 
 NSString* const kTTGoxFrameOpenNSString = @"{";
 NSString* const kTTGoxFrameCloseNSString = @"}";
@@ -29,6 +30,9 @@ NSString* const kTTGoxOperationKeyResult = @"result";//    The response for op:c
 
 @property (nonatomic, strong) SRWebSocket* socketConn;
 
+-(void)open;
+-(void)write:(NSString*)utfString;
+
 @end
 
 @implementation TTGoxSocketController
@@ -37,11 +41,36 @@ RU_SYNTHESIZE_SINGLETON_FOR_CLASS_WITH_ACCESSOR(TTGoxSocketController, sharedIns
 
 #pragma mark Public Methods
 
--(void)write:(NSString *)utfString
+NSString* const kTTGoxSocketTradesChannelID  = @"dbf1dee9-4f2e-4a08-8cb7-748919a71b21";
+NSString* const kTTGoxSocketTickerChannelID  = @"d5f06780-30a8-4a48-a2f8-7ed181b4a13f";
+NSString* const kTTGoxSocketDepthChannelID  = @"24e67e0d-1cad-4cc0-9e7a-f8523ef460fe";
+
+#pragma mark public methods
+-(void)subscribe:(TTGoxSubscriptionChannel)channel
 {
-    [_socketConn send:[utfString dataUsingEncoding:NSUTF8StringEncoding]];
+    NSString* channelID;
+    
+    switch (channel) {
+        case TTGoxSubscriptionChannelTrades:
+            channelID = kTTGoxSocketTradesChannelID;
+            break;
+        case TTGoxSubscriptionChannelTicker:
+            channelID = kTTGoxSocketTickerChannelID;
+            break;
+        case TTGoxSubscriptionChannelDepth:
+            channelID = kTTGoxSocketDepthChannelID;
+            break;
+            
+        default:
+            break;
+    }
+    
+    NSDictionary* d = @{@"channel" : channelID, @"op" : @"subscribe"};
+    
+    [self write:[d JSONString]];
 }
 
+#pragma mark Private Methods
 -(void)open
 {
     if (!_socketConn)
@@ -55,7 +84,10 @@ RU_SYNTHESIZE_SINGLETON_FOR_CLASS_WITH_ACCESSOR(TTGoxSocketController, sharedIns
     [_socketConn open];
 }
 
-#pragma mark Private Methods
+-(void)write:(NSString *)utfString
+{
+    [_socketConn send:[utfString dataUsingEncoding:NSUTF8StringEncoding]];
+}
 
 -(id)parseSocketMessage:(id)message
 {
@@ -69,24 +101,8 @@ RU_SYNTHESIZE_SINGLETON_FOR_CLASS_WITH_ACCESSOR(TTGoxSocketController, sharedIns
     
     if (![stringFromUnichar(firstCharacter) isEqualToString:kTTGoxFrameOpenNSString] && ![stringFromUnichar(lastCharacter)isEqualToString:kTTGoxFrameCloseNSString])
         [NSException raise:@"TTBadMessageFrameUnichar" format:@"Message frame open/close was bad"];
-    
-    [mutableStringMessage deleteCharactersInRange:NSMakeRange(0, 1)]; // Delete opening curly
-    [mutableStringMessage deleteCharactersInRange:NSMakeRange(mutableStringMessage.length - 1, 1)]; // Delete closing curly
-    
-    NSMutableDictionary* keyValues = [NSMutableDictionary dictionary];
-    
-    NSArray* valueKeyComponentsArray = [mutableStringMessage componentsSeparatedByString:@","];
-    [valueKeyComponentsArray enumerateObjectsUsingBlock:^(NSString* obj, NSUInteger idx, BOOL *stop) {
-        NSArray* keyValue = [obj componentsSeparatedByString:@":"];
-        NSMutableArray* copyDestination = [NSMutableArray array];
-        [keyValue enumerateObjectsUsingBlock:^(NSString* s, NSUInteger idx, BOOL *stop) {
-            NSMutableString* mutableCopy = [s mutableCopy];
-            [mutableCopy deleteCharactersInRange:NSMakeRange(0, 1)];
-            [mutableCopy deleteCharactersInRange:NSMakeRange(mutableCopy.length - 1, 1)];
-            [copyDestination insertObject:mutableCopy atIndex:idx];
-        }];
-        [keyValues setObject:[copyDestination objectAtIndex:1] forKey:[copyDestination objectAtIndex:0]];
-    }];
+
+    NSDictionary* keyValues = [mutableStringMessage objectFromJSONString];
     
     return keyValues;
 }
@@ -105,28 +121,22 @@ RU_SYNTHESIZE_SINGLETON_FOR_CLASS_WITH_ACCESSOR(TTGoxSocketController, sharedIns
 
 -(void)webSocket:(SRWebSocket *)webSocket didReceiveMessage:(id)message
 {
-    RUDLog(@"%@ %@ Message Recieved %@", webSocket, [message class], message);
+//    RUDLog(@"%@ %@ Message Recieved %@", webSocket, [message class], message);
     NSDictionary* responseDictionary = (NSDictionary*)[self parseSocketMessage:message];
     TTGoxSocketMessageType type = messageTypeFromDictionary(responseDictionary);
     switch (type) {
         case TTGoxSocketMessageTypeRemark:
-            RUDLog(@"Remark");
+//            RUDLog(@"Remark");
             [_remarkDelegate shouldExamineResponseDictionary:responseDictionary ofMessageType:type];
             break;
             
-        case TTGoxSocketMessageTypeSubscribe:
-        case TTGoxSocketMessageTypeUnsubscribe:
-            RUDLog(@"Subscribe");
-            [_subscribeDelegate shouldExamineResponseDictionary:responseDictionary ofMessageType:type];
-            break;
-            
         case TTGoxSocketMessageTypePrivate:
-            RUDLog(@"Private");
+//            RUDLog(@"Private");
             [_privateDelegate shouldExamineResponseDictionary:responseDictionary ofMessageType:type];
             break;
             
         case TTGoxSocketMessageTypeResult:
-            RUDLog(@"Result");
+//            RUDLog(@"Result");
             [_resultDelegate shouldExamineResponseDictionary:responseDictionary ofMessageType:type];
             break;
             
@@ -155,10 +165,6 @@ TTGoxSocketMessageType messageTypeFromDictionary(NSDictionary* dictionary)
     NSString* operationString = [dictionary objectForKey:kTTGoxOperationKey];
     if ([operationString isEqualToString:kTTGoxOperationKeyRemark])
         return TTGoxSocketMessageTypeRemark;
-    else if ([operationString isEqualToString:kTTGoxOperationKeySubscribe])
-        return TTGoxSocketMessageTypeSubscribe;
-    else if ([operationString isEqualToString:kTTGoxOperationKeyUnsubscribe])
-        return TTGoxSocketMessageTypeUnsubscribe;
     else if ([operationString isEqualToString:kTTGoxOperationKeyPrivate])
         return TTGoxSocketMessageTypePrivate;
     else if ([operationString isEqualToString:kTTGoxOperationKeyResult])
@@ -166,5 +172,12 @@ TTGoxSocketMessageType messageTypeFromDictionary(NSDictionary* dictionary)
     else
         return TTGoxSocketMessageTypeNone;
 }
+
+/*
+ else if ([operationString isEqualToString:kTTGoxOperationKeySubscribe])
+ return TTGoxSocketMessageTypeSubscribe;
+ else if ([operationString isEqualToString:kTTGoxOperationKeyUnsubscribe])
+ return TTGoxSocketMessageTypeUnsubscribe;
+ */
 
 @end

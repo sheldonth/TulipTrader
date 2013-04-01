@@ -10,12 +10,7 @@
 
 #import "TTGoxSocketController.h"
 
-typedef enum{
-    TTGoxSubscriptionChannelNone = 0,
-    TTGoxSubscriptionChannelTrades,
-    TTGoxSubscriptionChannelTicker,
-    TTGoxSubscriptionChannelDepth
-}TTGoxSubscriptionChannel;
+
 
 @interface TTGoxSubscriptionsController : NSObject <TTGoxSocketControllerMessageDelegate>
 
