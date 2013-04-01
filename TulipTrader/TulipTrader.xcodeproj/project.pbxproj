@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		47D2008B1708AC5300AEA412 /* TTGoxSocketController.m in Sources */ = {isa = PBXBuildFile; fileRef = 47D2008A1708AC5300AEA412 /* TTGoxSocketController.m */; };
 		47D2008C1708AC5300AEA412 /* TTGoxSocketController.m in Sources */ = {isa = PBXBuildFile; fileRef = 47D2008A1708AC5300AEA412 /* TTGoxSocketController.m */; };
+		47D20099170935AC00AEA412 /* TTGoxSubscriptionsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 47D20098170935AC00AEA412 /* TTGoxSubscriptionsController.m */; };
+		47D2009A170935AC00AEA412 /* TTGoxSubscriptionsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 47D20098170935AC00AEA412 /* TTGoxSubscriptionsController.m */; };
 		47D2FD261702764300AEA412 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 47D2FD251702764300AEA412 /* Cocoa.framework */; };
 		47D2FD301702764300AEA412 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 47D2FD2E1702764300AEA412 /* InfoPlist.strings */; };
 		47D2FD321702764300AEA412 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 47D2FD311702764300AEA412 /* main.m */; };
@@ -64,6 +66,8 @@
 		47D200831708AB7C00AEA412 /* RUSynthesizeUserDefaultMethods.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RUSynthesizeUserDefaultMethods.h; path = ResplendentUtilities/ResplendentUtilities/Misc/RUSynthesizeUserDefaultMethods.h; sourceTree = "<group>"; };
 		47D200891708AC5300AEA412 /* TTGoxSocketController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTGoxSocketController.h; sourceTree = "<group>"; };
 		47D2008A1708AC5300AEA412 /* TTGoxSocketController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTGoxSocketController.m; sourceTree = "<group>"; };
+		47D20097170935AC00AEA412 /* TTGoxSubscriptionsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTGoxSubscriptionsController.h; sourceTree = "<group>"; };
+		47D20098170935AC00AEA412 /* TTGoxSubscriptionsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTGoxSubscriptionsController.m; sourceTree = "<group>"; };
 		47D2FD221702764300AEA412 /* TulipTrader.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TulipTrader.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		47D2FD251702764300AEA412 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		47D2FD281702764300AEA412 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -126,6 +130,8 @@
 			children = (
 				47D200891708AC5300AEA412 /* TTGoxSocketController.h */,
 				47D2008A1708AC5300AEA412 /* TTGoxSocketController.m */,
+				47D20097170935AC00AEA412 /* TTGoxSubscriptionsController.h */,
+				47D20098170935AC00AEA412 /* TTGoxSubscriptionsController.m */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -363,6 +369,7 @@
 				47D2FE1D170376DB00AEA412 /* NSData+SRB64Additions.m in Sources */,
 				47D2FE1F170376DB00AEA412 /* SRWebSocket.m in Sources */,
 				47D2008B1708AC5300AEA412 /* TTGoxSocketController.m in Sources */,
+				47D20099170935AC00AEA412 /* TTGoxSubscriptionsController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -375,6 +382,7 @@
 				47D2FE1E170376DB00AEA412 /* NSData+SRB64Additions.m in Sources */,
 				47D2FE20170376DB00AEA412 /* SRWebSocket.m in Sources */,
 				47D2008C1708AC5300AEA412 /* TTGoxSocketController.m in Sources */,
+				47D2009A170935AC00AEA412 /* TTGoxSubscriptionsController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

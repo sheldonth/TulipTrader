@@ -9,6 +9,7 @@
 #import "TTAppDelegate.h"
 
 #import "TTGoxSocketController.h"
+#import "TTGoxSubscriptionsController.h"
 
 @implementation TTAppDelegate
 
@@ -21,6 +22,8 @@
     // Insert code here to initialize your application
     TTGoxSocketController* socketController = [TTGoxSocketController sharedInstance];
     [socketController open];
+    
+    TTGoxSubscriptionsController* subscriptionsController = [TTGoxSubscriptionsController new];
 }
 
 // Returns the directory the application uses to store the Core Data store file. This code uses a directory named "co.resplendent.TulipTrader" in the user's Application Support directory.
