@@ -7,7 +7,10 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "RUSingleton.h"
 
 @interface TTGoxPrivateMessageController : NSObject
 
+
+RU_SYNTHESIZE_SINGLETON_DECLARATION_FOR_CLASS_WITH_ACCESSOR(TTGoxPrivateMessageController, sharedInstance);
 @end

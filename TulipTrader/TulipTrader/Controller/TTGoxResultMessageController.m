@@ -7,7 +7,9 @@
 //
 
 #import "TTGoxResultMessageController.h"
+#import "RUSingleton.h"
 
 @implementation TTGoxResultMessageController
 
+RU_SYNTHESIZE_SINGLETON_FOR_CLASS_WITH_ACCESSOR(TTGoxResultMessageController, sharedInstance);
 @end

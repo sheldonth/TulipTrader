@@ -8,6 +8,8 @@
 
 #import "TTOperationsController.h"
 #import "RUConstants.h"
+#import "TTGoxPrivateMessageController.h"
+#import "TTGoxResultMessageController.h"
 
 @interface TTOperationsController ()
 
