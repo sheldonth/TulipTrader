@@ -11,9 +11,9 @@
 
 typedef enum{
     TTGoxSocketMessageTypeNone = 0,
-    TTGoxSocketMessageTypeRemark = 1,
-    TTGoxSocketMessageTypePrivate = 2,
-    TTGoxSocketMessageTypeResult = 3
+    TTGoxSocketMessageTypeRemark,
+    TTGoxSocketMessageTypePrivate,
+    TTGoxSocketMessageTypeResult
 }TTGoxSocketMessageType;
 
 typedef enum{

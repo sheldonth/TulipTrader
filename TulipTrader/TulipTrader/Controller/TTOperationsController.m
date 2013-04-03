@@ -14,6 +14,7 @@
 @interface TTOperationsController ()
 
 @property(nonatomic, retain) TTGoxSocketController* socketController;
+@property(nonatomic, retain) TTGoxPrivateMessageController* messageDataController;
 
 @end
 
@@ -31,7 +32,7 @@
     {
         _socketController = [TTGoxSocketController sharedInstance];
         
-        [_socketController setRemarkDelegate:self];
+//        [_socketController setRemarkDelegate:self];
         
         [_socketController open];
     }

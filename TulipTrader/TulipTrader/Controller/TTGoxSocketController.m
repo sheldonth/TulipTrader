@@ -29,6 +29,7 @@ NSString* const kTTGoxOperationKeyResult = @"result";//    The response for op:c
 @interface TTGoxSocketController ()
 
 @property (nonatomic, strong) SRWebSocket* socketConn;
+@property (nonatomic)NSInteger retries;
 
 -(void)open;
 -(void)write:(NSString*)utfString;
@@ -46,6 +47,17 @@ NSString* const kTTGoxSocketTickerChannelID  = @"d5f06780-30a8-4a48-a2f8-7ed181b
 NSString* const kTTGoxSocketDepthChannelID  = @"24e67e0d-1cad-4cc0-9e7a-f8523ef460fe";
 
 #pragma mark public methods
+
+-(id)init
+{
+    self = [super init];
+    if (self)
+    {
+        [self setRetries:0];
+    }
+    return self;
+}
+
 -(void)subscribe:(TTGoxSubscriptionChannel)channel
 {
     NSString* channelID;
@@ -73,14 +85,12 @@ NSString* const kTTGoxSocketDepthChannelID  = @"24e67e0d-1cad-4cc0-9e7a-f8523ef4
 #pragma mark Private Methods
 -(void)open
 {
-    if (!_socketConn)
-    {
-        if (kTTUseWebSocketURL)
-            _socketConn = [[SRWebSocket alloc]initWithURL:[NSURL URLWithString:kTTGoxWebSocketURL]];
-        else
-            _socketConn = [[SRWebSocket alloc]initWithURL:[NSURL URLWithString:kTTGoxSocketIOURL]];
-    }
+    if (kTTUseWebSocketURL)
+        _socketConn = [[SRWebSocket alloc]initWithURL:[NSURL URLWithString:kTTGoxWebSocketURL]];
+    else
+        _socketConn = [[SRWebSocket alloc]initWithURL:[NSURL URLWithString:kTTGoxSocketIOURL]];
     [_socketConn setDelegate:self];
+    _retries++;
     [_socketConn open];
 }
 
@@ -112,11 +122,13 @@ NSString* const kTTGoxSocketDepthChannelID  = @"24e67e0d-1cad-4cc0-9e7a-f8523ef4
 -(void)webSocketDidOpen:(SRWebSocket *)webSocket
 {
     RUDLog(@"%@ did open", webSocket);
+    [self subscribe:TTGoxSubscriptionChannelTicker];
 }
 
 -(void)webSocket:(SRWebSocket *)webSocket didCloseWithCode:(NSInteger)code reason:(NSString *)reason wasClean:(BOOL)wasClean
 {
     RUDLog(@"%@ Closed with code %li and reason %@ and is clean %i", webSocket, code, reason, wasClean);
+    [self open];
 }
 
 -(void)webSocket:(SRWebSocket *)webSocket didReceiveMessage:(id)message
@@ -126,17 +138,17 @@ NSString* const kTTGoxSocketDepthChannelID  = @"24e67e0d-1cad-4cc0-9e7a-f8523ef4
     TTGoxSocketMessageType type = messageTypeFromDictionary(responseDictionary);
     switch (type) {
         case TTGoxSocketMessageTypeRemark:
-//            RUDLog(@"Remark");
+            RUDLog(@"Remark");
             [_remarkDelegate shouldExamineResponseDictionary:responseDictionary ofMessageType:type];
             break;
             
         case TTGoxSocketMessageTypePrivate:
-//            RUDLog(@"Private");
+            RUDLog(@"Private");
             [_privateDelegate shouldExamineResponseDictionary:responseDictionary ofMessageType:type];
             break;
             
         case TTGoxSocketMessageTypeResult:
-//            RUDLog(@"Result");
+            RUDLog(@"Result");
             [_resultDelegate shouldExamineResponseDictionary:responseDictionary ofMessageType:type];
             break;
             
@@ -151,6 +163,7 @@ NSString* const kTTGoxSocketDepthChannelID  = @"24e67e0d-1cad-4cc0-9e7a-f8523ef4
 -(void)webSocket:(SRWebSocket *)webSocket didFailWithError:(NSError *)error
 {
     RUDLog(@"%@ %@ Failed With Error %@", webSocket, [webSocket class], error.localizedDescription);
+    [self open];
 }
 
 #pragma mark - C methods
@@ -173,11 +186,8 @@ TTGoxSocketMessageType messageTypeFromDictionary(NSDictionary* dictionary)
         return TTGoxSocketMessageTypeNone;
 }
 
-/*
- else if ([operationString isEqualToString:kTTGoxOperationKeySubscribe])
- return TTGoxSocketMessageTypeSubscribe;
- else if ([operationString isEqualToString:kTTGoxOperationKeyUnsubscribe])
- return TTGoxSocketMessageTypeUnsubscribe;
- */
-
+-(void)dealloc
+{
+    [_socketConn close];
+}
 @end
