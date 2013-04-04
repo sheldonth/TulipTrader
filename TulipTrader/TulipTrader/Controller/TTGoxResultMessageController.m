@@ -8,8 +8,14 @@
 
 #import "TTGoxResultMessageController.h"
 #import "RUSingleton.h"
+#import "RUConstants.h"
 
 @implementation TTGoxResultMessageController
+
+-(void)shouldExamineResponseDictionary:(NSDictionary *)dictionary ofMessageType:(TTGoxSocketMessageType)type
+{
+    RUDLog(@"Result");
+}
 
 RU_SYNTHESIZE_SINGLETON_FOR_CLASS_WITH_ACCESSOR(TTGoxResultMessageController, sharedInstance);
 @end

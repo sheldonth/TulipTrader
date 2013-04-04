@@ -10,9 +10,6 @@
 #import "RUConstants.h"
 #import "JSONKit.h"
 
-NSString* const kTTGoxWebSocketURL  = @"wss://websocket.mtgox.com/mtgox";
-NSString* const kTTGoxSocketIOURL  = @"wss://socketio.mtgox.com/mtgox";
-
 NSString* const kTTGoxFrameOpenNSString = @"{";
 NSString* const kTTGoxFrameCloseNSString = @"}";
 
@@ -46,7 +43,40 @@ NSString* const kTTGoxSocketTradesChannelID  = @"dbf1dee9-4f2e-4a08-8cb7-748919a
 NSString* const kTTGoxSocketTickerChannelID  = @"d5f06780-30a8-4a48-a2f8-7ed181b4a13f";
 NSString* const kTTGoxSocketDepthChannelID  = @"24e67e0d-1cad-4cc0-9e7a-f8523ef460fe";
 
+static NSArray* currencies;
+static NSDictionary* currencyUsagePairs;
+
+static NSMutableString* kTTGoxWebSocketURL;
+static NSMutableString* kTTGoxSocketIOURL;
+
 #pragma mark public methods
+
++(void)initialize
+{
+    currencies = @[@"USD", @"AUD", @"CAD", @"CHF", @"CNY", @"DKK", @"EUR", @"GBP", @"HKD", @"JPY", @"NZD", @"PLN", @"RUB", @"SEK", @"SGD", @"THB"];
+    currencyUsagePairs = @{@"USD": @(1),
+                           @"AUD": @(0),
+                           @"CAD": @(0),
+                           @"CHF": @(0),
+                           @"CNY": @(0),
+                           @"DKK": @(0),
+                           @"EUR": @(0),
+                           @"GBP": @(0),
+                           @"HKD": @(0),
+                           @"JPY": @(0),
+                           @"NZD": @(0),
+                           @"PLN": @(0),
+                           @"RUB": @(0),
+                           @"SEK": @(0),
+                           @"SGD": @(0),
+                           @"THB": @(0),};
+    kTTGoxWebSocketURL = [NSMutableString stringWithString:@"wss://websocket.mtgox.com/mtgox?Currency="];
+    kTTGoxSocketIOURL = [NSMutableString stringWithString:@"wss://socketio.mtgox.com/mtgox?Currency="];
+    [[currencyUsagePairs allKeys] enumerateObjectsUsingBlock:^(NSString* key, NSUInteger idx, BOOL *stop) {
+        if ([[currencyUsagePairs objectForKey:key]isEqualToNumber:@(1)])
+            [kTTGoxWebSocketURL appendFormat:@"%@,", key];
+    }];
+}
 
 -(id)init
 {
@@ -123,6 +153,8 @@ NSString* const kTTGoxSocketDepthChannelID  = @"24e67e0d-1cad-4cc0-9e7a-f8523ef4
 {
     RUDLog(@"%@ did open", webSocket);
     [self subscribe:TTGoxSubscriptionChannelTicker];
+    [self subscribe:TTGoxSubscriptionChannelDepth];
+    [self subscribe:TTGoxSubscriptionChannelTrades];
 }
 
 -(void)webSocket:(SRWebSocket *)webSocket didCloseWithCode:(NSInteger)code reason:(NSString *)reason wasClean:(BOOL)wasClean
@@ -133,23 +165,22 @@ NSString* const kTTGoxSocketDepthChannelID  = @"24e67e0d-1cad-4cc0-9e7a-f8523ef4
 
 -(void)webSocket:(SRWebSocket *)webSocket didReceiveMessage:(id)message
 {
-//    RUDLog(@"%@ %@ Message Recieved %@", webSocket, [message class], message);
     NSDictionary* responseDictionary = (NSDictionary*)[self parseSocketMessage:message];
     TTGoxSocketMessageType type = messageTypeFromDictionary(responseDictionary);
     switch (type) {
         case TTGoxSocketMessageTypeRemark:
-            RUDLog(@"Remark");
-            [_remarkDelegate shouldExamineResponseDictionary:responseDictionary ofMessageType:type];
+            if (_remarkDelegate && [_remarkDelegate respondsToSelector:@selector(shouldExamineResponseDictionary:ofMessageType:)])
+                [_remarkDelegate shouldExamineResponseDictionary:responseDictionary ofMessageType:type];
             break;
             
         case TTGoxSocketMessageTypePrivate:
-            RUDLog(@"Private");
-            [_privateDelegate shouldExamineResponseDictionary:responseDictionary ofMessageType:type];
+            if (_privateDelegate && [_privateDelegate respondsToSelector:@selector(shouldExamineResponseDictionary:ofMessageType:)])
+                [_privateDelegate shouldExamineResponseDictionary:responseDictionary ofMessageType:type];
             break;
             
         case TTGoxSocketMessageTypeResult:
-            RUDLog(@"Result");
-            [_resultDelegate shouldExamineResponseDictionary:responseDictionary ofMessageType:type];
+            if (_resultDelegate && [_resultDelegate respondsToSelector:@selector(shouldExamineResponseDictionary:ofMessageType:)])
+                [_resultDelegate shouldExamineResponseDictionary:responseDictionary ofMessageType:type];
             break;
             
         case TTGoxSocketMessageTypeNone:

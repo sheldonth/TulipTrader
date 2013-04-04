@@ -14,7 +14,8 @@
 @interface TTOperationsController ()
 
 @property(nonatomic, retain) TTGoxSocketController* socketController;
-@property(nonatomic, retain) TTGoxPrivateMessageController* messageDataController;
+@property(nonatomic, retain) TTGoxPrivateMessageController* privateMessageController;
+@property(nonatomic, retain) TTGoxResultMessageController* resultMessageController;
 
 @end
 
@@ -22,7 +23,7 @@
 
 -(void)shouldExamineResponseDictionary:(NSDictionary *)dictionary ofMessageType:(TTGoxSocketMessageType)type
 {
-    RUDLog(@"Remark %@", dictionary);
+    RUDLog(@"Remark Held: %@", dictionary);
 }
 
 -(id)init
@@ -32,7 +33,15 @@
     {
         _socketController = [TTGoxSocketController sharedInstance];
         
-//        [_socketController setRemarkDelegate:self];
+        [_socketController setRemarkDelegate:self];
+        
+        _privateMessageController = [TTGoxPrivateMessageController new];
+        
+        [_socketController setPrivateDelegate:_privateMessageController];
+        
+        _resultMessageController = [TTGoxResultMessageController new];
+        
+        [_socketController setResultDelegate:_resultMessageController];
         
         [_socketController open];
     }

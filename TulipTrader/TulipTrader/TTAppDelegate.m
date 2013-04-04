@@ -12,6 +12,8 @@
 
 @interface TTAppDelegate ()
 
+@property(nonatomic, retain)TTOperationsController* operationsController;
+
 @end
 
 @implementation TTAppDelegate
@@ -22,7 +24,7 @@
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {
-    [TTOperationsController new];
+    [self setOperationsController:[TTOperationsController new]];
 }
 
 // Returns the directory the application uses to store the Core Data store file. This code uses a directory named "co.resplendent.TulipTrader" in the user's Application Support directory.

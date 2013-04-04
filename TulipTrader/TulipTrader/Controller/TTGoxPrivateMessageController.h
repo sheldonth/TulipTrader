@@ -8,8 +8,9 @@
 
 #import <Foundation/Foundation.h>
 #import "RUSingleton.h"
+#import "TTGoxSocketController.h"
 
-@interface TTGoxPrivateMessageController : NSObject
+@interface TTGoxPrivateMessageController : NSObject <TTGoxSocketControllerMessageDelegate>
 
 
 RU_SYNTHESIZE_SINGLETON_DECLARATION_FOR_CLASS_WITH_ACCESSOR(TTGoxPrivateMessageController, sharedInstance);
