@@ -9,10 +9,12 @@
 #import "TTAppDelegate.h"
 #import "TTOperationsController.h"
 #import "RUConstants.h"
+#import "TTMasterViewController.h"
 
 @interface TTAppDelegate ()
 
 @property(nonatomic, retain)TTOperationsController* operationsController;
+@property(nonatomic, retain)TTMasterViewController* masterViewController;
 
 @end
 
@@ -25,6 +27,9 @@
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {
     [self setOperationsController:[TTOperationsController new]];
+    [self setMasterViewController:[[TTMasterViewController alloc]initWithNibName:@"TTMasterViewController" bundle:nil]];
+    [_masterViewController.view setFrame:[(NSView*)self.window.contentView bounds]];
+    [self.window.contentView addSubview:_masterViewController.view];
 }
 
 // Returns the directory the application uses to store the Core Data store file. This code uses a directory named "co.resplendent.TulipTrader" in the user's Application Support directory.

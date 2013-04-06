@@ -43,6 +43,12 @@
 		47D2FE231703781E00AEA412 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 47D2FD2A1702764300AEA412 /* Foundation.framework */; };
 		47D2FE251703782600AEA412 /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 47D2FE241703782600AEA412 /* libicucore.dylib */; };
 		47D2FE271703786800AEA412 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 47D2FE261703786800AEA412 /* Security.framework */; };
+		47DDDF44170FF3DF0087EE78 /* TTStatusBarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 47DDDF43170FF3DF0087EE78 /* TTStatusBarView.m */; };
+		47DDDF45170FF3DF0087EE78 /* TTStatusBarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 47DDDF43170FF3DF0087EE78 /* TTStatusBarView.m */; };
+		47DDDF4F1710A59E0087EE78 /* TTMasterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 47DDDF4D1710A59E0087EE78 /* TTMasterViewController.m */; };
+		47DDDF501710A59E0087EE78 /* TTMasterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 47DDDF4D1710A59E0087EE78 /* TTMasterViewController.m */; };
+		47DDDF511710A59E0087EE78 /* TTMasterViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 47DDDF4E1710A59E0087EE78 /* TTMasterViewController.xib */; };
+		47DDDF521710A59E0087EE78 /* TTMasterViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 47DDDF4E1710A59E0087EE78 /* TTMasterViewController.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -118,6 +124,11 @@
 		47D2FE211703780F00AEA412 /* CoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreServices.framework; path = System/Library/Frameworks/CoreServices.framework; sourceTree = SDKROOT; };
 		47D2FE241703782600AEA412 /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = usr/lib/libicucore.dylib; sourceTree = SDKROOT; };
 		47D2FE261703786800AEA412 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
+		47DDDF42170FF3DF0087EE78 /* TTStatusBarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTStatusBarView.h; sourceTree = "<group>"; };
+		47DDDF43170FF3DF0087EE78 /* TTStatusBarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTStatusBarView.m; sourceTree = "<group>"; };
+		47DDDF4C1710A59E0087EE78 /* TTMasterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTMasterViewController.h; sourceTree = "<group>"; };
+		47DDDF4D1710A59E0087EE78 /* TTMasterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTMasterViewController.m; sourceTree = "<group>"; };
+		47DDDF4E1710A59E0087EE78 /* TTMasterViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TTMasterViewController.xib; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -217,6 +228,8 @@
 			isa = PBXGroup;
 			children = (
 				47D200B2170D53A400AEA412 /* Data_Event_Formats.rtf */,
+				47DDDF4B1710A5810087EE78 /* ViewController */,
+				47DDDF41170FF3BA0087EE78 /* Views */,
 				47D200881708AC2000AEA412 /* Controller */,
 				47D2FE2B1708A94000AEA412 /* Library */,
 				47D2FD371702764300AEA412 /* TTAppDelegate.h */,
@@ -287,6 +300,25 @@
 				47D200831708AB7C00AEA412 /* RUSynthesizeUserDefaultMethods.h */,
 			);
 			path = Library;
+			sourceTree = "<group>";
+		};
+		47DDDF41170FF3BA0087EE78 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				47DDDF42170FF3DF0087EE78 /* TTStatusBarView.h */,
+				47DDDF43170FF3DF0087EE78 /* TTStatusBarView.m */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		47DDDF4B1710A5810087EE78 /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+				47DDDF4C1710A59E0087EE78 /* TTMasterViewController.h */,
+				47DDDF4D1710A59E0087EE78 /* TTMasterViewController.m */,
+				47DDDF4E1710A59E0087EE78 /* TTMasterViewController.xib */,
+			);
+			path = ViewController;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -368,6 +400,7 @@
 				47D200A01709584200AEA412 /* CHANGELOG.md in Resources */,
 				47D200A41709584200AEA412 /* README.md in Resources */,
 				47D200B3170D53A400AEA412 /* Data_Event_Formats.rtf in Resources */,
+				47DDDF511710A59E0087EE78 /* TTMasterViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -378,6 +411,7 @@
 				47D2FD501702764300AEA412 /* InfoPlist.strings in Resources */,
 				47D200A11709584200AEA412 /* CHANGELOG.md in Resources */,
 				47D200A51709584200AEA412 /* README.md in Resources */,
+				47DDDF521710A59E0087EE78 /* TTMasterViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -415,6 +449,8 @@
 				47D200A8170A47A800AEA412 /* TTOperationsController.m in Sources */,
 				47D200AC170A48F800AEA412 /* TTGoxPrivateMessageController.m in Sources */,
 				47D200B0170A491400AEA412 /* TTGoxResultMessageController.m in Sources */,
+				47DDDF44170FF3DF0087EE78 /* TTStatusBarView.m in Sources */,
+				47DDDF4F1710A59E0087EE78 /* TTMasterViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -431,6 +467,8 @@
 				47D200A9170A47A800AEA412 /* TTOperationsController.m in Sources */,
 				47D200AD170A48F800AEA412 /* TTGoxPrivateMessageController.m in Sources */,
 				47D200B1170A491400AEA412 /* TTGoxResultMessageController.m in Sources */,
+				47DDDF45170FF3DF0087EE78 /* TTStatusBarView.m in Sources */,
+				47DDDF501710A59E0087EE78 /* TTMasterViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
