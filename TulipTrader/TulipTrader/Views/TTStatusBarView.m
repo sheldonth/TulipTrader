@@ -22,7 +22,8 @@
 
 - (void)drawRect:(NSRect)dirtyRect
 {
-    // Drawing code here.
+    [[NSColor orangeColor] setFill];
+    NSRectFill(dirtyRect);
 }
 
 @end

@@ -1,7 +1,34 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model name="" userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="2061" systemVersion="12D78" minimumToolsVersion="Automatic" macOSVersion="Automatic" iOSVersion="Automatic">
     <entity name="Depth" syncable="YES"/>
+    <entity name="Tick" syncable="YES">
+        <attribute name="currency" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="display" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="display_short" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="value" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="value_int" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+    </entity>
+    <entity name="Ticker" syncable="YES">
+        <attribute name="channel_id" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="channel_name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="now" optional="YES" attributeType="Date" syncable="YES"/>
+        <relationship name="average" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Tick" syncable="YES"/>
+        <relationship name="buy" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Tick" syncable="YES"/>
+        <relationship name="high" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Tick" syncable="YES"/>
+        <relationship name="last" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Tick" syncable="YES"/>
+        <relationship name="last_all" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Tick" syncable="YES"/>
+        <relationship name="last_local" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Tick" syncable="YES"/>
+        <relationship name="last_orig" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Tick" syncable="YES"/>
+        <relationship name="low" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Tick" syncable="YES"/>
+        <relationship name="sell" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Tick" syncable="YES"/>
+        <relationship name="vol" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Tick" syncable="YES"/>
+        <relationship name="vwap" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Tick" syncable="YES"/>
+    </entity>
+    <entity name="Trade" syncable="YES"/>
     <elements>
         <element name="Depth" positionX="160" positionY="192" width="128" height="45"/>
+        <element name="Tick" positionX="160" positionY="192" width="128" height="120"/>
+        <element name="Trade" positionX="160" positionY="192" width="128" height="45"/>
+        <element name="Ticker" positionX="160" positionY="192" width="128" height="255"/>
     </elements>
 </model>

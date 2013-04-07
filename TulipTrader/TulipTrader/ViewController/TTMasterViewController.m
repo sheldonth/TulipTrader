@@ -7,8 +7,13 @@
 //
 
 #import "TTMasterViewController.h"
+#import "TTStatusBarView.h"
+#import "RUConstants.h"
+#import "TTFrameConstants.h"
 
 @interface TTMasterViewController ()
+
+@property(nonatomic, retain)TTStatusBarView* statusBarView;
 
 @end
 
@@ -18,7 +23,9 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        
+        [self setStatusBarView:[TTStatusBarView new]];
+        [_statusBarView setFrame:(NSRect){0, kTTWindowHeight - kTTStatusBarHeight, kTTWindowWidth, kTTStatusBarHeight}];
+        [self.view addSubview:_statusBarView];
     }
     
     return self;

@@ -11,6 +11,8 @@
 #import "RUConstants.h"
 #import "TTMasterViewController.h"
 
+#define appTitle @"Tulip Trader v0.0.1"
+
 @interface TTAppDelegate ()
 
 @property(nonatomic, retain)TTOperationsController* operationsController;
@@ -26,6 +28,7 @@
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {
+    [self.window setTitle:appTitle];
     [self setOperationsController:[TTOperationsController new]];
     [self setMasterViewController:[[TTMasterViewController alloc]initWithNibName:@"TTMasterViewController" bundle:nil]];
     [_masterViewController.view setFrame:[(NSView*)self.window.contentView bounds]];

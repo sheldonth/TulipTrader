@@ -74,6 +74,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		47A749F417110636007792AC /* TTFrameConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTFrameConstants.h; sourceTree = "<group>"; };
 		47D2007D1708AB7C00AEA412 /* RUClassOrNilUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RUClassOrNilUtil.h; path = ResplendentUtilities/ResplendentUtilities/Misc/RUClassOrNilUtil.h; sourceTree = "<group>"; };
 		47D2007E1708AB7C00AEA412 /* RUConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RUConstants.h; path = ResplendentUtilities/ResplendentUtilities/Misc/RUConstants.h; sourceTree = "<group>"; };
 		47D2007F1708AB7C00AEA412 /* RUDebug.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RUDebug.h; path = ResplendentUtilities/ResplendentUtilities/Misc/RUDebug.h; sourceTree = "<group>"; };
@@ -238,6 +239,7 @@
 				47D2FD3D1702764300AEA412 /* TulipTrader.xcdatamodeld */,
 				47D2FDFE1702880100AEA412 /* SocketRocket */,
 				47D2FD2C1702764300AEA412 /* Supporting Files */,
+				47A749F417110636007792AC /* TTFrameConstants.h */,
 			);
 			path = TulipTrader;
 			sourceTree = "<group>";
@@ -546,6 +548,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				MOMC_NO_INVERSE_RELATIONSHIP_WARNINGS = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
 			};
@@ -573,6 +576,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				MOMC_NO_INVERSE_RELATIONSHIP_WARNINGS = YES;
 				SDKROOT = macosx;
 			};
 			name = Release;
