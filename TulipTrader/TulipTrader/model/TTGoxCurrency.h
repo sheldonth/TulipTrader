@@ -1,0 +1,35 @@
+//
+//  TTGoxCurrency.h
+//  TulipTrader
+//
+//  Created by Sheldon Thomas on 4/19/13.
+//  Copyright (c) 2013 Resplendent G.P. Sheldon Thomas. All rights reserved.
+//
+
+#import <Foundation/Foundation.h>
+
+typedef enum{
+    TTGoxCurrencyNone = 0,
+    TTGoxCurrencyBTC, // Bitcoin
+    TTGoxCurrencyUSD, // US Dollar
+    TTGoxCurrencyAUD, // Australian Dollar
+    TTGoxCurrencyCAD, // Canadian Dollar
+    TTGoxCurrencyCHF, // Swiss Franc
+    TTGoxCurrencyCNY, // Chinese Renminbi
+    TTGoxCurrencyDKK, // Danish Krone
+    TTGoxCurrencyEUR, // Euro
+    TTGoxCurrencyGBP, // Great British Pound
+    TTGoxCurrencyHKD, // Hong Kong Dollar
+    TTGoxCurrencyJPY, // Japanese Yen
+    TTGoxCurrencyNZD, // New Zealand Dollar
+    TTGoxCurrencyPLN, // Polish Zloty
+    TTGoxCurrencyRUB, // Russian Ruble
+    TTGoxCurrencySEK, // Swedish Krona
+    TTGoxCurrencySGD, // Singapore Dollar
+    TTGoxCurrencyTHB  // Thai Bhat
+}TTGoxCurrency;
+
+TTGoxCurrency currencyFromNumber(NSNumber* number);
+
+
+TTGoxCurrency currencyFromString(NSString* string);

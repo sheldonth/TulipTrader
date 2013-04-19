@@ -11,6 +11,8 @@
 #import "TTGoxSocketController.h"
 #import "RUSingleton.h"
 #import "RUConstants.h"
+#import "Ticker.h"
+#import "TTAppDelegate.h"
 
 typedef enum{
     kTTGoxMarketNone = 0,
@@ -23,7 +25,14 @@ NSString* const kTTGoxDepthKey = @"depth";
 NSString* const kTTGoxTickerKey = @"ticker";
 NSString* const kTTGoxTradeKey = @"trade";
 
+static NSManagedObjectContext* primaryContext;
+
 @implementation TTGoxPrivateMessageController
+
++(void)initialize
+{
+    primaryContext = [(TTAppDelegate*)[[NSApplication sharedApplication]delegate]managedObjectContext];
+}
 
 -(void)recordDepth:(NSDictionary*)depthDictionary
 {
@@ -35,9 +44,10 @@ NSString* const kTTGoxTradeKey = @"trade";
     RUDLog(@"!");
 }
 
--(void)recordTick:(NSDictionary*)tickerDictionary
+-(void)recordTicker:(NSDictionary*)tickerDictionary
 {
-    RUDLog(@"!");    
+    RUDLog(@"!");
+    Ticker* ticker = [Ticker newTickerInContext:primaryContext fromDictionary:tickerDictionary];
 }
 
 -(void)shouldExamineResponseDictionary:(NSDictionary *)dictionary ofMessageType:(TTGoxSocketMessageType)type
@@ -53,7 +63,7 @@ NSString* const kTTGoxTradeKey = @"trade";
             break;
             
         case kTTGoxMarketTicker:
-            [self recordTick:dictionary];
+            [self recordTicker:dictionary];
             break;
             
         case kTTGoxMarketNone:

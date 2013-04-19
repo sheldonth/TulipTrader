@@ -1,14 +1,27 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model name="" userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="2061" systemVersion="12D78" minimumToolsVersion="Automatic" macOSVersion="Automatic" iOSVersion="Automatic">
-    <entity name="Depth" syncable="YES"/>
-    <entity name="Tick" syncable="YES">
+    <entity name="Depth" representedClassName="Depth" syncable="YES">
+        <attribute name="channel_id" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="channel_name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="currency" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="item" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="now" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="price" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="price_int" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="total_volume_int" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="type" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="type_str" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="volume" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+        <attribute name="volume_int" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+    </entity>
+    <entity name="Tick" representedClassName="Tick" syncable="YES">
         <attribute name="currency" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
         <attribute name="display" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="display_short" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="value" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="value_int" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
     </entity>
-    <entity name="Ticker" syncable="YES">
+    <entity name="Ticker" representedClassName="Ticker" syncable="YES">
         <attribute name="channel_id" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="channel_name" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="now" optional="YES" attributeType="Date" syncable="YES"/>
@@ -26,9 +39,9 @@
     </entity>
     <entity name="Trade" syncable="YES"/>
     <elements>
-        <element name="Depth" positionX="160" positionY="192" width="128" height="45"/>
+        <element name="Depth" positionX="160" positionY="192" width="128" height="225"/>
         <element name="Tick" positionX="160" positionY="192" width="128" height="120"/>
-        <element name="Trade" positionX="160" positionY="192" width="128" height="45"/>
         <element name="Ticker" positionX="160" positionY="192" width="128" height="255"/>
+        <element name="Trade" positionX="160" positionY="192" width="128" height="45"/>
     </elements>
 </model>

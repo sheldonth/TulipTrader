@@ -7,6 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4770563A1721130B0084FE5F /* Depth.m in Sources */ = {isa = PBXBuildFile; fileRef = 477056391721130B0084FE5F /* Depth.m */; };
+		4770563B1721130B0084FE5F /* Depth.m in Sources */ = {isa = PBXBuildFile; fileRef = 477056391721130B0084FE5F /* Depth.m */; };
+		4770563E1721130B0084FE5F /* Tick.m in Sources */ = {isa = PBXBuildFile; fileRef = 4770563D1721130B0084FE5F /* Tick.m */; };
+		4770563F1721130B0084FE5F /* Tick.m in Sources */ = {isa = PBXBuildFile; fileRef = 4770563D1721130B0084FE5F /* Tick.m */; };
+		477056421721130C0084FE5F /* Ticker.m in Sources */ = {isa = PBXBuildFile; fileRef = 477056411721130B0084FE5F /* Ticker.m */; };
+		477056431721130C0084FE5F /* Ticker.m in Sources */ = {isa = PBXBuildFile; fileRef = 477056411721130B0084FE5F /* Ticker.m */; };
+		477056481721BCB90084FE5F /* TTGoxCurrency.m in Sources */ = {isa = PBXBuildFile; fileRef = 477056471721BCB80084FE5F /* TTGoxCurrency.m */; };
 		47D2008B1708AC5300AEA412 /* TTGoxSocketController.m in Sources */ = {isa = PBXBuildFile; fileRef = 47D2008A1708AC5300AEA412 /* TTGoxSocketController.m */; };
 		47D2008C1708AC5300AEA412 /* TTGoxSocketController.m in Sources */ = {isa = PBXBuildFile; fileRef = 47D2008A1708AC5300AEA412 /* TTGoxSocketController.m */; };
 		47D200A01709584200AEA412 /* CHANGELOG.md in Resources */ = {isa = PBXBuildFile; fileRef = 47D2009C1709584200AEA412 /* CHANGELOG.md */; };
@@ -74,6 +81,14 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		477056381721130B0084FE5F /* Depth.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Depth.h; sourceTree = "<group>"; };
+		477056391721130B0084FE5F /* Depth.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Depth.m; sourceTree = "<group>"; };
+		4770563C1721130B0084FE5F /* Tick.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Tick.h; sourceTree = "<group>"; };
+		4770563D1721130B0084FE5F /* Tick.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Tick.m; sourceTree = "<group>"; };
+		477056401721130B0084FE5F /* Ticker.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Ticker.h; sourceTree = "<group>"; };
+		477056411721130B0084FE5F /* Ticker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Ticker.m; sourceTree = "<group>"; };
+		477056461721BCB70084FE5F /* TTGoxCurrency.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTGoxCurrency.h; sourceTree = "<group>"; };
+		477056471721BCB80084FE5F /* TTGoxCurrency.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTGoxCurrency.m; sourceTree = "<group>"; };
 		47A749F417110636007792AC /* TTFrameConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTFrameConstants.h; sourceTree = "<group>"; };
 		47D2007D1708AB7C00AEA412 /* RUClassOrNilUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RUClassOrNilUtil.h; path = ResplendentUtilities/ResplendentUtilities/Misc/RUClassOrNilUtil.h; sourceTree = "<group>"; };
 		47D2007E1708AB7C00AEA412 /* RUConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RUConstants.h; path = ResplendentUtilities/ResplendentUtilities/Misc/RUConstants.h; sourceTree = "<group>"; };
@@ -157,6 +172,21 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		47705637172112DF0084FE5F /* model */ = {
+			isa = PBXGroup;
+			children = (
+				477056401721130B0084FE5F /* Ticker.h */,
+				477056411721130B0084FE5F /* Ticker.m */,
+				4770563C1721130B0084FE5F /* Tick.h */,
+				4770563D1721130B0084FE5F /* Tick.m */,
+				477056381721130B0084FE5F /* Depth.h */,
+				477056391721130B0084FE5F /* Depth.m */,
+				477056461721BCB70084FE5F /* TTGoxCurrency.h */,
+				477056471721BCB80084FE5F /* TTGoxCurrency.m */,
+			);
+			path = model;
+			sourceTree = "<group>";
+		};
 		47D200881708AC2000AEA412 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
@@ -228,6 +258,7 @@
 		47D2FD2B1702764300AEA412 /* TulipTrader */ = {
 			isa = PBXGroup;
 			children = (
+				47705637172112DF0084FE5F /* model */,
 				47D200B2170D53A400AEA412 /* Data_Event_Formats.rtf */,
 				47DDDF4B1710A5810087EE78 /* ViewController */,
 				47DDDF41170FF3BA0087EE78 /* Views */,
@@ -453,6 +484,10 @@
 				47D200B0170A491400AEA412 /* TTGoxResultMessageController.m in Sources */,
 				47DDDF44170FF3DF0087EE78 /* TTStatusBarView.m in Sources */,
 				47DDDF4F1710A59E0087EE78 /* TTMasterViewController.m in Sources */,
+				4770563A1721130B0084FE5F /* Depth.m in Sources */,
+				4770563E1721130B0084FE5F /* Tick.m in Sources */,
+				477056421721130C0084FE5F /* Ticker.m in Sources */,
+				477056481721BCB90084FE5F /* TTGoxCurrency.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -471,6 +506,9 @@
 				47D200B1170A491400AEA412 /* TTGoxResultMessageController.m in Sources */,
 				47DDDF45170FF3DF0087EE78 /* TTStatusBarView.m in Sources */,
 				47DDDF501710A59E0087EE78 /* TTMasterViewController.m in Sources */,
+				4770563B1721130B0084FE5F /* Depth.m in Sources */,
+				4770563F1721130B0084FE5F /* Tick.m in Sources */,
+				477056431721130C0084FE5F /* Ticker.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

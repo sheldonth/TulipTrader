@@ -8,27 +8,7 @@
 
 #import "RUSingleton.h"
 #import "SRWebSocket.h"
-
-typedef enum{
-    TTGoxCurrencyNone = 0,
-    TTGoxCurrencyBTC, // Bitcoin
-    TTGoxCurrencyUSD, // US Dollar
-    TTGoxCurrencyAUD, // Australian Dollar
-    TTGoxCurrencyCAD, // Canadian Dollar
-    TTGoxCurrencyCHF, // Swiss Franc
-    TTGoxCurrencyCNY, // Chinese Renminbi
-    TTGoxCurrencyDKK, // Danish Krone
-    TTGoxCurrencyEUR, // Euro
-    TTGoxCurrencyGBP, // Great British Pound
-    TTGoxCurrencyHKD, // Hong Kong Dollar
-    TTGoxCurrencyJPY, // Japanese Yen
-    TTGoxCurrencyNZD, // New Zealand Dollar
-    TTGoxCurrencyPLN, // Polish Zloty
-    TTGoxCurrencyRUB, // Russian Ruble
-    TTGoxCurrencySEK, // Swedish Krona
-    TTGoxCurrencySGD, // Singapore Dollar
-    TTGoxCurrencyTHB  // Thai Bhat
-}TTGoxCurrency;
+#import "TTGoxCurrency.h"
 
 typedef enum{
     TTGoxSocketMessageTypeNone = 0,

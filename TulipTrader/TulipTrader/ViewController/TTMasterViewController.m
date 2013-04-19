@@ -25,6 +25,7 @@
     if (self) {
         [self setStatusBarView:[TTStatusBarView new]];
         [_statusBarView setFrame:(NSRect){0, kTTWindowHeight - kTTStatusBarHeight, kTTWindowWidth, kTTStatusBarHeight}];
+        [_statusBarView setNeedsLayout:YES];
         [self.view addSubview:_statusBarView];
     }
     
