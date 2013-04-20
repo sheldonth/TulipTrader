@@ -134,7 +134,7 @@ static NSMutableString* kTTGoxSocketIOURL;
 -(id)parseSocketMessage:(id)message
 {
     if (![message isKindOfClass:[NSString class]])
-        [NSException raise:@"Bad Class of Message Object" format:RUStringWithFormat(@"Message callback from WebSocket was %@, should've been NSString"), NSStringFromClass([message class])];
+        [NSException raise:@"Bad Class of Message Object" format:@"Message callback from WebSocket was %@, should've been NSString", [message class]];
     
     NSMutableString* mutableStringMessage = [NSMutableString stringWithString:(NSString *)message];
     

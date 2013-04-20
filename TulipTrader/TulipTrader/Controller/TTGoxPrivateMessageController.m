@@ -46,8 +46,11 @@ static NSManagedObjectContext* primaryContext;
 
 -(void)recordTicker:(NSDictionary*)tickerDictionary
 {
-    RUDLog(@"!");
     Ticker* ticker = [Ticker newTickerInContext:primaryContext fromDictionary:tickerDictionary];
+    NSError* e = nil;
+    [ticker.managedObjectContext save:&e];
+    if (e)
+        RUDLog(@"Error saving ticker on channel: %@", ticker.channel_name);
 }
 
 -(void)shouldExamineResponseDictionary:(NSDictionary *)dictionary ofMessageType:(TTGoxSocketMessageType)type

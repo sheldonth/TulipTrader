@@ -29,7 +29,9 @@ typedef enum{
     TTGoxCurrencyTHB  // Thai Bhat
 }TTGoxCurrency;
 
+extern NSString* const goxUSDString;
+extern NSString* const goxBTCString;
+
 TTGoxCurrency currencyFromNumber(NSNumber* number);
-
-
 TTGoxCurrency currencyFromString(NSString* string);
+NSNumber* numberFromCurrencyString(NSString* string);
