@@ -84,7 +84,7 @@ static NSMutableString* kTTGoxSocketIOURL;
     if (self)
     {
         [self setRetries:0];
-        [self setIsConnected:@(0)];
+        [self setIsConnected:TTGoxSocketConnectionStateNotConnected];
     }
     return self;
 }
@@ -123,6 +123,7 @@ static NSMutableString* kTTGoxSocketIOURL;
         _socketConn = [[SRWebSocket alloc]initWithURL:[NSURL URLWithString:kTTGoxSocketIOURL]];
     [_socketConn setDelegate:self];
     _retries++;
+    [self setIsConnected:TTGoxSocketConnectionStateConnecting];
     [_socketConn open];
 }
 
@@ -154,7 +155,7 @@ static NSMutableString* kTTGoxSocketIOURL;
 -(void)webSocketDidOpen:(SRWebSocket *)webSocket
 {
     RUDLog(@"%@ did open", webSocket);
-    [self setIsConnected:@(1)];
+    [self setIsConnected:TTGoxSocketConnectionStateConnected];
     [self subscribe:TTGoxSubscriptionChannelTicker];
     [self subscribe:TTGoxSubscriptionChannelDepth];
     [self subscribe:TTGoxSubscriptionChannelTrades];
@@ -163,7 +164,7 @@ static NSMutableString* kTTGoxSocketIOURL;
 -(void)webSocket:(SRWebSocket *)webSocket didCloseWithCode:(NSInteger)code reason:(NSString *)reason wasClean:(BOOL)wasClean
 {
     RUDLog(@"%@ Closed with code %li and reason %@ and is clean %i", webSocket, code, reason, wasClean);
-    [self setIsConnected:@(0)];
+    [self setIsConnected:TTGoxSocketConnectionStateNotConnected];
     [self open];
 }
 

@@ -24,6 +24,14 @@ typedef enum{
     TTGoxSubscriptionChannelDepth
 }TTGoxSubscriptionChannel;
 
+typedef enum{
+    TTGoxSocketConnectionStateNone = 0,
+    TTGoxSocketConnectionStateNotConnected,
+    TTGoxSocketConnectionStateConnecting,
+    TTGoxSocketConnectionStateConnected,
+    TTGoxSocketConnectionStateFailed
+}TTGoxSocketConnectionState;
+
 @protocol TTGoxSocketControllerMessageDelegate <NSObject>
 
 -(void)shouldExamineResponseDictionary:(NSDictionary*)dictionary ofMessageType:(TTGoxSocketMessageType)type;
@@ -42,7 +50,7 @@ typedef enum{
 @property (assign) id <TTGoxSocketControllerMessageDelegate> privateDelegate;
 @property (assign) id <TTGoxSocketControllerMessageDelegate> resultDelegate;
 
-@property (nonatomic, retain)NSNumber* isConnected;
+@property (nonatomic)TTGoxSocketConnectionState isConnected;
 
 RU_SYNTHESIZE_SINGLETON_DECLARATION_FOR_CLASS_WITH_ACCESSOR(TTGoxSocketController, sharedInstance);
 
