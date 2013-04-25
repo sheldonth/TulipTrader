@@ -24,12 +24,17 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         [self setStatusBarView:[TTStatusBarView new]];
-        [_statusBarView setFrame:(NSRect){0, kTTWindowHeight - kTTStatusBarHeight, kTTWindowWidth, kTTStatusBarHeight}];
-        [_statusBarView setNeedsLayout:YES];
         [self.view addSubview:_statusBarView];
     }
     
     return self;
+}
+
+-(void)setViewFrameAndInformSubviews:(NSRect)newFrame
+{
+    [self.view setFrame:newFrame];
+    [_statusBarView setFrame:(NSRect){0, CGRectGetHeight(newFrame) - kTTStatusBarHeight, CGRectGetWidth(newFrame), kTTStatusBarHeight}];
+    [_statusBarView setNeedsLayout:YES];
 }
 
 @end

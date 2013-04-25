@@ -7,6 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		470991551729D6240091E6E2 /* TTCurrencyBox.m in Sources */ = {isa = PBXBuildFile; fileRef = 470991541729D6240091E6E2 /* TTCurrencyBox.m */; };
+		470991561729D6240091E6E2 /* TTCurrencyBox.m in Sources */ = {isa = PBXBuildFile; fileRef = 470991541729D6240091E6E2 /* TTCurrencyBox.m */; };
+		470991591729DAE20091E6E2 /* TTGoxCurrencyController.m in Sources */ = {isa = PBXBuildFile; fileRef = 470991581729DAE20091E6E2 /* TTGoxCurrencyController.m */; };
+		4709915A1729DAE20091E6E2 /* TTGoxCurrencyController.m in Sources */ = {isa = PBXBuildFile; fileRef = 470991581729DAE20091E6E2 /* TTGoxCurrencyController.m */; };
+		476DD9F21729A37D0076C301 /* TTStatusBarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 476DD9F11729A37D0076C301 /* TTStatusBarView.m */; };
+		476DD9F31729A37D0076C301 /* TTStatusBarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 476DD9F11729A37D0076C301 /* TTStatusBarView.m */; };
+		476DD9F61729A3C90076C301 /* TTTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 476DD9F51729A3C90076C301 /* TTTextView.m */; };
+		476DD9F71729A3C90076C301 /* TTTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 476DD9F51729A3C90076C301 /* TTTextView.m */; };
 		4770563A1721130B0084FE5F /* Depth.m in Sources */ = {isa = PBXBuildFile; fileRef = 477056391721130B0084FE5F /* Depth.m */; };
 		4770563B1721130B0084FE5F /* Depth.m in Sources */ = {isa = PBXBuildFile; fileRef = 477056391721130B0084FE5F /* Depth.m */; };
 		4770563E1721130B0084FE5F /* Tick.m in Sources */ = {isa = PBXBuildFile; fileRef = 4770563D1721130B0084FE5F /* Tick.m */; };
@@ -50,8 +58,6 @@
 		47D2FE231703781E00AEA412 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 47D2FD2A1702764300AEA412 /* Foundation.framework */; };
 		47D2FE251703782600AEA412 /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 47D2FE241703782600AEA412 /* libicucore.dylib */; };
 		47D2FE271703786800AEA412 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 47D2FE261703786800AEA412 /* Security.framework */; };
-		47DDDF44170FF3DF0087EE78 /* TTStatusBarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 47DDDF43170FF3DF0087EE78 /* TTStatusBarView.m */; };
-		47DDDF45170FF3DF0087EE78 /* TTStatusBarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 47DDDF43170FF3DF0087EE78 /* TTStatusBarView.m */; };
 		47DDDF4F1710A59E0087EE78 /* TTMasterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 47DDDF4D1710A59E0087EE78 /* TTMasterViewController.m */; };
 		47DDDF501710A59E0087EE78 /* TTMasterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 47DDDF4D1710A59E0087EE78 /* TTMasterViewController.m */; };
 		47DDDF511710A59E0087EE78 /* TTMasterViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 47DDDF4E1710A59E0087EE78 /* TTMasterViewController.xib */; };
@@ -81,6 +87,14 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		470991531729D6240091E6E2 /* TTCurrencyBox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTCurrencyBox.h; sourceTree = "<group>"; };
+		470991541729D6240091E6E2 /* TTCurrencyBox.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTCurrencyBox.m; sourceTree = "<group>"; };
+		470991571729DAE20091E6E2 /* TTGoxCurrencyController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTGoxCurrencyController.h; sourceTree = "<group>"; };
+		470991581729DAE20091E6E2 /* TTGoxCurrencyController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTGoxCurrencyController.m; sourceTree = "<group>"; };
+		476DD9F01729A37D0076C301 /* TTStatusBarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTStatusBarView.h; sourceTree = "<group>"; };
+		476DD9F11729A37D0076C301 /* TTStatusBarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTStatusBarView.m; sourceTree = "<group>"; };
+		476DD9F41729A3C90076C301 /* TTTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTTextView.h; sourceTree = "<group>"; };
+		476DD9F51729A3C90076C301 /* TTTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTTextView.m; sourceTree = "<group>"; };
 		477056381721130B0084FE5F /* Depth.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Depth.h; sourceTree = "<group>"; };
 		477056391721130B0084FE5F /* Depth.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Depth.m; sourceTree = "<group>"; };
 		4770563C1721130B0084FE5F /* Tick.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Tick.h; sourceTree = "<group>"; };
@@ -140,8 +154,6 @@
 		47D2FE211703780F00AEA412 /* CoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreServices.framework; path = System/Library/Frameworks/CoreServices.framework; sourceTree = SDKROOT; };
 		47D2FE241703782600AEA412 /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = usr/lib/libicucore.dylib; sourceTree = SDKROOT; };
 		47D2FE261703786800AEA412 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
-		47DDDF42170FF3DF0087EE78 /* TTStatusBarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTStatusBarView.h; sourceTree = "<group>"; };
-		47DDDF43170FF3DF0087EE78 /* TTStatusBarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTStatusBarView.m; sourceTree = "<group>"; };
 		47DDDF4C1710A59E0087EE78 /* TTMasterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTMasterViewController.h; sourceTree = "<group>"; };
 		47DDDF4D1710A59E0087EE78 /* TTMasterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTMasterViewController.m; sourceTree = "<group>"; };
 		47DDDF4E1710A59E0087EE78 /* TTMasterViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TTMasterViewController.xib; sourceTree = "<group>"; };
@@ -172,6 +184,33 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		470991521729D6140091E6E2 /* NSBox */ = {
+			isa = PBXGroup;
+			children = (
+				470991531729D6240091E6E2 /* TTCurrencyBox.h */,
+				470991541729D6240091E6E2 /* TTCurrencyBox.m */,
+			);
+			path = NSBox;
+			sourceTree = "<group>";
+		};
+		476DD9EE1729A37D0076C301 /* NSTextView */ = {
+			isa = PBXGroup;
+			children = (
+				476DD9F41729A3C90076C301 /* TTTextView.h */,
+				476DD9F51729A3C90076C301 /* TTTextView.m */,
+			);
+			path = NSTextView;
+			sourceTree = "<group>";
+		};
+		476DD9EF1729A37D0076C301 /* NSView */ = {
+			isa = PBXGroup;
+			children = (
+				476DD9F01729A37D0076C301 /* TTStatusBarView.h */,
+				476DD9F11729A37D0076C301 /* TTStatusBarView.m */,
+			);
+			path = NSView;
+			sourceTree = "<group>";
+		};
 		47705637172112DF0084FE5F /* model */ = {
 			isa = PBXGroup;
 			children = (
@@ -198,6 +237,8 @@
 				47D200AB170A48F800AEA412 /* TTGoxPrivateMessageController.m */,
 				47D200AE170A491300AEA412 /* TTGoxResultMessageController.h */,
 				47D200AF170A491300AEA412 /* TTGoxResultMessageController.m */,
+				470991571729DAE20091E6E2 /* TTGoxCurrencyController.h */,
+				470991581729DAE20091E6E2 /* TTGoxCurrencyController.m */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -338,8 +379,9 @@
 		47DDDF41170FF3BA0087EE78 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				47DDDF42170FF3DF0087EE78 /* TTStatusBarView.h */,
-				47DDDF43170FF3DF0087EE78 /* TTStatusBarView.m */,
+				470991521729D6140091E6E2 /* NSBox */,
+				476DD9EE1729A37D0076C301 /* NSTextView */,
+				476DD9EF1729A37D0076C301 /* NSView */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -482,12 +524,15 @@
 				47D200A8170A47A800AEA412 /* TTOperationsController.m in Sources */,
 				47D200AC170A48F800AEA412 /* TTGoxPrivateMessageController.m in Sources */,
 				47D200B0170A491400AEA412 /* TTGoxResultMessageController.m in Sources */,
-				47DDDF44170FF3DF0087EE78 /* TTStatusBarView.m in Sources */,
 				47DDDF4F1710A59E0087EE78 /* TTMasterViewController.m in Sources */,
 				4770563A1721130B0084FE5F /* Depth.m in Sources */,
 				4770563E1721130B0084FE5F /* Tick.m in Sources */,
 				477056421721130C0084FE5F /* Ticker.m in Sources */,
 				477056481721BCB90084FE5F /* TTGoxCurrency.m in Sources */,
+				476DD9F21729A37D0076C301 /* TTStatusBarView.m in Sources */,
+				476DD9F61729A3C90076C301 /* TTTextView.m in Sources */,
+				470991551729D6240091E6E2 /* TTCurrencyBox.m in Sources */,
+				470991591729DAE20091E6E2 /* TTGoxCurrencyController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -504,11 +549,14 @@
 				47D200A9170A47A800AEA412 /* TTOperationsController.m in Sources */,
 				47D200AD170A48F800AEA412 /* TTGoxPrivateMessageController.m in Sources */,
 				47D200B1170A491400AEA412 /* TTGoxResultMessageController.m in Sources */,
-				47DDDF45170FF3DF0087EE78 /* TTStatusBarView.m in Sources */,
 				47DDDF501710A59E0087EE78 /* TTMasterViewController.m in Sources */,
 				4770563B1721130B0084FE5F /* Depth.m in Sources */,
 				4770563F1721130B0084FE5F /* Tick.m in Sources */,
 				477056431721130C0084FE5F /* Ticker.m in Sources */,
+				476DD9F31729A37D0076C301 /* TTStatusBarView.m in Sources */,
+				476DD9F71729A3C90076C301 /* TTTextView.m in Sources */,
+				470991561729D6240091E6E2 /* TTCurrencyBox.m in Sources */,
+				4709915A1729DAE20091E6E2 /* TTGoxCurrencyController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

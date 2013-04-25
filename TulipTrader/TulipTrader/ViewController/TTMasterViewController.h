@@ -10,4 +10,6 @@
 
 @interface TTMasterViewController : NSViewController
 
+-(void)setViewFrameAndInformSubviews:(NSRect)newFrame;
+
 @end

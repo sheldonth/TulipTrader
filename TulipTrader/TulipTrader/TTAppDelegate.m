@@ -26,12 +26,44 @@
 @synthesize managedObjectModel = _managedObjectModel;
 @synthesize managedObjectContext = _managedObjectContext;
 
+#pragma mark - NSWindowDelegate methods
+-(NSSize)window:(NSWindow *)window willUseFullScreenContentSize:(NSSize)proposedSize
+{
+    NSRect newSizeAtOrigin = (NSRect){0,0,proposedSize};
+    [window setFrame:newSizeAtOrigin display:YES animate:YES];
+    [_masterViewController setViewFrameAndInformSubviews:newSizeAtOrigin];
+    return proposedSize;
+}
+
+-(void)windowWillEnterFullScreen:(NSNotification *)notification
+{
+    RUDLog(@"!");
+}
+
+-(void)windowDidEnterFullScreen:(NSNotification *)notification
+{
+    RUDLog(@"!");
+}
+
+-(void)windowWillExitFullScreen:(NSNotification *)notification
+{
+     RUDLog(@"!");
+}
+
+-(void)windowDidExitFullScreen:(NSNotification *)notification
+{
+     RUDLog(@"!");
+}
+
+#pragma mark - NSApplicationDelegate methods
+
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {
     [self.window setTitle:appTitle];
+    [self.window setCollectionBehavior:NSWindowCollectionBehaviorFullScreenPrimary];
     [self setOperationsController:[TTOperationsController new]];
     [self setMasterViewController:[[TTMasterViewController alloc]initWithNibName:@"TTMasterViewController" bundle:nil]];
-    [_masterViewController.view setFrame:[(NSView*)self.window.contentView bounds]];
+    [_masterViewController setViewFrameAndInformSubviews:[(NSView*)self.window.contentView bounds]];
     [self.window.contentView addSubview:_masterViewController.view];
 }
 
