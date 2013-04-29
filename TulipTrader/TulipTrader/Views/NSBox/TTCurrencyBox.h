@@ -8,6 +8,7 @@
 
 #import <Cocoa/Cocoa.h>
 #import "TTGoxCurrency.h"
+
 @interface TTCurrencyBox : NSBox
 
 @property(nonatomic)TTGoxCurrency currency;

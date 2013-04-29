@@ -16,4 +16,6 @@ RU_SYNTHESIZE_SINGLETON_DECLARATION_FOR_CLASS_WITH_ACCESSOR(TTGoxCurrencyControl
 @property(nonatomic, retain)NSArray* currencies;
 @property(nonatomic, retain)NSDictionary* currencyUsagePairs;
 
++(NSArray*)activeCurrencys;
+
 @end

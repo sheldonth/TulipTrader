@@ -23,5 +23,6 @@
 @dynamic type_str;
 @dynamic volume;
 @dynamic volume_int;
+@dynamic timeStamp;
 
 @end

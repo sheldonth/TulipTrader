@@ -51,8 +51,6 @@ static NSManagedObjectContext* primaryContext;
     [ticker.managedObjectContext save:&e];
     if (e)
         RUDLog(@"Error saving ticker on channel: %@", ticker.channel_name);
-    else
-        RUDLog(@"Ticker Logged");
 }
 
 -(void)shouldExamineResponseDictionary:(NSDictionary *)dictionary ofMessageType:(TTGoxSocketMessageType)type

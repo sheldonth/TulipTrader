@@ -35,3 +35,5 @@ extern NSString* const goxBTCString;
 TTGoxCurrency currencyFromNumber(NSNumber* number);
 TTGoxCurrency currencyFromString(NSString* string);
 NSNumber* numberFromCurrencyString(NSString* string);
+NSString* stringFromCurrency(TTGoxCurrency currency);
+NSNumber* numberFromCurrency(TTGoxCurrency currency);

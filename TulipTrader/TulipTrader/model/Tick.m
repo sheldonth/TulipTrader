@@ -17,6 +17,7 @@
 @dynamic display_short;
 @dynamic value;
 @dynamic value_int;
+@dynamic timeStamp;
 
 +(Tick*)newTickInContext:(NSManagedObjectContext*)context fromDictionary:(NSDictionary*)d
 {
@@ -26,6 +27,7 @@
     [t setDisplay_short:kRUStringOrNil([d objectForKey:@"display_short"])];
     [t setValue:@([kRUStringOrNil([d objectForKey:@"value"]) doubleValue])];
     [t setValue_int:@([kRUStringOrNil([d objectForKey:@"value_int"]) intValue])];
+    [t setTimeStamp:[NSDate date]];
     return t;
 }
 

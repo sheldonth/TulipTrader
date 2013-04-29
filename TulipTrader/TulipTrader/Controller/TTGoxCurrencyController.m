@@ -43,6 +43,16 @@ RU_SYNTHESIZE_SINGLETON_FOR_CLASS_WITH_ACCESSOR(TTGoxCurrencyController, sharedI
 
 }
 
++(NSArray*)activeCurrencys
+{
+    NSMutableArray* activeCurrencies = [NSMutableArray array];
+    [[currencyUsagePairsStatic allKeys]enumerateObjectsUsingBlock:^(NSString* key, NSUInteger idx, BOOL *stop) {
+        if ([[currencyUsagePairsStatic objectForKey:key] boolValue])
+            [activeCurrencies addObject:key];
+    }];
+    return activeCurrencies;
+}
+
 -(id)init
 {
     self = [super init];
@@ -53,4 +63,5 @@ RU_SYNTHESIZE_SINGLETON_FOR_CLASS_WITH_ACCESSOR(TTGoxCurrencyController, sharedI
     }
     return self;
 }
+
 @end

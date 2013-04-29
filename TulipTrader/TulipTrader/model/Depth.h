@@ -24,5 +24,6 @@
 @property (nonatomic, retain) NSString * type_str;
 @property (nonatomic, retain) NSNumber * volume;
 @property (nonatomic, retain) NSNumber * volume_int;
+@property (nonatomic, retain) NSDate* timeStamp;
 
 @end

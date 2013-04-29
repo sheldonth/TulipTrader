@@ -16,6 +16,7 @@
 @property (nonatomic, retain) NSString * channel_id;
 @property (nonatomic, retain) NSString * channel_name;
 @property (nonatomic, retain) NSDate * now;
+@property (nonatomic, retain) NSDate * timeStamp;
 @property (nonatomic, retain) Tick *average;
 @property (nonatomic, retain) Tick *buy;
 @property (nonatomic, retain) Tick *high;

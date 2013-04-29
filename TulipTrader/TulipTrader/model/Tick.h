@@ -17,6 +17,8 @@
 @property (nonatomic, retain) NSString * display_short;
 @property (nonatomic, retain) NSNumber * value;
 @property (nonatomic, retain) NSNumber * value_int;
+@property (nonatomic, retain) NSDate* timeStamp;
+
 
 +(Tick*)newTickInContext:(NSManagedObjectContext*)context fromDictionary:(NSDictionary*)d;
 

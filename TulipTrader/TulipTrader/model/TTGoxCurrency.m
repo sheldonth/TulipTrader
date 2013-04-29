@@ -29,6 +29,67 @@ NSString* const goxAUDString = @"AUD";
 
 #define ExceptionOnNoCurrencyFound 1
 
+NSString* stringFromCurrency(TTGoxCurrency currency)
+{
+    switch (currency) {
+        case TTGoxCurrencyBTC:
+            return goxBTCString;
+            break;
+        case TTGoxCurrencyUSD: // US Dollar
+            return goxUSDString;
+            break;
+        case TTGoxCurrencyAUD: // Australian Dollar
+            return goxAUDString;
+            break;
+        case TTGoxCurrencyCAD: // Canadian Dollar
+            return goxCADString;
+            break;
+        case TTGoxCurrencyCHF: // Swiss Franc
+            return goxCHFString;
+            break;
+        case TTGoxCurrencyCNY: // Chinese Renminbi
+            return goxCNYString;
+            break;
+        case TTGoxCurrencyDKK: // Danish Krone
+            return goxDKKString;
+            break;
+        case TTGoxCurrencyEUR: // Euro
+            return goxEURString;
+            break;
+        case TTGoxCurrencyGBP: // Great British Pound
+            return goxGBPString;
+            break;
+        case TTGoxCurrencyHKD: // Hong Kong Dollar
+            return goxHKDString;
+            break;
+        case TTGoxCurrencyJPY: // Japanese Yen
+            return goxJPYString;
+            break;
+        case TTGoxCurrencyNZD: // New Zealand Dollar
+            return goxNZDString;
+            break;
+        case TTGoxCurrencyPLN: // Polish Zloty
+            return goxPLNString;
+            break;
+        case TTGoxCurrencyRUB: // Russian Ruble
+            return goxRUBString;
+            break;
+        case TTGoxCurrencySEK: // Swedish Krona
+            return goxSEKString;
+            break;
+        case TTGoxCurrencySGD: // Singapore Dollar
+            return goxSGDString;
+            break;
+        case TTGoxCurrencyTHB: // Thai Bhat
+            return goxTHBString;
+            break;
+        case TTGoxCurrencyNone:
+        default:
+            return @"ERR";
+            break;
+    }
+}
+
 TTGoxCurrency currencyFromString(NSString* string)
 {
     if ([string isEqualToString:goxBTCString])
@@ -79,5 +140,10 @@ TTGoxCurrency currencyFromNumber(NSNumber* number)
 NSNumber* numberFromCurrencyString(NSString* string)
 {
     TTGoxCurrency currency = currencyFromString(string);
+    return @(currency);
+}
+
+NSNumber* numberFromCurrency(TTGoxCurrency currency)
+{
     return @(currency);
 }

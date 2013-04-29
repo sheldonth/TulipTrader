@@ -11,12 +11,18 @@
 #import "RUConstants.h"
 #import "TTGoxSocketController.h"
 #import "TTTextView.h"
+#import "TTCurrencyBox.h"
+#import "TTGoxCurrencyController.h"
+#import "TTGoxCurrency.h"
 
 @interface TTStatusBarView ()
 
 @property(nonatomic, retain)TTTextView* connectionStateTextView;
-
 @property(nonatomic, retain)TTGoxSocketController* webSocket;
+@property(nonatomic, retain)NSMutableArray* currencyBoxes;
+@property(nonatomic, retain)NSScrollView* scrollView;
+
+NSString* socketStateStringForConnectionState (TTGoxSocketConnectionState state);
 
 @end
 
@@ -31,6 +37,11 @@ static NSString* TT_NONE_STRING;
 static NSFont* TT_TYPEWRITER_FONT;
 
 #define TTStatusBarContentLeftOffset 10.f
+#define TTStatusBarContentBottomOffset 10.f
+
+#define TTCurrencyBoxWidth 100.f
+#define TTCurrencyBoxHeight 70.f
+
 
 +(void)initialize
 {
@@ -48,45 +59,40 @@ static NSFont* TT_TYPEWRITER_FONT;
 -(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
 {
     TTGoxSocketConnectionState state = (TTGoxSocketConnectionState)[[change objectForKey:@"new"]intValue];
-    switch (state) {
-        case TTGoxSocketConnectionStateConnected:
-            [_connectionStateTextView setString:TT_CONNECTED_STRING];
-            break;
-            
-        case TTGoxSocketConnectionStateConnecting:
-            [_connectionStateTextView setString:TT_CONNECTING_STRING];
-            break;
-            
-        case TTGoxSocketConnectionStateNone:
-            [_connectionStateTextView setString:TT_NONE_STRING];
-            break;
-            
-        case TTGoxSocketConnectionStateFailed:
-            [_connectionStateTextView setString:TT_FAILED_STRING];
-            break;
-            
-        case TTGoxSocketConnectionStateNotConnected:
-            [_connectionStateTextView setString:TT_NOTCONNECTED_STRING];
-            break;
-        }
-    [_connectionStateTextView setNeedsDisplay:YES];
+    NSString* stateStr = socketStateStringForConnectionState(state);
+    [_connectionStateTextView setString:stateStr];
 }
 
 - (id)initWithFrame:(NSRect)frame
 {
     self = [super initWithFrame:frame];
     if (self) {
+        _webSocket = [TTGoxSocketController sharedInstance];
+        
         _connectionStateTextView = [[TTTextView alloc]initWithFrame:CGRectZero];
         [_connectionStateTextView setBackgroundColor:[NSColor clearColor]];
-        [_connectionStateTextView setString:TT_NOTCONNECTED_STRING];
+        [_connectionStateTextView setString:socketStateStringForConnectionState(_webSocket.isConnected)];
         [_connectionStateTextView setFont:TT_TYPEWRITER_FONT];
         [self addSubview:_connectionStateTextView];
         
-        _webSocket = [TTGoxSocketController sharedInstance];
+        _scrollView = [[NSScrollView alloc]initWithFrame:CGRectZero];
+        [_scrollView setDocumentView:[NSView new]];
+//        [_scrollView.documentView setBackgroundColor:[NSColor blueColor]];
+        [self addSubview:_scrollView];
         
         [_webSocket addObserver:self forKeyPath:@"isConnected" options:NSKeyValueObservingOptionNew context:nil];
+        
+        // Enumerate the active currencies, and add a currency box for each, set their frames in the status bar's setframe method
+        
+        _currencyBoxes = [NSMutableArray array];
+        
+        [[TTGoxCurrencyController activeCurrencys] enumerateObjectsUsingBlock:^(NSString* currencyKey, NSUInteger idx, BOOL *stop) {
+            TTCurrencyBox* bx = [TTCurrencyBox new];
+            [bx setCurrency:currencyFromString(currencyKey)];
+            [self addSubview:bx];
+            [_currencyBoxes addObject:bx];
+        }];
     }
-    
     return self;
 }
 
@@ -94,12 +100,45 @@ static NSFont* TT_TYPEWRITER_FONT;
 {
     [super setFrame:frameRect];
     [_connectionStateTextView setFrame:(NSRect){TTStatusBarContentLeftOffset, CGRectGetHeight(frameRect) - 65, 185, 60}];
-}   
+    [_scrollView setFrame:(NSRect){0, 0, CGRectGetWidth(frameRect), TTCurrencyBoxHeight}];
+//    [_scrollView.documentView setSize:(NSSize){_currencyBoxes.count * TTCurrencyBoxWidth + (2 * TTStatusBarContentLeftOffset), TTCurrencyBoxHeight}];
+//    NSInteger numRows = _currencyBoxes.count / 8;
+//    #define TTCurrencyBoxSpacing 140.f
+    CGFloat boxSpace = CGRectGetWidth(frameRect) / 8;
+    [_currencyBoxes enumerateObjectsUsingBlock:^(TTCurrencyBox* box, NSUInteger idx, BOOL *stop) {
+        [box setFrame:(NSRect){((boxSpace / 2) - (TTCurrencyBoxWidth / 2)) + (boxSpace * (idx % 8)), TTStatusBarContentBottomOffset + ((idx / 8) * (TTCurrencyBoxHeight + 20)), TTCurrencyBoxWidth, TTCurrencyBoxHeight}];
+    }];
+}
 
 - (void)drawRect:(NSRect)dirtyRect
 {
     [[NSColor whiteColor] setFill];
     NSRectFill(dirtyRect);
+}
+
+NSString* socketStateStringForConnectionState (TTGoxSocketConnectionState state)
+{
+    switch (state) {
+        case TTGoxSocketConnectionStateConnected:
+            return TT_CONNECTED_STRING;
+            break;
+            
+        case TTGoxSocketConnectionStateConnecting:
+            return TT_CONNECTING_STRING;
+            break;
+            
+        case TTGoxSocketConnectionStateNone:
+            return TT_NONE_STRING;
+            break;
+            
+        case TTGoxSocketConnectionStateFailed:
+            return TT_FAILED_STRING;
+            break;
+            
+        case TTGoxSocketConnectionStateNotConnected:
+            return TT_NOTCONNECTED_STRING;
+            break;
+    }
 }
 
 // If you invoke display manually, it invokes layout and layout invokes updateConstraints.

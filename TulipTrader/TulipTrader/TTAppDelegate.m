@@ -14,7 +14,9 @@
 #define appTitle @"Tulip Trader v0.0.1"
 
 @interface TTAppDelegate ()
-
+{
+    NSSize partialScreenSize;
+}
 @property(nonatomic, retain)TTOperationsController* operationsController;
 @property(nonatomic, retain)TTMasterViewController* masterViewController;
 
@@ -27,6 +29,7 @@
 @synthesize managedObjectContext = _managedObjectContext;
 
 #pragma mark - NSWindowDelegate methods
+
 -(NSSize)window:(NSWindow *)window willUseFullScreenContentSize:(NSSize)proposedSize
 {
     NSRect newSizeAtOrigin = (NSRect){0,0,proposedSize};
@@ -37,22 +40,31 @@
 
 -(void)windowWillEnterFullScreen:(NSNotification *)notification
 {
-    RUDLog(@"!");
+    NSWindow* windowPtr = (NSWindow*)notification.object;
+    if (![windowPtr isKindOfClass:[NSWindow class]])
+        return;
+    RUDLog(@"Will Enter: %@", NSStringFromRect([windowPtr.contentView frame]));
+    partialScreenSize = [windowPtr.contentView frame].size;
 }
 
 -(void)windowDidEnterFullScreen:(NSNotification *)notification
 {
-    RUDLog(@"!");
+    NSWindow* windowPtr = (NSWindow*)notification.object;
+    if (![windowPtr isKindOfClass:[NSWindow class]])
+        return;
+    RUDLog(@"Did Enter: %@", NSStringFromRect([windowPtr.contentView frame]));
 }
 
 -(void)windowWillExitFullScreen:(NSNotification *)notification
 {
-     RUDLog(@"!");
+    [_masterViewController setViewFrameAndInformSubviews:(NSRect){0,0,partialScreenSize}];
 }
 
 -(void)windowDidExitFullScreen:(NSNotification *)notification
 {
-     RUDLog(@"!");
+//    NSWindow* windowPtr = (NSWindow*)notification.object;
+//    NSRect winFrame = [windowPtr.contentView frame];
+//    NSRect newSizeAtOrigin = (NSRect){0,0,winFrame.size};
 }
 
 #pragma mark - NSApplicationDelegate methods

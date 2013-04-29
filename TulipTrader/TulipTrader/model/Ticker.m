@@ -15,6 +15,7 @@
 @dynamic channel_id;
 @dynamic channel_name;
 @dynamic now;
+@dynamic timeStamp;
 @dynamic average;
 @dynamic buy;
 @dynamic high;
@@ -36,6 +37,8 @@
     [t setChannel_name:kRUStringOrNil([d objectForKey:@"channel_name"])];
     
     [t setChannel_id:kRUStringOrNil([d objectForKey:@"channel"])];
+    
+    [t setTimeStamp:[NSDate date]];
     
     NSDictionary* tickTypes = [d objectForKey:@"ticker"];
     
