@@ -29,6 +29,11 @@
 
 -(void)setString:(NSString *)string
 {
+    if (![NSThread isMainThread])
+    {
+        [self performSelectorOnMainThread:@selector(setString:) withObject:string waitUntilDone:NO];
+        return;
+    }
     [super setString:string];
     [self setNeedsDisplay:YES];
 }

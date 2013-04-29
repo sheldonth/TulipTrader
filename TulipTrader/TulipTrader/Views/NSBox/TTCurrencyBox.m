@@ -13,6 +13,7 @@
 #import "RUConstants.h"
 #import "Ticker.h"
 #import "Tick.h"
+#import "TTGoxPrivateMessageController.h"
 
 @interface TTCurrencyBox ()
 {
@@ -58,29 +59,54 @@ static NSFont* sellFont;
                              alpha:1.0];
 }
 
--(void)runQuery
+-(void)reloadBuy:(NSNotification*)sender
+{
+    TTGoxCurrency notifCurrency = currencyFromNumber([sender.userInfo objectForKey:@"currency"]);
+    if (notifCurrency == self.currency)
+        [self runBuy];
+}
+
+-(void)reloadSell:(NSNotification*)sender
+{
+    TTGoxCurrency notifCurrency = currencyFromNumber([sender.userInfo objectForKey:@"currency"]);
+    if (notifCurrency == self.currency)
+        [self runSell];
+}
+
+-(void)runSell
 {
     NSError* e = nil;
     sellTicks = [_appDelegateContext executeFetchRequest:_sellFetchRequest error:&e];
     if (e)
         @throw e;
+    if (sellTicks.count)
+    {
+        NSNumber* lastSell = [[(Ticker*)[sellTicks objectAtIndex:0]sell] value];
+        [_sellPriceText setString:RUStringWithFormat(@"%@", stringShortenedForCurrencyBox(lastSell.stringValue))];
+    }
+    else
+        [_sellPriceText setString:RUStringWithFormat(@"--:-----")];
+}
+
+-(void)runBuy
+{
+    NSError* e = nil;
     buyTicks = [_appDelegateContext executeFetchRequest:_buyFetchRequest error:&e];
     if (e)
         @throw e;
     if (buyTicks.count)
     {
         NSNumber* lastBuy = [[(Ticker*)[buyTicks objectAtIndex:0]buy] value];
-        [_buyPriceText setString:RUStringWithFormat(@"%@", lastBuy.stringValue)];
+        [_buyPriceText setString:RUStringWithFormat(@"%@", stringShortenedForCurrencyBox(lastBuy.stringValue))];
     }
     else
         [_buyPriceText setString:@"--.-----"];
-    if (sellTicks.count)
-    {
-        NSNumber* lastSell = [[(Ticker*)[sellTicks objectAtIndex:0]sell] value];
-        [_sellPriceText setString:RUStringWithFormat(@"%@", lastSell.stringValue)];
-    }
-    else
-        [_sellPriceText setString:RUStringWithFormat(@"--:-----")];
+}
+
+-(void)runQueries
+{
+    [self runBuy];
+    [self runSell];
 }
 
 -(void)setCurrency:(TTGoxCurrency)currency
@@ -91,7 +117,13 @@ static NSFont* sellFont;
     [self.sellFetchRequest setPredicate:[NSPredicate predicateWithFormat:@"sell.currency == %@", numberFromCurrency(currency)]];
     [self.buyFetchRequest setPredicate:[NSPredicate predicateWithFormat:@"buy.currency == %@", numberFromCurrency(currency)]];
     [self didChangeValueForKey:@"currency"];
-    [self runQuery];
+    [self runQueries];
+}
+
+-(void)dealloc
+{
+    [[NSNotificationCenter defaultCenter]removeObserver:self name:TTBuyNotificationString object:nil];
+    [[NSNotificationCenter defaultCenter]removeObserver:self name:TTSellNotificationString object:nil];
 }
 
 - (id)initWithFrame:(NSRect)frame
@@ -126,6 +158,9 @@ static NSFont* sellFont;
         [_buyPriceText setEditable:NO];
         [_buyPriceText setFont:buyFont];
         [self addSubview:_buyPriceText];
+        
+        [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(reloadBuy:) name:TTBuyNotificationString object:nil];
+        [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(reloadSell:) name:TTSellNotificationString object:nil];
     }
     return self;
 }
@@ -136,6 +171,17 @@ static NSFont* sellFont;
     [_buyPriceText setFrame:(NSRect){5, CGRectGetHeight(frameRect) - 60, 90, 30}];
     [_sellPriceText setFrame:(NSRect){5, CGRectGetHeight(frameRect) - 80, 90, 30}];
     [self setNeedsDisplay:YES];
+}
+
+NSString* stringShortenedForCurrencyBox(NSString* proposedVal)
+{
+    if (proposedVal.length < 10)
+        return proposedVal;
+    else
+    {
+        NSMutableString* s  = [NSMutableString stringWithString:proposedVal];
+        return [s substringToIndex:10];
+    }
 }
 
 //- (void)drawRect:(NSRect)dirtyRect

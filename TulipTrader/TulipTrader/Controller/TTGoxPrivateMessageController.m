@@ -13,6 +13,7 @@
 #import "RUConstants.h"
 #import "Ticker.h"
 #import "TTAppDelegate.h"
+#import "Tick.h"
 
 typedef enum{
     kTTGoxMarketNone = 0,
@@ -26,6 +27,9 @@ NSString* const kTTGoxTickerKey = @"ticker";
 NSString* const kTTGoxTradeKey = @"trade";
 
 static NSManagedObjectContext* primaryContext;
+
+NSString* const TTBuyNotificationString = @"ttBuyNotification";
+NSString* const TTSellNotificationString = @"ttSellNotification";
 
 @implementation TTGoxPrivateMessageController
 
@@ -51,6 +55,8 @@ static NSManagedObjectContext* primaryContext;
     [ticker.managedObjectContext save:&e];
     if (e)
         RUDLog(@"Error saving ticker on channel: %@", ticker.channel_name);
+    [[NSNotificationCenter defaultCenter]postNotificationName:TTBuyNotificationString object:nil userInfo:@{@"currency": ticker.buy.currency}];
+    [[NSNotificationCenter defaultCenter]postNotificationName:TTSellNotificationString object:nil userInfo:@{@"currency": ticker.sell.currency}];
 }
 
 -(void)shouldExamineResponseDictionary:(NSDictionary *)dictionary ofMessageType:(TTGoxSocketMessageType)type
