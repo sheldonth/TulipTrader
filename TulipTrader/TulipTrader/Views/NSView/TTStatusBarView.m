@@ -60,7 +60,8 @@ static NSFont* TT_TYPEWRITER_FONT;
 {
     TTGoxSocketConnectionState state = (TTGoxSocketConnectionState)[[change objectForKey:@"new"]intValue];
     NSString* stateStr = socketStateStringForConnectionState(state);
-    [_connectionStateTextView setString:stateStr];
+    if (![[_connectionStateTextView string]isEqualToString:stateStr])
+        [_connectionStateTextView setString:stateStr];
 }
 
 - (id)initWithFrame:(NSRect)frame
@@ -101,9 +102,6 @@ static NSFont* TT_TYPEWRITER_FONT;
     [super setFrame:frameRect];
     [_connectionStateTextView setFrame:(NSRect){TTStatusBarContentLeftOffset, CGRectGetHeight(frameRect) - 65, 185, 60}];
     [_scrollView setFrame:(NSRect){0, 0, CGRectGetWidth(frameRect), TTCurrencyBoxHeight}];
-//    [_scrollView.documentView setSize:(NSSize){_currencyBoxes.count * TTCurrencyBoxWidth + (2 * TTStatusBarContentLeftOffset), TTCurrencyBoxHeight}];
-//    NSInteger numRows = _currencyBoxes.count / 8;
-//    #define TTCurrencyBoxSpacing 140.f
     CGFloat boxSpace = CGRectGetWidth(frameRect) / 8;
     [_currencyBoxes enumerateObjectsUsingBlock:^(TTCurrencyBox* box, NSUInteger idx, BOOL *stop) {
         [box setFrame:(NSRect){((boxSpace / 2) - (TTCurrencyBoxWidth / 2)) + (boxSpace * (idx % 8)), TTStatusBarContentBottomOffset + ((idx / 8) * (TTCurrencyBoxHeight + 20)), TTCurrencyBoxWidth, TTCurrencyBoxHeight}];

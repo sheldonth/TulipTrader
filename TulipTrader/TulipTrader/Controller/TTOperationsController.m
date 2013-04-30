@@ -10,12 +10,14 @@
 #import "RUConstants.h"
 #import "TTGoxPrivateMessageController.h"
 #import "TTGoxResultMessageController.h"
+#import "TTOERatesController.h"
 
 @interface TTOperationsController ()
 
 @property(nonatomic, retain) TTGoxSocketController* socketController;
 @property(nonatomic, retain) TTGoxPrivateMessageController* privateMessageController;
 @property(nonatomic, retain) TTGoxResultMessageController* resultMessageController;
+@property(nonatomic, retain) TTOERatesController* oeRatesController;
 
 @end
 
@@ -44,6 +46,10 @@
         [_socketController setResultDelegate:_resultMessageController];
         
         [_socketController open];
+        
+        _oeRatesController = [TTOERatesController new];
+        
+        [_oeRatesController reloadRates];
     }
     return self;
 }

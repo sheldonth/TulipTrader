@@ -35,7 +35,6 @@
         return;
     }
     [super setString:string];
-    [self setNeedsDisplay:YES];
 }
 
 @end
