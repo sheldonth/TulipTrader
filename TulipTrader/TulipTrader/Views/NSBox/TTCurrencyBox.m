@@ -16,20 +16,12 @@
 #import "TTGoxPrivateMessageController.h"
 
 @interface TTCurrencyBox ()
-{
-    @private
-    NSArray* buyTicks;
-    NSArray* sellTicks;
-}
 @property (nonatomic, retain) NSImageView* flagImage;
 @property (nonatomic, retain) TTTextView* sellPriceText;
 @property (nonatomic, retain) TTTextView* buyPriceText;
-@property (nonatomic, retain) NSFetchRequest* buyFetchRequest;
-@property (nonatomic, retain) NSFetchRequest* sellFetchRequest;
+@property (nonatomic, retain) NSFetchRequest* unifiedFetchRequest;
 @property (nonatomic, retain) NSTimer* refreshTimer;
-
 @property (assign) NSManagedObjectContext* appDelegateContext;
-
 @end
 
 @implementation TTCurrencyBox
@@ -59,54 +51,33 @@ static NSFont* sellFont;
                              alpha:1.0];
 }
 
--(void)reloadBuy:(NSNotification*)sender
+-(void)reloadTicker:(NSNotification*)sender
 {
-    TTGoxCurrency notifCurrency = currencyFromNumber([sender.userInfo objectForKey:@"currency"]);
-    if (notifCurrency == self.currency)
-        [self runBuy];
+    Ticker* ticker = [sender.userInfo objectForKey:@"Ticker"];
+    TTGoxCurrency currency = currencyFromNumber(ticker.buy.currency); // @SHELDON ITS BAD FORM THAT I'M ASSUMING TO USE THE BUY TICK CURRENCY!
+    if (currency == self.currency)
+        [self runQuery];
 }
 
--(void)reloadSell:(NSNotification*)sender
-{
-    TTGoxCurrency notifCurrency = currencyFromNumber([sender.userInfo objectForKey:@"currency"]);
-    if (notifCurrency == self.currency)
-        [self runSell];
-}
-
--(void)runSell
+-(void)runQuery
 {
     NSError* e = nil;
-    sellTicks = [_appDelegateContext executeFetchRequest:_sellFetchRequest error:&e];
+    NSArray* latestTicker = [_appDelegateContext executeFetchRequest:_unifiedFetchRequest error:&e];
     if (e)
-        @throw e;
-    if (sellTicks.count)
+        {RUDLog(@"Error fetching latest ticker for channel: %@", bitcoinTickerChannelNameForCurrency(_currency));return;}
+    if (latestTicker.count)
     {
-        NSNumber* lastSell = [[(Ticker*)[sellTicks objectAtIndex:0]sell] value];
+        Ticker* ticker = [latestTicker lastObject];
+        NSNumber* lastSell = [ticker.sell value];
+        NSNumber* lastBuy = [ticker.buy value];
         [_sellPriceText setString:RUStringWithFormat(@"%@", stringShortenedForCurrencyBox(lastSell.stringValue))];
-    }
-    else
-        [_sellPriceText setString:RUStringWithFormat(@"--:-----")];
-}
-
--(void)runBuy
-{
-    NSError* e = nil;
-    buyTicks = [_appDelegateContext executeFetchRequest:_buyFetchRequest error:&e];
-    if (e)
-        @throw e;
-    if (buyTicks.count)
-    {
-        NSNumber* lastBuy = [[(Ticker*)[buyTicks objectAtIndex:0]buy] value];
         [_buyPriceText setString:RUStringWithFormat(@"%@", stringShortenedForCurrencyBox(lastBuy.stringValue))];
     }
     else
+    {
         [_buyPriceText setString:@"--.-----"];
-}
-
--(void)runQueries
-{
-    [self runBuy];
-    [self runSell];
+        [_sellPriceText setString:@"--.-----"];
+    }
 }
 
 -(void)setCurrency:(TTGoxCurrency)currency
@@ -114,16 +85,15 @@ static NSFont* sellFont;
     [self willChangeValueForKey:@"currency"];
     _currency = currency;
     [self setTitle:stringFromCurrency(currency)];
-    [self.sellFetchRequest setPredicate:[NSPredicate predicateWithFormat:@"sell.currency == %@", numberFromCurrency(currency)]];
-    [self.buyFetchRequest setPredicate:[NSPredicate predicateWithFormat:@"buy.currency == %@", numberFromCurrency(currency)]];
+    NSPredicate* pred = [NSPredicate predicateWithFormat:@"channel_name == %@", bitcoinTickerChannelNameForCurrency(currency)];
+    [self.unifiedFetchRequest setPredicate:pred];
     [self didChangeValueForKey:@"currency"];
-    [self runQueries];
+    [self runQuery];
 }
 
 -(void)dealloc
 {
-    [[NSNotificationCenter defaultCenter]removeObserver:self name:TTBuyNotificationString object:nil];
-    [[NSNotificationCenter defaultCenter]removeObserver:self name:TTSellNotificationString object:nil];
+    [[NSNotificationCenter defaultCenter]removeObserver:self name:TTCurrencyUpdateNotificationString object:nil];
 }
 
 - (id)initWithFrame:(NSRect)frame
@@ -139,14 +109,11 @@ static NSFont* sellFont;
         [self setTitleFont:titleFont];
         
         [self setAppDelegateContext:[(TTAppDelegate*)[[NSApplication sharedApplication]delegate]managedObjectContext]];
-        [self setBuyFetchRequest:[NSFetchRequest fetchRequestWithEntityName:@"Ticker"]];
-        [self setSellFetchRequest:[NSFetchRequest fetchRequestWithEntityName:@"Ticker"]];
+        [self setUnifiedFetchRequest:[NSFetchRequest fetchRequestWithEntityName:@"Ticker"]];
         
         NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"timeStamp" ascending:NO];
-        [_buyFetchRequest setSortDescriptors:@[sortDescriptor]];
-        [_sellFetchRequest setSortDescriptors:@[sortDescriptor]];
-        [_buyFetchRequest setFetchLimit:1];
-        [_sellFetchRequest setFetchLimit:1];
+        [_unifiedFetchRequest setSortDescriptors:@[sortDescriptor]];
+        [_unifiedFetchRequest setFetchLimit:1];
         
         [self setSellPriceText:[TTTextView new]];
         [_sellPriceText setBackgroundColor:[NSColor clearColor]];
@@ -159,8 +126,7 @@ static NSFont* sellFont;
         [_buyPriceText setFont:buyFont];
         [self addSubview:_buyPriceText];
         
-        [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(reloadBuy:) name:TTBuyNotificationString object:nil];
-        [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(reloadSell:) name:TTSellNotificationString object:nil];
+        [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(reloadTicker:) name:TTCurrencyUpdateNotificationString object:nil];
     }
     return self;
 }
@@ -183,11 +149,5 @@ NSString* stringShortenedForCurrencyBox(NSString* proposedVal)
         return [s substringToIndex:10];
     }
 }
-
-//- (void)drawRect:(NSRect)dirtyRect
-//{
-//    [[NSColor blueColor]setFill];
-//    NSRectFill(dirtyRect);
-//}
 
 @end

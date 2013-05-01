@@ -29,6 +29,16 @@ NSString* const goxAUDString = @"AUD";
 
 #define ExceptionOnNoCurrencyFound 1
 
+NSString* bitcoinTickerChannelNameForCurrency(TTGoxCurrency currency)
+{
+    if (currency == TTGoxCurrencyBTC)
+    {
+        NSException *e = [NSException exceptionWithName:NSInvalidArgumentException reason:@"Can't ask for channel in bitcoin ticker channel itself, must be in terms of another currency." userInfo:@{@"currency": @(currency)}];
+        @throw e;
+    }
+    return RUStringWithFormat(@"ticker.BTC%@", stringFromCurrency(currency));
+}
+
 NSString* stringFromCurrency(TTGoxCurrency currency)
 {
     switch (currency) {

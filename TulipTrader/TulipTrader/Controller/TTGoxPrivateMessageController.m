@@ -28,8 +28,7 @@ NSString* const kTTGoxTradeKey = @"trade";
 
 static NSManagedObjectContext* primaryContext;
 
-NSString* const TTBuyNotificationString = @"ttBuyNotification";
-NSString* const TTSellNotificationString = @"ttSellNotification";
+NSString* const TTCurrencyUpdateNotificationString = @"ttCurrencyUpdateNotification";
 
 @implementation TTGoxPrivateMessageController
 
@@ -55,9 +54,7 @@ NSString* const TTSellNotificationString = @"ttSellNotification";
     [ticker.managedObjectContext save:&e];
     if (e)
         RUDLog(@"Error saving ticker on channel: %@", ticker.channel_name);
-    [[NSNotificationCenter defaultCenter]postNotificationName:TTBuyNotificationString object:nil userInfo:@{@"currency": ticker.buy.currency}];
-    [[NSNotificationCenter defaultCenter]postNotificationName:TTSellNotificationString object:nil userInfo:@{@"currency": ticker.sell.currency}];
-}
+    [[NSNotificationCenter defaultCenter]postNotificationName:TTCurrencyUpdateNotificationString object:nil userInfo:@{@"Ticker": ticker}];}
 
 -(void)shouldExamineResponseDictionary:(NSDictionary *)dictionary ofMessageType:(TTGoxSocketMessageType)type
 {

@@ -14,7 +14,6 @@
 
 RU_SYNTHESIZE_SINGLETON_DECLARATION_FOR_CLASS_WITH_ACCESSOR(TTGoxPrivateMessageController, sharedInstance);
 
-extern NSString* const TTBuyNotificationString;
-extern NSString* const TTSellNotificationString;
+extern NSString* const TTCurrencyUpdateNotificationString;
 
 @end

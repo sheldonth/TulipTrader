@@ -29,6 +29,7 @@ typedef enum{
     TTGoxCurrencyTHB  // Thai Bhat
 }TTGoxCurrency;
 
+// Makes string consts available outside class's implementation
 extern NSString* const goxUSDString;
 extern NSString* const goxBTCString;
 
@@ -37,3 +38,4 @@ TTGoxCurrency currencyFromString(NSString* string);
 NSNumber* numberFromCurrencyString(NSString* string);
 NSString* stringFromCurrency(TTGoxCurrency currency);
 NSNumber* numberFromCurrency(TTGoxCurrency currency);
+NSString* bitcoinTickerChannelNameForCurrency(TTGoxCurrency currency);
