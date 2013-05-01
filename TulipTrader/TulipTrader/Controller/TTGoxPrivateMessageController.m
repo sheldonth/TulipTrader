@@ -40,7 +40,7 @@ NSString* const TTSellNotificationString = @"ttSellNotification";
 
 -(void)recordDepth:(NSDictionary*)depthDictionary
 {
-
+    
 }
 
 -(void)recordTrade:(NSDictionary*)tradeDictionary

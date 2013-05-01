@@ -47,10 +47,10 @@ static NSFont* TT_TYPEWRITER_FONT;
 {
     if (self == [TTStatusBarView class])
     {
-        TT_NOTCONNECTED_STRING = NSLocalizedString(@"Not Connected", @"TT_NOTCONNECTED_STRING");
-        TT_CONNECTED_STRING = NSLocalizedString(@"Connected", @"TT_CONNECTED_STRING");
-        TT_CONNECTING_STRING = NSLocalizedString(@"Connecting", @"TT_CONNECTING_STRING");
-        TT_FAILED_STRING = NSLocalizedString(@"Failed", @"TT_FAILED_STRING");
+        TT_NOTCONNECTED_STRING = NSLocalizedString(@"Socket: Closed", @"TT_NOTCONNECTED_STRING");
+        TT_CONNECTED_STRING = NSLocalizedString(@"Socket: Open", @"TT_CONNECTED_STRING");
+        TT_CONNECTING_STRING = NSLocalizedString(@"Socket: Connecting", @"TT_CONNECTING_STRING");
+        TT_FAILED_STRING = NSLocalizedString(@"Socket: Failed", @"TT_FAILED_STRING");
         TT_NONE_STRING = NSLocalizedString(@"No State Available", @"TT_FAILED_NONE");
         TT_TYPEWRITER_FONT = [NSFont fontWithName:@"American Typewriter" size:22.f];
     }

@@ -29,17 +29,17 @@ RU_SYNTHESIZE_SINGLETON_FOR_CLASS_WITH_ACCESSOR(TTGoxCurrencyController, sharedI
                            @"CAD": @(1),
                            @"CHF": @(1),
                            @"CNY": @(1),
-                           @"DKK": @(1),
+                           @"DKK": @(0),
                            @"EUR": @(1),
                            @"GBP": @(1),
-                           @"HKD": @(1),
+                           @"HKD": @(0),
                            @"JPY": @(1),
-                           @"NZD": @(1),
-                           @"PLN": @(1),
-                           @"RUB": @(1),
-                           @"SEK": @(1),
-                           @"SGD": @(1),
-                           @"THB": @(1),};
+                           @"NZD": @(0),
+                           @"PLN": @(0),
+                           @"RUB": @(0),
+                           @"SEK": @(0),
+                           @"SGD": @(0),
+                           @"THB": @(0),};
 
 }
 

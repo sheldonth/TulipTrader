@@ -9,6 +9,7 @@
 #import "Ticker.h"
 #import "Tick.h"
 #import "RUClassOrNilUtil.h"
+#import "RUConstants.h"
 
 @implementation Ticker
 
@@ -35,6 +36,8 @@
     Ticker* t = [NSEntityDescription insertNewObjectForEntityForName:@"Ticker" inManagedObjectContext:context];
     
     [t setChannel_name:kRUStringOrNil([d objectForKey:@"channel_name"])];
+    
+    RUDLog(@"%@", t.channel_name);
     
     [t setChannel_id:kRUStringOrNil([d objectForKey:@"channel"])];
     

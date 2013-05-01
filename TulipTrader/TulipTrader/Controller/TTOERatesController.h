@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "TTGoxCurrency.h"
 
 @protocol TTOERatesControllerDelegate <NSObject>
 
@@ -25,6 +26,10 @@ extern NSString* const OELastLoadedDataKey;
 @interface TTOERatesController : NSObject <NSURLConnectionDelegate, NSURLConnectionDataDelegate>
 
 -(void)reloadRates;
+
+-(NSNumber*)priceInUSDBaseForCurrency:(TTGoxCurrency)currency;
+
+-(NSNumber*)priceForCurrency:(TTGoxCurrency)currency inBaseCurrency:(TTGoxCurrency)baseCurrency;
 
 @property(assign)id<TTOERatesControllerDelegate> delegate;
 

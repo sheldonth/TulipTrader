@@ -34,6 +34,41 @@ NSString* const OELastLoadedDataKey = @"OELastLoadedData";
 
 @implementation TTOERatesController
 
+#pragma mark - public methods
+
+/*
+ For example, if you need to convert British Pounds (GBP) to Hong Kong Dollars (HKD), the calculation is equal to converting the GBP to USD first, then converting those USD to HKD - but we can do this in a single step.
+ 
+ // let usd_gbp = 0.6438, usd_hkd = 7.7668
+     gbp_hkd = usd_hkd * (1 / usd_gbp)
+ 
+ In other words, if you have the following exchange rates relative to US Dollars (the common 'base'): USD/GBP 0.6438 and USD/HKD 7.7668, then you can calculate GBP/HKD 12.0639 by multiplying 7.7668 by the inverse of 0.6438, or 7.7668 * (1 / 0.6438).
+ */
+
+-(NSNumber*)priceForCurrency:(TTGoxCurrency)currency inBaseCurrency:(TTGoxCurrency)baseCurrency
+{
+    NSNumber* targetCurrencyInUSD = [self priceInUSDBaseForCurrency:currency];
+    NSNumber* baseCurrencyInUSD = [self priceInUSDBaseForCurrency:baseCurrency];
+    double translatedValue = targetCurrencyInUSD.doubleValue * (1 / baseCurrencyInUSD.doubleValue);
+    return @(translatedValue);
+}
+
+-(NSNumber*)priceInUSDBaseForCurrency:(TTGoxCurrency)currency
+{
+    NSNumber* p = [self.currencyValues objectForKey:stringFromCurrency(currency)];
+    return p;
+}
+
+-(void)reloadRates
+{
+    NSURLRequest* r = [[NSURLRequest alloc]initWithURL:urlForDataWithBaseCurrency(TTGoxCurrencyUSD) cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:30.f];
+    _urlConnection = [[NSURLConnection alloc]initWithRequest:r delegate:self startImmediately:YES];
+    _requestData = [NSMutableData data];
+}
+
+
+#pragma mark - private methods
+
 -(id)init
 {
     self = [super init];
@@ -85,13 +120,6 @@ NSURL* urlForDataWithBaseCurrency(TTGoxCurrency baseCurrency)
     return [NSURL URLWithString:urlStr];
 }
 
--(void)reloadRates
-{
-    NSURLRequest* r = [[NSURLRequest alloc]initWithURL:urlForDataWithBaseCurrency(TTGoxCurrencyUSD) cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:30.f];
-    _urlConnection = [[NSURLConnection alloc]initWithRequest:r delegate:self startImmediately:YES];
-    _requestData = [NSMutableData data];
-}
-
 - (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data
 {
     [_requestData appendData:data];
@@ -107,6 +135,5 @@ NSURL* urlForDataWithBaseCurrency(TTGoxCurrency baseCurrency)
     [self setLastLoadedData:[dict objectForKey:@"rates"]];
     [self setCurrencyValues:[dict objectForKey:@"rates"]];
 }
-
 
 @end

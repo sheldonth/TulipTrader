@@ -41,7 +41,16 @@ RU_SYNTHESIZE_SINGLETON_FOR_CLASS_WITH_ACCESSOR(TTGoxSocketController, sharedIns
 #pragma mark Public Methods
 
 NSString* const kTTGoxSocketTradesChannelID  = @"dbf1dee9-4f2e-4a08-8cb7-748919a71b21";
-NSString* const kTTGoxSocketTickerChannelID  = @"d5f06780-30a8-4a48-a2f8-7ed181b4a13f";
+
+NSString* const kTTGoxSocketTickerUSDChannelID  = @"d5f06780-30a8-4a48-a2f8-7ed181b4a13f";
+NSString* const kTTGoxSocketDepthUSDChannelID  = @"24e67e0d-1cad-4cc0-9e7a-f8523ef460fe";
+
+NSString* const kTTGoxSocketTickerAUDChannelID = @"eb6aaa11-99d0-4f64-9e8c-1140872a423d";
+NSString* const kTTGoxSocketDepthAUDChannelID = @"296ee352-dd5d-46f3-9bea-5e39dede2005";
+
+NSString* const kTTGoxSocketTickerCADChannelID = @"10720792-084d-45ba-92e3-cf44d9477775";
+NSString* const kTTGoxSocketDepthCADChannelID = @"5b234cc3-a7c1-47ce-854f-27aee4cdbda5";
+
 NSString* const kTTGoxSocketDepthChannelID  = @"24e67e0d-1cad-4cc0-9e7a-f8523ef460fe";
 
 static NSMutableString* kTTGoxWebSocketURL;
@@ -58,6 +67,7 @@ static NSMutableString* kTTGoxSocketIOURL;
     [[currencyUsageDict allKeys] enumerateObjectsUsingBlock:^(NSString* key, NSUInteger idx, BOOL *stop) {
         if ([[currencyUsageDict objectForKey:key]isEqualToNumber:@(1)])
             [kTTGoxWebSocketURL appendFormat:@"%@,", key];
+            return;
     }];
 }
 
@@ -72,6 +82,14 @@ static NSMutableString* kTTGoxSocketIOURL;
     return self;
 }
 
+-(void)subscribeToChannelID:(NSString*)channelID
+{
+//    NSDictionary* d = @{@"channel" : channelID, @"op" : @"subscribe"};
+    NSDictionary* d = @{@"channel" : channelID, @"op" : @"mtgox.subscribe"};
+    
+    [self write:[d JSONString]];
+}
+
 -(void)subscribe:(TTGoxSubscriptionChannel)channel
 {
     NSString* channelID;
@@ -81,7 +99,7 @@ static NSMutableString* kTTGoxSocketIOURL;
             channelID = kTTGoxSocketTradesChannelID;
             break;
         case TTGoxSubscriptionChannelTicker:
-            channelID = kTTGoxSocketTickerChannelID;
+//            channelID = kTTGoxSocketTickerChannelID;
             break;
         case TTGoxSubscriptionChannelDepth:
             channelID = kTTGoxSocketDepthChannelID;
@@ -142,9 +160,23 @@ static NSMutableString* kTTGoxSocketIOURL;
 {
     RUDLog(@"%@ did open", webSocket);
     [self setIsConnected:TTGoxSocketConnectionStateConnected];
-    [self subscribe:TTGoxSubscriptionChannelTicker];
-    [self subscribe:TTGoxSubscriptionChannelDepth];
-    [self subscribe:TTGoxSubscriptionChannelTrades];
+    
+    [self subscribeToChannelID:@"ticker.BTCUSD"];
+    [self subscribeToChannelID:@"ticker.BTCEUR"];
+    [self subscribeToChannelID:@"ticker.BTCCAD"];
+    [self subscribeToChannelID:@"ticker.BTCCHF"];
+//    [self subscribeToChannelID:@"ticker.BTCCNY"];
+//    [self subscribeToChannelID:@"ticker.BTCDKK"];
+//    [self subscribeToChannelID:@"ticker.BTCGBP"];
+//    [self subscribeToChannelID:@"ticker.BTCHKD"];
+//    [self subscribeToChannelID:@"ticker.BTCJPY"];
+//    [self subscribeToChannelID:@"ticker.BTCNZD"];
+//    [self subscribeToChannelID:@"ticker.BTCPLN"];
+//    [self subscribeToChannelID:@"ticker.BTCRUB"];
+//    [self subscribeToChannelID:@"ticker.BTCSEK"];
+//    [self subscribeToChannelID:@"ticker.BTCSGD"];
+//    [self subscribeToChannelID:@"ticker.BTCTHB"];
+//    [self subscribeToChannelID:@"ticker.BTCAUD"];
 }
 
 -(void)webSocket:(SRWebSocket *)webSocket didCloseWithCode:(NSInteger)code reason:(NSString *)reason wasClean:(BOOL)wasClean

@@ -11,4 +11,4 @@
 #define kTTWindowWidth 1200
 #define kTTWindowHeight 800
 
-#define kTTStatusBarHeight 200
+#define kTTStatusBarHeight 125
