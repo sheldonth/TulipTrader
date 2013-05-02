@@ -22,6 +22,8 @@
 @property (nonatomic, retain) NSFetchRequest* unifiedFetchRequest;
 @property (nonatomic, retain) NSTimer* refreshTimer;
 @property (assign) NSManagedObjectContext* appDelegateContext;
+@property (nonatomic, retain) TTTextView* buyWordText;
+@property (nonatomic, retain) TTTextView* sellWordText;
 @end
 
 @implementation TTCurrencyBox
@@ -29,12 +31,14 @@
 static NSFont* titleFont;
 static NSFont* buyFont;
 static NSFont* sellFont;
+static NSFont* buySellLabelsFont;
 
 +(void)initialize
 {
     titleFont = [NSFont fontWithName:@"American Typewriter" size:10.f];
     buyFont = [NSFont fontWithName:@"Helvetica-Bold" size:14.f];
     sellFont = [NSFont fontWithName:@"Helvetica-Bold" size:14.f];
+    buySellLabelsFont = [NSFont fontWithName:@"Avenir Next" size:12.f];
 }
 
 -(NSColor*)colorWithHexString:(NSString*)string
@@ -84,7 +88,7 @@ static NSFont* sellFont;
 {
     [self willChangeValueForKey:@"currency"];
     _currency = currency;
-    [self setTitle:stringFromCurrency(currency)];
+    [self setTitle:RUStringWithFormat(@"%@.BTC", stringFromCurrency(currency))];
     NSPredicate* pred = [NSPredicate predicateWithFormat:@"channel_name == %@", bitcoinTickerChannelNameForCurrency(currency)];
     [self.unifiedFetchRequest setPredicate:pred];
     [self didChangeValueForKey:@"currency"];
@@ -126,6 +130,22 @@ static NSFont* sellFont;
         [_buyPriceText setFont:buyFont];
         [self addSubview:_buyPriceText];
         
+        [self setBuyWordText:[TTTextView new]];
+        [_buyWordText setBackgroundColor:[NSColor clearColor]];
+        [_buyWordText setEditable:NO];
+        [_buyWordText setFont:buySellLabelsFont];
+        [_buyWordText setTextColor:[self colorWithHexString:@"337147"]];
+        [_buyWordText setString:@"Buy:"];
+        [self addSubview:_buyWordText];
+        
+        [self setSellWordText:[TTTextView new]];
+        [_sellWordText setBackgroundColor:[NSColor clearColor]];
+        [_sellWordText setEditable:NO];
+        [_sellWordText setFont:buySellLabelsFont];
+        [_sellWordText setTextColor:[self colorWithHexString:@"f26c4f"]];
+        [_sellWordText setString:@"Sell:"];
+        [self addSubview:_sellWordText];
+        
         [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(reloadTicker:) name:TTCurrencyUpdateNotificationString object:nil];
     }
     return self;
@@ -134,8 +154,10 @@ static NSFont* sellFont;
 -(void)setFrame:(NSRect)frameRect
 {
     [super setFrame:frameRect];
-    [_buyPriceText setFrame:(NSRect){5, CGRectGetHeight(frameRect) - 60, 90, 30}];
-    [_sellPriceText setFrame:(NSRect){5, CGRectGetHeight(frameRect) - 80, 90, 30}];
+    [_buyPriceText setFrame:(NSRect){25, CGRectGetHeight(frameRect) - 60, 90, 30}];
+    [_sellPriceText setFrame:(NSRect){25, CGRectGetHeight(frameRect) - 80, 90, 30}];
+    [_sellWordText setFrame:(NSRect){-5, CGRectGetHeight(frameRect) - 76, 40, 25}];
+    [_buyWordText setFrame:(NSRect){-5, CGRectGetHeight(frameRect) - 56, 40, 25}];
     [self setNeedsDisplay:YES];
 }
 

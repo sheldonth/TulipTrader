@@ -10,9 +10,17 @@
 #import "RUSingleton.h"
 #import "TTGoxSocketController.h"
 
+@protocol TTGoxPrivateMessageControllerLagDelegate <NSObject>
+
+-(void)lagObserved:(NSDictionary*)lagDict;
+
+@end
+
 @interface TTGoxPrivateMessageController : NSObject <TTGoxSocketControllerMessageDelegate>
 
 RU_SYNTHESIZE_SINGLETON_DECLARATION_FOR_CLASS_WITH_ACCESSOR(TTGoxPrivateMessageController, sharedInstance);
+
+@property(nonatomic)id<TTGoxPrivateMessageControllerLagDelegate>lagDelegate;
 
 extern NSString* const TTCurrencyUpdateNotificationString;
 

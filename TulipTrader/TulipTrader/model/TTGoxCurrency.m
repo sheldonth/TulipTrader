@@ -27,7 +27,7 @@ NSString* const goxSGDString = @"SGD";
 NSString* const goxTHBString = @"THB";
 NSString* const goxAUDString = @"AUD";
 
-#define ExceptionOnNoCurrencyFound 1
+#define ExceptionOnNoCurrencyFound 0
 
 NSString* bitcoinTickerChannelNameForCurrency(TTGoxCurrency currency)
 {

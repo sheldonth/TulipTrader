@@ -19,12 +19,14 @@ typedef enum{
     kTTGoxMarketNone = 0,
     kTTGoxMarketDepth = 1,
     kTTGoxMarketTrade = 2,
-    kTTGoxMarketTicker = 3
+    kTTGoxMarketTicker = 3,
+    kTTGoxMarketLag = 4
 }kTTGoxMarketDataType;
 
 NSString* const kTTGoxDepthKey = @"depth";
 NSString* const kTTGoxTickerKey = @"ticker";
 NSString* const kTTGoxTradeKey = @"trade";
+NSString* const kTTGoxLagKey = @"lag";
 
 static NSManagedObjectContext* primaryContext;
 
@@ -54,7 +56,14 @@ NSString* const TTCurrencyUpdateNotificationString = @"ttCurrencyUpdateNotificat
     [ticker.managedObjectContext save:&e];
     if (e)
         RUDLog(@"Error saving ticker on channel: %@", ticker.channel_name);
-    [[NSNotificationCenter defaultCenter]postNotificationName:TTCurrencyUpdateNotificationString object:nil userInfo:@{@"Ticker": ticker}];}
+    [[NSNotificationCenter defaultCenter]postNotificationName:TTCurrencyUpdateNotificationString object:nil userInfo:@{@"Ticker": ticker}];
+}
+
+-(void)observeLag:(NSDictionary*)lagDictionary
+{
+    if (self.lagDelegate && [self.lagDelegate respondsToSelector:@selector(lagObserved:)])
+        [_lagDelegate lagObserved:lagDictionary];
+}
 
 -(void)shouldExamineResponseDictionary:(NSDictionary *)dictionary ofMessageType:(TTGoxSocketMessageType)type
 {
@@ -70,6 +79,10 @@ NSString* const TTCurrencyUpdateNotificationString = @"ttCurrencyUpdateNotificat
             
         case kTTGoxMarketTicker:
             [self recordTicker:dictionary];
+            break;
+            
+        case kTTGoxMarketLag:
+            [self observeLag:dictionary];
             break;
             
         case kTTGoxMarketNone:
@@ -90,6 +103,8 @@ kTTGoxMarketDataType TTGoxPrivateMessageControllerDataType(NSString* typeString)
         return kTTGoxMarketTicker;
     else if ([typeString isEqualToString:kTTGoxTradeKey])
         return kTTGoxMarketTrade;
+    else if ([typeString isEqualToString:kTTGoxLagKey])
+        return kTTGoxMarketLag;
     else
         return kTTGoxMarketNone;
 }

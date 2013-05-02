@@ -161,10 +161,10 @@ static NSMutableString* kTTGoxSocketIOURL;
     RUDLog(@"%@ did open", webSocket);
     [self setIsConnected:TTGoxSocketConnectionStateConnected];
     
-    [self subscribeToChannelID:@"ticker.BTCUSD"];
-    [self subscribeToChannelID:@"ticker.BTCEUR"];
-    [self subscribeToChannelID:@"ticker.BTCCAD"];
-    [self subscribeToChannelID:@"ticker.BTCCHF"];
+    [self subscribeToChannelID:@"trade.lag"];
+//    [self subscribeToChannelID:@"ticker.BTCEUR"];
+//    [self subscribeToChannelID:@"ticker.BTCCAD"];
+//    [self subscribeToChannelID:@"ticker.BTCCHF"];
 //    [self subscribeToChannelID:@"ticker.BTCCNY"];
 //    [self subscribeToChannelID:@"ticker.BTCDKK"];
 //    [self subscribeToChannelID:@"ticker.BTCGBP"];
