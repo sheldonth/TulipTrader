@@ -33,11 +33,11 @@
         
         [self setArbitrageStackViewsArray:[NSMutableArray array]];
         NSArray* __activeCurrencies = [TTGoxCurrencyController activeCurrencys];
-        [__activeCurrencies enumerateObjectsUsingBlock:^(NSNumber* obj, NSUInteger idx, BOOL *stop) {
+        [__activeCurrencies enumerateObjectsUsingBlock:^(NSString* obj, NSUInteger idx, BOOL *stop) {
             TTArbitrageStackView* stackView = [TTArbitrageStackView new];
-            [stackView setBaseCurrency:currencyFromNumber(obj)];
-            if (idx == 2)
-                [self.view addSubview:stackView];
+            [stackView setBaseCurrency:currencyFromString(obj)];
+//            if (idx == 2)
+            [self.view addSubview:stackView];
             [self.arbitrageStackViewsArray addObject:stackView];
         }];
     }
