@@ -17,8 +17,11 @@
 #import "TTOERatesController.h"
 
 #define ABBoxPrimaryTitleHeight 40
-#define ABBoxSecondaryTitleHeight 40
+#define ABBoxSecondaryTitleHeight 60
 #define ABBoxThirdTitleHeight 40
+
+static NSFont* currencyLabelFont;
+static NSFont* zedFont;
 
 @interface TTArbitrageBox ()
 
@@ -36,11 +39,33 @@
 
 #define kUnitsOfBitcoinBase 1.f
 
++(void)initialize
+{
+    if (self == [TTArbitrageBox class])
+    {
+        currencyLabelFont = [NSFont fontWithName:@"Avenir Next Condensed" size:12.f];
+        zedFont = [NSFont fontWithName:@"Geneva-Bold" size:12.f];
+    }
+}
+
+-(void)updateForZed:(double)zed
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (zed > 1)
+            [self setBorderColor:[self colorWithHexString:@"216C2A"]];
+        else
+            [self setBorderColor:[self colorWithHexString:@"cccccc"]];
+    });
+}
+
 -(void)arbitrate // literally, the sexiest method name I've ever written. Just makes me wanna fuckkkinnggg uncze.
 {
 //    [_tradeTitle setString:RUStringWithFormat(@"%@%@", stringFromCurrency(_arbitrageStackCurrency), stringFromCurrency(_deltaCurrency))];
     // Order of operations, load latest ticker for each value.
     // calculate is bitcoin -> stack -> delta -> bitcoin is greater than 1.0 ?
+    
+    [_primaryTitleLeft setString:RUStringWithFormat(@"%@ %@ %@", stringFromCurrency(_bitcoinBase), stringFromCurrency(_alphaNodeCurrency), stringFromCurrency(_deltaNodeCurrency))];
+    
     NSFetchRequest* alphaCurrencyFetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"Ticker"];
     [alphaCurrencyFetchRequest setPredicate:[NSPredicate predicateWithFormat:@"channel_name == %@", bitcoinTickerChannelNameForCurrency(_alphaNodeCurrency)]];
     [alphaCurrencyFetchRequest setFetchLimit:1];
@@ -67,10 +92,12 @@
     NSNumber* alphaDeltaBuyPrice = [_oeRatesController priceForCurrency:_deltaNodeCurrency inBaseCurrency:_alphaNodeCurrency];
     
     double deltaNodeComputed = alphaNodeDouble * alphaDeltaBuyPrice.doubleValue;
-//    [_secondaryTitleLeft setString:RUStringWithFormat(@"%f", deltaNodeComputed)];
     
     double zed = deltaNodeComputed / deltaTicker.sell.value.doubleValue;
-    [_thirdTitleLeft setString:RUStringWithFormat(@"%f", zed)];
+    
+    [_secondaryTitleLeft setString:RUStringWithFormat(@"%f", zed)];
+//    [_thirdTitleLeft setString:RUStringWithFormat(@"%f", zed)];
+    [self updateForZed:zed];
 }
 
 -(void)tickerRecorded:(NSNotification*)sender
@@ -108,21 +135,23 @@
         _bitcoinBase = TTGoxCurrencyBTC; // weird line of code, but neccesary
         [self setBorderColor:[self colorWithHexString:@"cccccc"]];
         [self setBorderType:NSLineBorder];
-//        [self setFillColor:[NSColor blackColor]];
-        [self setBorderWidth:1.f];
+        [self setBorderWidth:1.5f];
         [self setBoxType:NSBoxCustom];
         
         [self setPrimaryTitleLeft:[TTTextView new]];
-//        [_primaryTitleLeft setBackgroundColor:[NSColor redColor]];
+        [_primaryTitleLeft setBackgroundColor:[NSColor clearColor]];
+        [_primaryTitleLeft setAlignment:NSCenterTextAlignment];
+        [_primaryTitleLeft setFont:currencyLabelFont];
+        [_primaryTitleLeft setEditable:NO];
         [self.contentView addSubview:_primaryTitleLeft];
         
         [self setSecondaryTitleLeft:[TTTextView new]];
-//        [_secondaryTitleLeft setBackgroundColor:[NSColor greenColor]];
+        [_secondaryTitleLeft setAlignment:NSCenterTextAlignment];
+        [_secondaryTitleLeft setBackgroundColor:[NSColor clearColor]];
+        [_secondaryTitleLeft setEditable:NO];
         [self.contentView addSubview:_secondaryTitleLeft];
         
         [self setThirdTitleLeft:[TTTextView new]];
-//        [_thirdTitleLeft setBackgroundColor:[NSColor blueColor]];
-        [self.contentView addSubview:_thirdTitleLeft];
         
         [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(tickerRecorded:) name:TTCurrencyUpdateNotificationString object:nil];
     
@@ -143,8 +172,8 @@
 {
     [super setFrame:frameRect];
     [_primaryTitleLeft setFrame:(NSRect){0,CGRectGetHeight(frameRect) - 50, CGRectGetWidth(frameRect), ABBoxPrimaryTitleHeight}];
-    [_secondaryTitleLeft setFrame:(NSRect){0, CGRectGetHeight(frameRect) - (50 + _primaryTitleLeft.frame.size.height), CGRectGetWidth(frameRect), ABBoxSecondaryTitleHeight}];
-    [_thirdTitleLeft setFrame:(NSRect){0, CGRectGetHeight(frameRect) - (50 + _primaryTitleLeft.frame.size.height + _secondaryTitleLeft.frame.size.height), CGRectGetWidth(frameRect), ABBoxThirdTitleHeight}];
+    [_secondaryTitleLeft setFrame:(NSRect){0, CGRectGetHeight(frameRect) - (70 + _primaryTitleLeft.frame.size.height), CGRectGetWidth(frameRect), ABBoxSecondaryTitleHeight}];
+//    [_thirdTitleLeft setFrame:(NSRect){0, CGRectGetHeight(frameRect) - (50 + _primaryTitleLeft.frame.size.height + _secondaryTitleLeft.frame.size.height), CGRectGetWidth(frameRect), ABBoxThirdTitleHeight}];
 }
 
 @end
