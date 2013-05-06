@@ -42,7 +42,7 @@ static NSFont* TT_TYPEWRITER_FONT_SMALL;
 #define TTStatusBarContentLeftOffset 10.f
 #define TTStatusBarContentBottomOffset 10.f
 
-#define TTCurrencyBoxWidth 120.f
+#define TTCurrencyBoxWidth 130.f
 #define TTCurrencyBoxHeight 70.f
 
 #pragma mark - lag delegate

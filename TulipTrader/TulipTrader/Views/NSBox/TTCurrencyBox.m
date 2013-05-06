@@ -24,6 +24,9 @@
 @property (assign) NSManagedObjectContext* appDelegateContext;
 @property (nonatomic, retain) TTTextView* buyWordText;
 @property (nonatomic, retain) TTTextView* sellWordText;
+
+NSUInteger numberOfLeadingCharactersToAffectForCurrency(TTGoxCurrency currency);
+
 @end
 
 @implementation TTCurrencyBox
@@ -32,12 +35,14 @@ static NSFont* titleFont;
 static NSFont* buyFont;
 static NSFont* sellFont;
 static NSFont* buySellLabelsFont;
+static NSFont* buySellFontForCurrencyLetters;
 
 +(void)initialize
 {
     titleFont = [NSFont fontWithName:@"American Typewriter" size:10.f];
     buyFont = [NSFont fontWithName:@"Helvetica-Bold" size:14.f];
     sellFont = [NSFont fontWithName:@"Helvetica-Bold" size:14.f];
+    buySellFontForCurrencyLetters = [NSFont fontWithName:@"Helvetica-Italic" size:10.f];
     buySellLabelsFont = [NSFont fontWithName:@"Avenir Next" size:12.f];
 }
 
@@ -74,8 +79,8 @@ static NSFont* buySellLabelsFont;
         Ticker* ticker = [latestTicker lastObject];
         NSNumber* lastSell = [ticker.sell value];
         NSNumber* lastBuy = [ticker.buy value];
-        [_sellPriceText setString:RUStringWithFormat(@"%@", stringShortenedForCurrencyBox(lastSell.stringValue))];
-        [_buyPriceText setString:RUStringWithFormat(@"%@", stringShortenedForCurrencyBox(lastBuy.stringValue))];
+        [_sellPriceText setString:RUStringWithFormat(@"%@%@",currencySymbolStringFromCurrency(_currency), stringShortenedForCurrencyBox(lastSell.stringValue))];
+        [_buyPriceText setString:RUStringWithFormat(@"%@%@", currencySymbolStringFromCurrency(_currency), stringShortenedForCurrencyBox(lastBuy.stringValue))];
     }
     else
     {
@@ -89,6 +94,8 @@ static NSFont* buySellLabelsFont;
     [self willChangeValueForKey:@"currency"];
     _currency = currency;
     [self setTitle:RUStringWithFormat(@"%@.BTC", stringFromCurrency(currency))];
+//    [_sellPriceText setFont:buySellFontForCurrencyLetters range:NSMakeRange(0, numberOfLeadingCharactersToAffectForCurrency(_currency))];
+//    [_buyPriceText setFont:buySellFontForCurrencyLetters range:NSMakeRange(0, numberOfLeadingCharactersToAffectForCurrency(_currency))];
     NSPredicate* pred = [NSPredicate predicateWithFormat:@"channel_name == %@", bitcoinTickerChannelNameForCurrency(currency)];
     [self.unifiedFetchRequest setPredicate:pred];
     [self didChangeValueForKey:@"currency"];
@@ -124,6 +131,7 @@ static NSFont* buySellLabelsFont;
         [_sellPriceText setEditable:NO];
         [_sellPriceText setFont:sellFont];
         [self addSubview:_sellPriceText];
+        
         [self setBuyPriceText:[TTTextView new]];
         [_buyPriceText setBackgroundColor:[NSColor clearColor]];
         [_buyPriceText setEditable:NO];
@@ -135,7 +143,7 @@ static NSFont* buySellLabelsFont;
         [_buyWordText setEditable:NO];
         [_buyWordText setFont:buySellLabelsFont];
         [_buyWordText setTextColor:[self colorWithHexString:@"337147"]];
-        [_buyWordText setString:@"Buy:"];
+        [_buyWordText setString:@"Bid:"];
         [self addSubview:_buyWordText];
         
         [self setSellWordText:[TTTextView new]];
@@ -143,7 +151,7 @@ static NSFont* buySellLabelsFont;
         [_sellWordText setEditable:NO];
         [_sellWordText setFont:buySellLabelsFont];
         [_sellWordText setTextColor:[self colorWithHexString:@"f26c4f"]];
-        [_sellWordText setString:@"Sell:"];
+        [_sellWordText setString:@"Ask:"];
         [self addSubview:_sellWordText];
         
         [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(reloadTicker:) name:TTCurrencyUpdateNotificationString object:nil];
@@ -154,8 +162,8 @@ static NSFont* buySellLabelsFont;
 -(void)setFrame:(NSRect)frameRect
 {
     [super setFrame:frameRect];
-    [_buyPriceText setFrame:(NSRect){25, CGRectGetHeight(frameRect) - 60, 90, 30}];
-    [_sellPriceText setFrame:(NSRect){25, CGRectGetHeight(frameRect) - 80, 90, 30}];
+    [_buyPriceText setFrame:(NSRect){25, CGRectGetHeight(frameRect) - 60, 120, 30}];
+    [_sellPriceText setFrame:(NSRect){25, CGRectGetHeight(frameRect) - 80, 120, 30}];
     [_sellWordText setFrame:(NSRect){-5, CGRectGetHeight(frameRect) - 76, 40, 25}];
     [_buyWordText setFrame:(NSRect){-5, CGRectGetHeight(frameRect) - 56, 40, 25}];
     [self setNeedsDisplay:YES];
@@ -169,6 +177,25 @@ NSString* stringShortenedForCurrencyBox(NSString* proposedVal)
     {
         NSMutableString* s  = [NSMutableString stringWithString:proposedVal];
         return [s substringToIndex:10];
+    }
+}
+
+NSUInteger numberOfLeadingCharactersToAffectForCurrency(TTGoxCurrency currency)
+{
+    switch (currency) {
+        case TTGoxCurrencyCHF:
+            return 3;
+            break;
+            
+        case TTGoxCurrencyCAD:
+            return 1;
+            
+        case TTGoxCurrencyAUD:
+            return 1;
+            
+        default:
+            return 0;
+            break;
     }
 }
 

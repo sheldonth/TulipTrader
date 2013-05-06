@@ -34,6 +34,8 @@ NSString* const OELastLoadedDataKey = @"OELastLoadedData";
 
 @implementation TTOERatesController
 
+RU_SYNTHESIZE_SINGLETON_FOR_CLASS_WITH_ACCESSOR(TTOERatesController, sharedInstance);
+
 #pragma mark - public methods
 
 /*

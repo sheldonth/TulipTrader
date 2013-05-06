@@ -29,6 +29,68 @@ NSString* const goxAUDString = @"AUD";
 
 #define ExceptionOnNoCurrencyFound 0
 
+NSString* currencySymbolStringFromCurrency(TTGoxCurrency currency)
+{
+    switch (currency) {
+        case TTGoxCurrencyBTC:
+            return @"B⃦";
+            break;
+        case TTGoxCurrencyUSD: // US Dollar
+            return @"$";
+            break;
+        case TTGoxCurrencyAUD: // Australian Dollar
+            return @"A$";
+            break;
+        case TTGoxCurrencyCAD: // Canadian Dollar
+            return @"C$";
+            break;
+        case TTGoxCurrencyCHF: // Swiss Franc
+            return @"";
+            break;
+        case TTGoxCurrencyCNY: // Chinese Renminbi
+            return @"¥";
+            break;
+        case TTGoxCurrencyDKK: // Danish Krone
+            return @"";
+            break;
+        case TTGoxCurrencyEUR: // Euro
+            return @"€";
+            break;
+        case TTGoxCurrencyGBP: // Great British Pound
+            return @"£";
+            break;
+        case TTGoxCurrencyHKD: // Hong Kong Dollar
+            return @"$";
+            break;
+        case TTGoxCurrencyJPY: // Japanese Yen
+            return @"¥";
+            break;
+        case TTGoxCurrencyNZD: // New Zealand Dollar
+            return @"$";
+            break;
+        case TTGoxCurrencyPLN: // Polish Zloty
+            return @"zł";
+            break;
+        case TTGoxCurrencyRUB: // Russian Ruble
+            return @"";
+            break;
+        case TTGoxCurrencySEK: // Swedish Krona
+            return @"";
+            break;
+        case TTGoxCurrencySGD: // Singapore Dollar
+            return @"$";
+            break;
+        case TTGoxCurrencyTHB: // Thai Bhat
+            return @"฿";
+            break;
+        case TTGoxCurrencyNone:
+        default:
+            return @"ERR";
+            break;
+    }
+}
+
+
 NSString* bitcoinTickerChannelNameForCurrency(TTGoxCurrency currency)
 {
     if (currency == TTGoxCurrencyBTC)

@@ -33,8 +33,8 @@
     [__activeCurrenciesMutable removeObject:stringFromCurrency(_baseCurrency)]; // Remove the primary party currency from the set every time
     [__activeCurrenciesMutable enumerateObjectsUsingBlock:^(NSString* currencyStr, NSUInteger idx, BOOL *stop) {
         TTArbitrageBox* arbBX = [TTArbitrageBox new];
-        [arbBX setArbitrageStackCurrency:_baseCurrency];
-        [arbBX setDeltaCurrency:currencyFromString(currencyStr)];
+        [arbBX setAlphaNodeCurrency:_baseCurrency];
+        [arbBX setDeltaNodeCurrency:currencyFromString(currencyStr)];
         [_arbitrageBoxes addObject:arbBX];
         [self addSubview:arbBX];
     }];

@@ -47,7 +47,7 @@
         
         [_socketController open];
         
-        _oeRatesController = [TTOERatesController new];
+        _oeRatesController = [TTOERatesController sharedInstance];
         
         [_oeRatesController reloadRates];
     }

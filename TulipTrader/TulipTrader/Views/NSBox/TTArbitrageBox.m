@@ -14,13 +14,19 @@
 #import "Tick.h"
 #import "TTGoxCurrency.h"
 #import "TTAppDelegate.h"
+#import "TTOERatesController.h"
+
+#define ABBoxPrimaryTitleHeight 40
+#define ABBoxSecondaryTitleHeight 40
+#define ABBoxThirdTitleHeight 40
 
 @interface TTArbitrageBox ()
 
-@property(nonatomic, retain)TTTextView* tradeTitle;
 @property(nonatomic, weak)NSManagedObjectContext* appDelegateContext;
-@property(nonatomic, retain)TTTextView* arbDeltaTitle;
-@property(nonatomic, retain)TTTextView* deltaBtcTitle;
+@property(nonatomic, retain)TTTextView* primaryTitleLeft;
+@property(nonatomic, retain)TTTextView* secondaryTitleLeft;
+@property(nonatomic, retain)TTTextView* thirdTitleLeft;
+@property(nonatomic, retain)TTOERatesController* oeRatesController;
 
 @end
 
@@ -28,36 +34,49 @@
 
 #pragma mark - public method
 
-#define kUnitsOfBitcoinBase 1
+#define kUnitsOfBitcoinBase 1.f
 
 -(void)arbitrate // literally, the sexiest method name I've ever written. Just makes me wanna fuckkkinnggg uncze.
 {
 //    [_tradeTitle setString:RUStringWithFormat(@"%@%@", stringFromCurrency(_arbitrageStackCurrency), stringFromCurrency(_deltaCurrency))];
     // Order of operations, load latest ticker for each value.
     // calculate is bitcoin -> stack -> delta -> bitcoin is greater than 1.0 ?
-    NSFetchRequest* fr_stack = [NSFetchRequest fetchRequestWithEntityName:@"Ticker"];
-    [fr_stack setPredicate:[NSPredicate predicateWithFormat:@"channel_name == %@", bitcoinTickerChannelNameForCurrency(_arbitrageStackCurrency)]];
-    [fr_stack setFetchLimit:1];
+    NSFetchRequest* alphaCurrencyFetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"Ticker"];
+    [alphaCurrencyFetchRequest setPredicate:[NSPredicate predicateWithFormat:@"channel_name == %@", bitcoinTickerChannelNameForCurrency(_alphaNodeCurrency)]];
+    [alphaCurrencyFetchRequest setFetchLimit:1];
     NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"timeStamp" ascending:NO];
-    [fr_stack setSortDescriptors:@[sortDescriptor]];
+    [alphaCurrencyFetchRequest setSortDescriptors:@[sortDescriptor]];
     
-    NSFetchRequest* fr_delta = [NSFetchRequest fetchRequestWithEntityName:@"Ticker"];
-    [fr_delta setPredicate:[NSPredicate predicateWithFormat:@"channel_name == %@", bitcoinTickerChannelNameForCurrency(_arbitrageStackCurrency)]];
-    [fr_delta setFetchLimit:1];
-    [fr_delta setSortDescriptors:@[sortDescriptor]];
+    NSFetchRequest* deltaCurrencyFetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"Ticker"];
+    [deltaCurrencyFetchRequest setPredicate:[NSPredicate predicateWithFormat:@"channel_name == %@", bitcoinTickerChannelNameForCurrency(_deltaNodeCurrency)]];
+    [deltaCurrencyFetchRequest setFetchLimit:1];
+    [deltaCurrencyFetchRequest setSortDescriptors:@[sortDescriptor]];
 
     NSError* e = nil;
-    NSArray* stackTicker = [_appDelegateContext executeFetchRequest:fr_stack error:&e];
+    NSArray* alphaCurrencyTickerArray = [_appDelegateContext executeFetchRequest:alphaCurrencyFetchRequest error:&e];
     if (e) @throw e;
-    NSArray* deltaTicker = [_appDelegateContext executeFetchRequest:fr_delta error:&e];
+    NSArray* deltaCurrencyTickerArray = [_appDelegateContext executeFetchRequest:deltaCurrencyFetchRequest error:&e];
     if (e) @throw e;
     
+    Ticker* alphaTicker = [alphaCurrencyTickerArray objectAtIndex:0];
+    Ticker* deltaTicker = [deltaCurrencyTickerArray objectAtIndex:0];
+    
+    double alphaNodeDouble = kUnitsOfBitcoinBase * alphaTicker.buy.value.doubleValue;
+//    [_primaryTitleLeft setString:RUStringWithFormat(@"%f", alphaNodeDouble)];
+    
+    NSNumber* alphaDeltaBuyPrice = [_oeRatesController priceForCurrency:_deltaNodeCurrency inBaseCurrency:_alphaNodeCurrency];
+    
+    double deltaNodeComputed = alphaNodeDouble * alphaDeltaBuyPrice.doubleValue;
+//    [_secondaryTitleLeft setString:RUStringWithFormat(@"%f", deltaNodeComputed)];
+    
+    double zed = deltaNodeComputed / deltaTicker.sell.value.doubleValue;
+    [_thirdTitleLeft setString:RUStringWithFormat(@"%f", zed)];
 }
 
 -(void)tickerRecorded:(NSNotification*)sender
 {
     Ticker* t = [[sender userInfo]objectForKey:@"Ticker"];
-    if ([t.channel_name isEqualToString:bitcoinTickerChannelNameForCurrency(_arbitrageStackCurrency)] || [t.channel_name isEqualToString:bitcoinTickerChannelNameForCurrency(_deltaCurrency)])
+    if ([t.channel_name isEqualToString:bitcoinTickerChannelNameForCurrency(_alphaNodeCurrency)] || [t.channel_name isEqualToString:bitcoinTickerChannelNameForCurrency(_deltaNodeCurrency)])
         [self arbitrate];
 }
 
@@ -93,19 +112,21 @@
         [self setBorderWidth:1.f];
         [self setBoxType:NSBoxCustom];
         
-        [self setTradeTitle:[TTTextView new]];
-        [_tradeTitle setBackgroundColor:[NSColor redColor]];
-        [self.contentView addSubview:_tradeTitle];
+        [self setPrimaryTitleLeft:[TTTextView new]];
+//        [_primaryTitleLeft setBackgroundColor:[NSColor redColor]];
+        [self.contentView addSubview:_primaryTitleLeft];
         
-        [self setArbDeltaTitle:[TTTextView new]];
-        [_arbDeltaTitle setBackgroundColor:[NSColor greenColor]];
-        [self.contentView addSubview:_arbDeltaTitle];
+        [self setSecondaryTitleLeft:[TTTextView new]];
+//        [_secondaryTitleLeft setBackgroundColor:[NSColor greenColor]];
+        [self.contentView addSubview:_secondaryTitleLeft];
         
-        [self setDeltaBtcTitle:[TTTextView new]];
-        [_deltaBtcTitle setBackgroundColor:[NSColor blueColor]];
-        [self.contentView addSubview:_deltaBtcTitle];
+        [self setThirdTitleLeft:[TTTextView new]];
+//        [_thirdTitleLeft setBackgroundColor:[NSColor blueColor]];
+        [self.contentView addSubview:_thirdTitleLeft];
         
         [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(tickerRecorded:) name:TTCurrencyUpdateNotificationString object:nil];
+    
+        [self setOeRatesController:[TTOERatesController sharedInstance]];
     }
     
     return self;
@@ -121,7 +142,9 @@
 -(void)setFrame:(NSRect)frameRect
 {
     [super setFrame:frameRect];
-    [_tradeTitle setFrame:(NSRect){0,CGRectGetHeight(frameRect) - 50, CGRectGetWidth(frameRect), 40}];
+    [_primaryTitleLeft setFrame:(NSRect){0,CGRectGetHeight(frameRect) - 50, CGRectGetWidth(frameRect), ABBoxPrimaryTitleHeight}];
+    [_secondaryTitleLeft setFrame:(NSRect){0, CGRectGetHeight(frameRect) - (50 + _primaryTitleLeft.frame.size.height), CGRectGetWidth(frameRect), ABBoxSecondaryTitleHeight}];
+    [_thirdTitleLeft setFrame:(NSRect){0, CGRectGetHeight(frameRect) - (50 + _primaryTitleLeft.frame.size.height + _secondaryTitleLeft.frame.size.height), CGRectGetWidth(frameRect), ABBoxThirdTitleHeight}];
 }
 
 @end

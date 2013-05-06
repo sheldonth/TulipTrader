@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "TTGoxCurrency.h"
+#import "RUSingleton.h"
 
 @protocol TTOERatesControllerDelegate <NSObject>
 
@@ -32,5 +33,7 @@ extern NSString* const OELastLoadedDataKey;
 -(NSNumber*)priceForCurrency:(TTGoxCurrency)currency inBaseCurrency:(TTGoxCurrency)baseCurrency;
 
 @property(assign)id<TTOERatesControllerDelegate> delegate;
+
+RU_SYNTHESIZE_SINGLETON_DECLARATION_FOR_CLASS_WITH_ACCESSOR(TTOERatesController, sharedInstance);
 
 @end

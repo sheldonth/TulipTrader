@@ -11,7 +11,7 @@
 #import "RUConstants.h"
 #import "TTMasterViewController.h"
 
-#define appTitle @"Tulip Trader v0.1.1"
+#define appTitle @"Tulip Trader v0.1.2"
 
 @interface TTAppDelegate ()
 {

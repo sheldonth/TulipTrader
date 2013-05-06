@@ -12,8 +12,8 @@
 @interface TTArbitrageBox : NSBox
 
 @property(nonatomic, readonly)TTGoxCurrency bitcoinBase;
-@property(nonatomic, readwrite)TTGoxCurrency arbitrageStackCurrency;
-@property(nonatomic, readwrite)TTGoxCurrency deltaCurrency;
+@property(nonatomic, readwrite)TTGoxCurrency alphaNodeCurrency;
+@property(nonatomic, readwrite)TTGoxCurrency deltaNodeCurrency;
 
 -(void)arbitrate;
 
