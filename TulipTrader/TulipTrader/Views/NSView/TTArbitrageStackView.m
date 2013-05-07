@@ -14,7 +14,7 @@
 
 @interface TTArbitrageStackView ()
 
-#define kTTArbitrageBoxHeight 50
+#define kTTArbitrageBoxHeight 40
 
 @property(nonatomic)NSMutableArray* arbitrageBoxes;
 
@@ -51,7 +51,7 @@
 
 - (void)drawRect:(NSRect)dirtyRect
 {
-    [[NSColor whiteColor] setFill];
+    [[NSColor orangeColor] setFill];
     NSRectFill(dirtyRect);
 }
 
@@ -66,8 +66,9 @@
 -(void)setFrame:(NSRect)frameRect
 {
     [super setFrame:frameRect];
+    CGFloat boxSideWidth =  floorf(CGRectGetWidth(frameRect) / 10); // one tenth on either side
     [_arbitrageBoxes enumerateObjectsUsingBlock:^(TTArbitrageBox* obj, NSUInteger idx, BOOL *stop) {
-        [obj setFrame:(NSRect){0, CGRectGetHeight(frameRect) - (((idx + 1) * kTTArbitrageBoxHeight) + (idx * 10)), CGRectGetWidth(frameRect), kTTArbitrageBoxHeight}];
+        [obj setFrame:(NSRect){boxSideWidth, CGRectGetHeight(frameRect) - (((idx + 1) * kTTArbitrageBoxHeight) + (idx * 10)), CGRectGetWidth(frameRect) - (2 * boxSideWidth), kTTArbitrageBoxHeight}];
     }];
 }
 

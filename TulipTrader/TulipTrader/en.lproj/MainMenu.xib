@@ -1292,25 +1292,25 @@
 			<object class="NSWindowTemplate" id="972006081">
 				<int key="NSWindowStyleMask">15</int>
 				<int key="NSWindowBacking">2</int>
-				<string key="NSWindowRect">{{120, 60}, {1200, 800}}</string>
+				<string key="NSWindowRect">{{250, 200}, {1200, 900}}</string>
 				<int key="NSWTFlags">1954021376</int>
 				<string key="NSWindowTitle">TulipTrader</string>
 				<string key="NSWindowClass">NSWindow</string>
 				<nil key="NSViewClass"/>
 				<nil key="NSUserInterfaceItemIdentifier"/>
-				<string key="NSWindowContentMaxSize">{1200, 800}</string>
-				<string key="NSWindowContentMinSize">{1200, 800}</string>
+				<string key="NSWindowContentMaxSize">{1200, 900}</string>
+				<string key="NSWindowContentMinSize">{1200, 900}</string>
 				<object class="NSView" key="NSWindowView" id="439893737">
 					<reference key="NSNextResponder"/>
 					<int key="NSvFlags">256</int>
-					<string key="NSFrameSize">{1200, 800}</string>
+					<string key="NSFrameSize">{1200, 900}</string>
 					<reference key="NSSuperview"/>
 					<reference key="NSWindow"/>
 					<reference key="NSNextKeyView"/>
 				</object>
-				<string key="NSScreenRect">{{0, 0}, {1440, 878}}</string>
-				<string key="NSMinSize">{1200, 822}</string>
-				<string key="NSMaxSize">{1200, 822}</string>
+				<string key="NSScreenRect">{{0, 0}, {1920, 1178}}</string>
+				<string key="NSMinSize">{1200, 922}</string>
+				<string key="NSMaxSize">{1200, 922}</string>
 				<bool key="NSWindowIsRestorable">YES</bool>
 			</object>
 			<object class="NSCustomObject" id="976324537">

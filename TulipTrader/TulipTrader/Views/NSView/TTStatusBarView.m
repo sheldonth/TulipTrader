@@ -96,10 +96,10 @@ static NSFont* TT_TYPEWRITER_FONT_SMALL;
         [_lagStateTextView setFont:TT_TYPEWRITER_FONT_SMALL];
         [self addSubview:_lagStateTextView];
         
-        _scrollView = [[NSScrollView alloc]initWithFrame:CGRectZero];
-        [_scrollView setDocumentView:[NSView new]];
+//        _scrollView = [[NSScrollView alloc]initWithFrame:CGRectZero];
+//        [_scrollView setDocumentView:[NSView new]];
 //        [_scrollView.documentView setBackgroundColor:[NSColor blueColor]];
-        [self addSubview:_scrollView];
+//        [self addSubview:_scrollView];
         
         [_webSocket addObserver:self forKeyPath:@"isConnected" options:NSKeyValueObservingOptionNew context:nil];
         
@@ -121,10 +121,11 @@ static NSFont* TT_TYPEWRITER_FONT_SMALL;
 
 -(void)setFrame:(NSRect)frameRect
 {
+//    [_scrollView setFrame:(NSRect){0, 0, CGRectGetWidth(frameRect), TTCurrencyBoxHeight}];
+    
     [super setFrame:frameRect];
     [_connectionStateTextView setFrame:(NSRect){TTStatusBarContentLeftOffset, CGRectGetHeight(frameRect) - 65, 225, 60}];
     [_lagStateTextView setFrame:(NSRect){TTStatusBarContentLeftOffset + 5, 70, 165, 25}];
-    [_scrollView setFrame:(NSRect){0, 0, CGRectGetWidth(frameRect), TTCurrencyBoxHeight}];
     CGFloat boxSpace = CGRectGetWidth(frameRect) / 8;
     [_currencyBoxes enumerateObjectsUsingBlock:^(TTCurrencyBox* box, NSUInteger idx, BOOL *stop) {
         [box setFrame:(NSRect){((boxSpace / 2) - (TTCurrencyBoxWidth / 2)) + (boxSpace * (idx % 8)), TTStatusBarContentBottomOffset + ((idx / 8) * (TTCurrencyBoxHeight + 20)), TTCurrencyBoxWidth, TTCurrencyBoxHeight}];
@@ -133,7 +134,7 @@ static NSFont* TT_TYPEWRITER_FONT_SMALL;
 
 - (void)drawRect:(NSRect)dirtyRect
 {
-    [[NSColor whiteColor] setFill];
+    [[NSColor redColor] setFill];
     NSRectFill(dirtyRect);
 }
 

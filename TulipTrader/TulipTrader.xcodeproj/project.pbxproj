@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4707799A1739967100DBBC47 /* NSView+Utility.m in Sources */ = {isa = PBXBuildFile; fileRef = 470779991739967100DBBC47 /* NSView+Utility.m */; };
+		4707799B1739967100DBBC47 /* NSView+Utility.m in Sources */ = {isa = PBXBuildFile; fileRef = 470779991739967100DBBC47 /* NSView+Utility.m */; };
 		470991551729D6240091E6E2 /* TTCurrencyBox.m in Sources */ = {isa = PBXBuildFile; fileRef = 470991541729D6240091E6E2 /* TTCurrencyBox.m */; };
 		470991561729D6240091E6E2 /* TTCurrencyBox.m in Sources */ = {isa = PBXBuildFile; fileRef = 470991541729D6240091E6E2 /* TTCurrencyBox.m */; };
 		470991591729DAE20091E6E2 /* TTGoxCurrencyController.m in Sources */ = {isa = PBXBuildFile; fileRef = 470991581729DAE20091E6E2 /* TTGoxCurrencyController.m */; };
@@ -28,6 +30,8 @@
 		478121151731BDAF00879CD6 /* TTArbitrageStackView.m in Sources */ = {isa = PBXBuildFile; fileRef = 478121131731BDAF00879CD6 /* TTArbitrageStackView.m */; };
 		478121181731C1BE00879CD6 /* TTArbitrageBox.m in Sources */ = {isa = PBXBuildFile; fileRef = 478121171731C1BE00879CD6 /* TTArbitrageBox.m */; };
 		478121191731C1BE00879CD6 /* TTArbitrageBox.m in Sources */ = {isa = PBXBuildFile; fileRef = 478121171731C1BE00879CD6 /* TTArbitrageBox.m */; };
+		479AE8AD17386B2D0043C10D /* TTAPIControlBoxView.m in Sources */ = {isa = PBXBuildFile; fileRef = 479AE8AC17386B2D0043C10D /* TTAPIControlBoxView.m */; };
+		479AE8AE17386B2D0043C10D /* TTAPIControlBoxView.m in Sources */ = {isa = PBXBuildFile; fileRef = 479AE8AC17386B2D0043C10D /* TTAPIControlBoxView.m */; };
 		47D2008B1708AC5300AEA412 /* TTGoxSocketController.m in Sources */ = {isa = PBXBuildFile; fileRef = 47D2008A1708AC5300AEA412 /* TTGoxSocketController.m */; };
 		47D2008C1708AC5300AEA412 /* TTGoxSocketController.m in Sources */ = {isa = PBXBuildFile; fileRef = 47D2008A1708AC5300AEA412 /* TTGoxSocketController.m */; };
 		47D200A01709584200AEA412 /* CHANGELOG.md in Resources */ = {isa = PBXBuildFile; fileRef = 47D2009C1709584200AEA412 /* CHANGELOG.md */; };
@@ -93,6 +97,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		470779981739967100DBBC47 /* NSView+Utility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSView+Utility.h"; sourceTree = "<group>"; };
+		470779991739967100DBBC47 /* NSView+Utility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSView+Utility.m"; sourceTree = "<group>"; };
 		470991531729D6240091E6E2 /* TTCurrencyBox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTCurrencyBox.h; sourceTree = "<group>"; };
 		470991541729D6240091E6E2 /* TTCurrencyBox.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTCurrencyBox.m; sourceTree = "<group>"; };
 		470991571729DAE20091E6E2 /* TTGoxCurrencyController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTGoxCurrencyController.h; sourceTree = "<group>"; };
@@ -115,6 +121,8 @@
 		478121131731BDAF00879CD6 /* TTArbitrageStackView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTArbitrageStackView.m; sourceTree = "<group>"; };
 		478121161731C1BE00879CD6 /* TTArbitrageBox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTArbitrageBox.h; sourceTree = "<group>"; };
 		478121171731C1BE00879CD6 /* TTArbitrageBox.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTArbitrageBox.m; sourceTree = "<group>"; };
+		479AE8AB17386B2D0043C10D /* TTAPIControlBoxView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTAPIControlBoxView.h; sourceTree = "<group>"; };
+		479AE8AC17386B2D0043C10D /* TTAPIControlBoxView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTAPIControlBoxView.m; sourceTree = "<group>"; };
 		47A749F417110636007792AC /* TTFrameConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTFrameConstants.h; sourceTree = "<group>"; };
 		47D2007D1708AB7C00AEA412 /* RUClassOrNilUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RUClassOrNilUtil.h; path = ResplendentUtilities/ResplendentUtilities/Misc/RUClassOrNilUtil.h; sourceTree = "<group>"; };
 		47D2007E1708AB7C00AEA412 /* RUConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RUConstants.h; path = ResplendentUtilities/ResplendentUtilities/Misc/RUConstants.h; sourceTree = "<group>"; };
@@ -223,6 +231,10 @@
 				476DD9F11729A37D0076C301 /* TTStatusBarView.m */,
 				478121121731BDAF00879CD6 /* TTArbitrageStackView.h */,
 				478121131731BDAF00879CD6 /* TTArbitrageStackView.m */,
+				479AE8AB17386B2D0043C10D /* TTAPIControlBoxView.h */,
+				479AE8AC17386B2D0043C10D /* TTAPIControlBoxView.m */,
+				470779981739967100DBBC47 /* NSView+Utility.h */,
+				470779991739967100DBBC47 /* NSView+Utility.m */,
 			);
 			path = NSView;
 			sourceTree = "<group>";
@@ -554,6 +566,8 @@
 				47812110172EFD9100879CD6 /* TTOERatesController.m in Sources */,
 				478121141731BDAF00879CD6 /* TTArbitrageStackView.m in Sources */,
 				478121181731C1BE00879CD6 /* TTArbitrageBox.m in Sources */,
+				479AE8AD17386B2D0043C10D /* TTAPIControlBoxView.m in Sources */,
+				4707799A1739967100DBBC47 /* NSView+Utility.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -581,6 +595,8 @@
 				47812111172EFD9100879CD6 /* TTOERatesController.m in Sources */,
 				478121151731BDAF00879CD6 /* TTArbitrageStackView.m in Sources */,
 				478121191731C1BE00879CD6 /* TTArbitrageBox.m in Sources */,
+				479AE8AE17386B2D0043C10D /* TTAPIControlBoxView.m in Sources */,
+				4707799B1739967100DBBC47 /* NSView+Utility.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -30,6 +30,11 @@
 
 #pragma mark - NSWindowDelegate methods
 
+- (BOOL)applicationShouldTerminateAfterLastWindowClosed:(NSApplication *)theApplication
+{
+    return YES;
+}
+
 -(NSSize)window:(NSWindow *)window willUseFullScreenContentSize:(NSSize)proposedSize
 {
     NSRect newSizeAtOrigin = (NSRect){0,0,proposedSize};
