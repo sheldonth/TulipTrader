@@ -49,7 +49,7 @@
 
 -(void)setViewFrameAndInformSubviews:(NSRect)newFrame
 {
-    CGFloat statusBarHeight = CGRectGetHeight(newFrame) / 3;
+    CGFloat statusBarHeight = CGRectGetHeight(newFrame) / 4;
     [self.view setFrame:newFrame];
     [_statusBarView setFrame:(NSRect){0, CGRectGetHeight(newFrame) - statusBarHeight, CGRectGetWidth(newFrame), statusBarHeight}];
     [_statusBarView setNeedsLayout:YES];

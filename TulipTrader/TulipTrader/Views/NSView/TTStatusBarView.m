@@ -14,15 +14,17 @@
 #import "TTCurrencyBox.h"
 #import "TTGoxCurrencyController.h"
 #import "TTGoxCurrency.h"
-
+#import "TTMarketBox.h"
 
 @interface TTStatusBarView ()
 
-@property(nonatomic, retain)TTTextView* connectionStateTextView;
-@property(nonatomic, retain)TTGoxSocketController* webSocket;
+//@property(nonatomic, retain)TTTextView* connectionStateTextView;
+//@property(nonatomic, retain)TTGoxSocketController* webSocket;
+//@property(nonatomic, retain)NSScrollView* scrollView;
+//@property(nonatomic, retain)TTTextView* lagStateTextView;
 @property(nonatomic, retain)NSMutableArray* currencyBoxes;
-@property(nonatomic, retain)NSScrollView* scrollView;
-@property(nonatomic, retain)TTTextView* lagStateTextView;
+@property(nonatomic, retain)TTMarketBox* goxMarketBox;
+@property(nonatomic, retain)TTMarketBox* coinbaseMarketBox;
 
 NSString* socketStateStringForConnectionState (TTGoxSocketConnectionState state);
 
@@ -65,45 +67,18 @@ static NSFont* TT_TYPEWRITER_FONT_SMALL;
     }
 }
 
--(void)dealloc
-{
-    [_webSocket removeObserver:self forKeyPath:@"isConnected"];
-//    [[TTGoxPrivateMessageController sharedInstance]setLagDelegate:nil];
-}
-
--(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
-{
-    TTGoxSocketConnectionState state = (TTGoxSocketConnectionState)[[change objectForKey:@"new"]intValue];
-    NSString* stateStr = socketStateStringForConnectionState(state);
-    if (![[_connectionStateTextView string]isEqualToString:stateStr])
-        [_connectionStateTextView setString:stateStr];
-}
-
 - (id)initWithFrame:(NSRect)frame
 {
     self = [super initWithFrame:frame];
     if (self) {
-        _webSocket = [TTGoxSocketController sharedInstance];
-        
-        _connectionStateTextView = [[TTTextView alloc]initWithFrame:CGRectZero];
-        [_connectionStateTextView setBackgroundColor:[NSColor clearColor]];
-        [_connectionStateTextView setString:socketStateStringForConnectionState(_webSocket.isConnected)];
-        [_connectionStateTextView setFont:TT_TYPEWRITER_FONT];
-        [self addSubview:_connectionStateTextView];
-        
-        _lagStateTextView = [TTTextView new];
-        [_lagStateTextView setBackgroundColor:[NSColor clearColor]];
-        [_lagStateTextView setFont:TT_TYPEWRITER_FONT_SMALL];
-        [self addSubview:_lagStateTextView];
-        
-//        _scrollView = [[NSScrollView alloc]initWithFrame:CGRectZero];
-//        [_scrollView setDocumentView:[NSView new]];
-//        [_scrollView.documentView setBackgroundColor:[NSColor blueColor]];
-//        [self addSubview:_scrollView];
-        
-        [_webSocket addObserver:self forKeyPath:@"isConnected" options:NSKeyValueObservingOptionNew context:nil];
         
         // Enumerate the active currencies, and add a currency box for each, set their frames in the status bar's setframe method
+        
+        _goxMarketBox = [TTMarketBox new];
+        [self addSubview:_goxMarketBox];
+        
+        _coinbaseMarketBox = [TTMarketBox new];
+        [self addSubview:_coinbaseMarketBox];
         
         _currencyBoxes = [NSMutableArray array];
         
@@ -121,11 +96,9 @@ static NSFont* TT_TYPEWRITER_FONT_SMALL;
 
 -(void)setFrame:(NSRect)frameRect
 {
-//    [_scrollView setFrame:(NSRect){0, 0, CGRectGetWidth(frameRect), TTCurrencyBoxHeight}];
-    
     [super setFrame:frameRect];
-    [_connectionStateTextView setFrame:(NSRect){TTStatusBarContentLeftOffset, CGRectGetHeight(frameRect) - 65, 225, 60}];
-    [_lagStateTextView setFrame:(NSRect){TTStatusBarContentLeftOffset + 5, 70, 165, 25}];
+//    [_connectionStateTextView setFrame:(NSRect){TTStatusBarContentLeftOffset, CGRectGetHeight(frameRect) - 65, 225, 60}];
+//    [_lagStateTextView setFrame:(NSRect){TTStatusBarContentLeftOffset + 5, 70, 165, 25}];
     CGFloat boxSpace = CGRectGetWidth(frameRect) / 8;
     [_currencyBoxes enumerateObjectsUsingBlock:^(TTCurrencyBox* box, NSUInteger idx, BOOL *stop) {
         [box setFrame:(NSRect){((boxSpace / 2) - (TTCurrencyBoxWidth / 2)) + (boxSpace * (idx % 8)), TTStatusBarContentBottomOffset + ((idx / 8) * (TTCurrencyBoxHeight + 20)), TTCurrencyBoxWidth, TTCurrencyBoxHeight}];
