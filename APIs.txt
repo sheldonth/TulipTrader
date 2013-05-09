@@ -1,0 +1,3 @@
+Coinbase API integration.
+Mtgox API Integration
+Alpari API Integration (Jesus)

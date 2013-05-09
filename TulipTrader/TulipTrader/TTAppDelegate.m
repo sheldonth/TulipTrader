@@ -10,8 +10,9 @@
 #import "TTOperationsController.h"
 #import "RUConstants.h"
 #import "TTMasterViewController.h"
+#import "TTMenuBehaviorController.h"
 
-#define appTitle @"Tulip Trader v0.1.2"
+#define appTitle @"Tulip Trader v0.2.2"
 
 @interface TTAppDelegate ()
 {
@@ -19,7 +20,7 @@
 }
 @property(nonatomic, retain)TTOperationsController* operationsController;
 @property(nonatomic, retain)TTMasterViewController* masterViewController;
-
+@property(nonatomic, retain)TTMenuBehaviorController* menuBehaviorController;
 @end
 
 @implementation TTAppDelegate
@@ -79,6 +80,7 @@
     [self.window setTitle:appTitle];
     [self.window setCollectionBehavior:NSWindowCollectionBehaviorFullScreenPrimary];
     [self setOperationsController:[TTOperationsController new]];
+    [self setMenuBehaviorController:[TTMenuBehaviorController sharedInstance]];
     [self setMasterViewController:[[TTMasterViewController alloc]initWithNibName:@"TTMasterViewController" bundle:nil]];
     [_masterViewController setViewFrameAndInformSubviews:[(NSView*)self.window.contentView bounds]];
     [self.window.contentView addSubview:_masterViewController.view];

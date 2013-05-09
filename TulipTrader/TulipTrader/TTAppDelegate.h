@@ -12,6 +12,8 @@
 
 @property (assign) IBOutlet NSWindow *window;
 
+@property (assign) IBOutlet NSMenu* theMenu;
+
 @property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 @property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;
 @property (readonly, strong, nonatomic) NSManagedObjectContext *managedObjectContext;
