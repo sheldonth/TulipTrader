@@ -47,6 +47,8 @@
 		473DF885173BFB5400C356A1 /* TTGraphView.m in Sources */ = {isa = PBXBuildFile; fileRef = 473DF883173BFB5400C356A1 /* TTGraphView.m */; };
 		473DF895173C228900C356A1 /* CorePlot.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 473DF892173C1C8900C356A1 /* CorePlot.framework */; };
 		473DF896173C22A500C356A1 /* CorePlot.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 473DF892173C1C8900C356A1 /* CorePlot.framework */; };
+		473DF89A173C4EF300C356A1 /* NSColor+Hex.m in Sources */ = {isa = PBXBuildFile; fileRef = 473DF899173C4EF300C356A1 /* NSColor+Hex.m */; };
+		473DF89B173C4EF300C356A1 /* NSColor+Hex.m in Sources */ = {isa = PBXBuildFile; fileRef = 473DF899173C4EF300C356A1 /* NSColor+Hex.m */; };
 		476DD9F21729A37D0076C301 /* TTStatusBarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 476DD9F11729A37D0076C301 /* TTStatusBarView.m */; };
 		476DD9F31729A37D0076C301 /* TTStatusBarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 476DD9F11729A37D0076C301 /* TTStatusBarView.m */; };
 		476DD9F61729A3C90076C301 /* TTTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 476DD9F51729A3C90076C301 /* TTTextView.m */; };
@@ -186,6 +188,8 @@
 		473DF882173BFB5400C356A1 /* TTGraphView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTGraphView.h; sourceTree = "<group>"; };
 		473DF883173BFB5400C356A1 /* TTGraphView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTGraphView.m; sourceTree = "<group>"; };
 		473DF88B173C1C8800C356A1 /* CorePlot.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CorePlot.xcodeproj; path = CorePlot/CorePlot_1.2/Source/framework/CorePlot.xcodeproj; sourceTree = "<group>"; };
+		473DF898173C4EF300C356A1 /* NSColor+Hex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSColor+Hex.h"; sourceTree = "<group>"; };
+		473DF899173C4EF300C356A1 /* NSColor+Hex.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSColor+Hex.m"; sourceTree = "<group>"; };
 		476DD9F01729A37D0076C301 /* TTStatusBarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTStatusBarView.h; sourceTree = "<group>"; };
 		476DD9F11729A37D0076C301 /* TTStatusBarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTStatusBarView.m; sourceTree = "<group>"; };
 		476DD9F41729A3C90076C301 /* TTTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTTextView.h; sourceTree = "<group>"; };
@@ -354,6 +358,15 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		473DF897173C4EDD00C356A1 /* Categories */ = {
+			isa = PBXGroup;
+			children = (
+				473DF898173C4EF300C356A1 /* NSColor+Hex.h */,
+				473DF899173C4EF300C356A1 /* NSColor+Hex.m */,
+			);
+			path = Categories;
+			sourceTree = "<group>";
+		};
 		476DD9EE1729A37D0076C301 /* NSTextView */ = {
 			isa = PBXGroup;
 			children = (
@@ -478,6 +491,7 @@
 		47D2FD2B1702764300AEA412 /* TulipTrader */ = {
 			isa = PBXGroup;
 			children = (
+				473DF897173C4EDD00C356A1 /* Categories */,
 				47705637172112DF0084FE5F /* model */,
 				47D200B2170D53A400AEA412 /* Data_Event_Formats.rtf */,
 				473DF842173AB91300C356A1 /* Window */,
@@ -759,6 +773,7 @@
 				473DF840173AB89D00C356A1 /* TTMenuBehaviorController.m in Sources */,
 				473DF845173ACE7F00C356A1 /* TTGraphsWindow.m in Sources */,
 				473DF884173BFB5400C356A1 /* TTGraphView.m in Sources */,
+				473DF89A173C4EF300C356A1 /* NSColor+Hex.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -803,6 +818,7 @@
 				473DF841173AB89D00C356A1 /* TTMenuBehaviorController.m in Sources */,
 				473DF846173ACE7F00C356A1 /* TTGraphsWindow.m in Sources */,
 				473DF885173BFB5400C356A1 /* TTGraphView.m in Sources */,
+				473DF89B173C4EF300C356A1 /* NSColor+Hex.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
