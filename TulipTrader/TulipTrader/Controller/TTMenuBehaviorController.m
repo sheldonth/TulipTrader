@@ -33,7 +33,7 @@ RU_SYNTHESIZE_SINGLETON_FOR_CLASS_WITH_ACCESSOR(TTMenuBehaviorController, shared
     if (!_graphsWindow)
     {
         NSScreen* currentScreen = [NSScreen mainScreen];
-        _graphsWindow = [[TTGraphsWindow alloc]initWithContentRect:(NSRect){50, 50, CGRectGetWidth(currentScreen.frame) - 100, CGRectGetHeight(currentScreen.frame) - 200} styleMask:(NSTitledWindowMask | NSClosableWindowMask | NSMiniaturizableWindowMask) backing:NSBackingStoreBuffered defer:NO];
+        _graphsWindow = [[TTGraphsWindow alloc]initWithContentRect:(NSRect){50, 50, CGRectGetWidth(currentScreen.frame) - 100, CGRectGetHeight(currentScreen.frame) - 100} styleMask:(NSTitledWindowMask | NSClosableWindowMask | NSMiniaturizableWindowMask) backing:NSBackingStoreBuffered defer:NO];
         [_graphsWindow makeKeyAndOrderFront:self];
     }
 }

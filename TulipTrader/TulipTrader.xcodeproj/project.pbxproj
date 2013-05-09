@@ -38,13 +38,15 @@
 		470991561729D6240091E6E2 /* TTCurrencyBox.m in Sources */ = {isa = PBXBuildFile; fileRef = 470991541729D6240091E6E2 /* TTCurrencyBox.m */; };
 		470991591729DAE20091E6E2 /* TTGoxCurrencyController.m in Sources */ = {isa = PBXBuildFile; fileRef = 470991581729DAE20091E6E2 /* TTGoxCurrencyController.m */; };
 		4709915A1729DAE20091E6E2 /* TTGoxCurrencyController.m in Sources */ = {isa = PBXBuildFile; fileRef = 470991581729DAE20091E6E2 /* TTGoxCurrencyController.m */; };
-		473DF83A173AAA1900C356A1 /* CorePlot.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 473DF837173AA9E200C356A1 /* CorePlot.framework */; };
-		473DF83B173AAA6800C356A1 /* CorePlot.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 473DF837173AA9E200C356A1 /* CorePlot.framework */; };
 		473DF83D173AAAC600C356A1 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 473DF83C173AAAC600C356A1 /* QuartzCore.framework */; };
 		473DF840173AB89D00C356A1 /* TTMenuBehaviorController.m in Sources */ = {isa = PBXBuildFile; fileRef = 473DF83F173AB89D00C356A1 /* TTMenuBehaviorController.m */; };
 		473DF841173AB89D00C356A1 /* TTMenuBehaviorController.m in Sources */ = {isa = PBXBuildFile; fileRef = 473DF83F173AB89D00C356A1 /* TTMenuBehaviorController.m */; };
 		473DF845173ACE7F00C356A1 /* TTGraphsWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 473DF844173ACE7F00C356A1 /* TTGraphsWindow.m */; };
 		473DF846173ACE7F00C356A1 /* TTGraphsWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 473DF844173ACE7F00C356A1 /* TTGraphsWindow.m */; };
+		473DF884173BFB5400C356A1 /* TTGraphView.m in Sources */ = {isa = PBXBuildFile; fileRef = 473DF883173BFB5400C356A1 /* TTGraphView.m */; };
+		473DF885173BFB5400C356A1 /* TTGraphView.m in Sources */ = {isa = PBXBuildFile; fileRef = 473DF883173BFB5400C356A1 /* TTGraphView.m */; };
+		473DF895173C228900C356A1 /* CorePlot.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 473DF892173C1C8900C356A1 /* CorePlot.framework */; };
+		473DF896173C22A500C356A1 /* CorePlot.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 473DF892173C1C8900C356A1 /* CorePlot.framework */; };
 		476DD9F21729A37D0076C301 /* TTStatusBarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 476DD9F11729A37D0076C301 /* TTStatusBarView.m */; };
 		476DD9F31729A37D0076C301 /* TTStatusBarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 476DD9F11729A37D0076C301 /* TTStatusBarView.m */; };
 		476DD9F61729A3C90076C301 /* TTTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 476DD9F51729A3C90076C301 /* TTTextView.m */; };
@@ -107,16 +109,16 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		473DF836173AA9E200C356A1 /* PBXContainerItemProxy */ = {
+		473DF891173C1C8900C356A1 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 473DF830173AA9E200C356A1 /* CorePlot.xcodeproj */;
+			containerPortal = 473DF88B173C1C8800C356A1 /* CorePlot.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = 8DC2EF5B0486A6940098B216;
 			remoteInfo = CorePlot;
 		};
-		473DF838173AA9E200C356A1 /* PBXContainerItemProxy */ = {
+		473DF893173C1C8900C356A1 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 473DF830173AA9E200C356A1 /* CorePlot.xcodeproj */;
+			containerPortal = 473DF88B173C1C8800C356A1 /* CorePlot.xcodeproj */;
 			proxyType = 2;
 			remoteGlobalIDString = 0730F600109492D800E95162;
 			remoteInfo = UnitTests;
@@ -137,7 +139,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				473DF83B173AAA6800C356A1 /* CorePlot.framework in CopyFiles */,
+				473DF896173C22A500C356A1 /* CorePlot.framework in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -176,12 +178,14 @@
 		470991541729D6240091E6E2 /* TTCurrencyBox.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTCurrencyBox.m; sourceTree = "<group>"; };
 		470991571729DAE20091E6E2 /* TTGoxCurrencyController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTGoxCurrencyController.h; sourceTree = "<group>"; };
 		470991581729DAE20091E6E2 /* TTGoxCurrencyController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTGoxCurrencyController.m; sourceTree = "<group>"; };
-		473DF830173AA9E200C356A1 /* CorePlot.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CorePlot.xcodeproj; path = ../../../../../../../Downloads/CorePlot_1.2/Source/framework/CorePlot.xcodeproj; sourceTree = "<group>"; };
 		473DF83C173AAAC600C356A1 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		473DF83E173AB89D00C356A1 /* TTMenuBehaviorController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTMenuBehaviorController.h; sourceTree = "<group>"; };
 		473DF83F173AB89D00C356A1 /* TTMenuBehaviorController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTMenuBehaviorController.m; sourceTree = "<group>"; };
 		473DF843173ACE7F00C356A1 /* TTGraphsWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTGraphsWindow.h; sourceTree = "<group>"; };
 		473DF844173ACE7F00C356A1 /* TTGraphsWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTGraphsWindow.m; sourceTree = "<group>"; };
+		473DF882173BFB5400C356A1 /* TTGraphView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTGraphView.h; sourceTree = "<group>"; };
+		473DF883173BFB5400C356A1 /* TTGraphView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTGraphView.m; sourceTree = "<group>"; };
+		473DF88B173C1C8800C356A1 /* CorePlot.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CorePlot.xcodeproj; path = CorePlot/CorePlot_1.2/Source/framework/CorePlot.xcodeproj; sourceTree = "<group>"; };
 		476DD9F01729A37D0076C301 /* TTStatusBarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTStatusBarView.h; sourceTree = "<group>"; };
 		476DD9F11729A37D0076C301 /* TTStatusBarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTStatusBarView.m; sourceTree = "<group>"; };
 		476DD9F41729A3C90076C301 /* TTTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTTextView.h; sourceTree = "<group>"; };
@@ -263,8 +267,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				473DF895173C228900C356A1 /* CorePlot.framework in Frameworks */,
 				473DF83D173AAAC600C356A1 /* QuartzCore.framework in Frameworks */,
-				473DF83A173AAA1900C356A1 /* CorePlot.framework in Frameworks */,
 				470779C71739B7C100DBBC47 /* SystemConfiguration.framework in Frameworks */,
 				47D2FE271703786800AEA412 /* Security.framework in Frameworks */,
 				47D2FE251703782600AEA412 /* libicucore.dylib in Frameworks */,
@@ -328,18 +332,8 @@
 		473DF82F173AA9DD00C356A1 /* CorePlot */ = {
 			isa = PBXGroup;
 			children = (
-				473DF830173AA9E200C356A1 /* CorePlot.xcodeproj */,
 			);
 			path = CorePlot;
-			sourceTree = "<group>";
-		};
-		473DF831173AA9E200C356A1 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				473DF837173AA9E200C356A1 /* CorePlot.framework */,
-				473DF839173AA9E200C356A1 /* UnitTests.octest */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 		473DF842173AB91300C356A1 /* Window */ = {
@@ -349,6 +343,15 @@
 				473DF844173ACE7F00C356A1 /* TTGraphsWindow.m */,
 			);
 			path = Window;
+			sourceTree = "<group>";
+		};
+		473DF88C173C1C8800C356A1 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				473DF892173C1C8900C356A1 /* CorePlot.framework */,
+				473DF894173C1C8900C356A1 /* UnitTests.octest */,
+			);
+			name = Products;
 			sourceTree = "<group>";
 		};
 		476DD9EE1729A37D0076C301 /* NSTextView */ = {
@@ -371,6 +374,8 @@
 				479AE8AC17386B2D0043C10D /* TTAPIControlBoxView.m */,
 				470779981739967100DBBC47 /* NSView+Utility.h */,
 				470779991739967100DBBC47 /* NSView+Utility.m */,
+				473DF882173BFB5400C356A1 /* TTGraphView.h */,
+				473DF883173BFB5400C356A1 /* TTGraphView.m */,
 			);
 			path = NSView;
 			sourceTree = "<group>";
@@ -539,6 +544,7 @@
 		47D2FE2B1708A94000AEA412 /* Library */ = {
 			isa = PBXGroup;
 			children = (
+				473DF88B173C1C8800C356A1 /* CorePlot.xcodeproj */,
 				473DF82F173AA9DD00C356A1 /* CorePlot */,
 				470779A01739B7A100DBBC47 /* AFNetworking */,
 				47D2009B1709584200AEA412 /* JSONKit */,
@@ -635,8 +641,8 @@
 			projectDirPath = "";
 			projectReferences = (
 				{
-					ProductGroup = 473DF831173AA9E200C356A1 /* Products */;
-					ProjectRef = 473DF830173AA9E200C356A1 /* CorePlot.xcodeproj */;
+					ProductGroup = 473DF88C173C1C8800C356A1 /* Products */;
+					ProjectRef = 473DF88B173C1C8800C356A1 /* CorePlot.xcodeproj */;
 				},
 			);
 			projectRoot = "";
@@ -648,18 +654,18 @@
 /* End PBXProject section */
 
 /* Begin PBXReferenceProxy section */
-		473DF837173AA9E200C356A1 /* CorePlot.framework */ = {
+		473DF892173C1C8900C356A1 /* CorePlot.framework */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.framework;
 			path = CorePlot.framework;
-			remoteRef = 473DF836173AA9E200C356A1 /* PBXContainerItemProxy */;
+			remoteRef = 473DF891173C1C8900C356A1 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		473DF839173AA9E200C356A1 /* UnitTests.octest */ = {
+		473DF894173C1C8900C356A1 /* UnitTests.octest */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.cfbundle;
 			path = UnitTests.octest;
-			remoteRef = 473DF838173AA9E200C356A1 /* PBXContainerItemProxy */;
+			remoteRef = 473DF893173C1C8900C356A1 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 /* End PBXReferenceProxy section */
@@ -752,6 +758,7 @@
 				470779CE1739B99E00DBBC47 /* TTCoinbaseHTTPController.m in Sources */,
 				473DF840173AB89D00C356A1 /* TTMenuBehaviorController.m in Sources */,
 				473DF845173ACE7F00C356A1 /* TTGraphsWindow.m in Sources */,
+				473DF884173BFB5400C356A1 /* TTGraphView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -795,6 +802,7 @@
 				470779CF1739B99E00DBBC47 /* TTCoinbaseHTTPController.m in Sources */,
 				473DF841173AB89D00C356A1 /* TTMenuBehaviorController.m in Sources */,
 				473DF846173ACE7F00C356A1 /* TTGraphsWindow.m in Sources */,
+				473DF885173BFB5400C356A1 /* TTGraphView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
