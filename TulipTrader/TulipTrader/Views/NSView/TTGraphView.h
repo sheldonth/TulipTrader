@@ -13,6 +13,4 @@
 
 @property(nonatomic)TTGoxCurrency currency;
 
--(void)setupGraphToCurrency:(TTGoxCurrency)currency;
-
 @end

@@ -10,9 +10,13 @@
 #import <CorePlot/CorePlot.h>
 #import "RUConstants.h"
 #import "NSColor+Hex.h"
+#import "TTGoxCurrencyController.h"
 
 #define kTTGraphStrongSidePadding 55.f
 #define kTTGraphWeakSidePadding 15.f
+
+#define kTTGraphViewPopupButtonWidth 125.f
+#define kTTGraphViewPopupButtonHeight 30.f
 
 @interface TTGraphView()
 
@@ -21,12 +25,15 @@
 @property(nonatomic, retain)CPTMutableTextStyle* textStyle;
 @property(nonatomic, retain)CPTMutableLineStyle* majorLineStyle;
 @property(nonatomic, retain)CPTMutableLineStyle* minorLineStyle;
+@property(nonatomic, retain)NSPopUpButton* popUpButton;
+@property(nonatomic)CGFloat boundsPadding;
 
-CPTMutableTextStyle* textStyleForCurrency(TTGoxCurrency currency);
+CPTMutableTextStyle* textStyle();
 
 @end
 
 static NSString* titleFontName;
+static const NSString* kTTNoCurrencySelectedTitle;
 
 @implementation TTGraphView
 
@@ -46,8 +53,6 @@ typedef enum CGLineCap CGLineCap;
  kCGLineJoinBevel
  };
  typedef enum CGLineJoin CGLineJoin;
-
- 
  
  */
 
@@ -56,31 +61,41 @@ typedef enum CGLineCap CGLineCap;
     if (self == [TTGraphView class])
     {
         titleFontName = @"Helvetica-Bold";
+        kTTNoCurrencySelectedTitle = @"None";
     }
 }
 
--(void)setupGraphToCurrency:(TTGoxCurrency)currency
+#pragma mark - button selectors
+
+-(void)currencyPopUpDidChange:(id)sender
+{
+    
+}
+
+#pragma mark - internal methods
+
+-(void)setupGraph
 {
     if (!_graph)
         {NSException* e = [NSException exceptionWithName:NSInternalInconsistencyException reason:@"No graph object" userInfo:nil]; @throw e;}
     [self.graph applyTheme:[CPTTheme themeNamed:kCPTStocksTheme]];
     [self.graph setFill:[CPTFill fillWithColor:[[CPTColor alloc]initWithCGColor:[NSColor colorWithHexString:@"cccccc"].CGColor]]];
-    [self.graph setTitle:stringFromCurrency(currency)];
-    [self.graph setTitleTextStyle:textStyleForCurrency(currency)];
+    //    [self.graph setTitle:stringFromCurrency(currency)];
+    [self.graph setTitleTextStyle:textStyle()];
     [self.graph setTitlePlotAreaFrameAnchor:CPTRectAnchorTop];
     self.graph.titleDisplacement = CGPointMake( 0.0f, 14.0f );
     
-    CGFloat boundsPadding = round(self.bounds.size.width / (CGFloat)40.0);
+    [self setBoundsPadding:round(self.bounds.size.width / (CGFloat)40.0)];
     
     if (_graph.titleDisplacement.y > 0.0) {
         _graph.paddingTop = _graph.titleDisplacement.y * 3;
     }
     else {
-        _graph.paddingTop = boundsPadding;
+        _graph.paddingTop = self.boundsPadding;
     }
-    _graph.paddingLeft = boundsPadding;
-    _graph.paddingRight = boundsPadding;
-    _graph.paddingBottom = boundsPadding;
+    _graph.paddingLeft = self.boundsPadding;
+    _graph.paddingRight = self.boundsPadding;
+    _graph.paddingBottom = self.boundsPadding;
     
     _graph.plotAreaFrame.paddingTop    = kTTGraphWeakSidePadding;
     _graph.plotAreaFrame.paddingRight  = kTTGraphWeakSidePadding;
@@ -94,7 +109,7 @@ typedef enum CGLineCap CGLineCap;
     xAxis.orthogonalCoordinateDecimal = CPTDecimalFromUnsignedInteger(0);
     xAxis.majorGridLineStyle = self.majorLineStyle;
     xAxis.minorGridLineStyle = self.minorLineStyle;
-    xAxis.minorTicksPerInterval = 10;
+    xAxis.minorTicksPerInterval = 9;
     xAxis.title = @"Date";
     xAxis.titleOffset = 35.0;
     
@@ -145,30 +160,30 @@ typedef enum CGLineCap CGLineCap;
             [_minorLineStyle setLineWidth:0.25f];
             [_minorLineStyle setLineColor:[CPTColor blackColor]];
         }
+        [self setupGraph];
+        [self setPopUpButton:[[NSPopUpButton alloc]initWithFrame:(NSRect){CGRectGetWidth(frame) - self.boundsPadding - kTTGraphViewPopupButtonWidth, CGRectGetHeight(frame) - (1.5 * kTTGraphViewPopupButtonHeight), kTTGraphViewPopupButtonWidth, kTTGraphViewPopupButtonHeight} pullsDown:YES]];
+        [self.popUpButton addItemWithTitle:(NSString*)kTTNoCurrencySelectedTitle];
+        [self.popUpButton addItemsWithTitles:[TTGoxCurrencyController activeCurrencys]];
+        [self.popUpButton setAction:@selector(currencyPopUpDidChange:)];
+        [self.defaultLayerHostingView addSubview:self.popUpButton];
     }
     return self;
 }
 
 - (void)drawRect:(NSRect)dirtyRect
 {
+    
 }
 
 #pragma mark - C methods
 
-CPTMutableTextStyle* textStyleForCurrency(TTGoxCurrency currency)
+CPTMutableTextStyle* textStyle()//ForCurrency(TTGoxCurrency currency)
 {
-    switch (currency) {
-        default:
-        {
             CPTMutableTextStyle* style = [CPTMutableTextStyle textStyle];
             [style setColor:[CPTColor blackColor]];
             [style setFontName:titleFontName];
             [style setFontSize:24.f];
             return style;
-            break;
-        }
-    }
-    return nil;
 }
 
 @end

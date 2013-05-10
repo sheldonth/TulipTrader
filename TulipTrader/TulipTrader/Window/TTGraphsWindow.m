@@ -29,11 +29,9 @@
         [self setGraphSize:(CGSize){CGRectGetWidth(contentRect), floorf(CGRectGetHeight(contentRect) / kTTGraphsWindowNumberOfGraphs)}];
         
         [self setGraphViewLower:[[TTGraphView alloc]initWithFrame:(NSRect){0,0,_graphSize}]];
-        [_graphViewLower setupGraphToCurrency:TTGoxCurrencyUSD];
         [self.contentView addSubview:_graphViewLower];
         
         [self setGraphViewTop:[[TTGraphView alloc]initWithFrame:(NSRect){0, _graphSize.height, _graphSize}]];
-        [_graphViewTop setupGraphToCurrency:TTGoxCurrencyEUR];
         [self.contentView addSubview:_graphViewTop];
     }
     return self;

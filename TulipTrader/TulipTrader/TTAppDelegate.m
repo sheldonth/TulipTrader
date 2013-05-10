@@ -12,7 +12,7 @@
 #import "TTMasterViewController.h"
 #import "TTMenuBehaviorController.h"
 
-#define appTitle @"Tulip Trader v0.2.2"
+#define appTitle @"Tulip Trader v0.2.3"
 
 @interface TTAppDelegate ()
 {
