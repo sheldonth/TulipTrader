@@ -30,17 +30,9 @@
 		470779C41739B7A100DBBC47 /* UIImageView+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = 470779B31739B7A100DBBC47 /* UIImageView+AFNetworking.m */; };
 		470779C51739B7A100DBBC47 /* UIImageView+AFNetworking.m in Sources */ = {isa = PBXBuildFile; fileRef = 470779B31739B7A100DBBC47 /* UIImageView+AFNetworking.m */; };
 		470779C71739B7C100DBBC47 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 470779C61739B7C100DBBC47 /* SystemConfiguration.framework */; };
-		470779CA1739B98900DBBC47 /* TTGoxHTTPController.m in Sources */ = {isa = PBXBuildFile; fileRef = 470779C91739B98900DBBC47 /* TTGoxHTTPController.m */; };
-		470779CB1739B98900DBBC47 /* TTGoxHTTPController.m in Sources */ = {isa = PBXBuildFile; fileRef = 470779C91739B98900DBBC47 /* TTGoxHTTPController.m */; };
-		470779CE1739B99E00DBBC47 /* TTCoinbaseHTTPController.m in Sources */ = {isa = PBXBuildFile; fileRef = 470779CD1739B99E00DBBC47 /* TTCoinbaseHTTPController.m */; };
-		470779CF1739B99E00DBBC47 /* TTCoinbaseHTTPController.m in Sources */ = {isa = PBXBuildFile; fileRef = 470779CD1739B99E00DBBC47 /* TTCoinbaseHTTPController.m */; };
 		470991551729D6240091E6E2 /* TTCurrencyBox.m in Sources */ = {isa = PBXBuildFile; fileRef = 470991541729D6240091E6E2 /* TTCurrencyBox.m */; };
 		470991561729D6240091E6E2 /* TTCurrencyBox.m in Sources */ = {isa = PBXBuildFile; fileRef = 470991541729D6240091E6E2 /* TTCurrencyBox.m */; };
-		470991591729DAE20091E6E2 /* TTGoxCurrencyController.m in Sources */ = {isa = PBXBuildFile; fileRef = 470991581729DAE20091E6E2 /* TTGoxCurrencyController.m */; };
-		4709915A1729DAE20091E6E2 /* TTGoxCurrencyController.m in Sources */ = {isa = PBXBuildFile; fileRef = 470991581729DAE20091E6E2 /* TTGoxCurrencyController.m */; };
 		473DF83D173AAAC600C356A1 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 473DF83C173AAAC600C356A1 /* QuartzCore.framework */; };
-		473DF840173AB89D00C356A1 /* TTMenuBehaviorController.m in Sources */ = {isa = PBXBuildFile; fileRef = 473DF83F173AB89D00C356A1 /* TTMenuBehaviorController.m */; };
-		473DF841173AB89D00C356A1 /* TTMenuBehaviorController.m in Sources */ = {isa = PBXBuildFile; fileRef = 473DF83F173AB89D00C356A1 /* TTMenuBehaviorController.m */; };
 		473DF845173ACE7F00C356A1 /* TTGraphsWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 473DF844173ACE7F00C356A1 /* TTGraphsWindow.m */; };
 		473DF846173ACE7F00C356A1 /* TTGraphsWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 473DF844173ACE7F00C356A1 /* TTGraphsWindow.m */; };
 		473DF884173BFB5400C356A1 /* TTGraphView.m in Sources */ = {isa = PBXBuildFile; fileRef = 473DF883173BFB5400C356A1 /* TTGraphView.m */; };
@@ -49,6 +41,24 @@
 		473DF896173C22A500C356A1 /* CorePlot.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 473DF892173C1C8900C356A1 /* CorePlot.framework */; };
 		473DF89A173C4EF300C356A1 /* NSColor+Hex.m in Sources */ = {isa = PBXBuildFile; fileRef = 473DF899173C4EF300C356A1 /* NSColor+Hex.m */; };
 		473DF89B173C4EF300C356A1 /* NSColor+Hex.m in Sources */ = {isa = PBXBuildFile; fileRef = 473DF899173C4EF300C356A1 /* NSColor+Hex.m */; };
+		473DF8B2173DB89000C356A1 /* TTMenuBehaviorController.m in Sources */ = {isa = PBXBuildFile; fileRef = 473DF89E173DB89000C356A1 /* TTMenuBehaviorController.m */; };
+		473DF8B3173DB89000C356A1 /* TTMenuBehaviorController.m in Sources */ = {isa = PBXBuildFile; fileRef = 473DF89E173DB89000C356A1 /* TTMenuBehaviorController.m */; };
+		473DF8B4173DB89000C356A1 /* TTCoinbaseHTTPController.m in Sources */ = {isa = PBXBuildFile; fileRef = 473DF8A1173DB89000C356A1 /* TTCoinbaseHTTPController.m */; };
+		473DF8B5173DB89000C356A1 /* TTCoinbaseHTTPController.m in Sources */ = {isa = PBXBuildFile; fileRef = 473DF8A1173DB89000C356A1 /* TTCoinbaseHTTPController.m */; };
+		473DF8B6173DB89000C356A1 /* TTGoxCurrencyController.m in Sources */ = {isa = PBXBuildFile; fileRef = 473DF8A4173DB89000C356A1 /* TTGoxCurrencyController.m */; };
+		473DF8B7173DB89000C356A1 /* TTGoxCurrencyController.m in Sources */ = {isa = PBXBuildFile; fileRef = 473DF8A4173DB89000C356A1 /* TTGoxCurrencyController.m */; };
+		473DF8B8173DB89000C356A1 /* TTGoxHTTPController.m in Sources */ = {isa = PBXBuildFile; fileRef = 473DF8A6173DB89000C356A1 /* TTGoxHTTPController.m */; };
+		473DF8B9173DB89000C356A1 /* TTGoxHTTPController.m in Sources */ = {isa = PBXBuildFile; fileRef = 473DF8A6173DB89000C356A1 /* TTGoxHTTPController.m */; };
+		473DF8BA173DB89000C356A1 /* TTGoxPrivateMessageController.m in Sources */ = {isa = PBXBuildFile; fileRef = 473DF8A8173DB89000C356A1 /* TTGoxPrivateMessageController.m */; };
+		473DF8BB173DB89000C356A1 /* TTGoxPrivateMessageController.m in Sources */ = {isa = PBXBuildFile; fileRef = 473DF8A8173DB89000C356A1 /* TTGoxPrivateMessageController.m */; };
+		473DF8BC173DB89000C356A1 /* TTGoxResultMessageController.m in Sources */ = {isa = PBXBuildFile; fileRef = 473DF8AA173DB89000C356A1 /* TTGoxResultMessageController.m */; };
+		473DF8BD173DB89000C356A1 /* TTGoxResultMessageController.m in Sources */ = {isa = PBXBuildFile; fileRef = 473DF8AA173DB89000C356A1 /* TTGoxResultMessageController.m */; };
+		473DF8BE173DB89000C356A1 /* TTGoxSocketController.m in Sources */ = {isa = PBXBuildFile; fileRef = 473DF8AC173DB89000C356A1 /* TTGoxSocketController.m */; };
+		473DF8BF173DB89000C356A1 /* TTGoxSocketController.m in Sources */ = {isa = PBXBuildFile; fileRef = 473DF8AC173DB89000C356A1 /* TTGoxSocketController.m */; };
+		473DF8C0173DB89000C356A1 /* TTOperationsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 473DF8AE173DB89000C356A1 /* TTOperationsController.m */; };
+		473DF8C1173DB89000C356A1 /* TTOperationsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 473DF8AE173DB89000C356A1 /* TTOperationsController.m */; };
+		473DF8C2173DB89000C356A1 /* TTOERatesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 473DF8B1173DB89000C356A1 /* TTOERatesController.m */; };
+		473DF8C3173DB89000C356A1 /* TTOERatesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 473DF8B1173DB89000C356A1 /* TTOERatesController.m */; };
 		476DD9F21729A37D0076C301 /* TTStatusBarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 476DD9F11729A37D0076C301 /* TTStatusBarView.m */; };
 		476DD9F31729A37D0076C301 /* TTStatusBarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 476DD9F11729A37D0076C301 /* TTStatusBarView.m */; };
 		476DD9F61729A3C90076C301 /* TTTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 476DD9F51729A3C90076C301 /* TTTextView.m */; };
@@ -60,28 +70,18 @@
 		477056421721130C0084FE5F /* Ticker.m in Sources */ = {isa = PBXBuildFile; fileRef = 477056411721130B0084FE5F /* Ticker.m */; };
 		477056431721130C0084FE5F /* Ticker.m in Sources */ = {isa = PBXBuildFile; fileRef = 477056411721130B0084FE5F /* Ticker.m */; };
 		477056481721BCB90084FE5F /* TTGoxCurrency.m in Sources */ = {isa = PBXBuildFile; fileRef = 477056471721BCB80084FE5F /* TTGoxCurrency.m */; };
-		47812110172EFD9100879CD6 /* TTOERatesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4781210F172EFD9000879CD6 /* TTOERatesController.m */; };
-		47812111172EFD9100879CD6 /* TTOERatesController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4781210F172EFD9000879CD6 /* TTOERatesController.m */; };
 		478121141731BDAF00879CD6 /* TTArbitrageStackView.m in Sources */ = {isa = PBXBuildFile; fileRef = 478121131731BDAF00879CD6 /* TTArbitrageStackView.m */; };
 		478121151731BDAF00879CD6 /* TTArbitrageStackView.m in Sources */ = {isa = PBXBuildFile; fileRef = 478121131731BDAF00879CD6 /* TTArbitrageStackView.m */; };
 		478121181731C1BE00879CD6 /* TTArbitrageBox.m in Sources */ = {isa = PBXBuildFile; fileRef = 478121171731C1BE00879CD6 /* TTArbitrageBox.m */; };
 		478121191731C1BE00879CD6 /* TTArbitrageBox.m in Sources */ = {isa = PBXBuildFile; fileRef = 478121171731C1BE00879CD6 /* TTArbitrageBox.m */; };
 		479AE8AD17386B2D0043C10D /* TTAPIControlBoxView.m in Sources */ = {isa = PBXBuildFile; fileRef = 479AE8AC17386B2D0043C10D /* TTAPIControlBoxView.m */; };
 		479AE8AE17386B2D0043C10D /* TTAPIControlBoxView.m in Sources */ = {isa = PBXBuildFile; fileRef = 479AE8AC17386B2D0043C10D /* TTAPIControlBoxView.m */; };
-		47D2008B1708AC5300AEA412 /* TTGoxSocketController.m in Sources */ = {isa = PBXBuildFile; fileRef = 47D2008A1708AC5300AEA412 /* TTGoxSocketController.m */; };
-		47D2008C1708AC5300AEA412 /* TTGoxSocketController.m in Sources */ = {isa = PBXBuildFile; fileRef = 47D2008A1708AC5300AEA412 /* TTGoxSocketController.m */; };
 		47D200A01709584200AEA412 /* CHANGELOG.md in Resources */ = {isa = PBXBuildFile; fileRef = 47D2009C1709584200AEA412 /* CHANGELOG.md */; };
 		47D200A11709584200AEA412 /* CHANGELOG.md in Resources */ = {isa = PBXBuildFile; fileRef = 47D2009C1709584200AEA412 /* CHANGELOG.md */; };
 		47D200A21709584200AEA412 /* JSONKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 47D2009E1709584200AEA412 /* JSONKit.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		47D200A31709584200AEA412 /* JSONKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 47D2009E1709584200AEA412 /* JSONKit.m */; };
 		47D200A41709584200AEA412 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 47D2009F1709584200AEA412 /* README.md */; };
 		47D200A51709584200AEA412 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 47D2009F1709584200AEA412 /* README.md */; };
-		47D200A8170A47A800AEA412 /* TTOperationsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 47D200A7170A47A800AEA412 /* TTOperationsController.m */; };
-		47D200A9170A47A800AEA412 /* TTOperationsController.m in Sources */ = {isa = PBXBuildFile; fileRef = 47D200A7170A47A800AEA412 /* TTOperationsController.m */; };
-		47D200AC170A48F800AEA412 /* TTGoxPrivateMessageController.m in Sources */ = {isa = PBXBuildFile; fileRef = 47D200AB170A48F800AEA412 /* TTGoxPrivateMessageController.m */; };
-		47D200AD170A48F800AEA412 /* TTGoxPrivateMessageController.m in Sources */ = {isa = PBXBuildFile; fileRef = 47D200AB170A48F800AEA412 /* TTGoxPrivateMessageController.m */; };
-		47D200B0170A491400AEA412 /* TTGoxResultMessageController.m in Sources */ = {isa = PBXBuildFile; fileRef = 47D200AF170A491300AEA412 /* TTGoxResultMessageController.m */; };
-		47D200B1170A491400AEA412 /* TTGoxResultMessageController.m in Sources */ = {isa = PBXBuildFile; fileRef = 47D200AF170A491300AEA412 /* TTGoxResultMessageController.m */; };
 		47D200B3170D53A400AEA412 /* Data_Event_Formats.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 47D200B2170D53A400AEA412 /* Data_Event_Formats.rtf */; };
 		47D2FD261702764300AEA412 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 47D2FD251702764300AEA412 /* Cocoa.framework */; };
 		47D2FD301702764300AEA412 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 47D2FD2E1702764300AEA412 /* InfoPlist.strings */; };
@@ -172,17 +172,9 @@
 		470779B21739B7A100DBBC47 /* UIImageView+AFNetworking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImageView+AFNetworking.h"; sourceTree = "<group>"; };
 		470779B31739B7A100DBBC47 /* UIImageView+AFNetworking.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImageView+AFNetworking.m"; sourceTree = "<group>"; };
 		470779C61739B7C100DBBC47 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
-		470779C81739B98900DBBC47 /* TTGoxHTTPController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTGoxHTTPController.h; sourceTree = "<group>"; };
-		470779C91739B98900DBBC47 /* TTGoxHTTPController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTGoxHTTPController.m; sourceTree = "<group>"; };
-		470779CC1739B99E00DBBC47 /* TTCoinbaseHTTPController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTCoinbaseHTTPController.h; sourceTree = "<group>"; };
-		470779CD1739B99E00DBBC47 /* TTCoinbaseHTTPController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTCoinbaseHTTPController.m; sourceTree = "<group>"; };
 		470991531729D6240091E6E2 /* TTCurrencyBox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTCurrencyBox.h; sourceTree = "<group>"; };
 		470991541729D6240091E6E2 /* TTCurrencyBox.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTCurrencyBox.m; sourceTree = "<group>"; };
-		470991571729DAE20091E6E2 /* TTGoxCurrencyController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTGoxCurrencyController.h; sourceTree = "<group>"; };
-		470991581729DAE20091E6E2 /* TTGoxCurrencyController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTGoxCurrencyController.m; sourceTree = "<group>"; };
 		473DF83C173AAAC600C356A1 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
-		473DF83E173AB89D00C356A1 /* TTMenuBehaviorController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTMenuBehaviorController.h; sourceTree = "<group>"; };
-		473DF83F173AB89D00C356A1 /* TTMenuBehaviorController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTMenuBehaviorController.m; sourceTree = "<group>"; };
 		473DF843173ACE7F00C356A1 /* TTGraphsWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTGraphsWindow.h; sourceTree = "<group>"; };
 		473DF844173ACE7F00C356A1 /* TTGraphsWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTGraphsWindow.m; sourceTree = "<group>"; };
 		473DF882173BFB5400C356A1 /* TTGraphView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTGraphView.h; sourceTree = "<group>"; };
@@ -190,6 +182,24 @@
 		473DF88B173C1C8800C356A1 /* CorePlot.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = CorePlot.xcodeproj; path = CorePlot/CorePlot_1.2/Source/framework/CorePlot.xcodeproj; sourceTree = "<group>"; };
 		473DF898173C4EF300C356A1 /* NSColor+Hex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSColor+Hex.h"; sourceTree = "<group>"; };
 		473DF899173C4EF300C356A1 /* NSColor+Hex.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSColor+Hex.m"; sourceTree = "<group>"; };
+		473DF89D173DB89000C356A1 /* TTMenuBehaviorController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTMenuBehaviorController.h; sourceTree = "<group>"; };
+		473DF89E173DB89000C356A1 /* TTMenuBehaviorController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTMenuBehaviorController.m; sourceTree = "<group>"; };
+		473DF8A0173DB89000C356A1 /* TTCoinbaseHTTPController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTCoinbaseHTTPController.h; sourceTree = "<group>"; };
+		473DF8A1173DB89000C356A1 /* TTCoinbaseHTTPController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTCoinbaseHTTPController.m; sourceTree = "<group>"; };
+		473DF8A3173DB89000C356A1 /* TTGoxCurrencyController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTGoxCurrencyController.h; sourceTree = "<group>"; };
+		473DF8A4173DB89000C356A1 /* TTGoxCurrencyController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTGoxCurrencyController.m; sourceTree = "<group>"; };
+		473DF8A5173DB89000C356A1 /* TTGoxHTTPController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTGoxHTTPController.h; sourceTree = "<group>"; };
+		473DF8A6173DB89000C356A1 /* TTGoxHTTPController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTGoxHTTPController.m; sourceTree = "<group>"; };
+		473DF8A7173DB89000C356A1 /* TTGoxPrivateMessageController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTGoxPrivateMessageController.h; sourceTree = "<group>"; };
+		473DF8A8173DB89000C356A1 /* TTGoxPrivateMessageController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTGoxPrivateMessageController.m; sourceTree = "<group>"; };
+		473DF8A9173DB89000C356A1 /* TTGoxResultMessageController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTGoxResultMessageController.h; sourceTree = "<group>"; };
+		473DF8AA173DB89000C356A1 /* TTGoxResultMessageController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTGoxResultMessageController.m; sourceTree = "<group>"; };
+		473DF8AB173DB89000C356A1 /* TTGoxSocketController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTGoxSocketController.h; sourceTree = "<group>"; };
+		473DF8AC173DB89000C356A1 /* TTGoxSocketController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTGoxSocketController.m; sourceTree = "<group>"; };
+		473DF8AD173DB89000C356A1 /* TTOperationsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTOperationsController.h; sourceTree = "<group>"; };
+		473DF8AE173DB89000C356A1 /* TTOperationsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTOperationsController.m; sourceTree = "<group>"; };
+		473DF8B0173DB89000C356A1 /* TTOERatesController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTOERatesController.h; sourceTree = "<group>"; };
+		473DF8B1173DB89000C356A1 /* TTOERatesController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTOERatesController.m; sourceTree = "<group>"; };
 		476DD9F01729A37D0076C301 /* TTStatusBarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTStatusBarView.h; sourceTree = "<group>"; };
 		476DD9F11729A37D0076C301 /* TTStatusBarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTStatusBarView.m; sourceTree = "<group>"; };
 		476DD9F41729A3C90076C301 /* TTTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTTextView.h; sourceTree = "<group>"; };
@@ -202,8 +212,6 @@
 		477056411721130B0084FE5F /* Ticker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Ticker.m; sourceTree = "<group>"; };
 		477056461721BCB70084FE5F /* TTGoxCurrency.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTGoxCurrency.h; sourceTree = "<group>"; };
 		477056471721BCB80084FE5F /* TTGoxCurrency.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTGoxCurrency.m; sourceTree = "<group>"; };
-		4781210E172EFD9000879CD6 /* TTOERatesController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTOERatesController.h; sourceTree = "<group>"; };
-		4781210F172EFD9000879CD6 /* TTOERatesController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTOERatesController.m; sourceTree = "<group>"; };
 		478121121731BDAF00879CD6 /* TTArbitrageStackView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTArbitrageStackView.h; sourceTree = "<group>"; };
 		478121131731BDAF00879CD6 /* TTArbitrageStackView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTArbitrageStackView.m; sourceTree = "<group>"; };
 		478121161731C1BE00879CD6 /* TTArbitrageBox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTArbitrageBox.h; sourceTree = "<group>"; };
@@ -218,18 +226,10 @@
 		47D200811708AB7C00AEA412 /* RUSingleton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RUSingleton.h; path = ResplendentUtilities/ResplendentUtilities/Misc/RUSingleton.h; sourceTree = "<group>"; };
 		47D200821708AB7C00AEA412 /* RUStaticVariableSynthesization.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RUStaticVariableSynthesization.h; path = ResplendentUtilities/ResplendentUtilities/Misc/RUStaticVariableSynthesization.h; sourceTree = "<group>"; };
 		47D200831708AB7C00AEA412 /* RUSynthesizeUserDefaultMethods.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = RUSynthesizeUserDefaultMethods.h; path = ResplendentUtilities/ResplendentUtilities/Misc/RUSynthesizeUserDefaultMethods.h; sourceTree = "<group>"; };
-		47D200891708AC5300AEA412 /* TTGoxSocketController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTGoxSocketController.h; sourceTree = "<group>"; };
-		47D2008A1708AC5300AEA412 /* TTGoxSocketController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTGoxSocketController.m; sourceTree = "<group>"; };
 		47D2009C1709584200AEA412 /* CHANGELOG.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CHANGELOG.md; sourceTree = "<group>"; };
 		47D2009D1709584200AEA412 /* JSONKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JSONKit.h; sourceTree = "<group>"; };
 		47D2009E1709584200AEA412 /* JSONKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JSONKit.m; sourceTree = "<group>"; };
 		47D2009F1709584200AEA412 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = README.md; sourceTree = "<group>"; };
-		47D200A6170A47A800AEA412 /* TTOperationsController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTOperationsController.h; sourceTree = "<group>"; };
-		47D200A7170A47A800AEA412 /* TTOperationsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTOperationsController.m; sourceTree = "<group>"; };
-		47D200AA170A48F800AEA412 /* TTGoxPrivateMessageController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTGoxPrivateMessageController.h; sourceTree = "<group>"; };
-		47D200AB170A48F800AEA412 /* TTGoxPrivateMessageController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTGoxPrivateMessageController.m; sourceTree = "<group>"; };
-		47D200AE170A491300AEA412 /* TTGoxResultMessageController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTGoxResultMessageController.h; sourceTree = "<group>"; };
-		47D200AF170A491300AEA412 /* TTGoxResultMessageController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTGoxResultMessageController.m; sourceTree = "<group>"; };
 		47D200B2170D53A400AEA412 /* Data_Event_Formats.rtf */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.rtf; path = Data_Event_Formats.rtf; sourceTree = "<group>"; };
 		47D2FD221702764300AEA412 /* TulipTrader.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TulipTrader.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		47D2FD251702764300AEA412 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
@@ -367,6 +367,52 @@
 			path = Categories;
 			sourceTree = "<group>";
 		};
+		473DF89C173DB89000C356A1 /* APPLICATION */ = {
+			isa = PBXGroup;
+			children = (
+				473DF89D173DB89000C356A1 /* TTMenuBehaviorController.h */,
+				473DF89E173DB89000C356A1 /* TTMenuBehaviorController.m */,
+			);
+			path = APPLICATION;
+			sourceTree = "<group>";
+		};
+		473DF89F173DB89000C356A1 /* COINBASE */ = {
+			isa = PBXGroup;
+			children = (
+				473DF8A0173DB89000C356A1 /* TTCoinbaseHTTPController.h */,
+				473DF8A1173DB89000C356A1 /* TTCoinbaseHTTPController.m */,
+			);
+			path = COINBASE;
+			sourceTree = "<group>";
+		};
+		473DF8A2173DB89000C356A1 /* MTGOX */ = {
+			isa = PBXGroup;
+			children = (
+				473DF8A3173DB89000C356A1 /* TTGoxCurrencyController.h */,
+				473DF8A4173DB89000C356A1 /* TTGoxCurrencyController.m */,
+				473DF8A5173DB89000C356A1 /* TTGoxHTTPController.h */,
+				473DF8A6173DB89000C356A1 /* TTGoxHTTPController.m */,
+				473DF8A7173DB89000C356A1 /* TTGoxPrivateMessageController.h */,
+				473DF8A8173DB89000C356A1 /* TTGoxPrivateMessageController.m */,
+				473DF8A9173DB89000C356A1 /* TTGoxResultMessageController.h */,
+				473DF8AA173DB89000C356A1 /* TTGoxResultMessageController.m */,
+				473DF8AB173DB89000C356A1 /* TTGoxSocketController.h */,
+				473DF8AC173DB89000C356A1 /* TTGoxSocketController.m */,
+				473DF8AD173DB89000C356A1 /* TTOperationsController.h */,
+				473DF8AE173DB89000C356A1 /* TTOperationsController.m */,
+			);
+			path = MTGOX;
+			sourceTree = "<group>";
+		};
+		473DF8AF173DB89000C356A1 /* OPEN EXCHANGE RATES */ = {
+			isa = PBXGroup;
+			children = (
+				473DF8B0173DB89000C356A1 /* TTOERatesController.h */,
+				473DF8B1173DB89000C356A1 /* TTOERatesController.m */,
+			);
+			path = "OPEN EXCHANGE RATES";
+			sourceTree = "<group>";
+		};
 		476DD9EE1729A37D0076C301 /* NSTextView */ = {
 			isa = PBXGroup;
 			children = (
@@ -411,24 +457,10 @@
 		47D200881708AC2000AEA412 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				47D200891708AC5300AEA412 /* TTGoxSocketController.h */,
-				47D2008A1708AC5300AEA412 /* TTGoxSocketController.m */,
-				47D200A6170A47A800AEA412 /* TTOperationsController.h */,
-				47D200A7170A47A800AEA412 /* TTOperationsController.m */,
-				47D200AA170A48F800AEA412 /* TTGoxPrivateMessageController.h */,
-				47D200AB170A48F800AEA412 /* TTGoxPrivateMessageController.m */,
-				47D200AE170A491300AEA412 /* TTGoxResultMessageController.h */,
-				47D200AF170A491300AEA412 /* TTGoxResultMessageController.m */,
-				470991571729DAE20091E6E2 /* TTGoxCurrencyController.h */,
-				470991581729DAE20091E6E2 /* TTGoxCurrencyController.m */,
-				4781210E172EFD9000879CD6 /* TTOERatesController.h */,
-				4781210F172EFD9000879CD6 /* TTOERatesController.m */,
-				470779C81739B98900DBBC47 /* TTGoxHTTPController.h */,
-				470779C91739B98900DBBC47 /* TTGoxHTTPController.m */,
-				470779CC1739B99E00DBBC47 /* TTCoinbaseHTTPController.h */,
-				470779CD1739B99E00DBBC47 /* TTCoinbaseHTTPController.m */,
-				473DF83E173AB89D00C356A1 /* TTMenuBehaviorController.h */,
-				473DF83F173AB89D00C356A1 /* TTMenuBehaviorController.m */,
+				473DF89C173DB89000C356A1 /* APPLICATION */,
+				473DF89F173DB89000C356A1 /* COINBASE */,
+				473DF8A2173DB89000C356A1 /* MTGOX */,
+				473DF8AF173DB89000C356A1 /* OPEN EXCHANGE RATES */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -739,11 +771,7 @@
 				47D2FE1B170376DB00AEA412 /* base64.c in Sources */,
 				47D2FE1D170376DB00AEA412 /* NSData+SRB64Additions.m in Sources */,
 				47D2FE1F170376DB00AEA412 /* SRWebSocket.m in Sources */,
-				47D2008B1708AC5300AEA412 /* TTGoxSocketController.m in Sources */,
 				47D200A21709584200AEA412 /* JSONKit.m in Sources */,
-				47D200A8170A47A800AEA412 /* TTOperationsController.m in Sources */,
-				47D200AC170A48F800AEA412 /* TTGoxPrivateMessageController.m in Sources */,
-				47D200B0170A491400AEA412 /* TTGoxResultMessageController.m in Sources */,
 				47DDDF4F1710A59E0087EE78 /* TTMasterViewController.m in Sources */,
 				4770563A1721130B0084FE5F /* Depth.m in Sources */,
 				4770563E1721130B0084FE5F /* Tick.m in Sources */,
@@ -752,8 +780,6 @@
 				476DD9F21729A37D0076C301 /* TTStatusBarView.m in Sources */,
 				476DD9F61729A3C90076C301 /* TTTextView.m in Sources */,
 				470991551729D6240091E6E2 /* TTCurrencyBox.m in Sources */,
-				470991591729DAE20091E6E2 /* TTGoxCurrencyController.m in Sources */,
-				47812110172EFD9100879CD6 /* TTOERatesController.m in Sources */,
 				478121141731BDAF00879CD6 /* TTArbitrageStackView.m in Sources */,
 				478121181731C1BE00879CD6 /* TTArbitrageBox.m in Sources */,
 				479AE8AD17386B2D0043C10D /* TTAPIControlBoxView.m in Sources */,
@@ -768,12 +794,18 @@
 				470779C01739B7A100DBBC47 /* AFURLConnectionOperation.m in Sources */,
 				470779C21739B7A100DBBC47 /* AFXMLRequestOperation.m in Sources */,
 				470779C41739B7A100DBBC47 /* UIImageView+AFNetworking.m in Sources */,
-				470779CA1739B98900DBBC47 /* TTGoxHTTPController.m in Sources */,
-				470779CE1739B99E00DBBC47 /* TTCoinbaseHTTPController.m in Sources */,
-				473DF840173AB89D00C356A1 /* TTMenuBehaviorController.m in Sources */,
 				473DF845173ACE7F00C356A1 /* TTGraphsWindow.m in Sources */,
 				473DF884173BFB5400C356A1 /* TTGraphView.m in Sources */,
 				473DF89A173C4EF300C356A1 /* NSColor+Hex.m in Sources */,
+				473DF8B2173DB89000C356A1 /* TTMenuBehaviorController.m in Sources */,
+				473DF8B4173DB89000C356A1 /* TTCoinbaseHTTPController.m in Sources */,
+				473DF8B6173DB89000C356A1 /* TTGoxCurrencyController.m in Sources */,
+				473DF8B8173DB89000C356A1 /* TTGoxHTTPController.m in Sources */,
+				473DF8BA173DB89000C356A1 /* TTGoxPrivateMessageController.m in Sources */,
+				473DF8BC173DB89000C356A1 /* TTGoxResultMessageController.m in Sources */,
+				473DF8BE173DB89000C356A1 /* TTGoxSocketController.m in Sources */,
+				473DF8C0173DB89000C356A1 /* TTOperationsController.m in Sources */,
+				473DF8C2173DB89000C356A1 /* TTOERatesController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -785,11 +817,7 @@
 				47D2FE1C170376DB00AEA412 /* base64.c in Sources */,
 				47D2FE1E170376DB00AEA412 /* NSData+SRB64Additions.m in Sources */,
 				47D2FE20170376DB00AEA412 /* SRWebSocket.m in Sources */,
-				47D2008C1708AC5300AEA412 /* TTGoxSocketController.m in Sources */,
 				47D200A31709584200AEA412 /* JSONKit.m in Sources */,
-				47D200A9170A47A800AEA412 /* TTOperationsController.m in Sources */,
-				47D200AD170A48F800AEA412 /* TTGoxPrivateMessageController.m in Sources */,
-				47D200B1170A491400AEA412 /* TTGoxResultMessageController.m in Sources */,
 				47DDDF501710A59E0087EE78 /* TTMasterViewController.m in Sources */,
 				4770563B1721130B0084FE5F /* Depth.m in Sources */,
 				4770563F1721130B0084FE5F /* Tick.m in Sources */,
@@ -797,8 +825,6 @@
 				476DD9F31729A37D0076C301 /* TTStatusBarView.m in Sources */,
 				476DD9F71729A3C90076C301 /* TTTextView.m in Sources */,
 				470991561729D6240091E6E2 /* TTCurrencyBox.m in Sources */,
-				4709915A1729DAE20091E6E2 /* TTGoxCurrencyController.m in Sources */,
-				47812111172EFD9100879CD6 /* TTOERatesController.m in Sources */,
 				478121151731BDAF00879CD6 /* TTArbitrageStackView.m in Sources */,
 				478121191731C1BE00879CD6 /* TTArbitrageBox.m in Sources */,
 				479AE8AE17386B2D0043C10D /* TTAPIControlBoxView.m in Sources */,
@@ -813,12 +839,18 @@
 				470779C11739B7A100DBBC47 /* AFURLConnectionOperation.m in Sources */,
 				470779C31739B7A100DBBC47 /* AFXMLRequestOperation.m in Sources */,
 				470779C51739B7A100DBBC47 /* UIImageView+AFNetworking.m in Sources */,
-				470779CB1739B98900DBBC47 /* TTGoxHTTPController.m in Sources */,
-				470779CF1739B99E00DBBC47 /* TTCoinbaseHTTPController.m in Sources */,
-				473DF841173AB89D00C356A1 /* TTMenuBehaviorController.m in Sources */,
 				473DF846173ACE7F00C356A1 /* TTGraphsWindow.m in Sources */,
 				473DF885173BFB5400C356A1 /* TTGraphView.m in Sources */,
 				473DF89B173C4EF300C356A1 /* NSColor+Hex.m in Sources */,
+				473DF8B3173DB89000C356A1 /* TTMenuBehaviorController.m in Sources */,
+				473DF8B5173DB89000C356A1 /* TTCoinbaseHTTPController.m in Sources */,
+				473DF8B7173DB89000C356A1 /* TTGoxCurrencyController.m in Sources */,
+				473DF8B9173DB89000C356A1 /* TTGoxHTTPController.m in Sources */,
+				473DF8BB173DB89000C356A1 /* TTGoxPrivateMessageController.m in Sources */,
+				473DF8BD173DB89000C356A1 /* TTGoxResultMessageController.m in Sources */,
+				473DF8BF173DB89000C356A1 /* TTGoxSocketController.m in Sources */,
+				473DF8C1173DB89000C356A1 /* TTOperationsController.m in Sources */,
+				473DF8C3173DB89000C356A1 /* TTOERatesController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
