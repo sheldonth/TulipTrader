@@ -11,12 +11,15 @@
 #import "RUConstants.h"
 #import "TTGraphsWindow.h"
 #import "TTGraphsWindow.h"
+#import "TTDatabaseLoader.h"
 
 #import <CorePlot/CorePlot.h>
 
 @interface TTMenuBehaviorController()
 
 @property(weak)NSMenu* tulipTraderApplicationMenu;
+@property(weak)NSMenu* fileMenu;
+@property(weak)NSMenuItem* loadDBMenuItem;
 @property(weak)NSMenu* visualizationsMenu;
 @property(weak)NSMenuItem* graphsMenuItem;
 
@@ -27,6 +30,11 @@
 @implementation TTMenuBehaviorController
 
 RU_SYNTHESIZE_SINGLETON_FOR_CLASS_WITH_ACCESSOR(TTMenuBehaviorController, sharedInstance);
+
+-(void)loadDB:(id)sender
+{
+    [TTDatabaseLoader showFilePicker];
+}
 
 -(void)launchGraphsWindow:(id)sender
 {
@@ -41,6 +49,8 @@ RU_SYNTHESIZE_SINGLETON_FOR_CLASS_WITH_ACCESSOR(TTMenuBehaviorController, shared
 -(void)establishPointers
 {
     _tulipTraderApplicationMenu = [[_menu itemWithTitle:@"TulipTrader"] submenu];
+    _fileMenu = [[_menu itemWithTitle:@"File"] submenu];
+    _loadDBMenuItem = [_fileMenu itemWithTitle:@"Load DB"];
     _visualizationsMenu = [[_tulipTraderApplicationMenu itemWithTitle:@"Visualizations"] submenu];
     _graphsMenuItem = [_visualizationsMenu itemWithTitle:@"Graphs"];
 }
@@ -52,6 +62,10 @@ RU_SYNTHESIZE_SINGLETON_FOR_CLASS_WITH_ACCESSOR(TTMenuBehaviorController, shared
     [_graphsMenuItem setEnabled:YES];
     [_graphsMenuItem setTarget:self];
     [_graphsMenuItem setAction:@selector(launchGraphsWindow:)];
+    
+    [_loadDBMenuItem setEnabled:YES];
+    [_loadDBMenuItem setTarget:self];
+    [_loadDBMenuItem setAction:@selector(loadDB:)];
 }
 
 -(id)init
