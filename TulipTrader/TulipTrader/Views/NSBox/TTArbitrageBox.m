@@ -83,6 +83,9 @@ static NSFont* zedFont;
     NSArray* deltaCurrencyTickerArray = [_appDelegateContext executeFetchRequest:deltaCurrencyFetchRequest error:&e];
     if (e) @throw e;
     
+    if (!alphaCurrencyTickerArray.count || !deltaCurrencyTickerArray.count)
+        return;
+    
     Ticker* alphaTicker = [alphaCurrencyTickerArray objectAtIndex:0];
     Ticker* deltaTicker = [deltaCurrencyTickerArray objectAtIndex:0];
     

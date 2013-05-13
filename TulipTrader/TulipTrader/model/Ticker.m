@@ -37,7 +37,7 @@
     
     [t setChannel_name:kRUStringOrNil([d objectForKey:@"channel_name"])];
     
-    RUDLog(@"%@", t.channel_name);
+//    RUDLog(@"%@", t.channel_name);
     
     [t setChannel_id:kRUStringOrNil([d objectForKey:@"channel"])];
     

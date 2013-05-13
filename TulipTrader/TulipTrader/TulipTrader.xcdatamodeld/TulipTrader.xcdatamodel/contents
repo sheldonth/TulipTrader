@@ -41,11 +41,20 @@
         <relationship name="vol" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Tick" syncable="YES"/>
         <relationship name="vwap" optional="YES" minCount="1" maxCount="1" deletionRule="Nullify" destinationEntity="Tick" syncable="YES"/>
     </entity>
-    <entity name="Trade" syncable="YES"/>
+    <entity name="Trade" representedClassName="Trade" syncable="YES">
+        <attribute name="amount" optional="YES" attributeType="Double" defaultValueString="0" syncable="YES"/>
+        <attribute name="currency" optional="YES" attributeType="Integer 16" defaultValueString="0" syncable="YES"/>
+        <attribute name="date" optional="YES" attributeType="Date" syncable="YES"/>
+        <attribute name="price" optional="YES" attributeType="Double" defaultValueString="0" syncable="YES"/>
+        <attribute name="properties" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="real_boolean" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="trade_type" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="tradeId" optional="YES" attributeType="Integer 64" defaultValueString="0" syncable="YES"/>
+    </entity>
     <elements>
         <element name="Depth" positionX="160" positionY="192" width="128" height="240"/>
         <element name="Tick" positionX="160" positionY="192" width="128" height="135"/>
         <element name="Ticker" positionX="160" positionY="192" width="128" height="285"/>
-        <element name="Trade" positionX="160" positionY="192" width="128" height="45"/>
+        <element name="Trade" positionX="160" positionY="192" width="128" height="165"/>
     </elements>
 </model>
