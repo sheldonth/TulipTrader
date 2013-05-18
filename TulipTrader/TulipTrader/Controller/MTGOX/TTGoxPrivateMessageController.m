@@ -41,22 +41,28 @@ NSString* const TTCurrencyUpdateNotificationString = @"ttCurrencyUpdateNotificat
 
 -(void)recordDepth:(NSDictionary*)depthDictionary
 {
-    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        // do depth stuff here
+    });
 }
 
 -(void)recordTrade:(NSDictionary*)tradeDictionary
 {
-
+    dispatch_async(dispatch_get_main_queue(), ^{
+        // do trade stuff here
+    });
 }
 
 -(void)recordTicker:(NSDictionary*)tickerDictionary
 {
-    Ticker* ticker = [Ticker newTickerInContext:primaryContext fromDictionary:tickerDictionary];
-    NSError* e = nil;
-    [ticker.managedObjectContext save:&e];
-    if (e)
-        RUDLog(@"Error saving ticker on channel: %@", ticker.channel_name);
-    [[NSNotificationCenter defaultCenter]postNotificationName:TTCurrencyUpdateNotificationString object:nil userInfo:@{@"Ticker": ticker}];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        Ticker* ticker = [Ticker newTickerInContext:primaryContext fromDictionary:tickerDictionary];
+        NSError* e = nil;
+        [ticker.managedObjectContext save:&e];
+        if (e)
+            RUDLog(@"Error saving ticker on channel: %@", ticker.channel_name);
+        [[NSNotificationCenter defaultCenter]postNotificationName:TTCurrencyUpdateNotificationString object:nil userInfo:@{@"Ticker": ticker}];
+    });
 }
 
 -(void)observeLag:(NSDictionary*)lagDictionary

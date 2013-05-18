@@ -8,9 +8,22 @@
 
 #import <Cocoa/Cocoa.h>
 #import "TTGoxCurrency.h"
+#import <CorePlot/CorePlot.h>
 
-@interface TTGraphView : NSView
+typedef enum {
+    TTGraphViewDateRangeNone = 0,
+    TTGraphViewDateRangeOneHour,
+    TTGraphViewDateRangeOneDay,
+    TTGraphViewDateRangeOneMonth,
+    TTGraphViewDateRangeThreeMonths,
+    TTGraphViewDateRangeSixMonths,
+    TTGraphViewDateRangeYearToDate,
+    TTGraphViewDateRangeOneYear,
+    TTGraphViewDateRangeAll
+}TTGraphViewDateRange;
+
+@interface TTGraphView : NSView <CPTScatterPlotDataSource, CPTScatterPlotDelegate>
 
 @property(nonatomic)TTGoxCurrency currency;
-
+@property(nonatomic)TTGraphViewDateRange selectedDateRange;
 @end

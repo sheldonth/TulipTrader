@@ -60,6 +60,7 @@
                 RUDLog(@"Database imported successfully");
         });
     }
+    [db close];
 }
 
 +(void)showFilePicker

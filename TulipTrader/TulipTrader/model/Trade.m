@@ -8,7 +8,8 @@
 
 #import "Trade.h"
 #import "RUClassOrNilUtil.h"
-
+#import "RUConstants.h"
+#import "TTGoxCurrency.h"
 
 @implementation Trade
 
@@ -20,6 +21,11 @@
 @dynamic real_boolean;
 @dynamic trade_type;
 @dynamic properties;
+
+-(NSString *)description
+{
+    return RUStringWithFormat(@"Trade %@ in %@ for %@ at %@ and is real %@", self.tradeId.stringValue, stringFromCurrency(currencyFromNumber(self.currency)), self.amount.stringValue, self.price.stringValue, self.real_boolean.stringValue);
+}
 
 +(Trade*)newTradeInContext:(NSManagedObjectContext*)context fromDictionary:(NSDictionary*)d
 {

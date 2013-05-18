@@ -40,3 +40,4 @@ NSString* stringFromCurrency(TTGoxCurrency currency);
 NSNumber* numberFromCurrency(TTGoxCurrency currency);
 NSString* bitcoinTickerChannelNameForCurrency(TTGoxCurrency currency);
 NSString* currencySymbolStringFromCurrency(TTGoxCurrency currency);
+NSColor* colorForCurrency(TTGoxCurrency currency);

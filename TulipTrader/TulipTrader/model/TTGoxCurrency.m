@@ -29,6 +29,11 @@ NSString* const goxAUDString = @"AUD";
 
 #define ExceptionOnNoCurrencyFound 0
 
+NSColor* colorForCurrency(TTGoxCurrency currency)
+{
+    return [NSColor redColor];
+}
+
 NSString* currencySymbolStringFromCurrency(TTGoxCurrency currency)
 {
     switch (currency) {

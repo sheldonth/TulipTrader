@@ -11,12 +11,20 @@
 #import "RUConstants.h"
 #import "NSColor+Hex.h"
 #import "TTGoxCurrencyController.h"
+#import "TTTextView.h"
+#import "TTAppDelegate.h"
+#import "Trade.h"
 
 #define kTTGraphStrongSidePadding 55.f
 #define kTTGraphWeakSidePadding 15.f
 
 #define kTTGraphViewPopupButtonWidth 125.f
 #define kTTGraphViewPopupButtonHeight 30.f
+
+#define kTTGraphViewTimelineButtonWidth 60
+#define kTTGraphViewTimelineButtonHeight 25
+
+#define kTTGraphViewPriceUpperYAxisDelta 10
 
 @interface TTGraphView()
 
@@ -27,6 +35,12 @@
 @property(nonatomic, retain)CPTMutableLineStyle* minorLineStyle;
 @property(nonatomic, retain)NSPopUpButton* popUpButton;
 @property(nonatomic)CGFloat boundsPadding;
+@property(nonatomic, retain)NSMutableArray* timelineButtonArray;
+@property(nonatomic, retain)TTTextView* loadingLabel;
+//@property(nonatomic, retain)CPTScatterPlot* priceInPrimaryCurrencyPlotLine;
+@property(nonatomic, retain)dispatch_queue_t databaseOperationQueue;
+@property(nonatomic, retain)NSMutableDictionary* tradeDataArrayDictionary;
+@property(nonatomic)NSButton* selectedButton;
 
 CPTMutableTextStyle* textStyle();
 
@@ -34,6 +48,9 @@ CPTMutableTextStyle* textStyle();
 
 static NSString* titleFontName;
 static const NSString* kTTNoCurrencySelectedTitle;
+static NSArray* timeLineLengthButtonArray;
+static NSString* defaultTimeLineLength;
+static TTAppDelegate* appDelegate;
 
 @implementation TTGraphView
 
@@ -62,17 +79,284 @@ typedef enum CGLineCap CGLineCap;
     {
         titleFontName = @"Helvetica-Bold";
         kTTNoCurrencySelectedTitle = @"None";
+        timeLineLengthButtonArray = @[@"1h", @"1d", @"1m", @"3m", @"6m", @"YTD", @"1y", @"All"];
+        defaultTimeLineLength = @"1d";
+        appDelegate = (TTAppDelegate*)[[NSApplication sharedApplication]delegate];
+    }
+}
+
+#pragma mark - CPTDataSource methods (required)
+-(NSUInteger)numberOfRecordsForPlot:(CPTPlot *)plot
+{
+    return numberOfPlotsForDateRange(self.selectedDateRange);
+}
+
+#pragma mark - CPTDataSource methods (optional)
+
+/*
+ typedef enum _CPTScatterPlotField {
+ CPTScatterPlotFieldX, ///< X values.
+ CPTScatterPlotFieldY  ///< Y values.
+ }
+ CPTScatterPlotField;
+ */
+
+-(NSNumber*)yValueForRecordIndex:(NSUInteger)index
+{
+    // write a fetch request that gets the median price over the time interval for the index.
+}
+
+-(NSNumber *)numberForPlot:(CPTPlot *)plot field:(NSUInteger)fieldEnum recordIndex:(NSUInteger)idx
+{
+    switch (fieldEnum) {
+        case CPTScatterPlotFieldX:
+            return @(idx);
+            break;
+            
+        case CPTScatterPlotFieldY:
+        {
+//            NSNumber* value = [self yValueForRecordIndex:idx];
+            return @(40);
+            break;
+        }
+        default:
+            return @(0);
+            break;
+    }
+}
+
+#pragma mark - CPTSDelegate methods (required)
+
+#pragma mark - CPTDelegate methods (options)
+
+#pragma mark - c methods selectors
+
+NSUInteger numberOfPlotsForDateRange(TTGraphViewDateRange range)
+{
+    switch (range) {
+        case TTGraphViewDateRangeNone:
+            return 0;
+            break;
+            
+        case TTGraphViewDateRangeOneHour:
+            return 60;
+            break;
+            
+        case TTGraphViewDateRangeOneDay:
+            return 24;
+            break;
+        
+        case TTGraphViewDateRangeOneMonth:
+            return 30;
+            break;
+            
+        case TTGraphViewDateRangeThreeMonths:
+            return 90;
+            break;
+            
+        case TTGraphViewDateRangeSixMonths:
+            return 180;
+            break;
+            
+        case TTGraphViewDateRangeYearToDate:
+        {
+            NSDate* now = [NSDate date];
+            NSCalendar* gregorian = [[NSCalendar alloc]initWithCalendarIdentifier:NSGregorianCalendar];
+            NSDateComponents* components = [gregorian components:NSDayCalendarUnit fromDate:now];
+            return components.day;
+            break;
+        }
+        
+        case TTGraphViewDateRangeOneYear:
+            return 365;
+            break;
+            
+        case TTGraphViewDateRangeAll:
+            return 800; // This is kinda arbitrary, how many units do you divide all data into?
+            break;
+            
+        default:
+            return 0;
+            break;
     }
 }
 
 #pragma mark - button selectors
 
--(void)currencyPopUpDidChange:(id)sender
+-(NSDate*)startDateForDateRange:(TTGraphViewDateRange)dateRange
 {
-    
+    NSDate* now = [NSDate date];
+    NSCalendar* gregorian = [[NSCalendar alloc]initWithCalendarIdentifier:NSGregorianCalendar];
+    NSDateComponents* components = [NSDateComponents new];
+    switch (dateRange) {
+        case TTGraphViewDateRangeNone:
+            return now;
+            break;
+            
+        case TTGraphViewDateRangeOneHour:
+            [components setHour:-1];
+            return [gregorian dateByAddingComponents:components toDate:now options:0];
+            break;
+            
+        case TTGraphViewDateRangeOneDay:
+            [components setDay:-1];
+            return [gregorian dateByAddingComponents:components toDate:now options:0];
+            break;
+            
+        case TTGraphViewDateRangeOneMonth:
+            [components setMonth:-1];
+            return [gregorian dateByAddingComponents:components toDate:now options:0];
+            break;
+            
+        case TTGraphViewDateRangeThreeMonths:
+            [components setMonth:-3];
+            return [gregorian dateByAddingComponents:components toDate:now options:0];
+            break;
+            
+        case TTGraphViewDateRangeSixMonths:
+            [components setMonth:-6];
+            return [gregorian dateByAddingComponents:components toDate:now options:0];
+            break;
+            
+        case TTGraphViewDateRangeYearToDate:
+        {
+            components = [gregorian components:NSYearCalendarUnit fromDate:now];
+            [components setMonth:1];
+            [components setDay:1];
+            NSDate* d = [gregorian dateFromComponents:components];
+            return d;
+            break;
+        }
+        case TTGraphViewDateRangeOneYear:
+            [components setYear:-1];
+            return [gregorian dateByAddingComponents:components toDate:now options:0];
+            break;
+            
+        case TTGraphViewDateRangeAll:
+            return [NSDate date];
+            break;
+            
+        default:
+            return [NSDate date];
+            break;
+    }
+}
+
+-(void)currencyPopUpDidChange:(NSPopUpButton*)sender
+{
+    [sender setTitle:sender.titleOfSelectedItem];
+    [self addCurrencyToGraph:currencyFromString(sender.titleOfSelectedItem)];
+}
+
+-(void)timelineButtonClicked:(NSButton*)sender
+{
+    [self setSelectedButton:sender];
+    NSString* buttonTitle = sender.title;
+    if ([buttonTitle isEqualToString:@"1h"])
+        [self setSelectedDateRange:TTGraphViewDateRangeOneHour];
+    else if ([buttonTitle isEqualToString:@"1d"])
+        [self setSelectedDateRange:TTGraphViewDateRangeOneDay];
+    else if ([buttonTitle isEqualToString:@"1m"])
+        [self setSelectedDateRange:TTGraphViewDateRangeOneMonth];
+    else if ([buttonTitle isEqualToString:@"3m"])
+        [self setSelectedDateRange:TTGraphViewDateRangeThreeMonths];
+    else if ([buttonTitle isEqualToString:@"6m"])
+        [self setSelectedDateRange:TTGraphViewDateRangeSixMonths];
+    else if ([buttonTitle isEqualToString:@"1y"])
+        [self setSelectedDateRange:TTGraphViewDateRangeOneYear];
+    else if ([buttonTitle isEqualToString:@"YTD"])
+        [self setSelectedDateRange:TTGraphViewDateRangeYearToDate];
+    else if ([buttonTitle isEqualToString:@"All"])
+        [self setSelectedDateRange:TTGraphViewDateRangeAll];
+    else
+        [self setSelectedDateRange:TTGraphViewDateRangeNone];
+    [self.timelineButtonArray enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+        if (obj == sender)
+            [obj setState:NSOnState];
+        else
+            [obj setState:NSOffState];
+    }];
+    [self.graph reloadData];
 }
 
 #pragma mark - internal methods
+
+-(void)loadDataForCurrency:(TTGoxCurrency)currency
+{
+    [self showLoadingLabel:YES];
+    if (!_databaseOperationQueue)
+        [self setDatabaseOperationQueue:dispatch_queue_create("co.resplent.graphLoadingQueue", NULL)];
+    
+    dispatch_async(self.databaseOperationQueue, ^{
+        NSManagedObjectContext* threadSafeMOC = [[NSManagedObjectContext alloc]initWithConcurrencyType:NSPrivateQueueConcurrencyType];
+        [threadSafeMOC setPersistentStoreCoordinator:appDelegate.persistentStoreCoordinator];
+        
+        NSExpression* keyExpression = [NSExpression expressionForKeyPath:@"price"];
+        NSExpression* maxExpression = [NSExpression expressionForFunction:@"max:" arguments:@[keyExpression]];
+        
+        NSExpressionDescription* description = [NSExpressionDescription new];
+        [description setName:@"maxPrice"];
+        [description setExpression:maxExpression];
+        [description setExpressionResultType:NSDoubleAttributeType];
+        
+        NSFetchRequest* dataRequest = [[NSFetchRequest alloc]initWithEntityName:@"Trade"];
+        NSDate* d = [self startDateForDateRange:self.selectedDateRange];
+        [dataRequest setPredicate:[NSPredicate predicateWithFormat:@"(date > %@) AND (currency == %@) AND (real_boolean == %@)", d, numberFromCurrency(currency), @(YES)]];
+        [dataRequest setPropertiesToFetch:@[description]];
+        [dataRequest setResultType:NSDictionaryResultType];
+        NSError* e = nil;
+        NSArray* dataSet = [threadSafeMOC executeFetchRequest:dataRequest error:&e];
+
+        if ([[[dataSet objectAtIndex:0]allObjects] count])
+        {
+            NSNumber* maxPriceNumber = [[dataSet objectAtIndex:0] objectForKey:@"maxPrice"];
+            NSUInteger maxPrice = [maxPriceNumber unsignedIntegerValue] + kTTGraphViewPriceUpperYAxisDelta;
+            dispatch_async(dispatch_get_main_queue(), ^{
+                CPTScatterPlot* currencyPlot = [CPTScatterPlot new];
+                [currencyPlot setDataSource:self];
+                [currencyPlot setDelegate:self];
+                [currencyPlot setIdentifier:stringFromCurrency(currency)];
+                [currencyPlot setCachePrecision:CPTPlotCachePrecisionAuto];
+     
+                CPTXYPlotSpace *plotSpace = (CPTXYPlotSpace *)self.graph.defaultPlotSpace;
+                
+                plotSpace.xRange = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromUnsignedInteger(0) length:CPTDecimalFromUnsignedInteger(numberOfPlotsForDateRange(self.selectedDateRange))];
+                plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromUnsignedInteger(0) length:CPTDecimalFromUnsignedInteger(maxPrice)];
+                
+                CPTMutableLineStyle *lineStyle = [currencyPlot.dataLineStyle mutableCopy];
+                lineStyle.lineWidth = 2.0;
+                lineStyle.lineColor     = [CPTColor colorWithCGColor:colorForCurrency(currency).CGColor];
+                currencyPlot.dataLineStyle = lineStyle;
+                [self.graph addPlot:currencyPlot];
+            });
+        }
+        else
+            RUDLog(@"No data was returned in the set");
+    });
+}
+
+-(void)showLoadingLabel:(BOOL)show
+{
+    if (![NSThread isMainThread])
+    {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self showLoadingLabel:show];
+            return ;
+        });
+    }
+    show ? [self.defaultLayerHostingView addSubview:_loadingLabel] : [self.loadingLabel removeFromSuperview];
+}
+
+-(void)removeCurrencyFromGraph:(TTGoxCurrency)currency
+{
+    CPTPlot* p = [self.graph plotWithIdentifier:stringFromCurrency(currency)];
+    [self.graph removePlot:p];
+}
+
+-(void)addCurrencyToGraph:(TTGoxCurrency)currency
+{
+    [self loadDataForCurrency:currency];
+}
 
 -(void)setupGraph
 {
@@ -109,7 +393,7 @@ typedef enum CGLineCap CGLineCap;
     xAxis.orthogonalCoordinateDecimal = CPTDecimalFromUnsignedInteger(0);
     xAxis.majorGridLineStyle = self.majorLineStyle;
     xAxis.minorGridLineStyle = self.minorLineStyle;
-    xAxis.minorTicksPerInterval = 9;
+    xAxis.minorTicksPerInterval = 19;
     xAxis.title = @"Date";
     xAxis.titleOffset = 35.0;
     
@@ -124,7 +408,7 @@ typedef enum CGLineCap CGLineCap;
     yAxis.minorGridLineStyle = self.minorLineStyle;
     yAxis.minorTicksPerInterval = 3;
     yAxis.labelOffset = 5.0;
-    yAxis.title = @"Price";
+//    yAxis.title = @"Price";
     yAxis.titleOffset = 30.0;
     yAxis.axisConstraints = [CPTConstraints constraintWithLowerOffset:0.0];
 }
@@ -164,8 +448,33 @@ typedef enum CGLineCap CGLineCap;
         [self setPopUpButton:[[NSPopUpButton alloc]initWithFrame:(NSRect){CGRectGetWidth(frame) - self.boundsPadding - kTTGraphViewPopupButtonWidth, CGRectGetHeight(frame) - (1.5 * kTTGraphViewPopupButtonHeight), kTTGraphViewPopupButtonWidth, kTTGraphViewPopupButtonHeight} pullsDown:YES]];
         [self.popUpButton addItemWithTitle:(NSString*)kTTNoCurrencySelectedTitle];
         [self.popUpButton addItemsWithTitles:[TTGoxCurrencyController activeCurrencys]];
+        [self.popUpButton setAutoenablesItems:YES];
         [self.popUpButton setAction:@selector(currencyPopUpDidChange:)];
+        [self.popUpButton setTarget:self];
         [self.defaultLayerHostingView addSubview:self.popUpButton];
+        
+        [self setLoadingLabel:[[TTTextView alloc]initWithFrame:(NSRect){CGRectGetMidX(frame), CGRectGetMidY(frame), 200, 100}]];
+        [self.loadingLabel setBackgroundColor:[NSColor clearColor]];
+        [self.loadingLabel setString:@"Loading"];
+        [self.defaultLayerHostingView addSubview:_loadingLabel];
+        
+        _timelineButtonArray = [NSMutableArray array];
+        
+        _tradeDataArrayDictionary = [NSMutableDictionary dictionary];
+        
+        [timeLineLengthButtonArray enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+            NSButton* btn = [NSButton new];
+            [btn setButtonType:NSPushOnPushOffButton];
+            [btn setBezelStyle:NSRoundRectBezelStyle];
+            [btn setFrame:NSMakeRect(self.boundsPadding + (idx * kTTGraphViewTimelineButtonWidth), CGRectGetHeight(frame) - (1.5 * kTTGraphViewTimelineButtonHeight), kTTGraphViewTimelineButtonWidth, kTTGraphViewTimelineButtonHeight)];
+            [btn setTitle:[timeLineLengthButtonArray objectAtIndex:idx]];
+            [btn setAction:@selector(timelineButtonClicked:)];
+            [btn setTarget:self];
+            [self.timelineButtonArray addObject:btn];
+            [self.defaultLayerHostingView addSubview:btn];
+        }];
+        [[self.timelineButtonArray objectAtIndex:0]setState:NSOnState];
+        [self setSelectedButton:[self.timelineButtonArray objectAtIndex:0]];
     }
     return self;
 }
