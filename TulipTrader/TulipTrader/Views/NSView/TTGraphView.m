@@ -400,7 +400,7 @@ NSUInteger numberOfPlotsForDateRange(TTGraphViewDateRange range)
     if (![[d allKeys] count])
         return @(0);
     else
-        return [d objectForKey:@"mediaPrice"];
+        return [d objectForKey:@"medianPrice"];
 }
 
 
