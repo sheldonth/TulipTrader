@@ -26,6 +26,32 @@
 
 #define kTTGraphViewPriceUpperYAxisDelta 10
 
+
+@interface TTDateRange : NSObject
+
+@property(nonatomic, retain)NSDate* openWindowDate;
+@property(nonatomic, retain)NSDate* closeWindowDate;
+
+@end
+
+@implementation TTDateRange
+
++(TTDateRange*)dateRangeWithOpen:(NSDate*)open close:(NSDate*)close
+{
+    TTDateRange* dateRange = [TTDateRange new];
+    [dateRange setOpenWindowDate:open];
+    [dateRange setCloseWindowDate:close];
+    return dateRange;
+}
+
+-(NSString *)description
+{
+    return RUStringWithFormat(@"\nOpen: %@\nClose: %@", self.openWindowDate, self.closeWindowDate);
+}
+
+@end
+
+
 @interface TTGraphView()
 
 @property(nonatomic, retain)CPTXYGraph* graph;
@@ -93,30 +119,24 @@ typedef enum CGLineCap CGLineCap;
 
 #pragma mark - CPTDataSource methods (optional)
 
-/*
- typedef enum _CPTScatterPlotField {
- CPTScatterPlotFieldX, ///< X values.
- CPTScatterPlotFieldY  ///< Y values.
- }
- CPTScatterPlotField;
- */
 
--(NSNumber*)yValueForRecordIndex:(NSUInteger)index
-{
-    // write a fetch request that gets the median price over the time interval for the index.
-}
+//typedef enum _CPTScatterPlotField {
+//    CPTScatterPlotFieldX, ///< X values.
+//    CPTScatterPlotFieldY  ///< Y values.
+//}CPTScatterPlotField;
+
 
 -(NSNumber *)numberForPlot:(CPTPlot *)plot field:(NSUInteger)fieldEnum recordIndex:(NSUInteger)idx
 {
     switch (fieldEnum) {
         case CPTScatterPlotFieldX:
-            return @(idx);
+            return @(idx + 1);
             break;
             
         case CPTScatterPlotFieldY:
         {
-//            NSNumber* value = [self yValueForRecordIndex:idx];
-            return @(40);
+            NSNumber* value = [self yValueForRecordIndex:idx];
+            return value;
             break;
         }
         default:
@@ -129,7 +149,64 @@ typedef enum CGLineCap CGLineCap;
 
 #pragma mark - CPTDelegate methods (options)
 
-#pragma mark - c methods selectors
+#pragma mark - C Methods
+
+/*
+ @purpose: Given the knowledge of the # of plots, and the timeInterval conferred to the user, return a TTDateRange for that unit.
+ */
+
+TTDateRange* dateRangeForIndexAndSelectedDateRange(NSUInteger recordIndex, TTGraphViewDateRange selectedDateRange)
+{
+    NSCalendar* gregorianCalendar = [[NSCalendar alloc]initWithCalendarIdentifier:NSGregorianCalendar];
+    TTDateRange* dateRange = nil;
+    NSInteger timeRelativePlotsBeforeNow = (-1 * (numberOfPlotsForDateRange(selectedDateRange) - recordIndex));
+    NSDateComponents* windowOpenDateComponents = [NSDateComponents new];
+    NSDateComponents* windowCloseDateComponents = [NSDateComponents new];
+    switch (selectedDateRange) {
+        case TTGraphViewDateRangeNone:
+        {
+            NSException* e = [NSException exceptionWithName:NSInternalInconsistencyException reason:@"Asked For A TTDateRange when TTGraphViewDateRangeNone is the selected Date Range" userInfo:nil];
+            @throw e;
+            break;
+        }
+            
+        case TTGraphViewDateRangeOneHour: // One hour has sixty plots, the window is (60-recordIndex) minutes before now
+            [windowOpenDateComponents setMinute:timeRelativePlotsBeforeNow];
+            [windowCloseDateComponents setMinute:(timeRelativePlotsBeforeNow + 1)];
+            break;
+            
+        case TTGraphViewDateRangeOneDay:
+            [windowOpenDateComponents setHour:timeRelativePlotsBeforeNow];
+            [windowCloseDateComponents setHour:(timeRelativePlotsBeforeNow + 1)];
+            break;
+            
+        case TTGraphViewDateRangeOneMonth:
+        case TTGraphViewDateRangeThreeMonths:
+        case TTGraphViewDateRangeSixMonths:
+        case TTGraphViewDateRangeYearToDate:
+        case TTGraphViewDateRangeOneYear:
+            [windowOpenDateComponents setDay:timeRelativePlotsBeforeNow];
+            [windowCloseDateComponents setDay:(timeRelativePlotsBeforeNow + 1)];
+            break;
+            
+        case TTGraphViewDateRangeAll:
+            RUDLog(@"Still need to write the math for subdividing data into DateRangeAll!");
+            break;
+    }
+    NSDate* windowOpen = [gregorianCalendar dateByAddingComponents:windowOpenDateComponents toDate:[NSDate date] options:0];
+    NSDate* windowClose = [gregorianCalendar dateByAddingComponents:windowCloseDateComponents toDate:[NSDate date] options:0];
+    dateRange = [TTDateRange dateRangeWithOpen:windowOpen close:windowClose];
+    return dateRange;
+}
+
+CPTMutableTextStyle* textStyle()//ForCurrency(TTGoxCurrency currency)
+{
+    CPTMutableTextStyle* style = [CPTMutableTextStyle textStyle];
+    [style setColor:[CPTColor blackColor]];
+    [style setFontName:titleFontName];
+    [style setFontSize:24.f];
+    return style;
+}
 
 NSUInteger numberOfPlotsForDateRange(TTGraphViewDateRange range)
 {
@@ -172,7 +249,7 @@ NSUInteger numberOfPlotsForDateRange(TTGraphViewDateRange range)
             break;
             
         case TTGraphViewDateRangeAll:
-            return 800; // This is kinda arbitrary, how many units do you divide all data into?
+            return 500; // This is kinda arbitrary, how many units do you divide all data into?
             break;
             
         default:
@@ -245,6 +322,7 @@ NSUInteger numberOfPlotsForDateRange(TTGraphViewDateRange range)
 -(void)currencyPopUpDidChange:(NSPopUpButton*)sender
 {
     [sender setTitle:sender.titleOfSelectedItem];
+    [self setCurrency:currencyFromString(sender.titleOfSelectedItem)];
     [self addCurrencyToGraph:currencyFromString(sender.titleOfSelectedItem)];
 }
 
@@ -280,6 +358,51 @@ NSUInteger numberOfPlotsForDateRange(TTGraphViewDateRange range)
 }
 
 #pragma mark - internal methods
+
+/*
+    Fetches the median price of a set of trades which occured during a timeinterval
+    Each timeinterval is an index of the numberOfRecords: datasource method
+ */
+
+-(NSNumber*)yValueForRecordIndex:(NSUInteger)index
+{
+    // write a fetch request that gets the median price over the time interval for the index.
+    
+    NSExpression* keyPathExpression = [NSExpression expressionForKeyPath:@"price"];
+    NSExpression* maxExpression = [NSExpression expressionForFunction:@"average:" arguments:@[keyPathExpression]];
+    
+    NSExpressionDescription* expressionDescription = [NSExpressionDescription new];
+    [expressionDescription setName:@"medianPrice"];
+    [expressionDescription setExpression:maxExpression];
+    [expressionDescription setExpressionResultType:NSDoubleAttributeType];
+    
+    NSFetchRequest* medianFetchRequest = [NSFetchRequest fetchRequestWithEntityName:@"Trade"];
+    TTDateRange* range = dateRangeForIndexAndSelectedDateRange(index, self.selectedDateRange);
+    [medianFetchRequest setPredicate:[NSPredicate predicateWithFormat:@"(date >= %@) AND (date =< %@) AND (currency == %@) AND (real_boolean == %@)", range.openWindowDate, range.closeWindowDate, numberFromCurrency(self.currency), @(1)]];
+
+//    [medianFetchRequest setPredicate:[NSPredicate predicateWithFormat:@"(date >= %@) AND (date =< %@) AND (currency == %@)", range.openWindowDate, range.closeWindowDate, numberFromCurrency(<#TTGoxCurrency currency#>) self.currency]];
+    
+    [medianFetchRequest setPropertiesToFetch:@[expressionDescription]]; // If you wanted to fetch multiple expression descriptions on different properties, add it to this array.
+    [medianFetchRequest setResultType:NSDictionaryResultType];
+    NSError* e = nil;
+    
+    // Create an alternate fetch that gets the object list for now
+//    NSFetchRequest* f = [NSFetchRequest fetchRequestWithEntityName:@"Trade"];
+//    [f setPredicate:[NSPredicate predicateWithFormat:@"(date > %@) AND (date < %@)  AND (currency == %@) AND (real_boolean == %@)", range.openWindowDate, range.closeWindowDate, numberFromCurrency(self.currency), @(1)]];
+//    NSArray* realObjectArray = [appDelegate.managedObjectContext executeFetchRequest:f error:nil];
+    
+    // If the fetch happens on thread 1, use the appdelegate's MOC -- as it is going to happen here.
+    NSArray* dataSet = [appDelegate.managedObjectContext executeFetchRequest:medianFetchRequest error:&e];
+    if (e)
+        RUDLog(@"Error running fetch request for timerange %@", range);
+    NSDictionary* d = [dataSet lastObject];
+    
+    if (![[d allKeys] count])
+        return @(0);
+    else
+        return [d objectForKey:@"mediaPrice"];
+}
+
 
 -(void)loadDataForCurrency:(TTGoxCurrency)currency
 {
@@ -482,17 +605,6 @@ NSUInteger numberOfPlotsForDateRange(TTGraphViewDateRange range)
 - (void)drawRect:(NSRect)dirtyRect
 {
     
-}
-
-#pragma mark - C methods
-
-CPTMutableTextStyle* textStyle()//ForCurrency(TTGoxCurrency currency)
-{
-            CPTMutableTextStyle* style = [CPTMutableTextStyle textStyle];
-            [style setColor:[CPTColor blackColor]];
-            [style setFontName:titleFontName];
-            [style setFontSize:24.f];
-            return style;
 }
 
 @end
