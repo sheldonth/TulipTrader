@@ -29,6 +29,7 @@ NSString* const kTTGoxTradeKey = @"trade";
 NSString* const kTTGoxLagKey = @"lag";
 
 static NSManagedObjectContext* primaryContext;
+static dispatch_queue_t privateMessageOperationQueue;
 
 NSString* const TTCurrencyUpdateNotificationString = @"ttCurrencyUpdateNotification";
 
@@ -37,30 +38,35 @@ NSString* const TTCurrencyUpdateNotificationString = @"ttCurrencyUpdateNotificat
 +(void)initialize
 {
     primaryContext = [(TTAppDelegate*)[[NSApplication sharedApplication]delegate]managedObjectContext];
+    privateMessageOperationQueue = dispatch_queue_create("PrivateMessageController", NULL);
 }
 
 -(void)recordDepth:(NSDictionary*)depthDictionary
 {
-    dispatch_async(dispatch_get_main_queue(), ^{
+    dispatch_async(privateMessageOperationQueue, ^{
         // do depth stuff here
     });
 }
 
 -(void)recordTrade:(NSDictionary*)tradeDictionary
 {
-    dispatch_async(dispatch_get_main_queue(), ^{
+    dispatch_async(privateMessageOperationQueue, ^{
         // do trade stuff here
     });
 }
 
 -(void)recordTicker:(NSDictionary*)tickerDictionary
 {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        Ticker* ticker = [Ticker newTickerInContext:primaryContext fromDictionary:tickerDictionary];
-        NSError* e = nil;
-        [ticker.managedObjectContext save:&e];
-        if (e)
-            RUDLog(@"Error saving ticker on channel: %@", ticker.channel_name);
+    dispatch_async(privateMessageOperationQueue, ^{
+        NSManagedObjectContext* c = [[NSManagedObjectContext alloc]initWithConcurrencyType:NSPrivateQueueConcurrencyType];
+        [c setPersistentStoreCoordinator:primaryContext.persistentStoreCoordinator];
+        Ticker* ticker = [Ticker newTickerInContext:c fromDictionary:tickerDictionary];
+        [ticker.managedObjectContext performBlock:^{
+            NSError* e = nil;
+            [ticker.managedObjectContext save:&e];
+            if (e)
+                RUDLog(@"Error saving ticker on channel: %@", ticker.channel_name);
+        }];
         [[NSNotificationCenter defaultCenter]postNotificationName:TTCurrencyUpdateNotificationString object:nil userInfo:@{@"Ticker": ticker}];
     });
 }
