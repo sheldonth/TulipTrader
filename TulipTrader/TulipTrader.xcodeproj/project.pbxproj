@@ -78,6 +78,8 @@
 		47458CE5174BF74900FBD5A2 /* icon.icns in Resources */ = {isa = PBXBuildFile; fileRef = 47458CE2174BF74900FBD5A2 /* icon.icns */; };
 		47458CEC174BF81600FBD5A2 /* icon.icns in Resources */ = {isa = PBXBuildFile; fileRef = 47458CEB174BF81600FBD5A2 /* icon.icns */; };
 		47458CEE174C04FF00FBD5A2 /* icon_q.icns in Resources */ = {isa = PBXBuildFile; fileRef = 47458CED174C04FF00FBD5A2 /* icon_q.icns */; };
+		47458CF2174C31B000FBD5A2 /* TTTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 47458CF1174C31B000FBD5A2 /* TTTextField.m */; };
+		47458CF3174C31B000FBD5A2 /* TTTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 47458CF1174C31B000FBD5A2 /* TTTextField.m */; };
 		476DD9F21729A37D0076C301 /* TTStatusBarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 476DD9F11729A37D0076C301 /* TTStatusBarView.m */; };
 		476DD9F31729A37D0076C301 /* TTStatusBarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 476DD9F11729A37D0076C301 /* TTStatusBarView.m */; };
 		476DD9F61729A3C90076C301 /* TTTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 476DD9F51729A3C90076C301 /* TTTextView.m */; };
@@ -237,6 +239,8 @@
 		47458CE2174BF74900FBD5A2 /* icon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = icon.icns; sourceTree = "<group>"; };
 		47458CEB174BF81600FBD5A2 /* icon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = icon.icns; sourceTree = "<group>"; };
 		47458CED174C04FF00FBD5A2 /* icon_q.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = icon_q.icns; sourceTree = "<group>"; };
+		47458CF0174C31B000FBD5A2 /* TTTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTTextField.h; sourceTree = "<group>"; };
+		47458CF1174C31B000FBD5A2 /* TTTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTTextField.m; sourceTree = "<group>"; };
 		476DD9F01729A37D0076C301 /* TTStatusBarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTStatusBarView.h; sourceTree = "<group>"; };
 		476DD9F11729A37D0076C301 /* TTStatusBarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTStatusBarView.m; sourceTree = "<group>"; };
 		476DD9F41729A3C90076C301 /* TTTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTTextView.h; sourceTree = "<group>"; };
@@ -476,6 +480,15 @@
 			path = Resources;
 			sourceTree = "<group>";
 		};
+		47458CEF174C319F00FBD5A2 /* NSTextField */ = {
+			isa = PBXGroup;
+			children = (
+				47458CF0174C31B000FBD5A2 /* TTTextField.h */,
+				47458CF1174C31B000FBD5A2 /* TTTextField.m */,
+			);
+			path = NSTextField;
+			sourceTree = "<group>";
+		};
 		476DD9EE1729A37D0076C301 /* NSTextView */ = {
 			isa = PBXGroup;
 			children = (
@@ -680,6 +693,7 @@
 		47DDDF41170FF3BA0087EE78 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				47458CEF174C319F00FBD5A2 /* NSTextField */,
 				470991521729D6140091E6E2 /* NSBox */,
 				476DD9EE1729A37D0076C301 /* NSTextView */,
 				476DD9EF1729A37D0076C301 /* NSView */,
@@ -889,6 +903,7 @@
 				473DF8DC173FF70800C356A1 /* FMResultSet.m in Sources */,
 				473DF8E5173FFCEE00C356A1 /* TTDatabaseLoader.m in Sources */,
 				473DF8ED174147A400C356A1 /* Trade.m in Sources */,
+				47458CF2174C31B000FBD5A2 /* TTTextField.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -941,6 +956,7 @@
 				473DF8DD173FF70800C356A1 /* FMResultSet.m in Sources */,
 				473DF8E6173FFCEE00C356A1 /* TTDatabaseLoader.m in Sources */,
 				473DF8EE174147A400C356A1 /* Trade.m in Sources */,
+				47458CF3174C31B000FBD5A2 /* TTTextField.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

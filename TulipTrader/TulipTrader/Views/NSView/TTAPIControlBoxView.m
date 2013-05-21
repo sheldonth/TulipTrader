@@ -11,13 +11,13 @@
 #import "NSView+Utility.h"
 #import "NSColor+Hex.h"
 #import "RUConstants.h"
-
+#import "TTTextField.h"
 
 @interface TTAPIControlBoxView ()
 
 @property(nonatomic, retain)NSScrollView* scrollView;
 @property(nonatomic, retain)TTTextView* dialogTextView;
-@property(nonatomic, retain)TTTextView* commandEntryPane;
+@property(nonatomic, retain)TTTextField* commandEntryTextField;
 
 @end
 
@@ -29,17 +29,46 @@ static NSColor* textBackgroundColor;
 
 #define TTAPIControlBoxLeadinString @">> "
 #define TTAPIControlBoxTailString @""
+#define kTTAPIControlBoxCommandEntryPrompt @"Enter Commands Here"
 
 #pragma mark - static methods
 
 static NSDateFormatter* dateFormatter;
+
+-(void)handleTab
+{
+    RUDLog(@"TAB");
+}
+
+-(BOOL)control:(NSControl *)control textView:(NSTextView *)textView doCommandBySelector:(SEL)commandSelector
+{
+    if (commandSelector == NSSelectorFromString(@"insertTab:"))
+        [self handleTab];
+    return YES;
+}
+
+-(void)mouseDownDidOccurWithEvent:(NSEvent*)theEvent
+{
+    if ([self.commandEntryTextField.stringValue isEqualToString:kTTAPIControlBoxCommandEntryPrompt])
+        [self.commandEntryTextField setStringValue:@""];
+}
+
+-(void)parseCommand:(NSString*)commandText
+{
+    NSArray* components = [commandText componentsSeparatedByString:@" "];
+}
+
+-(void)enterCommand:(TTTextField*)sender
+{
+    [self parseCommand:sender.stringValue];
+}
 
 +(void)publishCommand:(NSString*)commandText
 {
     TTAPIControlBoxView* pointer = [TTAPIControlBoxView sharedInstance];
     NSMutableString* mutableCopy = [pointer.dialogTextView.string mutableCopy];
     [mutableCopy appendString:RUStringWithFormat(@"\n%@ %@%@%@",[dateFormatter stringFromDate:[NSDate date]], TTAPIControlBoxLeadinString, commandText, TTAPIControlBoxTailString)];
-    if (![NSThread mainThread])
+    if (![NSThread isMainThread])
     {
         dispatch_async(dispatch_get_main_queue(), ^{
             [pointer.dialogTextView setString:mutableCopy];
@@ -85,11 +114,19 @@ static NSDateFormatter* dateFormatter;
         [[_dialogTextView textContainer] setWidthTracksTextView:YES];
         [_scrollView setDocumentView:_dialogTextView];
         
-        [self setCommandEntryPane:[[TTTextView alloc]initWithFrame:CGRectZero]];
-        [_commandEntryPane setFont:[NSFont fontWithName:@"Gill Sans" size:14.f]];
-        [_commandEntryPane setTextColor:[NSColor blackColor]];
-        [_commandEntryPane setBackgroundColor:[NSColor whiteColor]];
-        
+        [self setCommandEntryTextField:[[TTTextField alloc]initWithFrame:CGRectZero]];
+        [_commandEntryTextField setFont:[NSFont fontWithName:@"Gill Sans" size:14.f]];
+        [_commandEntryTextField setTextColor:[NSColor blackColor]];
+        [_commandEntryTextField setBackgroundColor:[NSColor whiteColor]];
+        [_commandEntryTextField setTarget:self];
+        [_commandEntryTextField setEditable:YES];
+        [_commandEntryTextField setSelectable:YES];
+        [_commandEntryTextField setBezeled:YES];
+        [_commandEntryTextField setBezelStyle:NSTextFieldSquareBezel];
+        [_commandEntryTextField setDelegate:self];
+        [_commandEntryTextField setAction:@selector(enterCommand:)];
+        [_commandEntryTextField setStringValue:kTTAPIControlBoxCommandEntryPrompt];
+        [self addSubview:_commandEntryTextField];
     }
     return self;
 }
@@ -98,6 +135,7 @@ static NSDateFormatter* dateFormatter;
 {
     [super setFrame:frameRect];
     [_scrollView setFrame:(NSRect){0, 30,CGRectGetWidth(frameRect),frameRect.size.height - 30}];
+    [_commandEntryTextField setFrame:(NSRect){0 ,0, CGRectGetWidth(frameRect), 30}];
     NSSize s = [_scrollView contentSize];
     [_dialogTextView setFrame:(NSRect){0,0,s.width, s.height}];
     [_dialogTextView setMinSize:(NSSize){0.f, s.height}];

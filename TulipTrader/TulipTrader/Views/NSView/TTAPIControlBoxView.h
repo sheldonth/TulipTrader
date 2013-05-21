@@ -9,7 +9,7 @@
 #import <Cocoa/Cocoa.h>
 #import "RUSingleton.h"
 
-@interface TTAPIControlBoxView : NSView
+@interface TTAPIControlBoxView : NSView <NSTextFieldDelegate>
 
 RU_SYNTHESIZE_SINGLETON_DECLARATION_FOR_CLASS_WITH_ACCESSOR(TTAPIControlBoxView, sharedInstance);
 

@@ -91,6 +91,7 @@
     [_masterViewController setViewFrameAndInformSubviews:[(NSView*)self.window.contentView bounds]];
     [self.window.contentView addSubview:_masterViewController.view];
     [TTAPIControlBoxView publishCommand:RUStringWithFormat(@"Welcome to %@", appTitle)];
+    [TTAPIControlBoxView publishCommand:@"Enter \"help\" for command list."];
 }
 
 // Returns the directory the application uses to store the Core Data store file. This code uses a directory named "co.resplendent.TulipTrader" in the user's Application Support directory.
