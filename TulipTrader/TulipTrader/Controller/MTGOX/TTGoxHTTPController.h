@@ -7,7 +7,10 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "TTGoxCurrency.h"
 
 @interface TTGoxHTTPController : NSObject
+
+-(void)updateLatestTradesForCurrency:(TTGoxCurrency)currency;
 
 @end

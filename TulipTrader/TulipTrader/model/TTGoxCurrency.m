@@ -29,6 +29,11 @@ NSString* const goxAUDString = @"AUD";
 
 #define ExceptionOnNoCurrencyFound 0
 
+NSString* urlPathStringForCurrency(TTGoxCurrency currency)
+{
+    return RUStringWithFormat(@"BTC%@", stringFromCurrency(currency));
+}
+
 NSColor* colorForCurrency(TTGoxCurrency currency)
 {
     return [NSColor redColor];

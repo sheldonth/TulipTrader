@@ -22,5 +22,5 @@
 @property (nonatomic, retain) NSString * properties;
 
 +(Trade*)newTradeInContext:(NSManagedObjectContext*)context fromDictionary:(NSDictionary*)d;
-
++(void)computeFunctionNamed:(NSString*)functionName onTradePropertyWithName:(NSString*)propertyName completion:(void (^)(NSNumber* computedResult))callbackBlock;
 @end

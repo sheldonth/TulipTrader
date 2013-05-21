@@ -448,7 +448,7 @@ NSUInteger numberOfPlotsForDateRange(TTGraphViewDateRange range)
                 
                 CPTMutableLineStyle *lineStyle = [currencyPlot.dataLineStyle mutableCopy];
                 lineStyle.lineWidth = 2.0;
-                lineStyle.lineColor     = [CPTColor colorWithCGColor:colorForCurrency(currency).CGColor];
+                lineStyle.lineColor = [CPTColor colorWithCGColor:colorForCurrency(currency).CGColor];
                 currencyPlot.dataLineStyle = lineStyle;
                 [self.graph addPlot:currencyPlot];
             });
