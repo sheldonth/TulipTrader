@@ -15,6 +15,7 @@
 #import "TTGoxCurrencyController.h"
 #import "TTGoxCurrency.h"
 #import "TTMarketBox.h"
+#import "NSColor+Hex.h"
 
 @interface TTStatusBarView ()
 
@@ -107,7 +108,7 @@ static NSFont* TT_TYPEWRITER_FONT_SMALL;
 
 - (void)drawRect:(NSRect)dirtyRect
 {
-    [[NSColor redColor] setFill];
+    [[NSColor darkGrayColor] setFill];
     NSRectFill(dirtyRect);
 }
 

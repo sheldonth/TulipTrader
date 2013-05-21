@@ -11,6 +11,7 @@
 #import "RUConstants.h"
 #import "TTMasterViewController.h"
 #import "TTMenuBehaviorController.h"
+#import "TTAPIControlBoxView.h"
 
 #define appTitle @"Tulip Trader v0.2.3"
 
@@ -75,8 +76,13 @@
 
 #pragma mark - NSApplicationDelegate methods
 
+#define kTTTradeWindowScreenInsets 20.f
+
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {
+    NSScreen* mainScreen = [NSScreen mainScreen];
+    NSRect mainScreenFrame = mainScreen.frame;
+    [self.window setFrame:(NSRect){kTTTradeWindowScreenInsets, kTTTradeWindowScreenInsets, mainScreenFrame.size.width - (2 * kTTTradeWindowScreenInsets), mainScreenFrame.size.height - (2 * kTTTradeWindowScreenInsets)} display:YES animate:YES];
     [self.window setTitle:appTitle];
     [self.window setCollectionBehavior:NSWindowCollectionBehaviorFullScreenPrimary];
     [self setOperationsController:[TTOperationsController new]];
@@ -84,6 +90,7 @@
     [self setMasterViewController:[[TTMasterViewController alloc]initWithNibName:@"TTMasterViewController" bundle:nil]];
     [_masterViewController setViewFrameAndInformSubviews:[(NSView*)self.window.contentView bounds]];
     [self.window.contentView addSubview:_masterViewController.view];
+    [TTAPIControlBoxView publishCommand:RUStringWithFormat(@"Welcome to %@", appTitle)];
 }
 
 // Returns the directory the application uses to store the Core Data store file. This code uses a directory named "co.resplendent.TulipTrader" in the user's Application Support directory.

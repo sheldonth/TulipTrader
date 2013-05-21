@@ -14,6 +14,7 @@
 #import "Ticker.h"
 #import "Tick.h"
 #import "TTGoxPrivateMessageController.h"
+#import "NSColor+Hex.h"
 
 @interface TTCurrencyBox ()
 @property (nonatomic, retain) NSImageView* flagImage;
@@ -116,7 +117,7 @@ static NSFont* buySellFontForCurrencyLetters;
         [self setBorderColor:[NSColor blackColor]];
         [self setBorderType:NSBezelBorder];
         [self setBoxType:NSBoxPrimary];
-        [self setFillColor:[self colorWithHexString:@"cccccc"]];
+        [self setFillColor:[NSColor colorWithHexString:@"292929"]];
         [self setTitleFont:titleFont];
         
         [self setAppDelegateContext:[(TTAppDelegate*)[[NSApplication sharedApplication]delegate]managedObjectContext]];

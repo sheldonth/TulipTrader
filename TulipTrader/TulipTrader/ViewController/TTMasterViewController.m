@@ -41,7 +41,7 @@
             [self.view addSubview:stackView];
             [self.arbitrageStackViewsArray addObject:stackView];
         }];
-        [self setControlBoxView:[TTAPIControlBoxView new]];
+        [self setControlBoxView:[TTAPIControlBoxView sharedInstance]];
         [self.view addSubview:_controlBoxView];
     }
     return self;
@@ -49,7 +49,7 @@
 
 -(void)setViewFrameAndInformSubviews:(NSRect)newFrame
 {
-    CGFloat statusBarHeight = CGRectGetHeight(newFrame) / 4;
+    CGFloat statusBarHeight = CGRectGetHeight(newFrame) / 8;
     [self.view setFrame:newFrame];
     [_statusBarView setFrame:(NSRect){0, CGRectGetHeight(newFrame) - statusBarHeight, CGRectGetWidth(newFrame), statusBarHeight}];
     [_statusBarView setNeedsLayout:YES];

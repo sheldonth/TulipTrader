@@ -9,6 +9,9 @@
 #import "TTAPIControlBoxView.h"
 #import "TTTextView.h"
 #import "NSView+Utility.h"
+#import "NSColor+Hex.h"
+#import "RUConstants.h"
+
 
 @interface TTAPIControlBoxView ()
 
@@ -19,7 +22,24 @@
 
 @implementation TTAPIControlBoxView
 
+RU_SYNTHESIZE_SINGLETON_FOR_CLASS_WITH_ACCESSOR(TTAPIControlBoxView, sharedInstance);
+
 static NSColor* textBackgroundColor;
+
+#define TTAPIControlBoxLeadinString @"\n>> "
+#define TTAPIControlBoxTailString @""
+
+#pragma mark - static methods
+
+static NSDateFormatter* dateFormatter;
+
++(void)publishCommand:(NSString*)commandText
+{
+    TTAPIControlBoxView* pointer = [TTAPIControlBoxView sharedInstance];
+    NSMutableString* mutableCopy = [pointer.dialogTextView.string mutableCopy];
+    [mutableCopy appendString:RUStringWithFormat(@"%@%@%@", TTAPIControlBoxLeadinString, commandText, TTAPIControlBoxTailString)];
+    [pointer.dialogTextView setString:mutableCopy];
+}
 
 +(void)initialize
 {
@@ -42,9 +62,11 @@ static NSColor* textBackgroundColor;
         
         [self setDialogTextView:[[TTTextView alloc]initWithFrame:CGRectZero]];
         [_dialogTextView setTextColor:[NSColor whiteColor]];
+        [_dialogTextView setBackgroundColor:[NSColor darkGrayColor]];
         [_dialogTextView setVerticallyResizable:YES];
         [_dialogTextView setHorizontallyResizable:NO];
         [_dialogTextView setAutoresizingMask:NSViewWidthSizable];
+        [_dialogTextView setEditable:NO];
         [[_dialogTextView textContainer] setWidthTracksTextView:YES];
         [_scrollView setDocumentView:_dialogTextView];
     }

@@ -31,10 +31,12 @@
 {
     if (![NSThread isMainThread])
     {
-        [self performSelectorOnMainThread:@selector(setString:) withObject:string waitUntilDone:NO];
-        return;
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self setString:string];
+        });
     }
-    [super setString:string];
+    else
+        [super setString:string];
 }
 
 @end

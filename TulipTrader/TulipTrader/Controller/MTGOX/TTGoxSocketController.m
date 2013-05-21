@@ -10,6 +10,7 @@
 #import "RUConstants.h"
 #import "JSONKit.h"
 #import "TTGoxCurrencyController.h"
+#import "TTAPIControlBoxView.h"
 
 NSString* const kTTGoxFrameOpenNSString = @"{";
 NSString* const kTTGoxFrameCloseNSString = @"}";
@@ -158,7 +159,7 @@ static NSMutableString* kTTGoxSocketIOURL;
 
 -(void)webSocketDidOpen:(SRWebSocket *)webSocket
 {
-    RUDLog(@"%@ did open", webSocket);
+    [TTAPIControlBoxView publishCommand:RUStringWithFormat(@"%@ did open", webSocket)];
     [self setIsConnected:TTGoxSocketConnectionStateConnected];
     
     [self subscribeToChannelID:@"trade.lag"];

@@ -10,6 +10,7 @@
 #import "Tick.h"
 #import "RUClassOrNilUtil.h"
 #import "RUConstants.h"
+#import "TTAPIControlBoxView.h"
 
 @implementation Ticker
 
@@ -37,7 +38,7 @@
     
     [t setChannel_name:kRUStringOrNil([d objectForKey:@"channel_name"])];
     
-//    RUDLog(@"%@", t.channel_name);
+    [TTAPIControlBoxView publishCommand:RUStringWithFormat(@"%@", t.channel_name)];
     
     [t setChannel_id:kRUStringOrNil([d objectForKey:@"channel"])];
     
