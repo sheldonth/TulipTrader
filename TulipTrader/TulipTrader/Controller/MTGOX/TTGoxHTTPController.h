@@ -8,9 +8,12 @@
 
 #import <Foundation/Foundation.h>
 #import "TTGoxCurrency.h"
+#import "RUSingleton.h"
 
 @interface TTGoxHTTPController : NSObject
 
 -(void)updateLatestTradesForCurrency:(TTGoxCurrency)currency;
+
+RU_SYNTHESIZE_SINGLETON_DECLARATION_FOR_CLASS_WITH_ACCESSOR(TTGoxHTTPController, sharedInstance);
 
 @end

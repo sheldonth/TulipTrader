@@ -15,7 +15,7 @@
 #import "TTAPIControlBoxView.h"
 
 #define TTArbitrageStackViewHeight 375 // Consider making this dynamic when you can drag resize the screen.
-#define TTControlBoxHeight 300
+//#define TTControlBoxHeight 355
 
 @interface TTMasterViewController ()
 
@@ -53,7 +53,7 @@
     [self.view setFrame:newFrame];
     [_statusBarView setFrame:(NSRect){0, CGRectGetHeight(newFrame) - statusBarHeight, CGRectGetWidth(newFrame), statusBarHeight}];
     [_statusBarView setNeedsLayout:YES];
-    [_controlBoxView setFrame:(NSRect){0, CGRectGetHeight(newFrame) - statusBarHeight - TTArbitrageStackViewHeight - TTControlBoxHeight, CGRectGetWidth(newFrame) / 2, TTControlBoxHeight}];
+    [_controlBoxView setFrame:(NSRect){0, 0, CGRectGetWidth(newFrame) / 2, CGRectGetHeight(newFrame) - statusBarHeight - TTArbitrageStackViewHeight}];
     [self.arbitrageStackViewsArray enumerateObjectsUsingBlock:^(TTArbitrageStackView* obj, NSUInteger idx, BOOL *stop) {
         [obj setFrame:(NSRect){(floor(CGRectGetWidth(newFrame) / self.arbitrageStackViewsArray.count)) * idx, CGRectGetHeight(newFrame) - statusBarHeight - TTArbitrageStackViewHeight, floor(CGRectGetWidth(newFrame) / self.arbitrageStackViewsArray.count), TTArbitrageStackViewHeight}];
     }];

@@ -12,6 +12,8 @@
 #import "NSColor+Hex.h"
 #import "RUConstants.h"
 #import "TTTextField.h"
+#import "TTGoxCurrency.h"
+#import "TTGoxHTTPController.h"
 
 @interface TTAPIControlBoxView ()
 
@@ -103,9 +105,19 @@ static NSColor* textBackgroundColor;
             break;
             
         case 2:
-            
+        {
+            TTGoxCurrency currency = currencyFromString([components objectAtIndex:1]);
+            if (currency == TTGoxCurrencyNone)
+                [TTAPIControlBoxView publishCommand:@"Unknown Currency, Please Try Again"];
+            else if (currency == TTGoxCurrencyBTC)
+                [TTAPIControlBoxView publishCommand:@"Must specify Bitcoin counter currency, i.e. USD"];
+            else
+            {
+                [TTAPIControlBoxView publishCommand:RUStringWithFormat(@"Assuming Market is MtGox, Loading %@", stringFromCurrency(currency))];
+                [[TTGoxHTTPController sharedInstance]updateLatestTradesForCurrency:currency];
+            }
             break;
-            
+        }
         default:
             break;
     }

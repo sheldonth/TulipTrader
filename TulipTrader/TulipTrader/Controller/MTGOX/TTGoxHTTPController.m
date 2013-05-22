@@ -10,9 +10,17 @@
 #import "AFHTTPClient.h"
 #import "RUConstants.h"
 #import "Trade.h"
+#import "RUConstants.h"
+#import "JSONKit.h"
+#import "TTAPIControlBoxView.h"
+#import "TTAppDelegate.h"
+#import "Trade.h"
 
 #define kTTMTGOXAPIV1 @"http://data.mtgox.com/api/1/"
 #define kTTMTGOXAPIV2 @"https://data.mtgox.com/api/2/"
+
+static dispatch_queue_t dataProcessQueue;
+static TTAppDelegate* appDelegatePtr;
 
 @interface TTGoxHTTPController()
 
@@ -21,6 +29,14 @@
 @end
 
 @implementation TTGoxHTTPController
+
+RU_SYNTHESIZE_SINGLETON_FOR_CLASS_WITH_ACCESSOR(TTGoxHTTPController, sharedInstance);
+
++(void)initialize
+{
+    dataProcessQueue = dispatch_queue_create("mtgox.api.processQueue", NULL);
+    appDelegatePtr = (TTAppDelegate*)[[NSApplication sharedApplication]delegate];
+}
 
 -(id)init
 {
@@ -34,11 +50,31 @@
 
 -(void)updateLatestTradesForCurrency:(TTGoxCurrency)currency
 {
-    [Trade computeFunctionNamed:@"max" onTradePropertyWithName:@"tradeId" completion:^(NSNumber *computedResult) {
+    [Trade computeFunctionNamed:@"max:" onTradePropertyWithName:@"tradeId" completion:^(NSNumber *computedResult) {
             [self.networkSecure getPath:RUStringWithFormat(@"%@/money/trades/fetch", urlPathStringForCurrency(currency)) parameters:@{@"since": computedResult} success:^(AFHTTPRequestOperation *operation, id responseObject) {
-                
+                NSString* result = [[NSString alloc]initWithData:(NSData*)responseObject encoding:NSUTF8StringEncoding];
+                NSDictionary* aDict = [result objectFromJSONString];
+                if ([[aDict objectForKey:@"result"]isEqualToString:@"success"])
+                {
+                    NSArray* tradeArray = [aDict objectForKey:@"data"];
+                    dispatch_async(dataProcessQueue, ^{
+                        NSManagedObjectContext* c = [[NSManagedObjectContext alloc]initWithConcurrencyType:NSPrivateQueueConcurrencyType];
+                        [c setPersistentStoreCoordinator:appDelegatePtr.persistentStoreCoordinator];
+                        [tradeArray enumerateObjectsUsingBlock:^(NSDictionary* obj, NSUInteger idx, BOOL *stop) {
+                            [Trade newTradeInContext:c fromDictionary:obj];
+                        }];
+                        [c performBlock:^{
+                            NSError* e = nil;
+                            [c save:&e];
+                            if (e)
+                                RUDLog(@"Error Saving Trade Data");
+                        }];
+                    });
+                }
+                else
+                    [TTAPIControlBoxView publishCommand:RUStringWithFormat(@"Server Returned Non-Success State: %@", [aDict objectForKey:@"result"])];
             } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-                
+                [TTAPIControlBoxView publishCommand:RUStringWithFormat(@"Server Request Did Fail With Error %@", error.localizedDescription)];
             }];
     }];
 }
