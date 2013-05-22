@@ -25,26 +25,47 @@
 
 RU_SYNTHESIZE_SINGLETON_FOR_CLASS_WITH_ACCESSOR(TTAPIControlBoxView, sharedInstance);
 
-static NSColor* textBackgroundColor;
-
 #define TTAPIControlBoxLeadinString @">> "
 #define TTAPIControlBoxTailString @""
 #define kTTAPIControlBoxCommandEntryPrompt @"Enter Commands Here"
 
 #pragma mark - static methods
 
+NSArray* kTTAPIActionCommandList;
+NSArray* kTTAPIActionObjectList;
+NSArray* kTTAPIActionFlagList;
+
 static NSDateFormatter* dateFormatter;
+static NSColor* textBackgroundColor;
+
++(void)initialize
+{
+    if (self == [TTAPIControlBoxView class])
+    {
+        textBackgroundColor = [NSColor blackColor];
+        dateFormatter = [NSDateFormatter new];
+        [dateFormatter setDateFormat:@"HH:mm:ss.SS"];
+        
+        kTTAPIActionCommandList = @[@"help", @"set", @"load"];
+        kTTAPIActionObjectList = @[@"noisyquotes"];
+        kTTAPIActionFlagList = @[@"On", @"Off"];
+    }
+}
 
 -(void)handleTab
 {
-    RUDLog(@"TAB");
+    RUDLog(@"HANDLE TAB");
 }
 
 -(BOOL)control:(NSControl *)control textView:(NSTextView *)textView doCommandBySelector:(SEL)commandSelector
 {
     if (commandSelector == NSSelectorFromString(@"insertTab:"))
+    {
         [self handleTab];
-    return YES;
+        return YES;
+    }
+    else
+        return NO;
 }
 
 -(void)mouseDownDidOccurWithEvent:(NSEvent*)theEvent
@@ -56,6 +77,39 @@ static NSDateFormatter* dateFormatter;
 -(void)parseCommand:(NSString*)commandText
 {
     NSArray* components = [commandText componentsSeparatedByString:@" "];
+    NSInteger indexPassingTest = [kTTAPIActionCommandList indexOfObjectPassingTest:^BOOL(NSString* obj, NSUInteger idx, BOOL *stop) {
+        if ([obj isEqualToString:[components objectAtIndex:0]])
+        {
+            *stop = YES;
+            return YES;
+        }
+        else
+            return NO;
+    }];
+    if (indexPassingTest == NSNotFound)
+        [TTAPIControlBoxView publishCommand:@"Unrecognized Command"];
+    switch (indexPassingTest) {
+        case 0:
+        {
+            NSMutableString* cmds = [NSMutableString stringWithFormat:@"Available Commands Are"];
+            [kTTAPIActionCommandList enumerateObjectsUsingBlock:^(NSString* obj, NSUInteger idx, BOOL *stop) {
+                [cmds appendFormat:@", %@", obj];
+            }];
+            [TTAPIControlBoxView publishCommand:cmds];
+            break;
+        }
+        case 1:
+            [TTAPIControlBoxView publishCommand:@"Set is not yet implemented."];
+            break;
+            
+        case 2:
+            
+            break;
+            
+        default:
+            break;
+    }
+    [self.commandEntryTextField setStringValue:@""];
 }
 
 -(void)enterCommand:(TTTextField*)sender
@@ -79,16 +133,6 @@ static NSDateFormatter* dateFormatter;
     {
         [pointer.dialogTextView setString:mutableCopy];
         [pointer.scrollView.contentView scrollToPoint:NSMakePoint(0, ((NSView*)pointer.scrollView.documentView).frame.size.height - pointer.scrollView.contentSize.height)];
-    }
-}
-
-+(void)initialize
-{
-    if (self == [TTAPIControlBoxView class])
-    {
-        textBackgroundColor = [NSColor blackColor];
-        dateFormatter = [NSDateFormatter new];
-        [dateFormatter setDateFormat:@"HH:mm:ss.SS"];
     }
 }
 
