@@ -50,7 +50,9 @@ RU_SYNTHESIZE_SINGLETON_FOR_CLASS_WITH_ACCESSOR(TTGoxHTTPController, sharedInsta
 
 -(void)updateLatestTradesForCurrency:(TTGoxCurrency)currency
 {
+    __block NSInteger iterative = 0;
     [Trade computeFunctionNamed:@"max:" onTradePropertyWithName:@"tradeId" completion:^(NSNumber *computedResult) {
+        [TTAPIControlBoxView publishCommand:RUStringWithFormat(@"Loadinging dataset %li for %@ on MTGOX", iterative, stringFromCurrency(currency))];
             [self.networkSecure getPath:RUStringWithFormat(@"%@/money/trades/fetch", urlPathStringForCurrency(currency)) parameters:@{@"since": computedResult} success:^(AFHTTPRequestOperation *operation, id responseObject) {
                 NSString* result = [[NSString alloc]initWithData:(NSData*)responseObject encoding:NSUTF8StringEncoding];
                 NSDictionary* aDict = [result objectFromJSONString];
@@ -60,14 +62,26 @@ RU_SYNTHESIZE_SINGLETON_FOR_CLASS_WITH_ACCESSOR(TTGoxHTTPController, sharedInsta
                     dispatch_async(dataProcessQueue, ^{
                         NSManagedObjectContext* c = [[NSManagedObjectContext alloc]initWithConcurrencyType:NSPrivateQueueConcurrencyType];
                         [c setPersistentStoreCoordinator:appDelegatePtr.persistentStoreCoordinator];
+                        __block Trade* lastTrade = nil;
                         [tradeArray enumerateObjectsUsingBlock:^(NSDictionary* obj, NSUInteger idx, BOOL *stop) {
-                            [Trade newTradeInContext:c fromDictionary:obj];
+                            lastTrade = [Trade newNetworkTradeInContext:c fromDictionary:obj];
                         }];
                         [c performBlock:^{
                             NSError* e = nil;
                             [c save:&e];
                             if (e)
                                 RUDLog(@"Error Saving Trade Data");
+                            else
+                            {
+                                [TTAPIControlBoxView publishCommand:RUStringWithFormat(@"Updated to tid %@ at %@", lastTrade.tradeId, lastTrade.date)];
+                                if (tradeArray.count > 1)
+                                {
+                                    [self updateLatestTradesForCurrency:currency];
+                                    iterative++;
+                                }
+                                else
+                                    [TTAPIControlBoxView publishCommand:RUStringWithFormat(@"Done Loading %@", stringFromCurrency(currency))];
+                            }
                         }];
                     });
                 }

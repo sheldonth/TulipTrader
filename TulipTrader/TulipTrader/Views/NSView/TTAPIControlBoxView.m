@@ -129,6 +129,8 @@ static NSColor* textBackgroundColor;
     [self parseCommand:sender.stringValue];
 }
 
+#define kTTAPIControlBoxAllowableScrollOffset 100.f
+
 +(void)publishCommand:(NSString*)commandText
 {
     TTAPIControlBoxView* pointer = [TTAPIControlBoxView sharedInstance];
@@ -137,14 +139,17 @@ static NSColor* textBackgroundColor;
     if (![NSThread isMainThread])
     {
         dispatch_async(dispatch_get_main_queue(), ^{
-            [pointer.dialogTextView setString:mutableCopy];
+        [pointer.dialogTextView setString:mutableCopy];
+//        CGFloat somefuckingfloat = ((pointer.scrollView.contentView.documentVisibleRect.origin.y + pointer.scrollView.contentView.documentVisibleRect.size.height) - [(TTTextView*)pointer.scrollView.documentView frame].size.height);
+//        if (somefuckingfloat < kTTAPIControlBoxAllowableScrollOffset)
             [pointer.scrollView.contentView scrollToPoint:NSMakePoint(0, ((NSView*)pointer.scrollView.documentView).frame.size.height - pointer.scrollView.contentSize.height)];
         });
     }
     else
     {
         [pointer.dialogTextView setString:mutableCopy];
-        [pointer.scrollView.contentView scrollToPoint:NSMakePoint(0, ((NSView*)pointer.scrollView.documentView).frame.size.height - pointer.scrollView.contentSize.height)];
+        if (pointer.scrollView.contentView.documentVisibleRect.origin.y)
+            [pointer.scrollView.contentView scrollToPoint:NSMakePoint(0, ((NSView*)pointer.scrollView.documentView).frame.size.height - pointer.scrollView.contentSize.height)];
     }
 }
 

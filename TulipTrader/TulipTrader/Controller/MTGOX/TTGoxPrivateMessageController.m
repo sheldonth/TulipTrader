@@ -14,6 +14,8 @@
 #import "Ticker.h"
 #import "TTAppDelegate.h"
 #import "Tick.h"
+#import "Trade.h"
+#import "TTAPIControlBoxView.h"
 
 typedef enum{
     kTTGoxMarketNone = 0,
@@ -51,7 +53,17 @@ NSString* const TTCurrencyUpdateNotificationString = @"ttCurrencyUpdateNotificat
 -(void)recordTrade:(NSDictionary*)tradeDictionary
 {
     dispatch_async(privateMessageOperationQueue, ^{
-        // do trade stuff here
+        NSManagedObjectContext* c = [[NSManagedObjectContext alloc]initWithConcurrencyType:NSPrivateQueueConcurrencyType];
+        [c setPersistentStoreCoordinator:primaryContext.persistentStoreCoordinator];
+        Trade* trade = [Trade newNetworkTradeInContext:c fromDictionary:[tradeDictionary objectForKey:@"trade"]];
+        [c performBlock:^{
+            NSError* e = nil;
+            [c save:&e];
+            if (e)
+                RUDLog(@"Error saving Trade");
+            else
+                [TTAPIControlBoxView publishCommand:RUStringWithFormat(@"%@ for %@ in %@", trade.amount.stringValue, trade.price.stringValue, stringFromCurrency(currencyFromNumber(trade.currency)))];
+        }];
     });
 }
 

@@ -12,6 +12,7 @@
 #import "TTGoxCurrency.h"
 #import "Trade.h"
 #import "TTAppDelegate.h"
+#import "TTAPIControlBoxView.h"
 
 #define kECTTDatabaseLoaderSaveInterval 300
 
@@ -19,7 +20,7 @@
 
 +(void)loadDatabaseAtUrl:(NSURL*)url
 {
-    RUDLog(@"Load DB");
+    [TTAPIControlBoxView publishCommand:@"Dataabse Loading Started"];
     FMDatabase* db = [FMDatabase databaseWithPath:url.absoluteString];
     if (![db open])
     {
@@ -50,14 +51,14 @@
                 [dict setObject:@(dateInteger) forKey:@"date"];
                 realBoolean ? [dict setObject:@"Y" forKey:@"primary"] : [dict setObject:@"N" forKey:@"primary"];
                 
-                [Trade newTradeInContext:dbProcessQueueMOC fromDictionary:dict];
+                [Trade newDatabaseTradeInContext:dbProcessQueueMOC fromDictionary:dict];
                 }
             NSError* e = nil;
             [dbProcessQueueMOC save:&e];
             if (e)
                 RUDLog(@"Error importing database!");
             else
-                RUDLog(@"Database imported successfully");
+                [TTAPIControlBoxView publishCommand:@"Database loaded."];
         });
     }
     [db close];

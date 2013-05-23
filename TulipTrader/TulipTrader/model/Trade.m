@@ -83,13 +83,33 @@ int64_t latestTradeID()
     });
 }
 
-
-+(Trade*)newTradeInContext:(NSManagedObjectContext*)context fromDictionary:(NSDictionary*)d
++(Trade*)newNetworkTradeInContext:(NSManagedObjectContext*)context fromDictionary:(NSDictionary*)d
 {
-    return [Trade newTradeInContext:context fromDictionary:d precision:TradePrecisionDouble];
+    Trade* t = [NSEntityDescription insertNewObjectForEntityForName:@"Trade" inManagedObjectContext:context];
+    NSNumberFormatter* numberFormatter = [NSNumberFormatter new];
+    [numberFormatter setNumberStyle:NSNumberFormatterDecimalStyle];
+    NSNumber* result = [numberFormatter numberFromString:[d objectForKey:@"tid"]];
+    [t setTradeId:result];
+    [t setCurrency:numberFromCurrencyString([d objectForKey:@"price_currency"])];
+    if ([[d objectForKey:@"amount"]isKindOfClass:[NSString class]])
+        [t setAmount:[numberFormatter numberFromString:[d objectForKey:@"amount"]]];
+    else
+        [t setAmount:[d objectForKey:@"amount"]];
+    if ([[d objectForKey:@"price"]isKindOfClass:[NSString class]])
+        [t setPrice:[numberFormatter numberFromString:[d objectForKey:@"price"]]];
+    else
+        [t setPrice:[d objectForKey:@"price"]];
+    [t setDate:[NSDate dateWithTimeIntervalSince1970:[[d objectForKey:@"date"]doubleValue]]];
+    if ([[d objectForKey:@"primary"] isEqualToString:@"Y"])
+        [t setReal_boolean:@(1)];
+    else if ([[d objectForKey:@"primary"] isEqualToString:@"N"])
+        [t setReal_boolean:@(0)];
+    [t setTrade_type:kRUStringOrNil([d objectForKey:@"trade_type"])];
+    [t setProperties:kRUStringOrNil([d objectForKey:@"properties"])];
+    return t;
 }
 
-+(Trade*)newTradeInContext:(NSManagedObjectContext*)context fromDictionary:(NSDictionary*)d precision:(TradePrecision)precision
++(Trade*)newDatabaseTradeInContext:(NSManagedObjectContext*)context fromDictionary:(NSDictionary*)d
 {
     Trade* t = [NSEntityDescription insertNewObjectForEntityForName:@"Trade" inManagedObjectContext:context];
     [t setTradeId:kRUNumberOrNil([d objectForKey:@"tid"])];
