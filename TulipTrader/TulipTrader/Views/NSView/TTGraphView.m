@@ -408,7 +408,7 @@ NSUInteger numberOfPlotsForDateRange(TTGraphViewDateRange range)
 {
     [self showLoadingLabel:YES];
     if (!_databaseOperationQueue)
-        [self setDatabaseOperationQueue:dispatch_queue_create("co.resplent.graphLoadingQueue", NULL)];
+        [self setDatabaseOperationQueue:dispatch_queue_create("co.resplendent.graphLoadingQueue", NULL)];
     
     dispatch_async(self.databaseOperationQueue, ^{
         NSManagedObjectContext* threadSafeMOC = [[NSManagedObjectContext alloc]initWithConcurrencyType:NSPrivateQueueConcurrencyType];
