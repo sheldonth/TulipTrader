@@ -38,7 +38,7 @@
     
     [t setChannel_name:kRUStringOrNil([d objectForKey:@"channel_name"])];
     
-    [TTAPIControlBoxView publishCommand:RUStringWithFormat(@"%@", t.channel_name)];
+//    [TTAPIControlBoxView publishCommand:RUStringWithFormat(@"%@", t.channel_name)];
     
     [t setChannel_id:kRUStringOrNil([d objectForKey:@"channel"])];
     

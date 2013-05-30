@@ -13,15 +13,16 @@
 #import "TTArbitrageStackView.h"
 #import "TTGoxCurrencyController.h"
 #import "TTAPIControlBoxView.h"
+#import "TTAccountBox.h"
 
 #define TTArbitrageStackViewHeight 375 // Consider making this dynamic when you can drag resize the screen.
-//#define TTControlBoxHeight 355
 
 @interface TTMasterViewController ()
 
 @property(nonatomic, retain)TTStatusBarView* statusBarView;
 @property(nonatomic, retain)NSMutableArray* arbitrageStackViewsArray;
 @property(nonatomic, retain)TTAPIControlBoxView* controlBoxView;
+@property(nonatomic, retain)TTAccountBox* accountBox;
 
 @end
 
@@ -43,6 +44,8 @@
         }];
         [self setControlBoxView:[TTAPIControlBoxView sharedInstance]];
         [self.view addSubview:_controlBoxView];
+        [self setAccountBox:[TTAccountBox new]];
+        [self.view addSubview:self.accountBox];
     }
     return self;
 }
@@ -53,7 +56,8 @@
     [self.view setFrame:newFrame];
     [_statusBarView setFrame:(NSRect){0, CGRectGetHeight(newFrame) - statusBarHeight, CGRectGetWidth(newFrame), statusBarHeight}];
     [_statusBarView setNeedsLayout:YES];
-    [_controlBoxView setFrame:(NSRect){0, 0, CGRectGetWidth(newFrame) / 2, CGRectGetHeight(newFrame) - statusBarHeight - TTArbitrageStackViewHeight}];
+    [_controlBoxView setFrame:(NSRect){0, 0, CGRectGetWidth(newFrame) / 4, CGRectGetHeight(newFrame) - statusBarHeight - TTArbitrageStackViewHeight}];
+    [_accountBox setFrame:(NSRect){CGRectGetWidth(_controlBoxView.frame), 0, ((CGRectGetWidth(newFrame) / 4) * 3), CGRectGetHeight(newFrame) - statusBarHeight - TTArbitrageStackViewHeight}];
     [self.arbitrageStackViewsArray enumerateObjectsUsingBlock:^(TTArbitrageStackView* obj, NSUInteger idx, BOOL *stop) {
         [obj setFrame:(NSRect){(floor(CGRectGetWidth(newFrame) / self.arbitrageStackViewsArray.count)) * idx, CGRectGetHeight(newFrame) - statusBarHeight - TTArbitrageStackViewHeight, floor(CGRectGetWidth(newFrame) / self.arbitrageStackViewsArray.count), TTArbitrageStackViewHeight}];
     }];

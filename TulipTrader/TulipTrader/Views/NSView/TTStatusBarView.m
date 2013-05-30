@@ -14,7 +14,6 @@
 #import "TTCurrencyBox.h"
 #import "TTGoxCurrencyController.h"
 #import "TTGoxCurrency.h"
-#import "TTMarketBox.h"
 #import "NSColor+Hex.h"
 
 @interface TTStatusBarView ()
@@ -24,8 +23,6 @@
 //@property(nonatomic, retain)NSScrollView* scrollView;
 //@property(nonatomic, retain)TTTextView* lagStateTextView;
 @property(nonatomic, retain)NSMutableArray* currencyBoxes;
-@property(nonatomic, retain)TTMarketBox* goxMarketBox;
-@property(nonatomic, retain)TTMarketBox* coinbaseMarketBox;
 
 NSString* socketStateStringForConnectionState (TTGoxSocketConnectionState state);
 
@@ -74,12 +71,6 @@ static NSFont* TT_TYPEWRITER_FONT_SMALL;
     if (self) {
         
         // Enumerate the active currencies, and add a currency box for each, set their frames in the status bar's setframe method
-        
-        _goxMarketBox = [TTMarketBox new];
-        [self addSubview:_goxMarketBox];
-        
-        _coinbaseMarketBox = [TTMarketBox new];
-        [self addSubview:_coinbaseMarketBox];
         
         _currencyBoxes = [NSMutableArray array];
         

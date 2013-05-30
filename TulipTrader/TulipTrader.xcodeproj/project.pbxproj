@@ -9,8 +9,6 @@
 /* Begin PBXBuildFile section */
 		4707799A1739967100DBBC47 /* NSView+Utility.m in Sources */ = {isa = PBXBuildFile; fileRef = 470779991739967100DBBC47 /* NSView+Utility.m */; };
 		4707799B1739967100DBBC47 /* NSView+Utility.m in Sources */ = {isa = PBXBuildFile; fileRef = 470779991739967100DBBC47 /* NSView+Utility.m */; };
-		4707799E1739B32F00DBBC47 /* TTMarketBox.m in Sources */ = {isa = PBXBuildFile; fileRef = 4707799D1739B32F00DBBC47 /* TTMarketBox.m */; };
-		4707799F1739B32F00DBBC47 /* TTMarketBox.m in Sources */ = {isa = PBXBuildFile; fileRef = 4707799D1739B32F00DBBC47 /* TTMarketBox.m */; };
 		470779B41739B7A100DBBC47 /* AFHTTPClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 470779A21739B7A100DBBC47 /* AFHTTPClient.m */; };
 		470779B51739B7A100DBBC47 /* AFHTTPClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 470779A21739B7A100DBBC47 /* AFHTTPClient.m */; };
 		470779B61739B7A100DBBC47 /* AFHTTPRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = 470779A41739B7A100DBBC47 /* AFHTTPRequestOperation.m */; };
@@ -135,6 +133,7 @@
 		47DDDF521710A59E0087EE78 /* TTMasterViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 47DDDF4E1710A59E0087EE78 /* TTMasterViewController.xib */; };
 		47E9C5CC1757BDF60069ADA6 /* UserData.plist in Resources */ = {isa = PBXBuildFile; fileRef = 47E9C5CB1757BDF60069ADA6 /* UserData.plist */; };
 		47E9C5CD1757BDF60069ADA6 /* UserData.plist in Resources */ = {isa = PBXBuildFile; fileRef = 47E9C5CB1757BDF60069ADA6 /* UserData.plist */; };
+		47E9C5D51757DC520069ADA6 /* TTAccountBox.m in Sources */ = {isa = PBXBuildFile; fileRef = 47E9C5D41757DC520069ADA6 /* TTAccountBox.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -177,8 +176,6 @@
 /* Begin PBXFileReference section */
 		470779981739967100DBBC47 /* NSView+Utility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSView+Utility.h"; sourceTree = "<group>"; };
 		470779991739967100DBBC47 /* NSView+Utility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSView+Utility.m"; sourceTree = "<group>"; };
-		4707799C1739B32F00DBBC47 /* TTMarketBox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTMarketBox.h; sourceTree = "<group>"; };
-		4707799D1739B32F00DBBC47 /* TTMarketBox.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTMarketBox.m; sourceTree = "<group>"; };
 		470779A11739B7A100DBBC47 /* AFHTTPClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPClient.h; sourceTree = "<group>"; };
 		470779A21739B7A100DBBC47 /* AFHTTPClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AFHTTPClient.m; sourceTree = "<group>"; };
 		470779A31739B7A100DBBC47 /* AFHTTPRequestOperation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHTTPRequestOperation.h; sourceTree = "<group>"; };
@@ -317,6 +314,8 @@
 		47DDDF4D1710A59E0087EE78 /* TTMasterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTMasterViewController.m; sourceTree = "<group>"; };
 		47DDDF4E1710A59E0087EE78 /* TTMasterViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TTMasterViewController.xib; sourceTree = "<group>"; };
 		47E9C5CB1757BDF60069ADA6 /* UserData.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = UserData.plist; sourceTree = "<group>"; };
+		47E9C5D31757DC520069ADA6 /* TTAccountBox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTAccountBox.h; sourceTree = "<group>"; };
+		47E9C5D41757DC520069ADA6 /* TTAccountBox.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTAccountBox.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -382,8 +381,8 @@
 				470991541729D6240091E6E2 /* TTCurrencyBox.m */,
 				478121161731C1BE00879CD6 /* TTArbitrageBox.h */,
 				478121171731C1BE00879CD6 /* TTArbitrageBox.m */,
-				4707799C1739B32F00DBBC47 /* TTMarketBox.h */,
-				4707799D1739B32F00DBBC47 /* TTMarketBox.m */,
+				47E9C5D31757DC520069ADA6 /* TTAccountBox.h */,
+				47E9C5D41757DC520069ADA6 /* TTAccountBox.m */,
 			);
 			path = NSBox;
 			sourceTree = "<group>";
@@ -919,7 +918,6 @@
 				478121181731C1BE00879CD6 /* TTArbitrageBox.m in Sources */,
 				479AE8AD17386B2D0043C10D /* TTAPIControlBoxView.m in Sources */,
 				4707799A1739967100DBBC47 /* NSView+Utility.m in Sources */,
-				4707799E1739B32F00DBBC47 /* TTMarketBox.m in Sources */,
 				470779B41739B7A100DBBC47 /* AFHTTPClient.m in Sources */,
 				470779B61739B7A100DBBC47 /* AFHTTPRequestOperation.m in Sources */,
 				470779B81739B7A100DBBC47 /* AFImageRequestOperation.m in Sources */,
@@ -951,6 +949,7 @@
 				47458CF2174C31B000FBD5A2 /* TTTextField.m in Sources */,
 				4754737217555A3500F42417 /* TTGoxHTTPClient.m in Sources */,
 				475473821756AF9B00F42417 /* NSData+Base64.m in Sources */,
+				47E9C5D51757DC520069ADA6 /* TTAccountBox.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -974,7 +973,6 @@
 				478121191731C1BE00879CD6 /* TTArbitrageBox.m in Sources */,
 				479AE8AE17386B2D0043C10D /* TTAPIControlBoxView.m in Sources */,
 				4707799B1739967100DBBC47 /* NSView+Utility.m in Sources */,
-				4707799F1739B32F00DBBC47 /* TTMarketBox.m in Sources */,
 				470779B51739B7A100DBBC47 /* AFHTTPClient.m in Sources */,
 				470779B71739B7A100DBBC47 /* AFHTTPRequestOperation.m in Sources */,
 				470779B91739B7A100DBBC47 /* AFImageRequestOperation.m in Sources */,

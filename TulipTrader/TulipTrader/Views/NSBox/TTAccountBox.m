@@ -1,20 +1,22 @@
 //
-//  TTMarketBox.m
+//  TTAccountBox.m
 //  TulipTrader
 //
-//  Created by Sheldon Thomas on 5/7/13.
+//  Created by Sheldon Thomas on 5/30/13.
 //  Copyright (c) 2013 Resplendent G.P. Sheldon Thomas. All rights reserved.
 //
 
-#import "TTMarketBox.h"
+#import "TTAccountBox.h"
 
-@implementation TTMarketBox
+@implementation TTAccountBox
 
 - (id)initWithFrame:(NSRect)frame
 {
     self = [super initWithFrame:frame];
     if (self) {
-        // Initialization code here.
+        [self setBorderWidth:2.f];
+        [self setBorderColor:[NSColor blackColor]];
+        [self setTitle:@"Accounts"];
     }
     
     return self;
@@ -22,7 +24,7 @@
 
 - (void)drawRect:(NSRect)dirtyRect
 {
-    // Drawing code here.
+    [super drawRect:dirtyRect];
 }
 
 @end

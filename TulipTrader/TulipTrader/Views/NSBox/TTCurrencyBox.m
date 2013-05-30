@@ -87,7 +87,7 @@ static NSFont* spreadFont;
         [_buyPriceText setString:RUStringWithFormat(@"%@%@", currencySymbolStringFromCurrency(_currency), stringShortenedForCurrencyBox(lastBuy.stringValue))];
         
         double spread = (lastSell.doubleValue - lastBuy.doubleValue) * pow(10, 4);
-        [self.spreadLabel setString:RUStringWithFormat(@"%.2fpips", spread)];
+        [self.spreadLabel setString:RUStringWithFormat(@"%.1fpips", spread)];
     }
     else
     {

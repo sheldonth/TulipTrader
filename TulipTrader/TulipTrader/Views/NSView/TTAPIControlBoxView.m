@@ -27,7 +27,7 @@
 
 RU_SYNTHESIZE_SINGLETON_FOR_CLASS_WITH_ACCESSOR(TTAPIControlBoxView, sharedInstance);
 
-#define TTAPIControlBoxLeadinString @">> "
+#define TTAPIControlBoxLeadinString @"> "
 #define TTAPIControlBoxTailString @""
 #define kTTAPIControlBoxCommandEntryPrompt @"Enter Commands Here"
 
@@ -46,7 +46,7 @@ static NSColor* textBackgroundColor;
     {
         textBackgroundColor = [NSColor blackColor];
         dateFormatter = [NSDateFormatter new];
-        [dateFormatter setDateFormat:@"HH:mm:ss.SS"];
+        [dateFormatter setDateFormat:@"HH:mm:ss"];
         
         kTTAPIActionCommandList = @[@"help", @"set", @"load", @"account"];
         kTTAPIActionObjectList = @[@"noisyquotes"];
@@ -143,8 +143,6 @@ static NSColor* textBackgroundColor;
     {
         dispatch_async(dispatch_get_main_queue(), ^{
         [pointer.dialogTextView setString:mutableCopy];
-//        CGFloat somefuckingfloat = ((pointer.scrollView.contentView.documentVisibleRect.origin.y + pointer.scrollView.contentView.documentVisibleRect.size.height) - [(TTTextView*)pointer.scrollView.documentView frame].size.height);
-//        if (somefuckingfloat < kTTAPIControlBoxAllowableScrollOffset)
             [pointer.scrollView.contentView scrollToPoint:NSMakePoint(0, ((NSView*)pointer.scrollView.documentView).frame.size.height - pointer.scrollView.contentSize.height)];
         });
     }
@@ -162,6 +160,8 @@ static NSColor* textBackgroundColor;
     if (self) {
         [self setScrollView:[[NSScrollView alloc]initWithFrame:CGRectZero]];
         [_scrollView setBorderType:NSNoBorder];
+        [_scrollView setBackgroundColor:[NSColor clearColor]];
+        [_scrollView setDrawsBackground:NO];
         [_scrollView setHasVerticalScroller:YES];
         [_scrollView setHasHorizontalScroller:NO];
         [_scrollView setAutoresizingMask:NSViewWidthSizable | NSViewHeightSizable];
@@ -169,12 +169,13 @@ static NSColor* textBackgroundColor;
         
         [self setDialogTextView:[[TTTextView alloc]initWithFrame:CGRectZero]];
         [_dialogTextView setFont:[NSFont fontWithName:@"Gill Sans" size:14.f]];
-        [_dialogTextView setTextColor:[NSColor whiteColor]];
-        [_dialogTextView setBackgroundColor:[NSColor darkGrayColor]];
+        [_dialogTextView setTextColor:[NSColor blackColor]];
+        [_dialogTextView setBackgroundColor:[NSColor clearColor]];
         [_dialogTextView setVerticallyResizable:YES];
         [_dialogTextView setHorizontallyResizable:NO];
         [_dialogTextView setAutoresizingMask:NSViewWidthSizable];
         [_dialogTextView setEditable:NO];
+        [_dialogTextView setDrawsBackground:NO];
         [[_dialogTextView textContainer] setWidthTracksTextView:YES];
         [_scrollView setDocumentView:_dialogTextView];
         
@@ -191,6 +192,10 @@ static NSColor* textBackgroundColor;
         [_commandEntryTextField setAction:@selector(enterCommand:)];
         [_commandEntryTextField setStringValue:kTTAPIControlBoxCommandEntryPrompt];
         [self addSubview:_commandEntryTextField];
+        
+        [self setBorderWidth:2.f];
+        [self setBorderColor:[NSColor blackColor]];
+        [self setTitle:@"Console"];
     }
     return self;
 }
@@ -198,8 +203,8 @@ static NSColor* textBackgroundColor;
 -(void)setFrame:(NSRect)frameRect
 {
     [super setFrame:frameRect];
-    [_scrollView setFrame:(NSRect){0, 30,CGRectGetWidth(frameRect),frameRect.size.height - 30}];
-    [_commandEntryTextField setFrame:(NSRect){0 ,0, CGRectGetWidth(frameRect), 30}];
+    [_scrollView setFrame:(NSRect){0, 40, CGRectGetWidth(frameRect) - 8, frameRect.size.height - 55}];
+    [_commandEntryTextField setFrame:(NSRect){0 ,0, CGRectGetWidth(frameRect) - 15, 30}];
     NSSize s = [_scrollView contentSize];
     [_dialogTextView setFrame:(NSRect){0,0,s.width, s.height}];
     [_dialogTextView setMinSize:(NSSize){0.f, s.height}];
@@ -209,8 +214,7 @@ static NSColor* textBackgroundColor;
 
 - (void)drawRect:(NSRect)dirtyRect
 {
-    [textBackgroundColor setFill];
-    NSRectFill(dirtyRect);
+    [super drawRect:dirtyRect];
 }
 
 @end

@@ -62,7 +62,12 @@ NSString* const TTCurrencyUpdateNotificationString = @"ttCurrencyUpdateNotificat
             if (e)
                 RUDLog(@"Error saving Trade");
             else
-                [TTAPIControlBoxView publishCommand:RUStringWithFormat(@"%@ for %@ in %@", trade.amount.stringValue, trade.price.stringValue, stringFromCurrency(currencyFromNumber(trade.currency)))];
+            {
+                if ([trade.trade_type isEqualToString:@"bid"])
+                    [TTAPIControlBoxView publishCommand:RUStringWithFormat(@"%@BTC bought for %@ %@ (%@)", trade.amount.stringValue, stringFromCurrency(currencyFromNumber(trade.currency)), trade.price.stringValue, trade.properties)];
+                else
+                    [TTAPIControlBoxView publishCommand:RUStringWithFormat(@"%@BTC sold for %@ %@ (%@)", trade.amount.stringValue, stringFromCurrency(currencyFromNumber(trade.currency)), trade.price.stringValue, trade.properties)];
+            }
         }];
     });
 }
