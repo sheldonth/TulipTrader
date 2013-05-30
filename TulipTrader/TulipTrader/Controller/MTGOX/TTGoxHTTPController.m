@@ -59,9 +59,9 @@ RU_SYNTHESIZE_SINGLETON_FOR_CLASS_WITH_ACCESSOR(TTGoxHTTPController, sharedInsta
     [self.networkSecure postPath:@"BTCCHF/money/info" parameters:@{@"test": @"object"} success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSString* str = [[NSString alloc]initWithData:responseObject encoding:NSUTF8StringEncoding];
         NSDictionary* d = [str objectFromJSONString];
-        
+        RUDLog(@"!");
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        
+        RUDLog(@"!");
     }];
 }
 

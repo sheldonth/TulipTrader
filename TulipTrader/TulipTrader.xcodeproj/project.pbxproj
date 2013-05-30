@@ -84,8 +84,6 @@
 		4754737D1755A30700F42417 /* libcommonCrypto.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4754737C1755A30600F42417 /* libcommonCrypto.dylib */; };
 		475473821756AF9B00F42417 /* NSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 475473801756AF9B00F42417 /* NSData+Base64.m */; };
 		475473831756AF9B00F42417 /* NSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 475473801756AF9B00F42417 /* NSData+Base64.m */; };
-		475473841756AF9B00F42417 /* NSData+Base64.podspec in Resources */ = {isa = PBXBuildFile; fileRef = 475473811756AF9B00F42417 /* NSData+Base64.podspec */; };
-		475473851756AF9B00F42417 /* NSData+Base64.podspec in Resources */ = {isa = PBXBuildFile; fileRef = 475473811756AF9B00F42417 /* NSData+Base64.podspec */; };
 		476DD9F21729A37D0076C301 /* TTStatusBarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 476DD9F11729A37D0076C301 /* TTStatusBarView.m */; };
 		476DD9F31729A37D0076C301 /* TTStatusBarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 476DD9F11729A37D0076C301 /* TTStatusBarView.m */; };
 		476DD9F61729A3C90076C301 /* TTTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 476DD9F51729A3C90076C301 /* TTTextView.m */; };
@@ -254,7 +252,6 @@
 		4754737C1755A30600F42417 /* libcommonCrypto.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libcommonCrypto.dylib; path = usr/lib/system/libcommonCrypto.dylib; sourceTree = SDKROOT; };
 		4754737F1756AF9B00F42417 /* NSData+Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+Base64.h"; sourceTree = "<group>"; };
 		475473801756AF9B00F42417 /* NSData+Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+Base64.m"; sourceTree = "<group>"; };
-		475473811756AF9B00F42417 /* NSData+Base64.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "NSData+Base64.podspec"; sourceTree = "<group>"; };
 		476DD9F01729A37D0076C301 /* TTStatusBarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTStatusBarView.h; sourceTree = "<group>"; };
 		476DD9F11729A37D0076C301 /* TTStatusBarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTStatusBarView.m; sourceTree = "<group>"; };
 		476DD9F41729A3C90076C301 /* TTTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTTextView.h; sourceTree = "<group>"; };
@@ -519,7 +516,6 @@
 			children = (
 				4754737F1756AF9B00F42417 /* NSData+Base64.h */,
 				475473801756AF9B00F42417 /* NSData+Base64.m */,
-				475473811756AF9B00F42417 /* NSData+Base64.podspec */,
 			);
 			path = "NSData-Base64";
 			sourceTree = "<group>";
@@ -864,7 +860,6 @@
 				47458CE4174BF74900FBD5A2 /* icon.icns in Resources */,
 				47458CEC174BF81600FBD5A2 /* icon.icns in Resources */,
 				47458CEE174C04FF00FBD5A2 /* icon_q.icns in Resources */,
-				475473841756AF9B00F42417 /* NSData+Base64.podspec in Resources */,
 				47E9C5CC1757BDF60069ADA6 /* UserData.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -878,7 +873,6 @@
 				47D200A51709584200AEA412 /* README.md in Resources */,
 				47DDDF521710A59E0087EE78 /* TTMasterViewController.xib in Resources */,
 				47458CE5174BF74900FBD5A2 /* icon.icns in Resources */,
-				475473851756AF9B00F42417 /* NSData+Base64.podspec in Resources */,
 				47E9C5CD1757BDF60069ADA6 /* UserData.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
