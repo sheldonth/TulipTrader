@@ -31,11 +31,6 @@ typedef enum{
 
 #pragma c methods
 
-int64_t latestTradeID()
-{
-
-}
-
 #pragma mark - class methods
 
 -(NSString *)description
@@ -51,7 +46,28 @@ int64_t latestTradeID()
  @propertyName @"price"
  */
 
++(void)findTradesWithPredicate:(NSPredicate*)p completion:(void (^)(NSArray* results))callbackBlock
+{
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+        TTAppDelegate* appDelegate = (TTAppDelegate*)[[NSApplication sharedApplication]delegate];
+        NSManagedObjectContext* c = [[NSManagedObjectContext alloc]initWithConcurrencyType:NSPrivateQueueConcurrencyType];
+        [c setPersistentStoreCoordinator:appDelegate.persistentStoreCoordinator];
+        
+        NSFetchRequest* f = [[NSFetchRequest alloc]initWithEntityName:@"Trade"];
+        [f setPredicate:p];
+        [f setIncludesPropertyValues:NO];
+        
+        NSArray* results = [c executeFetchRequest:f error:nil];
+        callbackBlock(results);
+    });
+}
+
 +(void)computeFunctionNamed:(NSString*)functionName onTradePropertyWithName:(NSString*)propertyName completion:(void (^)(NSNumber* computedResult))callbackBlock
+{
+    return [Trade computeFunctionNamed:functionName onTradePropertyWithName:propertyName optionalPredicate:nil completion:callbackBlock];
+}
+
++(void)computeFunctionNamed:(NSString*)functionName onTradePropertyWithName:(NSString*)propertyName optionalPredicate:(NSPredicate*)predicate completion:(void (^)(NSNumber* computedResult))callbackBlock
 {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
         TTAppDelegate* appDelegate = (TTAppDelegate*)[[NSApplication sharedApplication]delegate];
@@ -67,6 +83,8 @@ int64_t latestTradeID()
         [context setPersistentStoreCoordinator:appDelegate.persistentStoreCoordinator];
         
         NSFetchRequest* request = [[NSFetchRequest alloc]initWithEntityName:@"Trade"];
+        if (predicate)
+            [request setPredicate:predicate];
         [request setPropertiesToFetch:@[description]];
         [request setResultType:NSDictionaryResultType];
     
@@ -106,6 +124,10 @@ int64_t latestTradeID()
         [t setReal_boolean:@(0)];
     [t setTrade_type:kRUStringOrNil([d objectForKey:@"trade_type"])];
     [t setProperties:kRUStringOrNil([d objectForKey:@"properties"])];
+    
+    if (!t.price || !t.amount || !t.tradeId)
+        RUDLog(@"ERROR SAVING");
+    
     return t;
 }
 
@@ -123,6 +145,8 @@ int64_t latestTradeID()
         [t setReal_boolean:@(0)];
     [t setTrade_type:kRUStringOrNil([d objectForKey:@"trade_type"])];
     [t setProperties:kRUStringOrNil([d objectForKey:@"properties"])];
+    if (!t.price || !t.amount || !t.tradeId)
+        RUDLog(@"ERROR SAVING");
     return t;
 }
 

@@ -49,11 +49,11 @@
     return self;
 }
 
-- (void)drawRect:(NSRect)dirtyRect
-{
-    [[NSColor orangeColor] setFill];
-    NSRectFill(dirtyRect);
-}
+//- (void)drawRect:(NSRect)dirtyRect
+//{
+//    [[NSColor orangeColor] setFill];
+//    NSRectFill(dirtyRect);
+//}
 
 -(void)setBaseCurrency:(TTGoxCurrency)baseCurrency
 {

@@ -24,6 +24,8 @@ extern NSString* const OEApiCurrenciesURL;
 extern NSString* const OELastLoadedDateKey;
 extern NSString* const OELastLoadedDataKey;
 
+extern NSString* const OERatesLoadedNotificationString;
+
 @interface TTOERatesController : NSObject <NSURLConnectionDelegate, NSURLConnectionDataDelegate>
 
 -(void)reloadRates;

@@ -25,6 +25,7 @@
 @property (assign) NSManagedObjectContext* appDelegateContext;
 @property (nonatomic, retain) TTTextView* buyWordText;
 @property (nonatomic, retain) TTTextView* sellWordText;
+@property (nonatomic, retain) TTTextView* spreadLabel;
 
 NSUInteger numberOfLeadingCharactersToAffectForCurrency(TTGoxCurrency currency);
 
@@ -37,6 +38,7 @@ static NSFont* buyFont;
 static NSFont* sellFont;
 static NSFont* buySellLabelsFont;
 static NSFont* buySellFontForCurrencyLetters;
+static NSFont* spreadFont;
 
 +(void)initialize
 {
@@ -44,7 +46,8 @@ static NSFont* buySellFontForCurrencyLetters;
     buyFont = [NSFont fontWithName:@"Helvetica-Bold" size:14.f];
     sellFont = [NSFont fontWithName:@"Helvetica-Bold" size:14.f];
     buySellFontForCurrencyLetters = [NSFont fontWithName:@"Helvetica-Italic" size:10.f];
-    buySellLabelsFont = [NSFont fontWithName:@"Avenir Next" size:12.f];
+    buySellLabelsFont = [NSFont fontWithName:@"Didot-Bold" size:12.f];
+    spreadFont = [NSFont fontWithName:@"Helvetica" size:12.f];
 }
 
 -(NSColor*)colorWithHexString:(NSString*)string
@@ -82,6 +85,9 @@ static NSFont* buySellFontForCurrencyLetters;
         NSNumber* lastBuy = [ticker.buy value];
         [_sellPriceText setString:RUStringWithFormat(@"%@%@",currencySymbolStringFromCurrency(_currency), stringShortenedForCurrencyBox(lastSell.stringValue))];
         [_buyPriceText setString:RUStringWithFormat(@"%@%@", currencySymbolStringFromCurrency(_currency), stringShortenedForCurrencyBox(lastBuy.stringValue))];
+        
+        double spread = (lastSell.doubleValue - lastBuy.doubleValue) * pow(10, 4);
+        [self.spreadLabel setString:RUStringWithFormat(@"%.2fpips", spread)];
     }
     else
     {
@@ -95,8 +101,6 @@ static NSFont* buySellFontForCurrencyLetters;
     [self willChangeValueForKey:@"currency"];
     _currency = currency;
     [self setTitle:RUStringWithFormat(@"%@.BTC", stringFromCurrency(currency))];
-//    [_sellPriceText setFont:buySellFontForCurrencyLetters range:NSMakeRange(0, numberOfLeadingCharactersToAffectForCurrency(_currency))];
-//    [_buyPriceText setFont:buySellFontForCurrencyLetters range:NSMakeRange(0, numberOfLeadingCharactersToAffectForCurrency(_currency))];
     NSPredicate* pred = [NSPredicate predicateWithFormat:@"channel_name == %@", bitcoinTickerChannelNameForCurrency(currency)];
     [self.unifiedFetchRequest setPredicate:pred];
     [self didChangeValueForKey:@"currency"];
@@ -117,7 +121,8 @@ static NSFont* buySellFontForCurrencyLetters;
         [self setBorderColor:[NSColor blackColor]];
         [self setBorderType:NSBezelBorder];
         [self setBoxType:NSBoxPrimary];
-        [self setFillColor:[NSColor colorWithHexString:@"292929"]];
+        [self setFillColor:[NSColor colorWithHexString:@"545454"]];
+        [self setFillColor:[NSColor whiteColor]];
         [self setTitleFont:titleFont];
         
         [self setAppDelegateContext:[(TTAppDelegate*)[[NSApplication sharedApplication]delegate]managedObjectContext]];
@@ -143,7 +148,7 @@ static NSFont* buySellFontForCurrencyLetters;
         [_buyWordText setBackgroundColor:[NSColor clearColor]];
         [_buyWordText setEditable:NO];
         [_buyWordText setFont:buySellLabelsFont];
-        [_buyWordText setTextColor:[self colorWithHexString:@"337147"]];
+        [_buyWordText setTextColor:[NSColor blackColor]];
         [_buyWordText setString:@"Bid:"];
         [self addSubview:_buyWordText];
         
@@ -151,9 +156,17 @@ static NSFont* buySellFontForCurrencyLetters;
         [_sellWordText setBackgroundColor:[NSColor clearColor]];
         [_sellWordText setEditable:NO];
         [_sellWordText setFont:buySellLabelsFont];
-        [_sellWordText setTextColor:[self colorWithHexString:@"f26c4f"]];
+        [_sellWordText setTextColor:[NSColor blackColor]];
         [_sellWordText setString:@"Ask:"];
         [self addSubview:_sellWordText];
+        
+        [self setSpreadLabel:[TTTextView new]];
+        [_spreadLabel setBackgroundColor:[NSColor clearColor]];
+        [_spreadLabel setEditable:NO];
+        [_spreadLabel setAlignment:NSCenterTextAlignment];
+        [_spreadLabel setFont:spreadFont];
+        [_spreadLabel setTextColor:[NSColor blackColor]];
+        [self addSubview:self.spreadLabel];
         
         [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(reloadTicker:) name:TTCurrencyUpdateNotificationString object:nil];
     }
@@ -167,6 +180,7 @@ static NSFont* buySellFontForCurrencyLetters;
     [_sellPriceText setFrame:(NSRect){25, CGRectGetHeight(frameRect) - 80, 120, 30}];
     [_sellWordText setFrame:(NSRect){-5, CGRectGetHeight(frameRect) - 76, 40, 25}];
     [_buyWordText setFrame:(NSRect){-5, CGRectGetHeight(frameRect) - 56, 40, 25}];
+    [_spreadLabel setFrame:(NSRect){-5, CGRectGetHeight(frameRect) - 95, 120, 25}];
     [self setNeedsDisplay:YES];
 }
 
@@ -198,6 +212,12 @@ NSUInteger numberOfLeadingCharactersToAffectForCurrency(TTGoxCurrency currency)
             return 0;
             break;
     }
+}
+
+- (void)drawRect:(NSRect)dirtyRect
+{
+
+    [super drawRect:dirtyRect];
 }
 
 @end

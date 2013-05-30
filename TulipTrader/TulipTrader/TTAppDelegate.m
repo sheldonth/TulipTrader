@@ -82,6 +82,7 @@
 {
     NSScreen* mainScreen = [NSScreen mainScreen];
     NSRect mainScreenFrame = mainScreen.frame;
+    RUDLog(@"Mainscreenframe %@", NSStringFromRect(mainScreenFrame));
     [self.window setFrame:(NSRect){kTTTradeWindowScreenInsets, kTTTradeWindowScreenInsets, mainScreenFrame.size.width - (2 * kTTTradeWindowScreenInsets), mainScreenFrame.size.height - (2 * kTTTradeWindowScreenInsets)} display:YES animate:YES];
     [self.window setTitle:appTitle];
     [self.window setCollectionBehavior:NSWindowCollectionBehaviorFullScreenPrimary];

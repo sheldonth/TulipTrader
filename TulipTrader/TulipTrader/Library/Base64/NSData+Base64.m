@@ -304,28 +304,9 @@ char *NewBase64Encode(
 		[[NSString alloc]
 			initWithBytes:outputBuffer
 			length:outputLength
-			encoding:NSASCIIStringEncoding]
-		;
+			encoding:NSASCIIStringEncoding];
 	free(outputBuffer);
 	return result;
 }
-
-// added by Hiroshi Hashiguchi
-- (NSString *)base64EncodedStringWithSeparateLines:(BOOL)separateLines
-{
-	size_t outputLength;
-	char *outputBuffer =
-    NewBase64Encode([self bytes], [self length], separateLines, &outputLength);
-	
-	NSString *result =
-    [[NSString alloc]
-      initWithBytes:outputBuffer
-      length:outputLength
-      encoding:NSASCIIStringEncoding]
-     ;
-	free(outputBuffer);
-	return result;
-}
-
 
 @end

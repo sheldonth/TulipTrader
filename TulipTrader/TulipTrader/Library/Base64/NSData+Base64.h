@@ -39,7 +39,4 @@ char *NewBase64Encode(
 + (NSData *)dataFromBase64String:(NSString *)aString;
 - (NSString *)base64EncodedString;
 
-// added by Hiroshi Hashiguchi
-- (NSString *)base64EncodedStringWithSeparateLines:(BOOL)separateLines;
-
 @end

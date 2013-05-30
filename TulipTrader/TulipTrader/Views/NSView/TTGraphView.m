@@ -114,7 +114,8 @@ typedef enum CGLineCap CGLineCap;
 #pragma mark - CPTDataSource methods (required)
 -(NSUInteger)numberOfRecordsForPlot:(CPTPlot *)plot
 {
-    return numberOfPlotsForDateRange(self.selectedDateRange);
+//    return numberOfPlotsForDateRange(self.selectedDateRange);
+    return self.tradeEventsInTimeFrame.count;
 }
 
 #pragma mark - CPTDataSource methods (optional)
@@ -130,13 +131,14 @@ typedef enum CGLineCap CGLineCap;
 {
     switch (fieldEnum) {
         case CPTScatterPlotFieldX:
-            return @(idx + 1);
+            return @(idx);
             break;
             
         case CPTScatterPlotFieldY:
         {
-            NSNumber* value = [self yValueForRecordIndex:idx];
-            return value;
+            Trade* t = [self.tradeEventsInTimeFrame objectAtIndex:idx];
+            Trade* t_threadSafe = (Trade*)[appDelegate.managedObjectContext existingObjectWithID:t.objectID error:nil];
+            return t_threadSafe.price;
             break;
         }
         default:
@@ -409,54 +411,38 @@ NSUInteger numberOfPlotsForDateRange(TTGraphViewDateRange range)
     [self showLoadingLabel:YES];
     if (!_databaseOperationQueue)
         [self setDatabaseOperationQueue:dispatch_queue_create("co.resplendent.graphLoadingQueue", NULL)];
-    
-    dispatch_async(self.databaseOperationQueue, ^{
-        NSManagedObjectContext* threadSafeMOC = [[NSManagedObjectContext alloc]initWithConcurrencyType:NSPrivateQueueConcurrencyType];
-        [threadSafeMOC setPersistentStoreCoordinator:appDelegate.persistentStoreCoordinator];
-        
-        NSExpression* keyExpression = [NSExpression expressionForKeyPath:@"price"];
-        NSExpression* maxExpression = [NSExpression expressionForFunction:@"max:" arguments:@[keyExpression]];
-        
-        NSExpressionDescription* description = [NSExpressionDescription new];
-        [description setName:@"maxPrice"];
-        [description setExpression:maxExpression];
-        [description setExpressionResultType:NSDoubleAttributeType];
-        
-        NSFetchRequest* dataRequest = [[NSFetchRequest alloc]initWithEntityName:@"Trade"];
         NSDate* d = [self startDateForDateRange:self.selectedDateRange];
-        [dataRequest setPredicate:[NSPredicate predicateWithFormat:@"(date > %@) AND (currency == %@) AND (real_boolean == %@)", d, numberFromCurrency(currency), @(YES)]];
-        [dataRequest setPropertiesToFetch:@[description]];
-        [dataRequest setResultType:NSDictionaryResultType];
-        NSError* e = nil;
-        NSArray* dataSet = [threadSafeMOC executeFetchRequest:dataRequest error:&e];
+        NSPredicate* p = [NSPredicate predicateWithFormat:@"(date > %@) AND (currency == %@) AND (real_boolean == %@)", d, numberFromCurrency(currency), @(YES)];
+        [Trade computeFunctionNamed:@"max:" onTradePropertyWithName:@"price" optionalPredicate:p completion:^(NSNumber *computedResult) {
+            NSUInteger maxPrice = [computedResult unsignedIntegerValue] + kTTGraphViewPriceUpperYAxisDelta;
+            [Trade findTradesWithPredicate:p completion:^(NSArray *results) {
+                _tradeEventsInTimeFrame = results;
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    CPTScatterPlot* currencyPlot = [CPTScatterPlot new];
+                    [currencyPlot setDataSource:self];
+                    [currencyPlot setDelegate:self];
+                    [currencyPlot setIdentifier:stringFromCurrency(currency)];
+                    [currencyPlot setCachePrecision:CPTPlotCachePrecisionAuto];
+                    
+                    CPTXYPlotSpace *plotSpace = (CPTXYPlotSpace *)self.graph.defaultPlotSpace;
+                    
+                    plotSpace.xRange = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromUnsignedInteger(0) length:CPTDecimalFromUnsignedInteger(numberOfPlotsForDateRange(self.selectedDateRange))];
+                    plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromUnsignedInteger(0) length:CPTDecimalFromUnsignedInteger(maxPrice)];
+                    
+                    CPTMutableLineStyle *lineStyle = [currencyPlot.dataLineStyle mutableCopy];
+                    lineStyle.lineWidth = 2.0;
+                    lineStyle.lineColor = [CPTColor colorWithCGColor:colorForCurrency(currency).CGColor];
+                    currencyPlot.dataLineStyle = lineStyle;
+                    [self.graph addPlot:currencyPlot];
+                    [self setNeedsDisplay:YES];
+                });
 
-        if ([[[dataSet objectAtIndex:0]allObjects] count])
-        {
-            NSNumber* maxPriceNumber = [[dataSet objectAtIndex:0] objectForKey:@"maxPrice"];
-            NSUInteger maxPrice = [maxPriceNumber unsignedIntegerValue] + kTTGraphViewPriceUpperYAxisDelta;
-            dispatch_async(dispatch_get_main_queue(), ^{
-                CPTScatterPlot* currencyPlot = [CPTScatterPlot new];
-                [currencyPlot setDataSource:self];
-                [currencyPlot setDelegate:self];
-                [currencyPlot setIdentifier:stringFromCurrency(currency)];
-                [currencyPlot setCachePrecision:CPTPlotCachePrecisionAuto];
-     
-                CPTXYPlotSpace *plotSpace = (CPTXYPlotSpace *)self.graph.defaultPlotSpace;
-                
-                plotSpace.xRange = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromUnsignedInteger(0) length:CPTDecimalFromUnsignedInteger(numberOfPlotsForDateRange(self.selectedDateRange))];
-                plotSpace.yRange = [CPTPlotRange plotRangeWithLocation:CPTDecimalFromUnsignedInteger(0) length:CPTDecimalFromUnsignedInteger(maxPrice)];
-                
-                CPTMutableLineStyle *lineStyle = [currencyPlot.dataLineStyle mutableCopy];
-                lineStyle.lineWidth = 2.0;
-                lineStyle.lineColor = [CPTColor colorWithCGColor:colorForCurrency(currency).CGColor];
-                currencyPlot.dataLineStyle = lineStyle;
-                [self.graph addPlot:currencyPlot];
-            });
-        }
-        else
-            RUDLog(@"No data was returned in the set");
-    });
+            }];
+        }];
 }
+
+                   
+
 
 -(void)showLoadingLabel:(BOOL)show
 {
@@ -544,12 +530,14 @@ NSUInteger numberOfPlotsForDateRange(TTGraphViewDateRange range)
         {
             [self setDefaultLayerHostingView:[[CPTGraphHostingView alloc]initWithFrame:self.bounds]];
             [_defaultLayerHostingView setAutoresizingMask:NSViewWidthSizable | NSViewHeightSizable];
-            [self addSubview:_defaultLayerHostingView];
+//            [self addSubview:_defaultLayerHostingView];
         }
         if (!_graph)
         {
             [self setGraph:[[CPTXYGraph alloc]initWithFrame:self.bounds]];
             [_defaultLayerHostingView setHostedGraph:_graph];
+//            CGRect
+//            [self.graph layoutAndRenderInContext:<#(CGContextRef)#>]
         }
         if (!_majorLineStyle)
         {
@@ -574,7 +562,8 @@ NSUInteger numberOfPlotsForDateRange(TTGraphViewDateRange range)
         [self.popUpButton setAutoenablesItems:YES];
         [self.popUpButton setAction:@selector(currencyPopUpDidChange:)];
         [self.popUpButton setTarget:self];
-        [self.defaultLayerHostingView addSubview:self.popUpButton];
+//        [self.defaultLayerHostingView addSubview:self.popUpButton];
+        [self addSubview:self.popUpButton];
         
         [self setLoadingLabel:[[TTTextView alloc]initWithFrame:(NSRect){CGRectGetMidX(frame), CGRectGetMidY(frame), 200, 100}]];
         [self.loadingLabel setBackgroundColor:[NSColor clearColor]];
@@ -585,6 +574,8 @@ NSUInteger numberOfPlotsForDateRange(TTGraphViewDateRange range)
         
         _tradeDataArrayDictionary = [NSMutableDictionary dictionary];
         
+        _plots = [NSMutableArray array];
+        
         [timeLineLengthButtonArray enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
             NSButton* btn = [NSButton new];
             [btn setButtonType:NSPushOnPushOffButton];
@@ -594,7 +585,8 @@ NSUInteger numberOfPlotsForDateRange(TTGraphViewDateRange range)
             [btn setAction:@selector(timelineButtonClicked:)];
             [btn setTarget:self];
             [self.timelineButtonArray addObject:btn];
-            [self.defaultLayerHostingView addSubview:btn];
+//            [self.defaultLayerHostingView addSubview:btn];
+            [self addSubview:btn];
         }];
         [[self.timelineButtonArray objectAtIndex:0]setState:NSOnState];
         [self setSelectedButton:[self.timelineButtonArray objectAtIndex:0]];
@@ -602,9 +594,46 @@ NSUInteger numberOfPlotsForDateRange(TTGraphViewDateRange range)
     return self;
 }
 
-- (void)drawRect:(NSRect)dirtyRect
+-(NSImage*)imageRepresentingCurrentObjects
 {
+    NSRect imageFrame = self.frame;
+    NSView* imageView = [[NSView alloc]initWithFrame:imageFrame];
+    [imageView setWantsLayer:YES];
+    if (self.defaultLayerHostingView)
+    {
+        [imageView addSubview:self.defaultLayerHostingView];
+    }
+    else
+    {NSException* e = [NSException exceptionWithName:NSInternalInconsistencyException reason:RUStringWithFormat(@"No defaultLayerHostingView") userInfo:nil];@throw e;}
+
+    CGSize boundingSize = imageFrame.size;
+    NSBitmapImageRep* bitmapImageRep = [[NSBitmapImageRep alloc]initWithBitmapDataPlanes:NULL
+                                                                              pixelsWide:boundingSize.width
+                                                                              pixelsHigh:boundingSize.height
+                                                                           bitsPerSample:8
+                                                                         samplesPerPixel:4
+                                                                                hasAlpha:YES
+                                                                                isPlanar:NO
+                                                                          colorSpaceName:NSCalibratedRGBColorSpace
+                                                                             bytesPerRow:(NSInteger)boundingSize.width * 4
+                                                                            bitsPerPixel:32];
+    NSGraphicsContext* bitmapContext = [NSGraphicsContext graphicsContextWithBitmapImageRep:bitmapImageRep];
+    
+    CGContextRef context = (CGContextRef)[bitmapContext graphicsPort];
+    CGContextClearRect(context, CGRectMake(0.f, 0.f, boundingSize.width, boundingSize.height));
+    CGContextSetAllowsAntialiasing(context, true);
+    CGContextSetShouldSmoothFonts(context, false);
+    [imageView.layer renderInContext:context];
+    CGContextFlush(context);
     
 }
+
+//- (void)drawRect:(NSRect)dirtyRect
+//{
+//    CGContextRef contextReference = [[NSGraphicsContext currentContext]graphicsPort];
+//    [self.graph.allPlots enumerateObjectsUsingBlock:^(CPTPlot* obj, NSUInteger idx, BOOL *stop) {
+//        [obj layoutAndRenderInContext:contextReference];
+//    }];
+//}
 
 @end
