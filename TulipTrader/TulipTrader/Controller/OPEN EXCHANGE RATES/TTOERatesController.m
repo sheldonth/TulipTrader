@@ -32,6 +32,8 @@ NSString* const OEApiCurrenciesURL = @"currencies.json";
 NSString* const OELastLoadedDateKey = @"OELastLoadedDate";
 NSString* const OELastLoadedDataKey = @"OELastLoadedData";
 
+NSString* const OERatesLoadedNotificationString = @"TTOERatesDidReload";
+
 @implementation TTOERatesController
 
 RU_SYNTHESIZE_SINGLETON_FOR_CLASS_WITH_ACCESSOR(TTOERatesController, sharedInstance);
@@ -136,6 +138,8 @@ NSURL* urlForDataWithBaseCurrency(TTGoxCurrency baseCurrency)
     [self setLastLoadedDate:d];
     [self setLastLoadedData:[dict objectForKey:@"rates"]];
     [self setCurrencyValues:[dict objectForKey:@"rates"]];
+    
+    [[NSNotificationCenter defaultCenter]postNotificationName:OERatesLoadedNotificationString object:self];
 }
 
 @end

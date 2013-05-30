@@ -21,7 +21,11 @@
 @property (nonatomic, retain) NSString * trade_type;
 @property (nonatomic, retain) NSString * properties;
 
++(void)findTradesWithPredicate:(NSPredicate*)p completion:(void (^)(NSArray* results))callbackBlock;
+
 +(Trade*)newNetworkTradeInContext:(NSManagedObjectContext*)context fromDictionary:(NSDictionary*)d;
 +(Trade*)newDatabaseTradeInContext:(NSManagedObjectContext*)context fromDictionary:(NSDictionary*)d;
+
++(void)computeFunctionNamed:(NSString*)functionName onTradePropertyWithName:(NSString*)propertyName optionalPredicate:(NSPredicate*)predicate completion:(void (^)(NSNumber* computedResult))callbackBlock;
 +(void)computeFunctionNamed:(NSString*)functionName onTradePropertyWithName:(NSString*)propertyName completion:(void (^)(NSNumber* computedResult))callbackBlock;
 @end

@@ -48,7 +48,7 @@ static NSColor* textBackgroundColor;
         dateFormatter = [NSDateFormatter new];
         [dateFormatter setDateFormat:@"HH:mm:ss.SS"];
         
-        kTTAPIActionCommandList = @[@"help", @"set", @"load"];
+        kTTAPIActionCommandList = @[@"help", @"set", @"load", @"account"];
         kTTAPIActionObjectList = @[@"noisyquotes"];
         kTTAPIActionFlagList = @[@"On", @"Off"];
     }
@@ -118,6 +118,9 @@ static NSColor* textBackgroundColor;
             }
             break;
         }
+        case 3:
+            [[TTGoxHTTPController sharedInstance]loadAccountData];
+            
         default:
             break;
     }

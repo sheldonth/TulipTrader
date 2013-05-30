@@ -18,6 +18,7 @@
 @property(nonatomic, retain) TTGoxPrivateMessageController* privateMessageController;
 @property(nonatomic, retain) TTGoxResultMessageController* resultMessageController;
 @property(nonatomic, retain) TTOERatesController* oeRatesController;
+@property(nonatomic, retain) NSTimer* oeRatesTimer;
 
 @end
 
@@ -50,8 +51,16 @@
         _oeRatesController = [TTOERatesController sharedInstance];
         
         [_oeRatesController reloadRates];
+        
+        [self setOeRatesTimer:[NSTimer scheduledTimerWithTimeInterval:600 target:_oeRatesController selector:@selector(reloadRates) userInfo:nil repeats:YES]];
     }
     return self;
+}
+
+-(void)dealloc
+{
+    [self.oeRatesTimer invalidate];
+    [self setOeRatesTimer:nil];
 }
 
 @end

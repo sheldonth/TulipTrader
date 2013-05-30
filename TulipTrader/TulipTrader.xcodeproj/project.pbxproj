@@ -80,6 +80,12 @@
 		47458CEE174C04FF00FBD5A2 /* icon_q.icns in Resources */ = {isa = PBXBuildFile; fileRef = 47458CED174C04FF00FBD5A2 /* icon_q.icns */; };
 		47458CF2174C31B000FBD5A2 /* TTTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 47458CF1174C31B000FBD5A2 /* TTTextField.m */; };
 		47458CF3174C31B000FBD5A2 /* TTTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 47458CF1174C31B000FBD5A2 /* TTTextField.m */; };
+		4754737217555A3500F42417 /* TTGoxHTTPClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 4754737117555A3400F42417 /* TTGoxHTTPClient.m */; };
+		4754737D1755A30700F42417 /* libcommonCrypto.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4754737C1755A30600F42417 /* libcommonCrypto.dylib */; };
+		475473821756AF9B00F42417 /* NSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 475473801756AF9B00F42417 /* NSData+Base64.m */; };
+		475473831756AF9B00F42417 /* NSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 475473801756AF9B00F42417 /* NSData+Base64.m */; };
+		475473841756AF9B00F42417 /* NSData+Base64.podspec in Resources */ = {isa = PBXBuildFile; fileRef = 475473811756AF9B00F42417 /* NSData+Base64.podspec */; };
+		475473851756AF9B00F42417 /* NSData+Base64.podspec in Resources */ = {isa = PBXBuildFile; fileRef = 475473811756AF9B00F42417 /* NSData+Base64.podspec */; };
 		476DD9F21729A37D0076C301 /* TTStatusBarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 476DD9F11729A37D0076C301 /* TTStatusBarView.m */; };
 		476DD9F31729A37D0076C301 /* TTStatusBarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 476DD9F11729A37D0076C301 /* TTStatusBarView.m */; };
 		476DD9F61729A3C90076C301 /* TTTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = 476DD9F51729A3C90076C301 /* TTTextView.m */; };
@@ -129,6 +135,8 @@
 		47DDDF501710A59E0087EE78 /* TTMasterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 47DDDF4D1710A59E0087EE78 /* TTMasterViewController.m */; };
 		47DDDF511710A59E0087EE78 /* TTMasterViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 47DDDF4E1710A59E0087EE78 /* TTMasterViewController.xib */; };
 		47DDDF521710A59E0087EE78 /* TTMasterViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 47DDDF4E1710A59E0087EE78 /* TTMasterViewController.xib */; };
+		47E9C5CC1757BDF60069ADA6 /* UserData.plist in Resources */ = {isa = PBXBuildFile; fileRef = 47E9C5CB1757BDF60069ADA6 /* UserData.plist */; };
+		47E9C5CD1757BDF60069ADA6 /* UserData.plist in Resources */ = {isa = PBXBuildFile; fileRef = 47E9C5CB1757BDF60069ADA6 /* UserData.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -241,6 +249,12 @@
 		47458CED174C04FF00FBD5A2 /* icon_q.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = icon_q.icns; sourceTree = "<group>"; };
 		47458CF0174C31B000FBD5A2 /* TTTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTTextField.h; sourceTree = "<group>"; };
 		47458CF1174C31B000FBD5A2 /* TTTextField.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTTextField.m; sourceTree = "<group>"; };
+		4754737017555A3400F42417 /* TTGoxHTTPClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTGoxHTTPClient.h; sourceTree = "<group>"; };
+		4754737117555A3400F42417 /* TTGoxHTTPClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTGoxHTTPClient.m; sourceTree = "<group>"; };
+		4754737C1755A30600F42417 /* libcommonCrypto.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libcommonCrypto.dylib; path = usr/lib/system/libcommonCrypto.dylib; sourceTree = SDKROOT; };
+		4754737F1756AF9B00F42417 /* NSData+Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+Base64.h"; sourceTree = "<group>"; };
+		475473801756AF9B00F42417 /* NSData+Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+Base64.m"; sourceTree = "<group>"; };
+		475473811756AF9B00F42417 /* NSData+Base64.podspec */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "NSData+Base64.podspec"; sourceTree = "<group>"; };
 		476DD9F01729A37D0076C301 /* TTStatusBarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTStatusBarView.h; sourceTree = "<group>"; };
 		476DD9F11729A37D0076C301 /* TTStatusBarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTStatusBarView.m; sourceTree = "<group>"; };
 		476DD9F41729A3C90076C301 /* TTTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTTextView.h; sourceTree = "<group>"; };
@@ -305,6 +319,7 @@
 		47DDDF4C1710A59E0087EE78 /* TTMasterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTMasterViewController.h; sourceTree = "<group>"; };
 		47DDDF4D1710A59E0087EE78 /* TTMasterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTMasterViewController.m; sourceTree = "<group>"; };
 		47DDDF4E1710A59E0087EE78 /* TTMasterViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = TTMasterViewController.xib; sourceTree = "<group>"; };
+		47E9C5CB1757BDF60069ADA6 /* UserData.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = UserData.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -312,6 +327,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4754737D1755A30700F42417 /* libcommonCrypto.dylib in Frameworks */,
 				473DF8E2173FF75100C356A1 /* libsqlite3.dylib in Frameworks */,
 				473DF895173C228900C356A1 /* CorePlot.framework in Frameworks */,
 				473DF83D173AAAC600C356A1 /* QuartzCore.framework in Frameworks */,
@@ -442,6 +458,8 @@
 				473DF8AC173DB89000C356A1 /* TTGoxSocketController.m */,
 				473DF8AD173DB89000C356A1 /* TTOperationsController.h */,
 				473DF8AE173DB89000C356A1 /* TTOperationsController.m */,
+				4754737017555A3400F42417 /* TTGoxHTTPClient.h */,
+				4754737117555A3400F42417 /* TTGoxHTTPClient.m */,
 			);
 			path = MTGOX;
 			sourceTree = "<group>";
@@ -487,6 +505,23 @@
 				47458CF1174C31B000FBD5A2 /* TTTextField.m */,
 			);
 			path = NSTextField;
+			sourceTree = "<group>";
+		};
+		4754737617555CD700F42417 /* Base64 */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Base64;
+			sourceTree = "<group>";
+		};
+		4754737E1756AF9B00F42417 /* NSData-Base64 */ = {
+			isa = PBXGroup;
+			children = (
+				4754737F1756AF9B00F42417 /* NSData+Base64.h */,
+				475473801756AF9B00F42417 /* NSData+Base64.m */,
+				475473811756AF9B00F42417 /* NSData+Base64.podspec */,
+			);
+			path = "NSData-Base64";
 			sourceTree = "<group>";
 		};
 		476DD9EE1729A37D0076C301 /* NSTextView */ = {
@@ -559,6 +594,7 @@
 		47D2FD191702764300AEA412 = {
 			isa = PBXGroup;
 			children = (
+				4754737C1755A30600F42417 /* libcommonCrypto.dylib */,
 				47458CED174C04FF00FBD5A2 /* icon_q.icns */,
 				47458CEB174BF81600FBD5A2 /* icon.icns */,
 				47D2FD2B1702764300AEA412 /* TulipTrader */,
@@ -606,6 +642,7 @@
 		47D2FD2B1702764300AEA412 /* TulipTrader */ = {
 			isa = PBXGroup;
 			children = (
+				47E9C5C71757BDD60069ADA6 /* UserData */,
 				47458CE1174BF74900FBD5A2 /* Resources */,
 				473DF897173C4EDD00C356A1 /* Categories */,
 				47705637172112DF0084FE5F /* model */,
@@ -674,6 +711,8 @@
 		47D2FE2B1708A94000AEA412 /* Library */ = {
 			isa = PBXGroup;
 			children = (
+				4754737E1756AF9B00F42417 /* NSData-Base64 */,
+				4754737617555CD700F42417 /* Base64 */,
 				473DF8C6173FF70800C356A1 /* FMDB */,
 				473DF88B173C1C8800C356A1 /* CorePlot.xcodeproj */,
 				473DF82F173AA9DD00C356A1 /* CorePlot */,
@@ -709,6 +748,14 @@
 				47DDDF4E1710A59E0087EE78 /* TTMasterViewController.xib */,
 			);
 			path = ViewController;
+			sourceTree = "<group>";
+		};
+		47E9C5C71757BDD60069ADA6 /* UserData */ = {
+			isa = PBXGroup;
+			children = (
+				47E9C5CB1757BDF60069ADA6 /* UserData.plist */,
+			);
+			path = UserData;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -817,6 +864,8 @@
 				47458CE4174BF74900FBD5A2 /* icon.icns in Resources */,
 				47458CEC174BF81600FBD5A2 /* icon.icns in Resources */,
 				47458CEE174C04FF00FBD5A2 /* icon_q.icns in Resources */,
+				475473841756AF9B00F42417 /* NSData+Base64.podspec in Resources */,
+				47E9C5CC1757BDF60069ADA6 /* UserData.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -829,6 +878,8 @@
 				47D200A51709584200AEA412 /* README.md in Resources */,
 				47DDDF521710A59E0087EE78 /* TTMasterViewController.xib in Resources */,
 				47458CE5174BF74900FBD5A2 /* icon.icns in Resources */,
+				475473851756AF9B00F42417 /* NSData+Base64.podspec in Resources */,
+				47E9C5CD1757BDF60069ADA6 /* UserData.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -904,6 +955,8 @@
 				473DF8E5173FFCEE00C356A1 /* TTDatabaseLoader.m in Sources */,
 				473DF8ED174147A400C356A1 /* Trade.m in Sources */,
 				47458CF2174C31B000FBD5A2 /* TTTextField.m in Sources */,
+				4754737217555A3500F42417 /* TTGoxHTTPClient.m in Sources */,
+				475473821756AF9B00F42417 /* NSData+Base64.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -957,6 +1010,7 @@
 				473DF8E6173FFCEE00C356A1 /* TTDatabaseLoader.m in Sources */,
 				473DF8EE174147A400C356A1 /* Trade.m in Sources */,
 				47458CF3174C31B000FBD5A2 /* TTTextField.m in Sources */,
+				475473831756AF9B00F42417 /* NSData+Base64.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1074,6 +1128,10 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "TulipTrader/TulipTrader-Prefix.pch";
 				INFOPLIST_FILE = "TulipTrader/TulipTrader-Info.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SDKROOT)/usr/lib/system\"",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -1086,6 +1144,10 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "TulipTrader/TulipTrader-Prefix.pch";
 				INFOPLIST_FILE = "TulipTrader/TulipTrader-Info.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SDKROOT)/usr/lib/system\"",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};

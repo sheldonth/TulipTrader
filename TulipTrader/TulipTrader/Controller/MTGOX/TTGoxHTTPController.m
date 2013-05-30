@@ -15,6 +15,7 @@
 #import "TTAPIControlBoxView.h"
 #import "TTAppDelegate.h"
 #import "Trade.h"
+#import "TTGoxHTTPClient.h"
 
 #define kTTMTGOXAPIV1 @"http://data.mtgox.com/api/1/"
 #define kTTMTGOXAPIV2 @"https://data.mtgox.com/api/2/"
@@ -24,7 +25,7 @@ static TTAppDelegate* appDelegatePtr;
 
 @interface TTGoxHTTPController()
 
-@property(nonatomic, retain)AFHTTPClient* networkSecure;
+@property(nonatomic, retain)TTGoxHTTPClient* networkSecure;
 
 @end
 
@@ -43,9 +44,25 @@ RU_SYNTHESIZE_SINGLETON_FOR_CLASS_WITH_ACCESSOR(TTGoxHTTPController, sharedInsta
     self = [super init];
     if (self)
     {
-        [self setNetworkSecure:[[AFHTTPClient alloc]initWithBaseURL:[NSURL URLWithString:kTTMTGOXAPIV2]]];
+        [self setNetworkSecure:[[TTGoxHTTPClient alloc]initWithBaseURL:[NSURL URLWithString:kTTMTGOXAPIV2]]];
     }
     return self;
+}
+
+-(void)subscribeToPersonalWebsocket
+{
+//    [self.networkSecure postPath:<#(NSString *)#> parameters:<#(NSDictionary *)#> success:<#^(AFHTTPRequestOperation *operation, id responseObject)success#> failure:<#^(AFHTTPRequestOperation *operation, NSError *error)failure#>]
+}
+
+-(void)loadAccountData
+{
+    [self.networkSecure postPath:@"BTCCHF/money/info" parameters:@{@"test": @"object"} success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSString* str = [[NSString alloc]initWithData:responseObject encoding:NSUTF8StringEncoding];
+        NSDictionary* d = [str objectFromJSONString];
+        
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        
+    }];
 }
 
 -(void)updateLatestTradesForCurrency:(TTGoxCurrency)currency

@@ -26,4 +26,9 @@ typedef enum {
 
 @property(nonatomic)TTGoxCurrency currency;
 @property(nonatomic)TTGraphViewDateRange selectedDateRange;
+
+@property(nonatomic, retain)NSMutableArray* plots;
+
+@property(nonatomic, retain, readonly)NSArray* tradeEventsInTimeFrame;
+
 @end

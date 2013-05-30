@@ -43,10 +43,10 @@ static NSFont* TT_TYPEWRITER_FONT;
 static NSFont* TT_TYPEWRITER_FONT_SMALL;
 
 #define TTStatusBarContentLeftOffset 10.f
-#define TTStatusBarContentBottomOffset 10.f
+#define TTStatusBarContentBottomOffset 5.f
 
 #define TTCurrencyBoxWidth 130.f
-#define TTCurrencyBoxHeight 70.f
+#define TTCurrencyBoxHeight 100.f
 
 #pragma mark - lag delegate
 -(void)lagObserved:(NSDictionary *)lagDict
@@ -108,7 +108,7 @@ static NSFont* TT_TYPEWRITER_FONT_SMALL;
 
 - (void)drawRect:(NSRect)dirtyRect
 {
-    [[NSColor darkGrayColor] setFill];
+    [[NSColor whiteColor] setFill];
     NSRectFill(dirtyRect);
 }
 

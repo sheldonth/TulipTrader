@@ -90,7 +90,6 @@ static NSFont* zedFont;
     Ticker* deltaTicker = [deltaCurrencyTickerArray objectAtIndex:0];
     
     double alphaNodeDouble = kUnitsOfBitcoinBase * alphaTicker.buy.value.doubleValue;
-//    [_primaryTitleLeft setString:RUStringWithFormat(@"%f", alphaNodeDouble)];
     
     NSNumber* alphaDeltaBuyPrice = [_oeRatesController priceForCurrency:_deltaNodeCurrency inBaseCurrency:_alphaNodeCurrency];
     
@@ -159,6 +158,8 @@ static NSFont* zedFont;
         [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(tickerRecorded:) name:TTCurrencyUpdateNotificationString object:nil];
     
         [self setOeRatesController:[TTOERatesController sharedInstance]];
+        
+//        [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(arbi trate) name:OERatesLoadedNotificationString object:nil];
     }
     
     return self;
@@ -174,8 +175,8 @@ static NSFont* zedFont;
 -(void)setFrame:(NSRect)frameRect
 {
     [super setFrame:frameRect];
-    [_primaryTitleLeft setFrame:(NSRect){0,CGRectGetHeight(frameRect) - 50, CGRectGetWidth(frameRect), ABBoxPrimaryTitleHeight}];
-    [_secondaryTitleLeft setFrame:(NSRect){0, CGRectGetHeight(frameRect) - (70 + _primaryTitleLeft.frame.size.height), CGRectGetWidth(frameRect), ABBoxSecondaryTitleHeight}];
+    [_primaryTitleLeft setFrame:(NSRect){0,CGRectGetHeight(frameRect) - 50, (CGRectGetWidth(frameRect) / 2) - 0, ABBoxPrimaryTitleHeight}];
+    [_secondaryTitleLeft setFrame:(NSRect){0, CGRectGetHeight(frameRect) - (70 + _primaryTitleLeft.frame.size.height), (CGRectGetWidth(frameRect) / 2) - 5, ABBoxSecondaryTitleHeight}];
 //    [_thirdTitleLeft setFrame:(NSRect){0, CGRectGetHeight(frameRect) - (50 + _primaryTitleLeft.frame.size.height + _secondaryTitleLeft.frame.size.height), CGRectGetWidth(frameRect), ABBoxThirdTitleHeight}];
 }
 

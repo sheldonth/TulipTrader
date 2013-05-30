@@ -20,7 +20,7 @@
 
 +(void)loadDatabaseAtUrl:(NSURL*)url
 {
-    [TTAPIControlBoxView publishCommand:@"Dataabse Loading Started"];
+    [TTAPIControlBoxView publishCommand:@"Database Loading Started"];
     FMDatabase* db = [FMDatabase databaseWithPath:url.absoluteString];
     if (![db open])
     {
@@ -58,10 +58,12 @@
             if (e)
                 RUDLog(@"Error importing database!");
             else
+            {
                 [TTAPIControlBoxView publishCommand:@"Database loaded."];
+                [db close];
+            }
         });
     }
-    [db close];
 }
 
 +(void)showFilePicker
