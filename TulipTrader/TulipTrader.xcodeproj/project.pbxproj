@@ -138,6 +138,14 @@
 		47E9C5D9175871D50069ADA6 /* TTGoxAccount.m in Sources */ = {isa = PBXBuildFile; fileRef = 47E9C5D7175871D50069ADA6 /* TTGoxAccount.m */; };
 		47E9C5DC175871E60069ADA6 /* TTGoxWallet.m in Sources */ = {isa = PBXBuildFile; fileRef = 47E9C5DB175871E60069ADA6 /* TTGoxWallet.m */; };
 		47E9C5DD175871E60069ADA6 /* TTGoxWallet.m in Sources */ = {isa = PBXBuildFile; fileRef = 47E9C5DB175871E60069ADA6 /* TTGoxWallet.m */; };
+		47E9C5E4175940C90069ADA6 /* JNWLabel+Accessibility.m in Sources */ = {isa = PBXBuildFile; fileRef = 47E9C5E1175940C90069ADA6 /* JNWLabel+Accessibility.m */; };
+		47E9C5E5175940C90069ADA6 /* JNWLabel+Accessibility.m in Sources */ = {isa = PBXBuildFile; fileRef = 47E9C5E1175940C90069ADA6 /* JNWLabel+Accessibility.m */; };
+		47E9C5E6175940C90069ADA6 /* JNWLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 47E9C5E3175940C90069ADA6 /* JNWLabel.m */; };
+		47E9C5E7175940C90069ADA6 /* JNWLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 47E9C5E3175940C90069ADA6 /* JNWLabel.m */; };
+		47E9C5EE175943500069ADA6 /* ITSidebar.m in Sources */ = {isa = PBXBuildFile; fileRef = 47E9C5EB175943500069ADA6 /* ITSidebar.m */; };
+		47E9C5EF175943500069ADA6 /* ITSidebar.m in Sources */ = {isa = PBXBuildFile; fileRef = 47E9C5EB175943500069ADA6 /* ITSidebar.m */; };
+		47E9C5F0175943500069ADA6 /* ITSidebarItemCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 47E9C5ED175943500069ADA6 /* ITSidebarItemCell.m */; };
+		47E9C5F1175943500069ADA6 /* ITSidebarItemCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 47E9C5ED175943500069ADA6 /* ITSidebarItemCell.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -324,6 +332,15 @@
 		47E9C5D7175871D50069ADA6 /* TTGoxAccount.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTGoxAccount.m; sourceTree = "<group>"; };
 		47E9C5DA175871E60069ADA6 /* TTGoxWallet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTGoxWallet.h; sourceTree = "<group>"; };
 		47E9C5DB175871E60069ADA6 /* TTGoxWallet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTGoxWallet.m; sourceTree = "<group>"; };
+		47E9C5E0175940C90069ADA6 /* JNWLabel+Accessibility.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "JNWLabel+Accessibility.h"; sourceTree = "<group>"; };
+		47E9C5E1175940C90069ADA6 /* JNWLabel+Accessibility.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "JNWLabel+Accessibility.m"; sourceTree = "<group>"; };
+		47E9C5E2175940C90069ADA6 /* JNWLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JNWLabel.h; sourceTree = "<group>"; };
+		47E9C5E3175940C90069ADA6 /* JNWLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JNWLabel.m; sourceTree = "<group>"; };
+		47E9C5E9175943500069ADA6 /* ITLeakWarningHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ITLeakWarningHelper.h; sourceTree = "<group>"; };
+		47E9C5EA175943500069ADA6 /* ITSidebar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ITSidebar.h; sourceTree = "<group>"; };
+		47E9C5EB175943500069ADA6 /* ITSidebar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ITSidebar.m; sourceTree = "<group>"; };
+		47E9C5EC175943500069ADA6 /* ITSidebarItemCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ITSidebarItemCell.h; sourceTree = "<group>"; };
+		47E9C5ED175943500069ADA6 /* ITSidebarItemCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ITSidebarItemCell.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -718,6 +735,8 @@
 		47D2FE2B1708A94000AEA412 /* Library */ = {
 			isa = PBXGroup;
 			children = (
+				47E9C5E8175943500069ADA6 /* ITSidebar */,
+				47E9C5DF175940C90069ADA6 /* JNWLabel */,
 				4754737E1756AF9B00F42417 /* NSData-Base64 */,
 				4754737617555CD700F42417 /* Base64 */,
 				473DF8C6173FF70800C356A1 /* FMDB */,
@@ -763,6 +782,29 @@
 				47E9C5CB1757BDF60069ADA6 /* UserData.plist */,
 			);
 			path = UserData;
+			sourceTree = "<group>";
+		};
+		47E9C5DF175940C90069ADA6 /* JNWLabel */ = {
+			isa = PBXGroup;
+			children = (
+				47E9C5E0175940C90069ADA6 /* JNWLabel+Accessibility.h */,
+				47E9C5E1175940C90069ADA6 /* JNWLabel+Accessibility.m */,
+				47E9C5E2175940C90069ADA6 /* JNWLabel.h */,
+				47E9C5E3175940C90069ADA6 /* JNWLabel.m */,
+			);
+			path = JNWLabel;
+			sourceTree = "<group>";
+		};
+		47E9C5E8175943500069ADA6 /* ITSidebar */ = {
+			isa = PBXGroup;
+			children = (
+				47E9C5E9175943500069ADA6 /* ITLeakWarningHelper.h */,
+				47E9C5EA175943500069ADA6 /* ITSidebar.h */,
+				47E9C5EB175943500069ADA6 /* ITSidebar.m */,
+				47E9C5EC175943500069ADA6 /* ITSidebarItemCell.h */,
+				47E9C5ED175943500069ADA6 /* ITSidebarItemCell.m */,
+			);
+			path = ITSidebar;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -964,6 +1006,10 @@
 				47E9C5D51757DC520069ADA6 /* TTAccountBox.m in Sources */,
 				47E9C5D8175871D50069ADA6 /* TTGoxAccount.m in Sources */,
 				47E9C5DC175871E60069ADA6 /* TTGoxWallet.m in Sources */,
+				47E9C5E4175940C90069ADA6 /* JNWLabel+Accessibility.m in Sources */,
+				47E9C5E6175940C90069ADA6 /* JNWLabel.m in Sources */,
+				47E9C5EE175943500069ADA6 /* ITSidebar.m in Sources */,
+				47E9C5F0175943500069ADA6 /* ITSidebarItemCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1019,6 +1065,10 @@
 				475473831756AF9B00F42417 /* NSData+Base64.m in Sources */,
 				47E9C5D9175871D50069ADA6 /* TTGoxAccount.m in Sources */,
 				47E9C5DD175871E60069ADA6 /* TTGoxWallet.m in Sources */,
+				47E9C5E5175940C90069ADA6 /* JNWLabel+Accessibility.m in Sources */,
+				47E9C5E7175940C90069ADA6 /* JNWLabel.m in Sources */,
+				47E9C5EF175943500069ADA6 /* ITSidebar.m in Sources */,
+				47E9C5F1175943500069ADA6 /* ITSidebarItemCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
