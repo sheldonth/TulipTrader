@@ -49,19 +49,22 @@ RU_SYNTHESIZE_SINGLETON_FOR_CLASS_WITH_ACCESSOR(TTGoxHTTPController, sharedInsta
     return self;
 }
 
--(void)subscribeToPersonalWebsocket
+-(void)subscribeToAccountWebsocket
 {
 //    [self.networkSecure postPath:<#(NSString *)#> parameters:<#(NSDictionary *)#> success:<#^(AFHTTPRequestOperation *operation, id responseObject)success#> failure:<#^(AFHTTPRequestOperation *operation, NSError *error)failure#>]
 }
 
--(void)loadAccountData
+-(void)loadAccountDataWithCompletion:(void (^)(NSDictionary* accountInformationDictionary))callbackBlock andFailBlock:(void (^)(NSError* e))failBlock
 {
     [self.networkSecure postPath:@"BTCCHF/money/info" parameters:@{@"test": @"object"} success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSString* str = [[NSString alloc]initWithData:responseObject encoding:NSUTF8StringEncoding];
         NSDictionary* d = [str objectFromJSONString];
-        
+        if (![[d objectForKey:@"result"]isEqualToString:@"success"])
+            failBlock(nil);
+        else
+            callbackBlock([d objectForKey:@"data"]);
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        RUDLog(@"!");
+        failBlock(error);
     }];
 }
 

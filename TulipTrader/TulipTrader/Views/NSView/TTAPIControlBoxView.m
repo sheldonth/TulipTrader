@@ -48,7 +48,7 @@ static NSColor* textBackgroundColor;
         dateFormatter = [NSDateFormatter new];
         [dateFormatter setDateFormat:@"HH:mm:ss"];
         
-        kTTAPIActionCommandList = @[@"help", @"set", @"load", @"account"];
+        kTTAPIActionCommandList = @[@"help", @"set", @"load", @"account", @"clear"];
         kTTAPIActionObjectList = @[@"noisyquotes"];
         kTTAPIActionFlagList = @[@"On", @"Off"];
     }
@@ -119,7 +119,14 @@ static NSColor* textBackgroundColor;
             break;
         }
         case 3:
-            [[TTGoxHTTPController sharedInstance]loadAccountData];
+            [[TTGoxHTTPController sharedInstance]loadAccountDataWithCompletion:^(NSDictionary *accountInformation) {
+                
+            } andFailBlock:^(NSError *e) {
+                
+            }];
+            
+        case 4:
+            [self.dialogTextView setString:@""];
             
         default:
             break;
@@ -203,7 +210,7 @@ static NSColor* textBackgroundColor;
 -(void)setFrame:(NSRect)frameRect
 {
     [super setFrame:frameRect];
-    [_scrollView setFrame:(NSRect){0, 40, CGRectGetWidth(frameRect) - 8, frameRect.size.height - 55}];
+    [_scrollView setFrame:(NSRect){0, 40, CGRectGetWidth(frameRect) - 16, frameRect.size.height - 55}];
     [_commandEntryTextField setFrame:(NSRect){0 ,0, CGRectGetWidth(frameRect) - 15, 30}];
     NSSize s = [_scrollView contentSize];
     [_dialogTextView setFrame:(NSRect){0,0,s.width, s.height}];

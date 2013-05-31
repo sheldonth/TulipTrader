@@ -14,7 +14,7 @@
 
 -(void)updateLatestTradesForCurrency:(TTGoxCurrency)currency;
 
--(void)loadAccountData;
+-(void)loadAccountDataWithCompletion:(void (^)(NSDictionary* accountInformationDictionary))callbackBlock andFailBlock:(void (^)(NSError* e))failBlock;
 
 RU_SYNTHESIZE_SINGLETON_DECLARATION_FOR_CLASS_WITH_ACCESSOR(TTGoxHTTPController, sharedInstance);
 

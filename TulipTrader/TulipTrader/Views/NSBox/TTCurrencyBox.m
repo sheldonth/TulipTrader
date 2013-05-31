@@ -26,6 +26,7 @@
 @property (nonatomic, retain) TTTextView* buyWordText;
 @property (nonatomic, retain) TTTextView* sellWordText;
 @property (nonatomic, retain) TTTextView* spreadLabel;
+@property (nonatomic, retain) TTTextView* lastTradeText;
 
 NSUInteger numberOfLeadingCharactersToAffectForCurrency(TTGoxCurrency currency);
 
@@ -48,6 +49,11 @@ static NSFont* spreadFont;
     buySellFontForCurrencyLetters = [NSFont fontWithName:@"Helvetica-Italic" size:10.f];
     buySellLabelsFont = [NSFont fontWithName:@"Didot-Bold" size:12.f];
     spreadFont = [NSFont fontWithName:@"Helvetica" size:12.f];
+}
+
+-(void)displayTrade:(Trade *)t
+{
+    [_lastTradeText setString:RUStringWithFormat(@"%@", t.price.stringValue)];
 }
 
 -(NSColor*)colorWithHexString:(NSString*)string
@@ -168,6 +174,13 @@ static NSFont* spreadFont;
         [_spreadLabel setTextColor:[NSColor blackColor]];
         [self addSubview:self.spreadLabel];
         
+        [self setLastTradeText:[TTTextView new]];
+        [_lastTradeText setBackgroundColor:[NSColor clearColor]];
+        [_lastTradeText setEditable:NO];
+        [_lastTradeText setAlignment:NSCenterTextAlignment];
+        [_lastTradeText setFont:spreadFont];
+        [self addSubview:_lastTradeText];
+        
         [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(reloadTicker:) name:TTCurrencyUpdateNotificationString object:nil];
     }
     return self;
@@ -181,6 +194,7 @@ static NSFont* spreadFont;
     [_sellWordText setFrame:(NSRect){-5, CGRectGetHeight(frameRect) - 76, 40, 25}];
     [_buyWordText setFrame:(NSRect){-5, CGRectGetHeight(frameRect) - 56, 40, 25}];
     [_spreadLabel setFrame:(NSRect){-5, CGRectGetHeight(frameRect) - 95, 120, 25}];
+    [_lastTradeText setFrame:(NSRect){-5, CGRectGetHeight(frameRect) - 130, 120, 25}];
     [self setNeedsDisplay:YES];
 }
 
@@ -216,7 +230,6 @@ NSUInteger numberOfLeadingCharactersToAffectForCurrency(TTGoxCurrency currency)
 
 - (void)drawRect:(NSRect)dirtyRect
 {
-
     [super drawRect:dirtyRect];
 }
 

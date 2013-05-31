@@ -9,6 +9,7 @@
 #import "Tick.h"
 #import "RUClassOrNilUtil.h"
 #import "TTGoxCurrency.h"
+#import "RUConstants.h"
 
 @implementation Tick
 
@@ -19,9 +20,37 @@
 @dynamic value_int;
 @dynamic timeStamp;
 
+-(NSString *)description
+{
+    return RUStringWithFormat(@"%@ %@ %@ %@", stringFromCurrency(currencyFromNumber(self.currency)), self.display, self.value, self.timeStamp);
+}
+
 +(Tick*)newTickInContext:(NSManagedObjectContext*)context fromDictionary:(NSDictionary*)d
 {
-    Tick* t = [NSEntityDescription insertNewObjectForEntityForName:@"Tick" inManagedObjectContext:context];
+    Tick* t = nil;
+    t = [NSEntityDescription insertNewObjectForEntityForName:@"Tick" inManagedObjectContext:context];
+    [t setCurrency:numberFromCurrencyString(kRUStringOrNil([d objectForKey:@"currency"]))];
+    [t setDisplay:kRUStringOrNil([d objectForKey:@"display"])];
+    [t setDisplay_short:kRUStringOrNil([d objectForKey:@"display_short"])];
+    [t setValue:@([kRUStringOrNil([d objectForKey:@"value"]) doubleValue])];
+    [t setValue_int:@([kRUStringOrNil([d objectForKey:@"value_int"]) intValue])];
+    [t setTimeStamp:[NSDate date]];
+    return t;
+}
+
+@end
+
+@implementation InMemoryTick
+
+-(NSString *)description
+{
+    return RUStringWithFormat(@"%@ %@ %@ %@", stringFromCurrency(currencyFromNumber(self.currency)), self.display, self.value, self.timeStamp);
+}
+
+
++(InMemoryTick*)newInMemoryTickfromDictionary:(NSDictionary*)d
+{
+    InMemoryTick* t = [InMemoryTick new];
     [t setCurrency:numberFromCurrencyString(kRUStringOrNil([d objectForKey:@"currency"]))];
     [t setDisplay:kRUStringOrNil([d objectForKey:@"display"])];
     [t setDisplay_short:kRUStringOrNil([d objectForKey:@"display_short"])];

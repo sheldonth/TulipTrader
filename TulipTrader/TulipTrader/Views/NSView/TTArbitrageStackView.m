@@ -67,8 +67,10 @@
 {
     [super setFrame:frameRect];
     CGFloat boxSideWidth =  floorf(CGRectGetWidth(frameRect) / 10); // one tenth on either side
+    CGFloat boxWidth = CGRectGetWidth(frameRect) - (2 * boxSideWidth);
     [_arbitrageBoxes enumerateObjectsUsingBlock:^(TTArbitrageBox* obj, NSUInteger idx, BOOL *stop) {
-        [obj setFrame:(NSRect){boxSideWidth, CGRectGetHeight(frameRect) - (((idx + 1) * kTTArbitrageBoxHeight) + (idx * 10)), CGRectGetWidth(frameRect) - (2 * boxSideWidth), kTTArbitrageBoxHeight}];
+        [obj setFrame:(NSRect){boxSideWidth, 10 + idx * ((boxSideWidth / 2) + kTTArbitrageBoxHeight), boxWidth, kTTArbitrageBoxHeight}];
+//        [obj setFrame:(NSRect){boxSideWidth, CGRectGetHeight(frameRect) - (((idx + 1) * kTTArbitrageBoxHeight) + (idx * 10)), CGRectGetWidth(frameRect) - (2 * boxSideWidth), kTTArbitrageBoxHeight}];
     }];
 }
 

@@ -23,3 +23,16 @@
 +(Tick*)newTickInContext:(NSManagedObjectContext*)context fromDictionary:(NSDictionary*)d;
 
 @end
+
+@interface InMemoryTick : NSObject
+
+@property (nonatomic, retain) NSNumber * currency;
+@property (nonatomic, retain) NSString * display;
+@property (nonatomic, retain) NSString * display_short;
+@property (nonatomic, retain) NSNumber * value;
+@property (nonatomic, retain) NSNumber * value_int;
+@property (nonatomic, retain) NSDate* timeStamp;
+
++(InMemoryTick*)newInMemoryTickfromDictionary:(NSDictionary*)d;
+
+@end

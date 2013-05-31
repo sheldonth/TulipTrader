@@ -134,6 +134,10 @@
 		47E9C5CC1757BDF60069ADA6 /* UserData.plist in Resources */ = {isa = PBXBuildFile; fileRef = 47E9C5CB1757BDF60069ADA6 /* UserData.plist */; };
 		47E9C5CD1757BDF60069ADA6 /* UserData.plist in Resources */ = {isa = PBXBuildFile; fileRef = 47E9C5CB1757BDF60069ADA6 /* UserData.plist */; };
 		47E9C5D51757DC520069ADA6 /* TTAccountBox.m in Sources */ = {isa = PBXBuildFile; fileRef = 47E9C5D41757DC520069ADA6 /* TTAccountBox.m */; };
+		47E9C5D8175871D50069ADA6 /* TTGoxAccount.m in Sources */ = {isa = PBXBuildFile; fileRef = 47E9C5D7175871D50069ADA6 /* TTGoxAccount.m */; };
+		47E9C5D9175871D50069ADA6 /* TTGoxAccount.m in Sources */ = {isa = PBXBuildFile; fileRef = 47E9C5D7175871D50069ADA6 /* TTGoxAccount.m */; };
+		47E9C5DC175871E60069ADA6 /* TTGoxWallet.m in Sources */ = {isa = PBXBuildFile; fileRef = 47E9C5DB175871E60069ADA6 /* TTGoxWallet.m */; };
+		47E9C5DD175871E60069ADA6 /* TTGoxWallet.m in Sources */ = {isa = PBXBuildFile; fileRef = 47E9C5DB175871E60069ADA6 /* TTGoxWallet.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -316,6 +320,10 @@
 		47E9C5CB1757BDF60069ADA6 /* UserData.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = UserData.plist; sourceTree = "<group>"; };
 		47E9C5D31757DC520069ADA6 /* TTAccountBox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTAccountBox.h; sourceTree = "<group>"; };
 		47E9C5D41757DC520069ADA6 /* TTAccountBox.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTAccountBox.m; sourceTree = "<group>"; };
+		47E9C5D6175871D50069ADA6 /* TTGoxAccount.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTGoxAccount.h; sourceTree = "<group>"; };
+		47E9C5D7175871D50069ADA6 /* TTGoxAccount.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTGoxAccount.m; sourceTree = "<group>"; };
+		47E9C5DA175871E60069ADA6 /* TTGoxWallet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTGoxWallet.h; sourceTree = "<group>"; };
+		47E9C5DB175871E60069ADA6 /* TTGoxWallet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTGoxWallet.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -558,6 +566,10 @@
 				477056391721130B0084FE5F /* Depth.m */,
 				477056461721BCB70084FE5F /* TTGoxCurrency.h */,
 				477056471721BCB80084FE5F /* TTGoxCurrency.m */,
+				47E9C5D6175871D50069ADA6 /* TTGoxAccount.h */,
+				47E9C5D7175871D50069ADA6 /* TTGoxAccount.m */,
+				47E9C5DA175871E60069ADA6 /* TTGoxWallet.h */,
+				47E9C5DB175871E60069ADA6 /* TTGoxWallet.m */,
 			);
 			path = model;
 			sourceTree = "<group>";
@@ -950,6 +962,8 @@
 				4754737217555A3500F42417 /* TTGoxHTTPClient.m in Sources */,
 				475473821756AF9B00F42417 /* NSData+Base64.m in Sources */,
 				47E9C5D51757DC520069ADA6 /* TTAccountBox.m in Sources */,
+				47E9C5D8175871D50069ADA6 /* TTGoxAccount.m in Sources */,
+				47E9C5DC175871E60069ADA6 /* TTGoxWallet.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1003,6 +1017,8 @@
 				473DF8EE174147A400C356A1 /* Trade.m in Sources */,
 				47458CF3174C31B000FBD5A2 /* TTTextField.m in Sources */,
 				475473831756AF9B00F42417 /* NSData+Base64.m in Sources */,
+				47E9C5D9175871D50069ADA6 /* TTGoxAccount.m in Sources */,
+				47E9C5DD175871E60069ADA6 /* TTGoxWallet.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

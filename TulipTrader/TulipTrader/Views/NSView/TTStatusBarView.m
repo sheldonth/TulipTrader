@@ -65,6 +65,14 @@ static NSFont* TT_TYPEWRITER_FONT_SMALL;
     }
 }
 
+-(void)tradeOccuredForCurrency:(TTGoxCurrency)currency tradeData:(Trade *)trade
+{
+    [_currencyBoxes enumerateObjectsUsingBlock:^(TTCurrencyBox* obj, NSUInteger idx, BOOL *stop) {
+        if (obj.currency == currency)
+            [obj displayTrade:trade];
+    }];
+}
+
 - (id)initWithFrame:(NSRect)frame
 {
     self = [super initWithFrame:frame];
@@ -82,6 +90,8 @@ static NSFont* TT_TYPEWRITER_FONT_SMALL;
         }];
         
         [[TTGoxPrivateMessageController sharedInstance]setLagDelegate:self];
+        [[TTGoxPrivateMessageController sharedInstance]setTradeDelegate:self];
+        
     }
     return self;
 }

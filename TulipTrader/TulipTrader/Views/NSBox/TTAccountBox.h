@@ -7,7 +7,11 @@
 //
 
 #import <Cocoa/Cocoa.h>
+#import "Tick.h"
+#import "TTGoxAccount.h"
 
 @interface TTAccountBox : NSBox
+
+@property(nonatomic, retain)TTGoxAccount* account;
 
 @end

@@ -9,6 +9,8 @@
 #import <Foundation/Foundation.h>
 #import "RUSingleton.h"
 #import "TTGoxSocketController.h"
+#import "TTGoxCurrency.h"
+#import "Trade.h"
 
 @protocol TTGoxPrivateMessageControllerLagDelegate <NSObject>
 
@@ -16,12 +18,19 @@
 
 @end
 
+@protocol TTGoxPrivateMessageControllerTradesDelegate <NSObject>
+
+-(void)tradeOccuredForCurrency:(TTGoxCurrency)currency tradeData:(Trade*)trade;
+
+@end
+
 @interface TTGoxPrivateMessageController : NSObject <TTGoxSocketControllerMessageDelegate>
 
-RU_SYNTHESIZE_SINGLETON_DECLARATION_FOR_CLASS_WITH_ACCESSOR(TTGoxPrivateMessageController, sharedInstance);
-
-@property(nonatomic)id<TTGoxPrivateMessageControllerLagDelegate>lagDelegate;
+@property(nonatomic) id<TTGoxPrivateMessageControllerLagDelegate>lagDelegate;
+@property(nonatomic) id<TTGoxPrivateMessageControllerTradesDelegate>tradeDelegate;
 
 extern NSString* const TTCurrencyUpdateNotificationString;
+
+RU_SYNTHESIZE_SINGLETON_DECLARATION_FOR_CLASS_WITH_ACCESSOR(TTGoxPrivateMessageController, sharedInstance);
 
 @end

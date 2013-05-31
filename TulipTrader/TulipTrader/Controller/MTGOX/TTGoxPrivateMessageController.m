@@ -17,6 +17,8 @@
 #import "Trade.h"
 #import "TTAPIControlBoxView.h"
 
+#define NOISYTRADES 1
+
 typedef enum{
     kTTGoxMarketNone = 0,
     kTTGoxMarketDepth = 1,
@@ -63,12 +65,16 @@ NSString* const TTCurrencyUpdateNotificationString = @"ttCurrencyUpdateNotificat
                 RUDLog(@"Error saving Trade");
             else
             {
-                if ([trade.trade_type isEqualToString:@"bid"])
-                    [TTAPIControlBoxView publishCommand:RUStringWithFormat(@"%@BTC bought for %@ %@ (%@)", trade.amount.stringValue, stringFromCurrency(currencyFromNumber(trade.currency)), trade.price.stringValue, trade.properties)];
-                else
-                    [TTAPIControlBoxView publishCommand:RUStringWithFormat(@"%@BTC sold for %@ %@ (%@)", trade.amount.stringValue, stringFromCurrency(currencyFromNumber(trade.currency)), trade.price.stringValue, trade.properties)];
+                if (NOISYTRADES)
+                {
+                    if ([trade.trade_type isEqualToString:@"bid"])
+                        [TTAPIControlBoxView publishCommand:RUStringWithFormat(@"%@BTC bought for %@ %@ (%@)", trade.amount.stringValue, stringFromCurrency(currencyFromNumber(trade.currency)), trade.price.stringValue, trade.properties)];
+                    else
+                        [TTAPIControlBoxView publishCommand:RUStringWithFormat(@"%@BTC sold for %@ %@ (%@)", trade.amount.stringValue, stringFromCurrency(currencyFromNumber(trade.currency)), trade.price.stringValue, trade.properties)];
+                }
             }
         }];
+//        [delegate tradeOccuredForCurrency:currencyFromNumber(trade.currency) tradeData:trade];
     });
 }
 

@@ -9,6 +9,6 @@
 #import <Cocoa/Cocoa.h>
 #import "TTGoxPrivateMessageController.h"
 
-@interface TTStatusBarView : NSView <TTGoxPrivateMessageControllerLagDelegate>
+@interface TTStatusBarView : NSView <TTGoxPrivateMessageControllerLagDelegate, TTGoxPrivateMessageControllerTradesDelegate>
 
 @end
