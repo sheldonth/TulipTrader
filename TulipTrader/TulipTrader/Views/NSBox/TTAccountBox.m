@@ -16,6 +16,7 @@
 
 @property(nonatomic, retain)TTGoxHTTPController* httpController;
 @property(nonatomic, retain)TTTextView* accountDataTextView;
+@property(nonatomic, retain)NSScrollView* scrollView;
 
 @end
 

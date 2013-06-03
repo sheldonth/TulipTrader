@@ -11,6 +11,7 @@
 #import "JSONKit.h"
 #import "TTGoxCurrencyController.h"
 #import "TTAPIControlBoxView.h"
+#import "TTGoxHTTPController.h"
 
 NSString* const kTTGoxFrameOpenNSString = @"{";
 NSString* const kTTGoxFrameCloseNSString = @"}";
@@ -85,8 +86,14 @@ static NSMutableString* kTTGoxSocketIOURL;
 
 -(void)subscribeToChannelID:(NSString*)channelID
 {
-//    NSDictionary* d = @{@"channel" : channelID, @"op" : @"subscribe"};
     NSDictionary* d = @{@"channel" : channelID, @"op" : @"mtgox.subscribe"};
+    
+    [self write:[d JSONString]];
+}
+
+-(void)subscribeToKeyID:(NSString*)channelID
+{
+    NSDictionary* d = @{@"key" : channelID, @"op" : @"mtgox.subscribe"};
     
     [self write:[d JSONString]];
 }
@@ -163,6 +170,9 @@ static NSMutableString* kTTGoxSocketIOURL;
     [self setIsConnected:TTGoxSocketConnectionStateConnected];
     
     [self subscribeToChannelID:@"trade.lag"];
+    
+    [[TTGoxHTTPController sharedInstance]subscribeToAccountWebsocket];
+    
 //    [self subscribeToChannelID:@"ticker.BTCEUR"];
 //    [self subscribeToChannelID:@"ticker.BTCCAD"];
 //    [self subscribeToChannelID:@"ticker.BTCCHF"];

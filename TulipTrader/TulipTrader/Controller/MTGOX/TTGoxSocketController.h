@@ -43,6 +43,10 @@ typedef enum{
 
 -(void)subscribe:(TTGoxSubscriptionChannel)channel;
 
+-(void)subscribeToChannelID:(NSString*)channelID;
+
+-(void)subscribeToKeyID:(NSString*)channelID;
+
 -(void)open;
 
 @property (assign) id <TTGoxSocketControllerMessageDelegate> subscribeDelegate;
