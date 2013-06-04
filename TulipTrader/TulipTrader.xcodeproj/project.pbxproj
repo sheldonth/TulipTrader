@@ -146,6 +146,8 @@
 		47E9C5EF175943500069ADA6 /* ITSidebar.m in Sources */ = {isa = PBXBuildFile; fileRef = 47E9C5EB175943500069ADA6 /* ITSidebar.m */; };
 		47E9C5F0175943500069ADA6 /* ITSidebarItemCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 47E9C5ED175943500069ADA6 /* ITSidebarItemCell.m */; };
 		47E9C5F1175943500069ADA6 /* ITSidebarItemCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 47E9C5ED175943500069ADA6 /* ITSidebarItemCell.m */; };
+		47E9C5F4175CF70C0069ADA6 /* Order.m in Sources */ = {isa = PBXBuildFile; fileRef = 47E9C5F3175CF70C0069ADA6 /* Order.m */; };
+		47E9C5F5175CF70C0069ADA6 /* Order.m in Sources */ = {isa = PBXBuildFile; fileRef = 47E9C5F3175CF70C0069ADA6 /* Order.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -341,6 +343,8 @@
 		47E9C5EB175943500069ADA6 /* ITSidebar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ITSidebar.m; sourceTree = "<group>"; };
 		47E9C5EC175943500069ADA6 /* ITSidebarItemCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ITSidebarItemCell.h; sourceTree = "<group>"; };
 		47E9C5ED175943500069ADA6 /* ITSidebarItemCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ITSidebarItemCell.m; sourceTree = "<group>"; };
+		47E9C5F2175CF70B0069ADA6 /* Order.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Order.h; sourceTree = "<group>"; };
+		47E9C5F3175CF70C0069ADA6 /* Order.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Order.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -587,6 +591,8 @@
 				47E9C5D7175871D50069ADA6 /* TTGoxAccount.m */,
 				47E9C5DA175871E60069ADA6 /* TTGoxWallet.h */,
 				47E9C5DB175871E60069ADA6 /* TTGoxWallet.m */,
+				47E9C5F2175CF70B0069ADA6 /* Order.h */,
+				47E9C5F3175CF70C0069ADA6 /* Order.m */,
 			);
 			path = model;
 			sourceTree = "<group>";
@@ -1010,6 +1016,7 @@
 				47E9C5E6175940C90069ADA6 /* JNWLabel.m in Sources */,
 				47E9C5EE175943500069ADA6 /* ITSidebar.m in Sources */,
 				47E9C5F0175943500069ADA6 /* ITSidebarItemCell.m in Sources */,
+				47E9C5F4175CF70C0069ADA6 /* Order.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1069,6 +1076,7 @@
 				47E9C5E7175940C90069ADA6 /* JNWLabel.m in Sources */,
 				47E9C5EF175943500069ADA6 /* ITSidebar.m in Sources */,
 				47E9C5F1175943500069ADA6 /* ITSidebarItemCell.m in Sources */,
+				47E9C5F5175CF70C0069ADA6 /* Order.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

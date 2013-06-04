@@ -94,7 +94,11 @@ NSString* HMAC_Out(NSString *msg, NSString *sec)
     else
         mutableParams = [NSMutableDictionary dictionary];
     
-    [mutableParams setObject:currentTonce() forKey:@"nonce"];
+    NSString* tonce = currentTonce();
+    
+    RUDLog(@"Tonce: %@", tonce);
+    
+    [mutableParams setObject:tonce forKey:@"nonce"];
     
     NSMutableURLRequest* req = [[super requestWithMethod:method path:path parameters:mutableParams]mutableCopy];
     

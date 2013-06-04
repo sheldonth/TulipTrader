@@ -17,6 +17,7 @@
 #import "Trade.h"
 #import "TTGoxHTTPClient.h"
 #import "TTGoxSocketController.h"
+#import "Order.h"
 
 #define kTTMTGOXAPIV1 @"http://data.mtgox.com/api/1/"
 #define kTTMTGOXAPIV2 @"https://data.mtgox.com/api/2/"
@@ -50,7 +51,24 @@ RU_SYNTHESIZE_SINGLETON_FOR_CLASS_WITH_ACCESSOR(TTGoxHTTPController, sharedInsta
     return self;
 }
 
--(void)getDepthForCurrency:(TTGoxCurrency)currency withCompletion:(void (^)(NSArray* bids, NSArray* asks))completionBlock withCompletion:(void (^)(NSError* e))failBlock
+-(void)getOrdersWithCompletion:(void (^)(NSArray* orders))completionBlock withFailBlock:(void (^)(NSError* e))failBlock
+{
+    [self.networkSecure postPath:@"BTCUSD/money/orders" parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSString* a = [[NSString alloc]initWithData:responseObject encoding:NSUTF8StringEncoding];
+        NSDictionary* d = [a objectFromJSONString];
+        NSArray* dataArray = [d objectForKey:@"data"];
+        NSMutableArray* orderArray = [NSMutableArray array];
+        [dataArray enumerateObjectsUsingBlock:^(NSDictionary* obj, NSUInteger idx, BOOL *stop) {
+            Order* order = [Order newOrderFromDictionary:obj];
+            [orderArray addObject:order];
+        }];
+        completionBlock(orderArray);
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        failBlock(error);
+    }];
+}
+
+-(void)getDepthForCurrency:(TTGoxCurrency)currency withCompletion:(void (^)(NSArray* bids, NSArray* asks))completionBlock withFailBlock:(void (^)(NSError* e))failBlock
 {
     [self.networkSecure postPath:RUStringWithFormat(@"%@/money/depth/fetch", urlPathStringForCurrency(currency)) parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
         

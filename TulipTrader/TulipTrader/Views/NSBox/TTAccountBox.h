@@ -13,5 +13,6 @@
 @interface TTAccountBox : NSBox
 
 @property(nonatomic, retain)TTGoxAccount* account;
+@property(nonatomic, retain)NSArray* orders;
 
 @end

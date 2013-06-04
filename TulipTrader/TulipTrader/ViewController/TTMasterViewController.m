@@ -34,14 +34,14 @@
     if (self) {
         [self setStatusBarView:[TTStatusBarView new]];
         [self.view addSubview:_statusBarView];
-        [self setArbitrageStackViewsArray:[NSMutableArray array]];
-        NSArray* __activeCurrencies = [TTGoxCurrencyController activeCurrencys];
-        [__activeCurrencies enumerateObjectsUsingBlock:^(NSString* obj, NSUInteger idx, BOOL *stop) {
-            TTArbitrageStackView* stackView = [TTArbitrageStackView new];
-            [stackView setBaseCurrency:currencyFromString(obj)];
-            [self.view addSubview:stackView];
-            [self.arbitrageStackViewsArray addObject:stackView];
-        }];
+//        [self setArbitrageStackViewsArray:[NSMutableArray array]];
+//        NSArray* __activeCurrencies = [TTGoxCurrencyController activeCurrencys];
+//        [__activeCurrencies enumerateObjectsUsingBlock:^(NSString* obj, NSUInteger idx, BOOL *stop) {
+//            TTArbitrageStackView* stackView = [TTArbitrageStackView new];
+//            [stackView setBaseCurrency:currencyFromString(obj)];
+//            [self.view addSubview:stackView];
+//            [self.arbitrageStackViewsArray addObject:stackView];
+//        }];
         [self setControlBoxView:[TTAPIControlBoxView sharedInstance]];
         [self.view addSubview:_controlBoxView];
         [self setAccountBox:[TTAccountBox new]];
@@ -57,7 +57,8 @@
     [_statusBarView setFrame:(NSRect){0, CGRectGetHeight(newFrame) - statusBarHeight, CGRectGetWidth(newFrame), statusBarHeight}];
     [_statusBarView setNeedsLayout:YES];
     [_controlBoxView setFrame:(NSRect){0, 0, CGRectGetWidth(newFrame) / 4, CGRectGetHeight(newFrame) - statusBarHeight - TTArbitrageStackViewHeight}];
-    [_accountBox setFrame:(NSRect){CGRectGetWidth(_controlBoxView.frame), 0, ((CGRectGetWidth(newFrame) / 4) * 3), CGRectGetHeight(newFrame) - statusBarHeight - TTArbitrageStackViewHeight}];
+    NSRect acctBoxFrame = (NSRect){CGRectGetWidth(_controlBoxView.frame), 0, ((CGRectGetWidth(newFrame) / 4) * 3), CGRectGetHeight(newFrame) - statusBarHeight - TTArbitrageStackViewHeight};
+    [_accountBox setFrame:acctBoxFrame];
     [self.arbitrageStackViewsArray enumerateObjectsUsingBlock:^(TTArbitrageStackView* obj, NSUInteger idx, BOOL *stop) {
         [obj setFrame:(NSRect){(floor(CGRectGetWidth(newFrame) / self.arbitrageStackViewsArray.count)) * idx, CGRectGetHeight(newFrame) - statusBarHeight - TTArbitrageStackViewHeight, floor(CGRectGetWidth(newFrame) / self.arbitrageStackViewsArray.count), TTArbitrageStackViewHeight}];
     }];
