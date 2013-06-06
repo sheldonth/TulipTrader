@@ -3,7 +3,7 @@
 //  TulipTrader
 //
 //  Created by Sheldon Thomas on 5/9/13.
-//  Copyright (c) 2013 Resplendent G.P. Sheldon Thomas. All rights reserved.
+//  Copyright (c) 2013  Sheldon Thomas. All rights reserved.
 //
 
 #import "TTGraphView.h"
