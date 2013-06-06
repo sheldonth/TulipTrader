@@ -21,8 +21,10 @@
 @interface TTAccountBox()
 
 @property(nonatomic, retain)TTGoxHTTPController* httpController;
+
 @property(nonatomic, retain)TTTextPaneScrollView* accountDataTextPane;
 @property(nonatomic, retain)TTTextPaneScrollView* tradeDataTextPane;
+
 @property(nonatomic, retain)JNWLabel* ordersLabel;
 
 @property(nonatomic, retain)NSTimer* accountDataTimer;
@@ -31,12 +33,15 @@
 @property(nonatomic, retain)NSPopUpButton* walletSelectionPopUpButton;
 
 @property(nonatomic, retain)NSScrollView* transactionsScrollView;
+@property(nonatomic, retain)JNWLabel* selectWalletLabel;
 
 @end
 
 @implementation TTAccountBox
 
 static NSDateFormatter* dateFormatter;
+
+#define kTTPopUpSelectorNoItemString @"   ****"
 
 +(void)initialize
 {
@@ -61,7 +66,7 @@ NSString* accountToString(TTGoxAccount* account)
     }
     [outputStr appendFormat:@"\nCurrent Trade Fee: %@%%", account.tradeFee.stringValue];
     [account.currencyWallets enumerateObjectsUsingBlock:^(TTGoxWallet* obj, NSUInteger idx, BOOL *stop) {
-        [outputStr appendFormat:@"\n%@ Wallet: %@ Operations\n\tBalance: %@\n\tDaily %@\n\tMonthly %@\n\tMax %@\n\tOpen %@", stringFromCurrency(obj.currency), obj.operationCount.stringValue, obj.balance.display, obj.dailyWithdrawalLimit.display, obj.monthlyWithdrawLimit.display, obj.maxWithdraw.display, obj.openOrders.display];
+        [outputStr appendFormat:@"\n%@ Wallet: %@ Operations\n\tBalance: %.2f\n\tDaily %.2f\n\tMonthly %.2f\n\tMax %.2f\n\tOpen %@", stringFromCurrency(obj.currency), obj.operationCount.stringValue, obj.balance.value.floatValue, obj.dailyWithdrawalLimit.value.floatValue, obj.monthlyWithdrawLimit.value.floatValue, obj.maxWithdraw.value.floatValue, obj.openOrders.display];
     }];
     return outputStr;
 }
@@ -94,6 +99,13 @@ NSString* ordersArrayToString(NSArray* ordersArray)
     }];
     
     return s;
+}
+
+-(void)walletButtonDidSelect:(NSPopUpButton*)sender
+{
+    if ([sender indexOfItemWithTitle:kTTPopUpSelectorNoItemString] >= 0)
+        [sender removeItemWithTitle:kTTPopUpSelectorNoItemString];
+    
 }
 
 -(void)getTransactionHistoryForAccount:(TTGoxAccount*)account
@@ -130,7 +142,9 @@ NSString* ordersArrayToString(NSArray* ordersArray)
     [_httpController loadAccountDataWithCompletion:^(NSDictionary* accountInformation) {
         [self setAccount:accountFromDictionary(accountInformation)];
         [self.accountDataTextPane.textView setString:accountToString(self.account)];
-        [self getTransactionHistoryForAccount:self.account];
+        [self.account.currencyWallets enumerateObjectsUsingBlock:^(TTGoxWallet* obj, NSUInteger idx, BOOL *stop) {
+            [self.walletSelectionPopUpButton addItemWithTitle:stringFromCurrency(obj.currency)];
+        }];
     } andFailBlock:^(NSError *e) {
         NSURLRequest* failingRequest = [[e userInfo]objectForKey:AFNetworkingOperationFailingURLRequestErrorKey];
         NSHTTPURLResponse* failingResponse =  [[e userInfo]objectForKey:AFNetworkingOperationFailingURLResponseErrorKey];
@@ -181,18 +195,32 @@ NSString* ordersArrayToString(NSArray* ordersArray)
         [self setOrdersLabel:[[JNWLabel alloc]initWithFrame:(NSRect){_accountDataTextPane.frame.size.width, CGRectGetHeight(frameRect) - 30, 60, 30}]];
         [_ordersLabel setText:@"Orders"];
         [_ordersLabel setFont:[NSFont systemFontOfSize:[NSFont smallSystemFontSize]]];
-        [_ordersLabel setBackgroundColor:[NSColor redColor]];
 //        [self addSubview:_ordersLabel];
     }
     if (!self.transactionsScrollView)
     {
         [self setTransactionsScrollView:[[NSScrollView alloc]initWithFrame:(NSRect){CGRectGetMaxX(self.tradeDataTextPane.frame), 0, CGRectGetWidth(self.tradeDataTextPane.frame), CGRectGetHeight(frameRect) - 50}]];
-        [self.transactionsScrollView setBackgroundColor:[NSColor redColor]];
+        [_transactionsScrollView setDocumentView:[[NSView alloc]initWithFrame:(NSRect){0, 0, CGRectGetWidth(self.transactionsScrollView.frame), CGRectGetHeight(self.transactionsScrollView.frame)}]];
+        [_transactionsScrollView setHasVerticalScroller:YES];
+        [_transactionsScrollView setHasHorizontalScroller:NO];
+        [_transactionsScrollView setAutoresizingMask:NSViewWidthSizable | NSViewHeightSizable];
+        [_transactionsScrollView setDrawsBackground:NO];
         [self.contentView addSubview:self.transactionsScrollView];
     }
     if (!self.walletSelectionPopUpButton)
     {
-//        [self setWalletSelectionPopUpButton:[[NSPopUpButton alloc]initWithFrame:(NSRect){CGRectGetMidX(<#CGRect rect#>)} pullsDown:YES]];
+        [self setWalletSelectionPopUpButton:[[NSPopUpButton alloc]initWithFrame:(NSRect){CGRectGetMidX(self.transactionsScrollView.frame), CGRectGetHeight(self.transactionsScrollView.frame), 80, 25} pullsDown:NO]];
+        [self.walletSelectionPopUpButton addItemWithTitle:kTTPopUpSelectorNoItemString];
+        [self.walletSelectionPopUpButton setAction:@selector(walletButtonDidSelect:)];
+        [self.walletSelectionPopUpButton setTarget:self];
+        [self.contentView addSubview:_walletSelectionPopUpButton];
+    }
+    if (!self.selectWalletLabel)
+    {
+        [self setSelectWalletLabel:[[JNWLabel alloc]initWithFrame:(NSRect){CGRectGetMidX(self.transactionsScrollView.frame) - 120, CGRectGetHeight(self.transactionsScrollView.frame), 120, 20}]];
+        [_selectWalletLabel setText:@"Select Wallet:"];
+        [_selectWalletLabel setTextAlignment:NSRightTextAlignment];
+        [self.contentView addSubview:_selectWalletLabel];
     }
 }
 
