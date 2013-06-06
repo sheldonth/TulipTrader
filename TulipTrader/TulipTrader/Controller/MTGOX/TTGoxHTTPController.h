@@ -21,9 +21,9 @@
 
 -(void)subscribeToAccountWebsocket;
 
--(void)getHistoryForWallet:(TTGoxWallet*)wallet withCompletion:(void (^)())completionBlock withFailBlock:(void (^)(NSError* e))failBlock;
+-(void)getTransactionsForWallet:(TTGoxWallet*)wallet withCompletion:(void (^)(TTGoxWallet* wallet))completionBlock withFailBlock:(void (^)(NSError* e))failBlock;
 
--(void)getHistoryForWallet:(TTGoxWallet*)wallet atPage:(NSInteger)historyPage withCompletion:(void (^)())completionBlock withFailBlock:(void (^)(NSError* e))failBlock;
+-(void)getTransactionsForWallet:(TTGoxWallet*)wallet atPage:(NSInteger)historyPage recursivelyAppendingToMutableArray:(NSMutableArray*)array withCompletion:(void (^)(TTGoxWallet* wallet))completionBlock withFailBlock:(void (^)(NSError* e))failBlock;
 
 RU_SYNTHESIZE_SINGLETON_DECLARATION_FOR_CLASS_WITH_ACCESSOR(TTGoxHTTPController, sharedInstance);
 

@@ -20,6 +20,7 @@
 #import "Order.h"
 #import "TTGoxWallet.h"
 #import "AFHTTPRequestOperation.h"
+#import "Transaction.h"
 
 #define kTTMTGOXAPIV1 @"http://data.mtgox.com/api/1/"
 #define kTTMTGOXAPIV2 @"https://data.mtgox.com/api/2/"
@@ -54,12 +55,12 @@ RU_SYNTHESIZE_SINGLETON_FOR_CLASS_WITH_ACCESSOR(TTGoxHTTPController, sharedInsta
     return self;
 }
 
--(void)getHistoryForWallet:(TTGoxWallet*)wallet withCompletion:(void (^)())completionBlock withFailBlock:(void (^)(NSError* e))failBlock
+-(void)getTransactionsForWallet:(TTGoxWallet*)wallet withCompletion:(void (^)(TTGoxWallet* wallet))completionBlock withFailBlock:(void (^)(NSError* e))failBlock
 {
-    [self getHistoryForWallet:wallet atPage:0 withCompletion:completionBlock withFailBlock:failBlock];
+    [self getTransactionsForWallet:wallet atPage:0 recursivelyAppendingToMutableArray:nil withCompletion:completionBlock withFailBlock:failBlock];
 }
 
--(void)getHistoryForWallet:(TTGoxWallet*)wallet atPage:(NSInteger)historyPage withCompletion:(void (^)())completionBlock withFailBlock:(void (^)(NSError* e))failBlock
+-(void)getTransactionsForWallet:(TTGoxWallet*)wallet atPage:(NSInteger)historyPage recursivelyAppendingToMutableArray:(NSMutableArray*)array withCompletion:(void (^)(TTGoxWallet* wallet))completionBlock withFailBlock:(void (^)(NSError* e))failBlock
 {
     NSDictionary* paramDic;
     if (historyPage)
@@ -67,14 +68,27 @@ RU_SYNTHESIZE_SINGLETON_FOR_CLASS_WITH_ACCESSOR(TTGoxHTTPController, sharedInsta
     else
         paramDic = @{@"currency": stringFromCurrency(wallet.currency)};
     
+    if (!array)
+        array = [NSMutableArray array];
+    
     [self.networkSecure postPath:RUStringWithFormat(@"money/wallet/history") parameters:paramDic success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSString* a = [[NSString alloc]initWithData:(NSData *)responseObject encoding:NSUTF8StringEncoding];
         NSDictionary* responseDictionary = [a objectFromJSONString];
         NSDictionary* dataResults = [responseDictionary objectForKey:@"data"];
         NSArray* transactions = [dataResults objectForKey:@"result"];
-        [transactions enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) { // Need to recursively request all pages of transactions, for now processing only 1st pg
-            
+        [transactions enumerateObjectsUsingBlock:^(NSDictionary* obj, NSUInteger idx, BOOL *stop) {
+            Transaction* t = [Transaction transactionFromDictionary:obj];
+            [array addObject:t];
         }];
+        NSNumber* currentPage = [dataResults objectForKey:@"current_page"];
+        NSNumber* maxPage = [dataResults objectForKey:@"max_page"];
+        if (currentPage.intValue < maxPage.intValue)
+            [self getTransactionsForWallet:wallet atPage:(currentPage.intValue + 1) recursivelyAppendingToMutableArray:array withCompletion:completionBlock withFailBlock:failBlock];
+        else
+        {
+            [wallet setTransactions:array];
+            completionBlock(wallet);
+        }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         RUDLog(@"WALLET HISTORY FAILED %@", stringFromCurrency(wallet.currency));
     }];

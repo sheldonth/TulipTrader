@@ -30,6 +30,12 @@
 		470779C71739B7C100DBBC47 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 470779C61739B7C100DBBC47 /* SystemConfiguration.framework */; };
 		470991551729D6240091E6E2 /* TTCurrencyBox.m in Sources */ = {isa = PBXBuildFile; fileRef = 470991541729D6240091E6E2 /* TTCurrencyBox.m */; };
 		470991561729D6240091E6E2 /* TTCurrencyBox.m in Sources */ = {isa = PBXBuildFile; fileRef = 470991541729D6240091E6E2 /* TTCurrencyBox.m */; };
+		471585F31760F3DF003A4BF4 /* Transaction.m in Sources */ = {isa = PBXBuildFile; fileRef = 471585F21760F3DF003A4BF4 /* Transaction.m */; };
+		471585F41760F3DF003A4BF4 /* Transaction.m in Sources */ = {isa = PBXBuildFile; fileRef = 471585F21760F3DF003A4BF4 /* Transaction.m */; };
+		471585FA17611EC1003A4BF4 /* TransactionTrade.m in Sources */ = {isa = PBXBuildFile; fileRef = 471585F917611EC0003A4BF4 /* TransactionTrade.m */; };
+		471585FB17611EC1003A4BF4 /* TransactionTrade.m in Sources */ = {isa = PBXBuildFile; fileRef = 471585F917611EC0003A4BF4 /* TransactionTrade.m */; };
+		471585FE176129CE003A4BF4 /* TTTransactionBox.m in Sources */ = {isa = PBXBuildFile; fileRef = 471585FD176129CE003A4BF4 /* TTTransactionBox.m */; };
+		471585FF176129CE003A4BF4 /* TTTransactionBox.m in Sources */ = {isa = PBXBuildFile; fileRef = 471585FD176129CE003A4BF4 /* TTTransactionBox.m */; };
 		473DF83D173AAAC600C356A1 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 473DF83C173AAAC600C356A1 /* QuartzCore.framework */; };
 		473DF845173ACE7F00C356A1 /* TTGraphsWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 473DF844173ACE7F00C356A1 /* TTGraphsWindow.m */; };
 		473DF846173ACE7F00C356A1 /* TTGraphsWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 473DF844173ACE7F00C356A1 /* TTGraphsWindow.m */; };
@@ -214,6 +220,12 @@
 		470779C61739B7C100DBBC47 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		470991531729D6240091E6E2 /* TTCurrencyBox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTCurrencyBox.h; sourceTree = "<group>"; };
 		470991541729D6240091E6E2 /* TTCurrencyBox.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTCurrencyBox.m; sourceTree = "<group>"; };
+		471585F11760F3DF003A4BF4 /* Transaction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Transaction.h; sourceTree = "<group>"; };
+		471585F21760F3DF003A4BF4 /* Transaction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Transaction.m; sourceTree = "<group>"; };
+		471585F817611EC0003A4BF4 /* TransactionTrade.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TransactionTrade.h; sourceTree = "<group>"; };
+		471585F917611EC0003A4BF4 /* TransactionTrade.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TransactionTrade.m; sourceTree = "<group>"; };
+		471585FC176129CE003A4BF4 /* TTTransactionBox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTTransactionBox.h; sourceTree = "<group>"; };
+		471585FD176129CE003A4BF4 /* TTTransactionBox.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTTransactionBox.m; sourceTree = "<group>"; };
 		473DF83C173AAAC600C356A1 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		473DF843173ACE7F00C356A1 /* TTGraphsWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTGraphsWindow.h; sourceTree = "<group>"; };
 		473DF844173ACE7F00C356A1 /* TTGraphsWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTGraphsWindow.m; sourceTree = "<group>"; };
@@ -416,6 +428,8 @@
 				478121171731C1BE00879CD6 /* TTArbitrageBox.m */,
 				47E9C5D31757DC520069ADA6 /* TTAccountBox.h */,
 				47E9C5D41757DC520069ADA6 /* TTAccountBox.m */,
+				471585FC176129CE003A4BF4 /* TTTransactionBox.h */,
+				471585FD176129CE003A4BF4 /* TTTransactionBox.m */,
 			);
 			path = NSBox;
 			sourceTree = "<group>";
@@ -597,6 +611,10 @@
 				47E9C5DB175871E60069ADA6 /* TTGoxWallet.m */,
 				47E9C5F2175CF70B0069ADA6 /* Order.h */,
 				47E9C5F3175CF70C0069ADA6 /* Order.m */,
+				471585F11760F3DF003A4BF4 /* Transaction.h */,
+				471585F21760F3DF003A4BF4 /* Transaction.m */,
+				471585F817611EC0003A4BF4 /* TransactionTrade.h */,
+				471585F917611EC0003A4BF4 /* TransactionTrade.m */,
 			);
 			path = model;
 			sourceTree = "<group>";
@@ -1032,6 +1050,9 @@
 				47E9C5F0175943500069ADA6 /* ITSidebarItemCell.m in Sources */,
 				47E9C5F4175CF70C0069ADA6 /* Order.m in Sources */,
 				47E9C5F9175E3FF70069ADA6 /* TTTextPaneScrollView.m in Sources */,
+				471585F31760F3DF003A4BF4 /* Transaction.m in Sources */,
+				471585FA17611EC1003A4BF4 /* TransactionTrade.m in Sources */,
+				471585FE176129CE003A4BF4 /* TTTransactionBox.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1093,6 +1114,9 @@
 				47E9C5F1175943500069ADA6 /* ITSidebarItemCell.m in Sources */,
 				47E9C5F5175CF70C0069ADA6 /* Order.m in Sources */,
 				47E9C5FA175E3FF70069ADA6 /* TTTextPaneScrollView.m in Sources */,
+				471585F41760F3DF003A4BF4 /* Transaction.m in Sources */,
+				471585FB17611EC1003A4BF4 /* TransactionTrade.m in Sources */,
+				471585FF176129CE003A4BF4 /* TTTransactionBox.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

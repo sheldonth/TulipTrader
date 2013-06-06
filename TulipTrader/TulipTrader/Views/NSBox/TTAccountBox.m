@@ -17,6 +17,7 @@
 #import "JNWLabel.h"
 #import "AFURLConnectionOperation.h"
 #import "TTAPIControlBoxView.h"
+#import "TTTransactionBox.h"
 
 @interface TTAccountBox()
 
@@ -35,13 +36,16 @@
 @property(nonatomic, retain)NSScrollView* transactionsScrollView;
 @property(nonatomic, retain)JNWLabel* selectWalletLabel;
 
+@property(nonatomic, retain)NSMutableArray* transactionBoxes;
+
 @end
 
 @implementation TTAccountBox
 
 static NSDateFormatter* dateFormatter;
 
-#define kTTPopUpSelectorNoItemString @"   ****"
+#define kTTPopUpSelectorNoItemString @"****"
+#define kTTTransactionBoxHeight 160.f
 
 +(void)initialize
 {
@@ -103,20 +107,42 @@ NSString* ordersArrayToString(NSArray* ordersArray)
 
 -(void)walletButtonDidSelect:(NSPopUpButton*)sender
 {
+    if ([sender.selectedItem.title isEqualToString:kTTPopUpSelectorNoItemString])
+        return;
     if ([sender indexOfItemWithTitle:kTTPopUpSelectorNoItemString] >= 0)
         [sender removeItemWithTitle:kTTPopUpSelectorNoItemString];
-    
+    TTGoxCurrency c = currencyFromString(sender.selectedItem.title);
+    NSInteger index = [self.account.currencyWallets indexOfObjectPassingTest:^BOOL(TTGoxWallet* obj, NSUInteger idx, BOOL *stop) {
+        if (obj.currency == c)
+            return YES;
+        else
+            return NO;
+    }];
+    TTGoxWallet* selectedWallet = [self.account.currencyWallets objectAtIndex:index];
+    [self getTransactionHistoryForWallet:selectedWallet];
 }
 
--(void)getTransactionHistoryForAccount:(TTGoxAccount*)account
+-(void)getTransactionHistoryForWallet:(TTGoxWallet*)wallet
 {
-    for (TTGoxWallet* wallet in account.currencyWallets) {
-        [_httpController getHistoryForWallet:wallet withCompletion:^(NSArray *walletEventsArray) {
-            RUDLog(@"!");
-        } withFailBlock:^(NSError *e) {
-            RUDLog(@"!");
+    [self.transactionBoxes enumerateObjectsUsingBlock:^(TTTransactionBox* obj, NSUInteger idx, BOOL *stop) {
+        [obj removeFromSuperview];
+        [(NSView*)self.transactionsScrollView.documentView setFrame:(NSRect){0,0,CGRectGetWidth(self.transactionsScrollView.frame), CGRectGetHeight(self.transactionsScrollView.frame)}];
+    }];
+    [_httpController getTransactionsForWallet:wallet withCompletion:^(TTGoxWallet *wallet) {
+        CGFloat proposedSize = wallet.transactions.count * kTTTransactionBoxHeight;
+        if (proposedSize > [(NSView*)self.transactionsScrollView.documentView frame].size.height)
+            [(NSView*)self.transactionsScrollView.documentView setFrame:(NSRect){0,0,self.transactionsScrollView.frame.size.width, proposedSize}];
+        [wallet.transactions enumerateObjectsUsingBlock:^(TTGoxWallet* obj, NSUInteger idx, BOOL *stop) {
+            TTTransactionBox* transactionBox = [[TTTransactionBox alloc]initWithFrame:(NSRect){0, CGRectGetHeight([(NSView*)self.transactionsScrollView.documentView frame]) - ((idx + 1) * kTTTransactionBoxHeight), CGRectGetWidth(self.transactionsScrollView.frame), kTTTransactionBoxHeight}];
+            [(NSView*)self.transactionsScrollView.documentView addSubview:transactionBox];
+            [self.transactionBoxes addObject:transactionBox];
         }];
-    };
+        NSPoint pt = NSMakePoint(0.0, [[self.transactionsScrollView documentView]
+                                       bounds].size.height);
+        [[self.transactionsScrollView documentView] scrollPoint:pt];
+    } withFailBlock:^(NSError *e) {
+        RUDLog(@"Wallet history failed");
+    }];
 }
 
 -(void)getOrderData
@@ -162,7 +188,7 @@ NSString* ordersArrayToString(NSArray* ordersArray)
         [self setBorderColor:[NSColor blackColor]];
         [self setTitle:@"Account"];
         
-        [self.layer setMasksToBounds:NO];
+        [self setTransactionBoxes:[NSMutableArray array]];
         
         [self setHttpController:[TTGoxHTTPController sharedInstance]];
     }
