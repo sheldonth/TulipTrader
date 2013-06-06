@@ -9,12 +9,13 @@
 #import "TTGoxResultMessageController.h"
 #import "RUSingleton.h"
 #import "RUConstants.h"
+#import "TTAPIControlBoxView.h"
 
 @implementation TTGoxResultMessageController
 
 -(void)shouldExamineResponseDictionary:(NSDictionary *)dictionary ofMessageType:(TTGoxSocketMessageType)type
 {
-    RUDLog(@"Result");
+    [TTAPIControlBoxView publishCommand:RUStringWithFormat(@"Result message: %@", dictionary)];
 }
 
 RU_SYNTHESIZE_SINGLETON_FOR_CLASS_WITH_ACCESSOR(TTGoxResultMessageController, sharedInstance);

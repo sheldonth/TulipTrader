@@ -20,4 +20,6 @@
 @property(nonatomic, retain)InMemoryTick* openOrders;
 @property(nonatomic, retain)NSNumber* operationCount;
 
+@property(nonatomic, retain)NSArray* transaction;
+
 @end

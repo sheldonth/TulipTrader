@@ -13,15 +13,24 @@
 #import "TTGoxAccount.h"
 #import "TTGoxWallet.h"
 #import "Order.h"
+#import "TTTextPaneScrollView.h"
+#import "JNWLabel.h"
+#import "AFURLConnectionOperation.h"
+#import "TTAPIControlBoxView.h"
 
 @interface TTAccountBox()
 
 @property(nonatomic, retain)TTGoxHTTPController* httpController;
-@property(nonatomic, retain)TTTextView* accountDataTextView;
-@property(nonatomic, retain)NSScrollView* accountDataScrollView;
+@property(nonatomic, retain)TTTextPaneScrollView* accountDataTextPane;
+@property(nonatomic, retain)TTTextPaneScrollView* tradeDataTextPane;
+@property(nonatomic, retain)JNWLabel* ordersLabel;
 
-@property(nonatomic, retain)TTTextView* tradeDataTextView;
-@property(nonatomic, retain)NSScrollView* tradeDataScrollView;
+@property(nonatomic, retain)NSTimer* accountDataTimer;
+@property(nonatomic, retain)NSTimer* ordersDataTimer;
+
+@property(nonatomic, retain)NSPopUpButton* walletSelectionPopUpButton;
+
+@property(nonatomic, retain)NSScrollView* transactionsScrollView;
 
 @end
 
@@ -59,7 +68,6 @@ NSString* accountToString(TTGoxAccount* account)
 
 NSString* ordersArrayToString(NSArray* ordersArray)
 {
-//    NSSortDescriptor* sortDescriptor = [[NSSortDescriptor alloc]initWithKey:@"orderType" ascending:YES];
     NSPredicate* bidPredicate = [NSPredicate predicateWithFormat:@"orderType == %u", TTGoxOrderTypeBid];
     NSArray* bidOrders = [ordersArray filteredArrayUsingPredicate:bidPredicate];
     
@@ -67,8 +75,11 @@ NSString* ordersArrayToString(NSArray* ordersArray)
     NSArray* askOrders = [ordersArray filteredArrayUsingPredicate:askPredicate];
     
     NSSortDescriptor* dateSortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"timestamp" ascending:NO];
-    NSArray* sortedBidOrders = [bidOrders sortedArrayUsingDescriptors:@[dateSortDescriptor]];
-    NSArray* sortedAskOrders = [askOrders sortedArrayUsingDescriptors:@[dateSortDescriptor]];
+    
+    NSSortDescriptor* currencySortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"currency" ascending:YES];
+    
+    NSArray* sortedBidOrders = [bidOrders sortedArrayUsingDescriptors:@[currencySortDescriptor, dateSortDescriptor]];
+    NSArray* sortedAskOrders = [askOrders sortedArrayUsingDescriptors:@[currencySortDescriptor, dateSortDescriptor]];
     
     NSMutableString* s = [NSMutableString string];
     [s appendString:@"BIDS:\n"];
@@ -85,23 +96,47 @@ NSString* ordersArrayToString(NSArray* ordersArray)
     return s;
 }
 
+-(void)getTransactionHistoryForAccount:(TTGoxAccount*)account
+{
+    for (TTGoxWallet* wallet in account.currencyWallets) {
+        [_httpController getHistoryForWallet:wallet withCompletion:^(NSArray *walletEventsArray) {
+            RUDLog(@"!");
+        } withFailBlock:^(NSError *e) {
+            RUDLog(@"!");
+        }];
+    };
+}
+
 -(void)getOrderData
 {
+    if (self.ordersDataTimer)
+        [self.ordersDataTimer invalidate];
     [_httpController getOrdersWithCompletion:^(NSArray *orders) {
         [self setOrders:orders];
-        [self.tradeDataTextView setString:ordersArrayToString(orders)];
+        [self.tradeDataTextPane.textView setString:ordersArrayToString(orders)];
     } withFailBlock:^(NSError *e) {
-        RUDLog(@"Get Order Data Failed");
+        NSURLRequest* failingRequest = [[e userInfo]objectForKey:AFNetworkingOperationFailingURLRequestErrorKey];
+        NSHTTPURLResponse* failingResponse =  [[e userInfo]objectForKey:AFNetworkingOperationFailingURLResponseErrorKey];
+        [self.tradeDataTextPane.textView setString:RUStringWithFormat(@"%@ Failed %ld\nRetrying in 3 seconds or run 'orders'", failingRequest.URL.absoluteString, failingResponse.statusCode)];
+        [TTAPIControlBoxView publishCommand:@"Orders Data Failed" repeating:YES];
+        [self setOrdersDataTimer:[NSTimer scheduledTimerWithTimeInterval:3.f target:self selector:@selector(getOrderData) userInfo:nil repeats:NO]];
     }];
 }
 
 -(void)getAccountData
 {
+    if (self.accountDataTimer)
+        [self.accountDataTimer invalidate];
     [_httpController loadAccountDataWithCompletion:^(NSDictionary* accountInformation) {
         [self setAccount:accountFromDictionary(accountInformation)];
-        [_accountDataTextView setString:accountToString(self.account)];
+        [self.accountDataTextPane.textView setString:accountToString(self.account)];
+        [self getTransactionHistoryForAccount:self.account];
     } andFailBlock:^(NSError *e) {
-        RUDLog(@"Get Account Data Failed");
+        NSURLRequest* failingRequest = [[e userInfo]objectForKey:AFNetworkingOperationFailingURLRequestErrorKey];
+        NSHTTPURLResponse* failingResponse =  [[e userInfo]objectForKey:AFNetworkingOperationFailingURLResponseErrorKey];
+        [self.accountDataTextPane.textView setString:RUStringWithFormat(@"%@ Failed %ld\n Retrying in 3 seconds or run 'account'", failingRequest.URL.absoluteString, failingResponse.statusCode)];
+        [TTAPIControlBoxView publishCommand:@"Account Data Failed" repeating:YES];
+        [self setAccountDataTimer:[NSTimer scheduledTimerWithTimeInterval:3.f target:self selector:@selector(getAccountData) userInfo:nil repeats:NO]];
     }];
 }
 
@@ -113,9 +148,9 @@ NSString* ordersArrayToString(NSArray* ordersArray)
         [self setBorderColor:[NSColor blackColor]];
         [self setTitle:@"Account"];
         
+        [self.layer setMasksToBounds:NO];
+        
         [self setHttpController:[TTGoxHTTPController sharedInstance]];
-        [self getAccountData];
-        [self getOrderData];
     }
     return self;
 }
@@ -124,74 +159,40 @@ NSString* ordersArrayToString(NSArray* ordersArray)
 {
     [super setFrame:frameRect];
     NSRect contentFrame = [(NSView*)self.contentView frame];
-    CGFloat columnWidth = floorf(CGRectGetWidth(contentFrame) / 4);
-    NSRect f = (NSRect){0, 0, columnWidth, CGRectGetHeight(contentFrame)};
-    if (!self.accountDataTextView)
+    CGFloat accountStatsColumnWidth = floorf(CGRectGetWidth(contentFrame) / 4);
+    CGFloat positionAccountHistoryColumnWidth = floorf((CGRectGetWidth(contentFrame) - accountStatsColumnWidth) / 2);
+    NSRect f = (NSRect){0, 0, accountStatsColumnWidth, CGRectGetHeight(contentFrame)};
+    if (!self.accountDataTextPane)
     {
-        [self setAccountDataScrollView:[[NSScrollView alloc]initWithFrame:(NSRect){f.origin.x, f.origin.y, f.size.width, f.size.height}]];
-        [_accountDataScrollView setBorderType:NSNoBorder];
-        [_accountDataScrollView setBackgroundColor:[NSColor clearColor]];
-        [_accountDataScrollView setDrawsBackground:NO];
-        [_accountDataScrollView setHasVerticalScroller:YES];
-        [_accountDataScrollView setHasHorizontalScroller:NO];
-        [_accountDataScrollView setAutoresizingMask:NSViewWidthSizable | NSViewHeightSizable];
-        [self.contentView addSubview:_accountDataScrollView];
-        
-        [self setAccountDataTextView:[[TTTextView alloc]initWithFrame:(NSRect){f.origin.x, f.origin.y, f.size.width, f.size.height}]];
-        [_accountDataTextView setDrawsBackground:NO];
-        [_accountDataTextView setFont:[NSFont systemFontOfSize:[NSFont systemFontSize]]];
-        [_accountDataTextView setEditable:NO];
-        [_accountDataTextView setSelectable:NO];
-        [_accountDataTextView setVerticallyResizable:YES];
-        [_accountDataTextView setHorizontallyResizable:NO];
-        [_accountDataTextView setAutoresizingMask:NSViewWidthSizable];
-        [[_accountDataTextView textContainer] setWidthTracksTextView:YES];
-        
-        NSSize s = [_accountDataScrollView contentSize];
-        [_accountDataTextView setFrame:(NSRect){0,0,s.width, s.height}];
-        [_accountDataTextView setMinSize:(NSSize){0.f, s.height}];
-        [_accountDataTextView setMaxSize:(NSSize){FLT_MAX, FLT_MAX}];
-        [_accountDataTextView.textContainer setContainerSize:(NSSize){s.width, FLT_MAX}];
-        
-        [_accountDataScrollView setDocumentView:_accountDataTextView];
+        [self setAccountDataTextPane:[[TTTextPaneScrollView alloc]initWithFrame:f]];
+        [self.contentView addSubview:self.accountDataTextPane];
+        [self.accountDataTextPane.textView setString:@"Loading..."];
+        [self getAccountData];
     }
-    else
+    if (!self.tradeDataTextPane)
     {
-        NSSize s = [_accountDataScrollView contentSize];
-        [_accountDataTextView setFrame:(NSRect){0,0,s.width, s.height}];
-        [_accountDataTextView setMinSize:(NSSize){0.f, s.height}];
-        [_accountDataTextView setMaxSize:(NSSize){FLT_MAX, FLT_MAX}];
-        [_accountDataTextView.textContainer setContainerSize:(NSSize){s.width, FLT_MAX}];
+        [self setTradeDataTextPane:[[TTTextPaneScrollView alloc]initWithFrame:(NSRect){_accountDataTextPane.frame.size.width, 0, positionAccountHistoryColumnWidth, CGRectGetHeight(contentFrame)}]];
+        [self.contentView addSubview:self.tradeDataTextPane];
+        [self.tradeDataTextPane.textView setString:@"Loading..."];
+        [self getOrderData];
     }
-    
-    if (!self.tradeDataScrollView)
+    if (!self.ordersLabel)
     {
-        [self setTradeDataScrollView:[[NSScrollView alloc]initWithFrame:(NSRect){_accountDataScrollView.frame.size.width, 0, 2 * columnWidth, CGRectGetHeight(contentFrame)}]];
-        [_tradeDataScrollView setBorderType:NSNoBorder];
-        [_tradeDataScrollView setBackgroundColor:[NSColor clearColor]];
-        [_tradeDataScrollView setDrawsBackground:NO];
-        [_tradeDataScrollView setHasVerticalScroller:YES];
-        [_tradeDataScrollView setHasHorizontalScroller:NO];
-        [_tradeDataScrollView setAutoresizingMask:NSViewWidthSizable | NSViewHeightSizable];
-        [self.contentView addSubview:_tradeDataScrollView];
-
-        [self setTradeDataTextView:[[TTTextView alloc]initWithFrame:self.tradeDataScrollView.frame]];
-        [_tradeDataTextView setDrawsBackground:NO];
-        [_tradeDataTextView setFont:[NSFont systemFontOfSize:[NSFont systemFontSize]]];
-        [_tradeDataTextView setEditable:NO];
-        [_tradeDataTextView setSelectable:NO];
-        [_tradeDataTextView setVerticallyResizable:YES];
-        [_tradeDataTextView setHorizontallyResizable:NO];
-        [_tradeDataTextView setAutoresizingMask:NSViewWidthSizable];
-        [[_tradeDataTextView textContainer] setWidthTracksTextView:YES];
-        
-        NSSize s = [_tradeDataScrollView contentSize];
-        [_tradeDataTextView setFrame:(NSRect){0,0,s.width, s.height}];
-        [_tradeDataTextView setMinSize:(NSSize){0.f, s.height}];
-        [_tradeDataTextView setMaxSize:(NSSize){FLT_MAX, FLT_MAX}];
-        [_tradeDataTextView.textContainer setContainerSize:(NSSize){s.width, FLT_MAX}];
-        
-        [_tradeDataScrollView setDocumentView:_tradeDataTextView];
+        [self setOrdersLabel:[[JNWLabel alloc]initWithFrame:(NSRect){_accountDataTextPane.frame.size.width, CGRectGetHeight(frameRect) - 30, 60, 30}]];
+        [_ordersLabel setText:@"Orders"];
+        [_ordersLabel setFont:[NSFont systemFontOfSize:[NSFont smallSystemFontSize]]];
+        [_ordersLabel setBackgroundColor:[NSColor redColor]];
+//        [self addSubview:_ordersLabel];
+    }
+    if (!self.transactionsScrollView)
+    {
+        [self setTransactionsScrollView:[[NSScrollView alloc]initWithFrame:(NSRect){CGRectGetMaxX(self.tradeDataTextPane.frame), 0, CGRectGetWidth(self.tradeDataTextPane.frame), CGRectGetHeight(frameRect) - 50}]];
+        [self.transactionsScrollView setBackgroundColor:[NSColor redColor]];
+        [self.contentView addSubview:self.transactionsScrollView];
+    }
+    if (!self.walletSelectionPopUpButton)
+    {
+//        [self setWalletSelectionPopUpButton:[[NSPopUpButton alloc]initWithFrame:(NSRect){CGRectGetMidX(<#CGRect rect#>)} pullsDown:YES]];
     }
 }
 

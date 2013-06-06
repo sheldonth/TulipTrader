@@ -35,6 +35,8 @@
 
 #define kTTUserAgent @"Tulip Trader/1.0 (Mac OS X)"
 
+#define kTTUserDefaultsNonceKey @"TTUserDefaultNonceKey"
+
 static NSString* APIKEY;
 static NSString* APISECRET;
 
@@ -60,13 +62,25 @@ NSString* const kTTMTGoxAPISecretKey = @"MTGOXUserAPISecret";
     }
 }
 
-NSString* currentTonce()
+NSString* currentDateTonce()
 {
     double d = ([[NSDate date]timeIntervalSince1970] * 1000.0);
     
     NSString* nonceString = RUStringWithFormat(@"%.0f", d);
     
     return nonceString;
+}
+
+NSString* currentIncrementalTonce()
+{
+    NSUserDefaults* standardUserDefaults = [NSUserDefaults standardUserDefaults];
+    NSNumber* a = [standardUserDefaults objectForKey:kTTUserDefaultsNonceKey];
+    if (!a)
+        a = @(1);
+    [standardUserDefaults setObject:@(a.intValue + 1) forKey:kTTUserDefaultsNonceKey];
+    [standardUserDefaults synchronize];
+    RUDLog(@"Returning Nonce: %@", a.stringValue);
+    return a.stringValue;
 }
 
 NSString* HMAC_Out(NSString *msg, NSString *sec)
@@ -94,9 +108,9 @@ NSString* HMAC_Out(NSString *msg, NSString *sec)
     else
         mutableParams = [NSMutableDictionary dictionary];
     
-    NSString* tonce = currentTonce();
-    
-    RUDLog(@"Tonce: %@", tonce);
+//    NSString* tonce = currentDateTonce();
+
+    NSString* tonce = currentIncrementalTonce();
     
     [mutableParams setObject:tonce forKey:@"nonce"];
     

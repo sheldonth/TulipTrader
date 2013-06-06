@@ -17,7 +17,7 @@
 #import "Trade.h"
 #import "TTAPIControlBoxView.h"
 
-#define NOISYTRADES 1
+#define NOISYTRADES 0
 
 typedef enum{
     kTTGoxMarketNone = 0,

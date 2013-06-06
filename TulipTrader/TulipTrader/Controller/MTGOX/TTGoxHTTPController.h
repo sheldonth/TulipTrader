@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "TTGoxCurrency.h"
 #import "RUSingleton.h"
+#import "TTGoxWallet.h"
 
 @interface TTGoxHTTPController : NSObject
 
@@ -19,6 +20,10 @@
 -(void)getOrdersWithCompletion:(void (^)(NSArray* orders))completionBlock withFailBlock:(void (^)(NSError* e))failBlock;
 
 -(void)subscribeToAccountWebsocket;
+
+-(void)getHistoryForWallet:(TTGoxWallet*)wallet withCompletion:(void (^)())completionBlock withFailBlock:(void (^)(NSError* e))failBlock;
+
+-(void)getHistoryForWallet:(TTGoxWallet*)wallet atPage:(NSInteger)historyPage withCompletion:(void (^)())completionBlock withFailBlock:(void (^)(NSError* e))failBlock;
 
 RU_SYNTHESIZE_SINGLETON_DECLARATION_FOR_CLASS_WITH_ACCESSOR(TTGoxHTTPController, sharedInstance);
 

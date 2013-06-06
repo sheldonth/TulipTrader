@@ -18,6 +18,8 @@
 #import "TTGoxHTTPClient.h"
 #import "TTGoxSocketController.h"
 #import "Order.h"
+#import "TTGoxWallet.h"
+#import "AFHTTPRequestOperation.h"
 
 #define kTTMTGOXAPIV1 @"http://data.mtgox.com/api/1/"
 #define kTTMTGOXAPIV2 @"https://data.mtgox.com/api/2/"
@@ -41,6 +43,7 @@ RU_SYNTHESIZE_SINGLETON_FOR_CLASS_WITH_ACCESSOR(TTGoxHTTPController, sharedInsta
     appDelegatePtr = (TTAppDelegate*)[[NSApplication sharedApplication]delegate];
 }
 
+
 -(id)init
 {
     self = [super init];
@@ -49,6 +52,32 @@ RU_SYNTHESIZE_SINGLETON_FOR_CLASS_WITH_ACCESSOR(TTGoxHTTPController, sharedInsta
         [self setNetworkSecure:[[TTGoxHTTPClient alloc]initWithBaseURL:[NSURL URLWithString:kTTMTGOXAPIV2]]];
     }
     return self;
+}
+
+-(void)getHistoryForWallet:(TTGoxWallet*)wallet withCompletion:(void (^)())completionBlock withFailBlock:(void (^)(NSError* e))failBlock
+{
+    [self getHistoryForWallet:wallet atPage:0 withCompletion:completionBlock withFailBlock:failBlock];
+}
+
+-(void)getHistoryForWallet:(TTGoxWallet*)wallet atPage:(NSInteger)historyPage withCompletion:(void (^)())completionBlock withFailBlock:(void (^)(NSError* e))failBlock
+{
+    NSDictionary* paramDic;
+    if (historyPage)
+        paramDic = @{@"currency": stringFromCurrency(wallet.currency), @"page": @(historyPage)};
+    else
+        paramDic = @{@"currency": stringFromCurrency(wallet.currency)};
+    
+    [self.networkSecure postPath:RUStringWithFormat(@"money/wallet/history") parameters:paramDic success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSString* a = [[NSString alloc]initWithData:(NSData *)responseObject encoding:NSUTF8StringEncoding];
+        NSDictionary* responseDictionary = [a objectFromJSONString];
+        NSDictionary* dataResults = [responseDictionary objectForKey:@"data"];
+        NSArray* transactions = [dataResults objectForKey:@"result"];
+        [transactions enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) { // Need to recursively request all pages of transactions, for now processing only 1st pg
+            
+        }];
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        RUDLog(@"WALLET HISTORY FAILED %@", stringFromCurrency(wallet.currency));
+    }];
 }
 
 -(void)getOrdersWithCompletion:(void (^)(NSArray* orders))completionBlock withFailBlock:(void (^)(NSError* e))failBlock
@@ -85,13 +114,14 @@ RU_SYNTHESIZE_SINGLETON_FOR_CLASS_WITH_ACCESSOR(TTGoxHTTPController, sharedInsta
         NSString* accountKey = [d objectForKey:@"data"];
         [[TTGoxSocketController sharedInstance]subscribeToKeyID:accountKey];
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        RUDLog(@"The private channel API Request failed");
+        RUDLog(@"PrivChannel Failed %@", error);
     }];
 }
 
 -(void)loadAccountDataWithCompletion:(void (^)(NSDictionary* accountInformationDictionary))callbackBlock andFailBlock:(void (^)(NSError* e))failBlock
 {
-    [self.networkSecure postPath:@"BTCUSD/money/info" parameters:@{@"test": @"object"} success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    NSString* path = @"BTCUSD/money/info";
+    [self.networkSecure postPath:path parameters:@{@"test": @"object"} success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSString* str = [[NSString alloc]initWithData:responseObject encoding:NSUTF8StringEncoding];
         NSDictionary* d = [str objectFromJSONString];
         if (![[d objectForKey:@"result"]isEqualToString:@"success"])
@@ -99,7 +129,7 @@ RU_SYNTHESIZE_SINGLETON_FOR_CLASS_WITH_ACCESSOR(TTGoxHTTPController, sharedInsta
         else
             callbackBlock([d objectForKey:@"data"]);
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        failBlock(error);
+            failBlock(error);
     }];
 }
 

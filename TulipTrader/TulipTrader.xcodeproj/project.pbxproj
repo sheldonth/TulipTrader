@@ -148,6 +148,8 @@
 		47E9C5F1175943500069ADA6 /* ITSidebarItemCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 47E9C5ED175943500069ADA6 /* ITSidebarItemCell.m */; };
 		47E9C5F4175CF70C0069ADA6 /* Order.m in Sources */ = {isa = PBXBuildFile; fileRef = 47E9C5F3175CF70C0069ADA6 /* Order.m */; };
 		47E9C5F5175CF70C0069ADA6 /* Order.m in Sources */ = {isa = PBXBuildFile; fileRef = 47E9C5F3175CF70C0069ADA6 /* Order.m */; };
+		47E9C5F9175E3FF70069ADA6 /* TTTextPaneScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 47E9C5F8175E3FF70069ADA6 /* TTTextPaneScrollView.m */; };
+		47E9C5FA175E3FF70069ADA6 /* TTTextPaneScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = 47E9C5F8175E3FF70069ADA6 /* TTTextPaneScrollView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -345,6 +347,8 @@
 		47E9C5ED175943500069ADA6 /* ITSidebarItemCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ITSidebarItemCell.m; sourceTree = "<group>"; };
 		47E9C5F2175CF70B0069ADA6 /* Order.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Order.h; sourceTree = "<group>"; };
 		47E9C5F3175CF70C0069ADA6 /* Order.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Order.m; sourceTree = "<group>"; };
+		47E9C5F7175E3FF70069ADA6 /* TTTextPaneScrollView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTTextPaneScrollView.h; sourceTree = "<group>"; };
+		47E9C5F8175E3FF70069ADA6 /* TTTextPaneScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTTextPaneScrollView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -764,6 +768,7 @@
 		47DDDF41170FF3BA0087EE78 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				47E9C5F6175E3FD10069ADA6 /* NSScrollView */,
 				47458CEF174C319F00FBD5A2 /* NSTextField */,
 				470991521729D6140091E6E2 /* NSBox */,
 				476DD9EE1729A37D0076C301 /* NSTextView */,
@@ -811,6 +816,15 @@
 				47E9C5ED175943500069ADA6 /* ITSidebarItemCell.m */,
 			);
 			path = ITSidebar;
+			sourceTree = "<group>";
+		};
+		47E9C5F6175E3FD10069ADA6 /* NSScrollView */ = {
+			isa = PBXGroup;
+			children = (
+				47E9C5F7175E3FF70069ADA6 /* TTTextPaneScrollView.h */,
+				47E9C5F8175E3FF70069ADA6 /* TTTextPaneScrollView.m */,
+			);
+			path = NSScrollView;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1017,6 +1031,7 @@
 				47E9C5EE175943500069ADA6 /* ITSidebar.m in Sources */,
 				47E9C5F0175943500069ADA6 /* ITSidebarItemCell.m in Sources */,
 				47E9C5F4175CF70C0069ADA6 /* Order.m in Sources */,
+				47E9C5F9175E3FF70069ADA6 /* TTTextPaneScrollView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1077,6 +1092,7 @@
 				47E9C5EF175943500069ADA6 /* ITSidebar.m in Sources */,
 				47E9C5F1175943500069ADA6 /* ITSidebarItemCell.m in Sources */,
 				47E9C5F5175CF70C0069ADA6 /* Order.m in Sources */,
+				47E9C5FA175E3FF70069ADA6 /* TTTextPaneScrollView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

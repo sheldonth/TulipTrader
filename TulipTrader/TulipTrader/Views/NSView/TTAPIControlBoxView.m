@@ -141,15 +141,31 @@ static NSColor* textBackgroundColor;
 
 #define kTTAPIControlBoxAllowableScrollOffset 100.f
 
-+(void)publishCommand:(NSString*)commandText
++(NSString *)currentControlString
 {
     TTAPIControlBoxView* pointer = [TTAPIControlBoxView sharedInstance];
+    return pointer.dialogTextView.string;
+}
+
++(void)publishCommand:(NSString *)commandText repeating:(BOOL)repeats
+{
+    TTAPIControlBoxView* pointer = [TTAPIControlBoxView sharedInstance];
+    NSString* curStr = [pointer.dialogTextView string];
+    if (curStr.length > commandText.length)
+    {
+        if ([[curStr substringWithRange:NSMakeRange(curStr.length - commandText.length, commandText.length)] isEqualToString:commandText])
+        {
+            if (!repeats)
+                return;
+        }
+    }
+    
     NSMutableString* mutableCopy = [pointer.dialogTextView.string mutableCopy];
     [mutableCopy appendString:RUStringWithFormat(@"\n%@ %@%@%@",[dateFormatter stringFromDate:[NSDate date]], TTAPIControlBoxLeadinString, commandText, TTAPIControlBoxTailString)];
     if (![NSThread isMainThread])
     {
         dispatch_async(dispatch_get_main_queue(), ^{
-        [pointer.dialogTextView setString:mutableCopy];
+            [pointer.dialogTextView setString:mutableCopy];
             [pointer.scrollView.contentView scrollToPoint:NSMakePoint(0, ((NSView*)pointer.scrollView.documentView).frame.size.height - pointer.scrollView.contentSize.height)];
         });
     }
@@ -159,6 +175,12 @@ static NSColor* textBackgroundColor;
         if (pointer.scrollView.contentView.documentVisibleRect.origin.y)
             [pointer.scrollView.contentView scrollToPoint:NSMakePoint(0, ((NSView*)pointer.scrollView.documentView).frame.size.height - pointer.scrollView.contentSize.height)];
     }
+    
+}
+
++(void)publishCommand:(NSString*)commandText
+{
+    [TTAPIControlBoxView publishCommand:commandText repeating:YES]; //Commands can be repeated by default
 }
 
 - (id)initWithFrame:(NSRect)frame

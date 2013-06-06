@@ -15,8 +15,11 @@ extern NSArray* kTTAPIActionFlagList;
 
 @interface TTAPIControlBoxView : NSBox <NSTextFieldDelegate>
 
-RU_SYNTHESIZE_SINGLETON_DECLARATION_FOR_CLASS_WITH_ACCESSOR(TTAPIControlBoxView, sharedInstance);
-
++(void)publishCommand:(NSString*)commandText repeating:(BOOL)repeats;
 +(void)publishCommand:(NSString*)commandText;
+
++(NSString*)currentControlString;
+
+RU_SYNTHESIZE_SINGLETON_DECLARATION_FOR_CLASS_WITH_ACCESSOR(TTAPIControlBoxView, sharedInstance);
 
 @end
