@@ -48,7 +48,7 @@ static NSColor* textBackgroundColor;
         dateFormatter = [NSDateFormatter new];
         [dateFormatter setDateFormat:@"HH:mm:ss"];
         
-        kTTAPIActionCommandList = @[@"help", @"set", @"load", @"account", @"clear"];
+        kTTAPIActionCommandList = @[@"help", @"set", @"load", @"account", @"clear", @"depth"];
         kTTAPIActionObjectList = @[@"noisyquotes"];
         kTTAPIActionFlagList = @[@"On", @"Off"];
     }
@@ -127,7 +127,15 @@ static NSColor* textBackgroundColor;
             
         case 4:
             [self.dialogTextView setString:@""];
+            break;
             
+        case 5:
+            [[TTGoxHTTPController sharedInstance]getDepthForCurrency:currencyFromString([components objectAtIndex:1]) withCompletion:^(NSArray *bids, NSArray *asks, NSDictionary *maxMinTicks) {
+                
+            } withFailBlock:^(NSError *e) {
+                
+            }];
+            break;
         default:
             break;
     }

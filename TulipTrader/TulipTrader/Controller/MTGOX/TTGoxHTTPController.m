@@ -111,9 +111,15 @@ RU_SYNTHESIZE_SINGLETON_FOR_CLASS_WITH_ACCESSOR(TTGoxHTTPController, sharedInsta
     }];
 }
 
--(void)getDepthForCurrency:(TTGoxCurrency)currency withCompletion:(void (^)(NSArray* bids, NSArray* asks))completionBlock withFailBlock:(void (^)(NSError* e))failBlock
+-(void)getDepthForCurrency:(TTGoxCurrency)currency withCompletion:(void (^)(NSArray* bids, NSArray* asks, NSDictionary* maxMinTicks))completionBlock withFailBlock:(void (^)(NSError* e))failBlock
 {
     [self.networkSecure postPath:RUStringWithFormat(@"%@/money/depth/fetch", urlPathStringForCurrency(currency)) parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSString* a = [[NSString alloc]initWithData:(NSData*)responseObject encoding:NSUTF8StringEncoding];
+        NSDictionary* responseDictionary = [a objectFromJSONString];
+        NSDictionary* data = [responseDictionary objectForKey:@"data"];
+        NSArray* bids = [data objectForKey:@"asks"];
+        NSArray* asks = [data objectForKey:@"bids"];
+        
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         

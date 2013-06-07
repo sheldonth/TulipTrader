@@ -93,4 +93,9 @@ TTGoxOrderType orderTypeFromString(NSString* orderTypeString)
     return o;
 }
 
+-(NSString *)description
+{
+    return RUStringWithFormat(@"oid: %@ timestamp: %f", self.oid, [self.timestamp timeIntervalSince1970]);
+}
+
 @end

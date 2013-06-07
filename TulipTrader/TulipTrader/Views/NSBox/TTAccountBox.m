@@ -18,6 +18,7 @@
 #import "AFURLConnectionOperation.h"
 #import "TTAPIControlBoxView.h"
 #import "TTTransactionBox.h"
+#import "Transaction.h"
 
 @interface TTAccountBox()
 
@@ -38,6 +39,9 @@
 
 @property(nonatomic, retain)NSMutableArray* transactionBoxes;
 
+@property(nonatomic, retain)NSProgressIndicator* walletTransactionsProgressIndicator;
+
+
 @end
 
 @implementation TTAccountBox
@@ -45,7 +49,7 @@
 static NSDateFormatter* dateFormatter;
 
 #define kTTPopUpSelectorNoItemString @"****"
-#define kTTTransactionBoxHeight 160.f
+#define kTTTransactionBoxHeight 120.f
 
 +(void)initialize
 {
@@ -124,6 +128,7 @@ NSString* ordersArrayToString(NSArray* ordersArray)
 
 -(void)getTransactionHistoryForWallet:(TTGoxWallet*)wallet
 {
+    [self.walletTransactionsProgressIndicator startAnimation:self];
     [self.transactionBoxes enumerateObjectsUsingBlock:^(TTTransactionBox* obj, NSUInteger idx, BOOL *stop) {
         [obj removeFromSuperview];
         [(NSView*)self.transactionsScrollView.documentView setFrame:(NSRect){0,0,CGRectGetWidth(self.transactionsScrollView.frame), CGRectGetHeight(self.transactionsScrollView.frame)}];
@@ -132,16 +137,18 @@ NSString* ordersArrayToString(NSArray* ordersArray)
         CGFloat proposedSize = wallet.transactions.count * kTTTransactionBoxHeight;
         if (proposedSize > [(NSView*)self.transactionsScrollView.documentView frame].size.height)
             [(NSView*)self.transactionsScrollView.documentView setFrame:(NSRect){0,0,self.transactionsScrollView.frame.size.width, proposedSize}];
-        [wallet.transactions enumerateObjectsUsingBlock:^(TTGoxWallet* obj, NSUInteger idx, BOOL *stop) {
+        [wallet.transactions enumerateObjectsUsingBlock:^(Transaction* obj, NSUInteger idx, BOOL *stop) {
             TTTransactionBox* transactionBox = [[TTTransactionBox alloc]initWithFrame:(NSRect){0, CGRectGetHeight([(NSView*)self.transactionsScrollView.documentView frame]) - ((idx + 1) * kTTTransactionBoxHeight), CGRectGetWidth(self.transactionsScrollView.frame), kTTTransactionBoxHeight}];
             [(NSView*)self.transactionsScrollView.documentView addSubview:transactionBox];
+            [transactionBox setTransaction:obj];
             [self.transactionBoxes addObject:transactionBox];
         }];
         NSPoint pt = NSMakePoint(0.0, [[self.transactionsScrollView documentView]
                                        bounds].size.height);
         [[self.transactionsScrollView documentView] scrollPoint:pt];
+        [self.walletTransactionsProgressIndicator stopAnimation:self];
     } withFailBlock:^(NSError *e) {
-        RUDLog(@"Wallet history failed");
+        [self.walletTransactionsProgressIndicator stopAnimation:self];
     }];
 }
 
@@ -163,6 +170,11 @@ NSString* ordersArrayToString(NSArray* ordersArray)
 
 -(void)getAccountData
 {
+    [self getAccountDataWithCompletion:nil];
+}
+
+-(void)getAccountDataWithCompletion:(void (^)())completion
+{
     if (self.accountDataTimer)
         [self.accountDataTimer invalidate];
     [_httpController loadAccountDataWithCompletion:^(NSDictionary* accountInformation) {
@@ -170,6 +182,8 @@ NSString* ordersArrayToString(NSArray* ordersArray)
         [self.accountDataTextPane.textView setString:accountToString(self.account)];
         [self.account.currencyWallets enumerateObjectsUsingBlock:^(TTGoxWallet* obj, NSUInteger idx, BOOL *stop) {
             [self.walletSelectionPopUpButton addItemWithTitle:stringFromCurrency(obj.currency)];
+        if (completion)
+            completion();
         }];
     } andFailBlock:^(NSError *e) {
         NSURLRequest* failingRequest = [[e userInfo]objectForKey:AFNetworkingOperationFailingURLRequestErrorKey];
@@ -177,6 +191,8 @@ NSString* ordersArrayToString(NSArray* ordersArray)
         [self.accountDataTextPane.textView setString:RUStringWithFormat(@"%@ Failed %ld\n Retrying in 3 seconds or run 'account'", failingRequest.URL.absoluteString, failingResponse.statusCode)];
         [TTAPIControlBoxView publishCommand:@"Account Data Failed" repeating:YES];
         [self setAccountDataTimer:[NSTimer scheduledTimerWithTimeInterval:3.f target:self selector:@selector(getAccountData) userInfo:nil repeats:NO]];
+        if (completion)
+            completion();
     }];
 }
 
@@ -186,10 +202,8 @@ NSString* ordersArrayToString(NSArray* ordersArray)
     if (self) {
         [self setBorderWidth:2.f];
         [self setBorderColor:[NSColor blackColor]];
-        [self setTitle:@"Account"];
-        
+        [self setTitle:@"Account\t\t\t\t\t\t\t\tOrders"];
         [self setTransactionBoxes:[NSMutableArray array]];
-        
         [self setHttpController:[TTGoxHTTPController sharedInstance]];
     }
     return self;
@@ -207,14 +221,12 @@ NSString* ordersArrayToString(NSArray* ordersArray)
         [self setAccountDataTextPane:[[TTTextPaneScrollView alloc]initWithFrame:f]];
         [self.contentView addSubview:self.accountDataTextPane];
         [self.accountDataTextPane.textView setString:@"Loading..."];
-        [self getAccountData];
     }
     if (!self.tradeDataTextPane)
     {
         [self setTradeDataTextPane:[[TTTextPaneScrollView alloc]initWithFrame:(NSRect){_accountDataTextPane.frame.size.width, 0, positionAccountHistoryColumnWidth, CGRectGetHeight(contentFrame)}]];
         [self.contentView addSubview:self.tradeDataTextPane];
         [self.tradeDataTextPane.textView setString:@"Loading..."];
-        [self getOrderData];
     }
     if (!self.ordersLabel)
     {
@@ -248,7 +260,18 @@ NSString* ordersArrayToString(NSArray* ordersArray)
         [_selectWalletLabel setTextAlignment:NSRightTextAlignment];
         [self.contentView addSubview:_selectWalletLabel];
     }
+    if (!self.walletTransactionsProgressIndicator)
+    {
+        [self setWalletTransactionsProgressIndicator:[[NSProgressIndicator alloc]initWithFrame:(NSRect){CGRectGetMaxX(_walletSelectionPopUpButton.frame), _walletSelectionPopUpButton.frame.origin.y, 25, 25}]];
+        [_walletTransactionsProgressIndicator setStyle:(NSProgressIndicatorSpinningStyle)];
+        [_walletTransactionsProgressIndicator setDisplayedWhenStopped:NO];
+        [self.contentView addSubview:_walletTransactionsProgressIndicator];
+    }
+    [self getAccountDataWithCompletion:^{
+        [self getOrderData];
+    }];
 }
+
 
 - (void)drawRect:(NSRect)dirtyRect
 {

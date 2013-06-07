@@ -10,16 +10,28 @@
 
 @implementation TTTransactionBox
 
+static NSDateFormatter* dateFormatter;
+
++(void)initialize
+{
+    dateFormatter = [NSDateFormatter new];
+    [dateFormatter setDateFormat:@"MM/dd/YYYY HH:mm:ss"];
+}
+
 - (id)initWithFrame:(NSRect)frame
 {
     self = [super initWithFrame:frame];
     if (self) {
         [self setBorderWidth:2.f];
         [self setBorderColor:[NSColor blackColor]];
-        [self setTitle:@"Transaction"];
     }
     
     return self;
+}
+
+-(void)setTransaction:(Transaction *)transaction
+{
+    [self setTitle:[dateFormatter stringFromDate:transaction.date]];
 }
 
 - (void)drawRect:(NSRect)dirtyRect

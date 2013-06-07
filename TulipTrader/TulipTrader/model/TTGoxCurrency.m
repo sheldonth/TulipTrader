@@ -174,39 +174,39 @@ NSString* stringFromCurrency(TTGoxCurrency currency)
 
 TTGoxCurrency currencyFromString(NSString* string)
 {
-    if ([string isEqualToString:goxBTCString])
+    if ([string caseInsensitiveCompare:goxBTCString] == NSOrderedSame)
         return TTGoxCurrencyBTC;
-    else if ([string isEqualToString:goxUSDString])
+    else if ([string caseInsensitiveCompare:goxUSDString] == NSOrderedSame)
         return TTGoxCurrencyUSD;
-    else if ([string isEqualToString:goxEURString])
+    else if ([string caseInsensitiveCompare:goxEURString] == NSOrderedSame)
         return TTGoxCurrencyEUR;
-    else if ([string isEqualToString:goxCADString])
+    else if ([string caseInsensitiveCompare:goxCADString] == NSOrderedSame)
         return TTGoxCurrencyCAD;
-    else if ([string isEqualToString:goxCHFString])
+    else if ([string caseInsensitiveCompare:goxCHFString] == NSOrderedSame)
         return TTGoxCurrencyCHF;
-    else if ([string isEqualToString:goxCNYString])
+    else if ([string caseInsensitiveCompare:goxCNYString] == NSOrderedSame)
         return TTGoxCurrencyCNY;
-    else if ([string isEqualToString:goxDKKString])
+    else if ([string caseInsensitiveCompare:goxDKKString] == NSOrderedSame)
         return TTGoxCurrencyDKK;
-    else if ([string isEqualToString:goxGBPString])
+    else if ([string caseInsensitiveCompare:goxGBPString] == NSOrderedSame)
         return TTGoxCurrencyGBP;
-    else if ([string isEqualToString:goxHKDString])
+    else if ([string caseInsensitiveCompare:goxHKDString] == NSOrderedSame)
         return TTGoxCurrencyHKD;
-    else if ([string isEqualToString:goxJPYString])
+    else if ([string caseInsensitiveCompare:goxJPYString] == NSOrderedSame)
         return TTGoxCurrencyJPY;
-    else if ([string isEqualToString:goxNZDString])
+    else if ([string caseInsensitiveCompare:goxNZDString] == NSOrderedSame)
         return TTGoxCurrencyNZD;
-    else if ([string isEqualToString:goxPLNString])
+    else if ([string caseInsensitiveCompare:goxPLNString] == NSOrderedSame)
         return TTGoxCurrencyPLN;
-    else if ([string isEqualToString:goxRUBString])
+    else if ([string caseInsensitiveCompare:goxRUBString] == NSOrderedSame)
         return TTGoxCurrencyRUB;
-    else if ([string isEqualToString:goxSEKString])
+    else if ([string caseInsensitiveCompare:goxSEKString] == NSOrderedSame)
         return TTGoxCurrencySEK;
-    else if ([string isEqualToString:goxSGDString])
+    else if ([string caseInsensitiveCompare:goxSGDString] == NSOrderedSame)
         return TTGoxCurrencySGD;
-    else if ([string isEqualToString:goxTHBString])
+    else if ([string caseInsensitiveCompare:goxTHBString] == NSOrderedSame)
         return TTGoxCurrencyTHB;
-    else if ([string isEqualToString:goxAUDString])
+    else if ([string caseInsensitiveCompare:goxAUDString] == NSOrderedSame)
         return TTGoxCurrencyAUD;
     else if (ExceptionOnNoCurrencyFound)
         [NSException raise:@"Currency Not Found" format:@"Currency %@ not found", string];
