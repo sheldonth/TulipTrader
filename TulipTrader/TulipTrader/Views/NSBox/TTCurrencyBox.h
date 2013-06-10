@@ -12,8 +12,6 @@
 
 @interface TTCurrencyBox : NSBox
 
--(void)displayTrade:(Trade*)t;
-
 @property(nonatomic)TTGoxCurrency currency;
 
 @end

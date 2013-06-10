@@ -38,6 +38,16 @@ typedef enum{
     return RUStringWithFormat(@"Trade %@ in %@ for %@ at %@ and is real %@", self.tradeId.stringValue, stringFromCurrency(currencyFromNumber(self.currency)), self.amount.stringValue, self.price.stringValue, self.real_boolean.stringValue);
 }
 
+-(TTGoxTradeType)tradeType
+{
+    if ([self.trade_type isEqualToString:@"bid"])
+        return TTGoxTradeTypeBid;
+    else if ([self.trade_type isEqualToString:@"ask"])
+        return TTGoxTradeTypeAsk;
+    else
+        return TTGoxTradeTypeNone;
+}
+
 #pragma mark - static Methods
 
 /*

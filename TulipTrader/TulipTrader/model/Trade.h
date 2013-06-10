@@ -9,6 +9,11 @@
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
 
+typedef enum{
+    TTGoxTradeTypeNone = 0,
+    TTGoxTradeTypeBid,
+    TTGoxTradeTypeAsk
+}TTGoxTradeType;
 
 @interface Trade : NSManagedObject
 
@@ -20,6 +25,9 @@
 @property (nonatomic, retain) NSNumber * real_boolean;
 @property (nonatomic, retain) NSString * trade_type;
 @property (nonatomic, retain) NSString * properties;
+
+
+-(TTGoxTradeType)tradeType;
 
 +(void)findTradesWithPredicate:(NSPredicate*)p completion:(void (^)(NSArray* results))callbackBlock;
 

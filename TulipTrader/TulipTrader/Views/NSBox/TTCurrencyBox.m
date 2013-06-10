@@ -15,6 +15,8 @@
 #import "Tick.h"
 #import "TTGoxPrivateMessageController.h"
 #import "NSColor+Hex.h"
+#import "Trade.h"
+#import "JNWLabel.h"
 
 @interface TTCurrencyBox ()
 @property (nonatomic, retain) NSImageView* flagImage;
@@ -26,7 +28,8 @@
 @property (nonatomic, retain) TTTextView* buyWordText;
 @property (nonatomic, retain) TTTextView* sellWordText;
 @property (nonatomic, retain) TTTextView* spreadLabel;
-@property (nonatomic, retain) TTTextView* lastTradeText;
+@property (nonatomic, retain) JNWLabel* tradeQtyLabel;
+@property (nonatomic, retain) JNWLabel* tradeStrikePriceLabel;
 
 NSUInteger numberOfLeadingCharactersToAffectForCurrency(TTGoxCurrency currency);
 
@@ -40,6 +43,7 @@ static NSFont* sellFont;
 static NSFont* buySellLabelsFont;
 static NSFont* buySellFontForCurrencyLetters;
 static NSFont* spreadFont;
+static NSNumberFormatter* spreadNumberFormatter;
 
 +(void)initialize
 {
@@ -49,11 +53,9 @@ static NSFont* spreadFont;
     buySellFontForCurrencyLetters = [NSFont fontWithName:@"Helvetica-Italic" size:10.f];
     buySellLabelsFont = [NSFont fontWithName:@"Didot-Bold" size:12.f];
     spreadFont = [NSFont fontWithName:@"Helvetica" size:12.f];
-}
-
--(void)displayTrade:(Trade *)t
-{
-    [_lastTradeText setString:RUStringWithFormat(@"%@", t.price.stringValue)];
+    spreadNumberFormatter = [NSNumberFormatter new];
+    [spreadNumberFormatter setNumberStyle:NSNumberFormatterDecimalStyle];
+    [spreadNumberFormatter setMaximumFractionDigits:0];
 }
 
 -(NSColor*)colorWithHexString:(NSString*)string
@@ -70,12 +72,42 @@ static NSFont* spreadFont;
                              alpha:1.0];
 }
 
+-(void)loadTrade:(NSNotification*)sender
+{
+    Trade* trade = [sender.userInfo objectForKey:@"Trade"];
+    NSString* tradeQtyString;
+    NSString* tradeStrikeString = RUStringWithFormat(@"@ %@%.5f", currencySymbolStringFromCurrency(currencyFromNumber(trade.currency)), trade.price.floatValue);
+    
+    if (trade.tradeType == TTGoxTradeTypeNone)
+        return;
+    else if (trade.tradeType == TTGoxTradeTypeBid)
+        tradeQtyString = RUStringWithFormat(@"%.5fBTC bid [BUY]", trade.amount.floatValue);
+    else if (trade.tradeType == TTGoxTradeTypeAsk)
+        tradeQtyString = RUStringWithFormat(@"%.5fBTC ask [SELL]", trade.amount.floatValue);
+    
+    if (currencyFromNumber(trade.currency) == self.currency)
+    {
+     dispatch_async(dispatch_get_main_queue(), ^{
+                [self.tradeQtyLabel setText:tradeQtyString];
+                [self.tradeStrikePriceLabel setText:tradeStrikeString];
+        });
+    }
+}
+
 -(void)reloadTicker:(NSNotification*)sender
 {
     Ticker* ticker = [sender.userInfo objectForKey:@"Ticker"];
     TTGoxCurrency currency = currencyFromNumber(ticker.buy.currency); // @SHELDON ITS BAD FORM THAT I'M ASSUMING TO USE THE BUY TICK CURRENCY!
     if (currency == self.currency)
-        [self runQuery];
+    {
+        NSNumber* lastSell = [ticker.sell value];
+        NSNumber* lastBuy = [ticker.buy value];
+        [_sellPriceText setString:RUStringWithFormat(@"%@%@",currencySymbolStringFromCurrency(_currency), stringShortenedForCurrencyBox(lastSell.stringValue))];
+        [_buyPriceText setString:RUStringWithFormat(@"%@%@", currencySymbolStringFromCurrency(_currency), stringShortenedForCurrencyBox(lastBuy.stringValue))];
+        
+        double spread = (lastSell.doubleValue - lastBuy.doubleValue) * pow(10, 5);
+        [self.spreadLabel setString:RUStringWithFormat(@"%@pips", [spreadNumberFormatter stringFromNumber:@(spread)])];
+    }
 }
 
 -(void)runQuery
@@ -92,8 +124,8 @@ static NSFont* spreadFont;
         [_sellPriceText setString:RUStringWithFormat(@"%@%@",currencySymbolStringFromCurrency(_currency), stringShortenedForCurrencyBox(lastSell.stringValue))];
         [_buyPriceText setString:RUStringWithFormat(@"%@%@", currencySymbolStringFromCurrency(_currency), stringShortenedForCurrencyBox(lastBuy.stringValue))];
         
-        double spread = (lastSell.doubleValue - lastBuy.doubleValue) * pow(10, 4);
-        [self.spreadLabel setString:RUStringWithFormat(@"%.1fpips", spread)];
+        double spread = (lastSell.doubleValue - lastBuy.doubleValue) * pow(10, 5);
+        [self.spreadLabel setString:RUStringWithFormat(@"%@pips", [spreadNumberFormatter stringFromNumber:@(spread)])];
     }
     else
     {
@@ -115,7 +147,8 @@ static NSFont* spreadFont;
 
 -(void)dealloc
 {
-    [[NSNotificationCenter defaultCenter]removeObserver:self name:TTCurrencyUpdateNotificationString object:nil];
+    [[NSNotificationCenter defaultCenter]removeObserver:self name:TTGoxWebsocketTickerNotificationString object:nil];
+    [[NSNotificationCenter defaultCenter]removeObserver:self name:TTGoxWebsocketTradeNotificationString object:nil];
 }
 
 - (id)initWithFrame:(NSRect)frame
@@ -142,13 +175,13 @@ static NSFont* spreadFont;
         [_sellPriceText setBackgroundColor:[NSColor clearColor]];
         [_sellPriceText setEditable:NO];
         [_sellPriceText setFont:sellFont];
-        [self addSubview:_sellPriceText];
+        [self.contentView addSubview:_sellPriceText];
         
         [self setBuyPriceText:[TTTextView new]];
         [_buyPriceText setBackgroundColor:[NSColor clearColor]];
         [_buyPriceText setEditable:NO];
         [_buyPriceText setFont:buyFont];
-        [self addSubview:_buyPriceText];
+        [self.contentView addSubview:_buyPriceText];
         
         [self setBuyWordText:[TTTextView new]];
         [_buyWordText setBackgroundColor:[NSColor clearColor]];
@@ -156,7 +189,7 @@ static NSFont* spreadFont;
         [_buyWordText setFont:buySellLabelsFont];
         [_buyWordText setTextColor:[NSColor blackColor]];
         [_buyWordText setString:@"Bid:"];
-        [self addSubview:_buyWordText];
+        [self.contentView addSubview:_buyWordText];
         
         [self setSellWordText:[TTTextView new]];
         [_sellWordText setBackgroundColor:[NSColor clearColor]];
@@ -164,7 +197,7 @@ static NSFont* spreadFont;
         [_sellWordText setFont:buySellLabelsFont];
         [_sellWordText setTextColor:[NSColor blackColor]];
         [_sellWordText setString:@"Ask:"];
-        [self addSubview:_sellWordText];
+        [self.contentView addSubview:_sellWordText];
         
         [self setSpreadLabel:[TTTextView new]];
         [_spreadLabel setBackgroundColor:[NSColor clearColor]];
@@ -172,16 +205,11 @@ static NSFont* spreadFont;
         [_spreadLabel setAlignment:NSCenterTextAlignment];
         [_spreadLabel setFont:spreadFont];
         [_spreadLabel setTextColor:[NSColor blackColor]];
-        [self addSubview:self.spreadLabel];
+        [self.contentView addSubview:self.spreadLabel];
         
-        [self setLastTradeText:[TTTextView new]];
-        [_lastTradeText setBackgroundColor:[NSColor clearColor]];
-        [_lastTradeText setEditable:NO];
-        [_lastTradeText setAlignment:NSCenterTextAlignment];
-        [_lastTradeText setFont:spreadFont];
-        [self addSubview:_lastTradeText];
         
-        [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(reloadTicker:) name:TTCurrencyUpdateNotificationString object:nil];
+        [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(reloadTicker:) name:TTGoxWebsocketTickerNotificationString object:nil];
+        [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(loadTrade:) name:TTGoxWebsocketTradeNotificationString object:nil];
     }
     return self;
 }
@@ -189,12 +217,34 @@ static NSFont* spreadFont;
 -(void)setFrame:(NSRect)frameRect
 {
     [super setFrame:frameRect];
-    [_buyPriceText setFrame:(NSRect){25, CGRectGetHeight(frameRect) - 60, 120, 30}];
-    [_sellPriceText setFrame:(NSRect){25, CGRectGetHeight(frameRect) - 80, 120, 30}];
-    [_sellWordText setFrame:(NSRect){-5, CGRectGetHeight(frameRect) - 76, 40, 25}];
-    [_buyWordText setFrame:(NSRect){-5, CGRectGetHeight(frameRect) - 56, 40, 25}];
-    [_spreadLabel setFrame:(NSRect){-5, CGRectGetHeight(frameRect) - 95, 120, 25}];
-    [_lastTradeText setFrame:(NSRect){-5, CGRectGetHeight(frameRect) - 130, 120, 25}];
+    [_buyPriceText setFrame:(NSRect){25, CGRectGetHeight(frameRect) - 55, 120, 30}];
+    [_buyWordText setFrame:(NSRect){-5, CGRectGetHeight(frameRect) - 52, 40, 25}];
+    
+    [_sellPriceText setFrame:(NSRect){25, CGRectGetHeight(frameRect) - 72, 120, 30}];
+    [_sellWordText setFrame:(NSRect){-5, CGRectGetHeight(frameRect) - 69, 40, 25}];
+    
+    [_spreadLabel setFrame:(NSRect){0, CGRectGetHeight(frameRect) - 85, CGRectGetWidth([(NSView*)self.contentView frame]), 25}];
+    
+    if (!self.tradeQtyLabel) // JNWLabel isn't friendly to allocators other than initWithFrame:
+    {
+        [self setTradeQtyLabel:[[JNWLabel alloc]initWithFrame:(NSRect){0, CGRectGetMinY(_spreadLabel.frame) - 12, CGRectGetWidth([(NSView*)self.contentView frame]), 12}]];
+        [_tradeQtyLabel setBackgroundColor:[NSColor clearColor]];
+        [_tradeQtyLabel setFont:[NSFont systemFontOfSize:[NSFont smallSystemFontSize]]];
+        [_tradeQtyLabel setDrawsBackground:YES];
+        [_tradeQtyLabel setTextAlignment:NSCenterTextAlignment];
+        [self.contentView addSubview:_tradeQtyLabel];
+    }
+    
+    if (!self.tradeStrikePriceLabel)
+    {
+        [self setTradeStrikePriceLabel:[[JNWLabel alloc]initWithFrame:(NSRect){0, CGRectGetMinY(_tradeQtyLabel.frame) - 25, CGRectGetWidth([(NSView*)self.contentView frame]), 25}]];
+        [_tradeStrikePriceLabel setFont:[NSFont systemFontOfSize:[NSFont smallSystemFontSize]]];
+        [_tradeStrikePriceLabel setBackgroundColor:[NSColor clearColor]];
+        [_tradeStrikePriceLabel setDrawsBackground:YES];
+        [_tradeStrikePriceLabel setTextAlignment:NSCenterTextAlignment];
+        [self.contentView addSubview:_tradeStrikePriceLabel];
+    }
+    
     [self setNeedsDisplay:YES];
 }
 

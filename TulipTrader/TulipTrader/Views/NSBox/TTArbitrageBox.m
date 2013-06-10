@@ -125,7 +125,7 @@ static NSFont* zedFont;
 
 -(void)dealloc
 {
-    [[NSNotificationCenter defaultCenter]removeObserver:self forKeyPath:TTCurrencyUpdateNotificationString];
+    [[NSNotificationCenter defaultCenter]removeObserver:self forKeyPath:TTGoxWebsocketTickerNotificationString];
 }
 
 - (id)initWithFrame:(NSRect)frame
@@ -155,7 +155,7 @@ static NSFont* zedFont;
         
         [self setThirdTitleLeft:[TTTextView new]];
         
-        [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(tickerRecorded:) name:TTCurrencyUpdateNotificationString object:nil];
+        [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(tickerRecorded:) name:TTGoxWebsocketTickerNotificationString object:nil];
     
         [self setOeRatesController:[TTOERatesController sharedInstance]];
         

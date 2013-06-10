@@ -42,7 +42,7 @@ static NSFont* TT_TYPEWRITER_FONT_SMALL;
 #define TTStatusBarContentLeftOffset 10.f
 #define TTStatusBarContentBottomOffset 5.f
 
-#define TTCurrencyBoxWidth 130.f
+#define TTCurrencyBoxWidth 160.f
 #define TTCurrencyBoxHeight 100.f
 
 #pragma mark - lag delegate
@@ -67,10 +67,7 @@ static NSFont* TT_TYPEWRITER_FONT_SMALL;
 
 -(void)tradeOccuredForCurrency:(TTGoxCurrency)currency tradeData:(Trade *)trade
 {
-    [_currencyBoxes enumerateObjectsUsingBlock:^(TTCurrencyBox* obj, NSUInteger idx, BOOL *stop) {
-        if (obj.currency == currency)
-            [obj displayTrade:trade];
-    }];
+    RUDLog(@"");
 }
 
 - (id)initWithFrame:(NSRect)frame

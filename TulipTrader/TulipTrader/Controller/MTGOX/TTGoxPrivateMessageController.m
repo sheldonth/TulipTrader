@@ -17,7 +17,7 @@
 #import "Trade.h"
 #import "TTAPIControlBoxView.h"
 
-#define NOISYTRADES 0
+#define NOISYTRADES 1
 
 typedef enum{
     kTTGoxMarketNone = 0,
@@ -35,7 +35,9 @@ NSString* const kTTGoxLagKey = @"lag";
 static NSManagedObjectContext* primaryContext;
 static dispatch_queue_t privateMessageOperationQueue;
 
-NSString* const TTCurrencyUpdateNotificationString = @"ttCurrencyUpdateNotification";
+NSString* const TTGoxWebsocketTickerNotificationString = @"ttGoxTickerUpdateNotification";
+NSString* const TTGoxWebsocketTradeNotificationString = @"ttGoxTradeUpdateNotification";
+NSString* const TTGoxWebsocketLagUpdateNotificationString = @"ttGoxLagUpdateNotification";
 
 @implementation TTGoxPrivateMessageController
 
@@ -47,57 +49,59 @@ NSString* const TTCurrencyUpdateNotificationString = @"ttCurrencyUpdateNotificat
 
 -(void)recordDepth:(NSDictionary*)depthDictionary
 {
-    dispatch_async(privateMessageOperationQueue, ^{
+//    dispatch_async(privateMessageOperationQueue, ^{
         // do depth stuff here
-    });
+//    });
 }
 
 -(void)recordTrade:(NSDictionary*)tradeDictionary
 {
-    dispatch_async(privateMessageOperationQueue, ^{
-        NSManagedObjectContext* c = [[NSManagedObjectContext alloc]initWithConcurrencyType:NSPrivateQueueConcurrencyType];
-        [c setPersistentStoreCoordinator:primaryContext.persistentStoreCoordinator];
-        Trade* trade = [Trade newNetworkTradeInContext:c fromDictionary:[tradeDictionary objectForKey:@"trade"]];
-        [c performBlock:^{
-            NSError* e = nil;
-            [c save:&e];
-            if (e)
-                RUDLog(@"Error saving Trade");
-            else
+//    dispatch_async(privateMessageOperationQueue, ^{
+    NSManagedObjectContext* c = [[NSManagedObjectContext alloc]initWithConcurrencyType:NSPrivateQueueConcurrencyType];
+    [c setPersistentStoreCoordinator:primaryContext.persistentStoreCoordinator];
+    Trade* trade = [Trade newNetworkTradeInContext:c fromDictionary:[tradeDictionary objectForKey:@"trade"]];
+    [c performBlockAndWait:^{
+        NSError* e = nil;
+        [c save:&e];
+        if (e)
+            RUDLog(@"Error saving Trade");
+        else
+        {
+            if (NOISYTRADES)
             {
-                if (NOISYTRADES)
-                {
-                    if ([trade.trade_type isEqualToString:@"bid"])
-                        [TTAPIControlBoxView publishCommand:RUStringWithFormat(@"%@BTC bought for %@ %@ (%@)", trade.amount.stringValue, stringFromCurrency(currencyFromNumber(trade.currency)), trade.price.stringValue, trade.properties)];
-                    else
-                        [TTAPIControlBoxView publishCommand:RUStringWithFormat(@"%@BTC sold for %@ %@ (%@)", trade.amount.stringValue, stringFromCurrency(currencyFromNumber(trade.currency)), trade.price.stringValue, trade.properties)];
-                }
+                if ([trade.trade_type isEqualToString:@"bid"])
+                    [TTAPIControlBoxView publishCommand:RUStringWithFormat(@"%@BTC bought for %@ %@ (%@)", trade.amount.stringValue, stringFromCurrency(currencyFromNumber(trade.currency)), trade.price.stringValue, trade.properties)];
+                else
+                    [TTAPIControlBoxView publishCommand:RUStringWithFormat(@"%@BTC sold for %@ %@ (%@)", trade.amount.stringValue, stringFromCurrency(currencyFromNumber(trade.currency)), trade.price.stringValue, trade.properties)];
             }
-        }];
-//        [delegate tradeOccuredForCurrency:currencyFromNumber(trade.currency) tradeData:trade];
-    });
+        }
+    }];
+    [[NSNotificationCenter defaultCenter]postNotificationName:TTGoxWebsocketTradeNotificationString object:self userInfo:@{@"Trade": trade}];
+//    });
 }
 
 -(void)recordTicker:(NSDictionary*)tickerDictionary
 {
-    dispatch_async(privateMessageOperationQueue, ^{
-        NSManagedObjectContext* c = [[NSManagedObjectContext alloc]initWithConcurrencyType:NSPrivateQueueConcurrencyType];
-        [c setPersistentStoreCoordinator:primaryContext.persistentStoreCoordinator];
-        Ticker* ticker = [Ticker newTickerInContext:c fromDictionary:tickerDictionary];
-        [ticker.managedObjectContext performBlock:^{
-            NSError* e = nil;
-            [ticker.managedObjectContext save:&e];
-            if (e)
-                RUDLog(@"Error saving ticker on channel: %@", ticker.channel_name);
-        }];
-        [[NSNotificationCenter defaultCenter]postNotificationName:TTCurrencyUpdateNotificationString object:nil userInfo:@{@"Ticker": ticker}];
-    });
+//    dispatch_async(privateMessageOperationQueue, ^{
+    NSManagedObjectContext* c = [[NSManagedObjectContext alloc]initWithConcurrencyType:NSPrivateQueueConcurrencyType];
+    [c setPersistentStoreCoordinator:primaryContext.persistentStoreCoordinator];
+    Ticker* ticker = [Ticker newTickerInContext:c fromDictionary:tickerDictionary];
+    [ticker.managedObjectContext performBlockAndWait:^{
+        NSError* e = nil;
+        [ticker.managedObjectContext save:&e];
+        if (e)
+            RUDLog(@"Error saving ticker on channel: %@", ticker.channel_name);
+    }];
+    [[NSNotificationCenter defaultCenter]postNotificationName:TTGoxWebsocketTickerNotificationString object:self userInfo:@{@"Ticker": ticker}];
+//    });
 }
 
 -(void)observeLag:(NSDictionary*)lagDictionary
 {
     if (self.lagDelegate && [self.lagDelegate respondsToSelector:@selector(lagObserved:)])
         [_lagDelegate lagObserved:lagDictionary];
+    else
+        [[NSNotificationCenter defaultCenter]postNotificationName:TTGoxWebsocketLagUpdateNotificationString object:self userInfo:@{@"LagDictionary": lagDictionary}];
 }
 
 -(void)shouldExamineResponseDictionary:(NSDictionary *)dictionary ofMessageType:(TTGoxSocketMessageType)type
