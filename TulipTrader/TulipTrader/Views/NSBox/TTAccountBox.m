@@ -106,7 +106,7 @@ NSString* ordersArrayToString(NSArray* ordersArray)
         [s appendFormat:@"\t%@ %@ SELL %@ AT %@\n", stringFromOrderStatus(obj.orderStatus), stringFromCurrency(obj.currency), obj.amount.display, obj.price.display];
     }];
     
-    [s appendString:@"\n\n\nREMINDER:\n1 pip(point in percentage) or .00001\nMtGox quotes exchange rates to >= 5 decimal places\n1000pips = $.01"];
+    [s appendString:@"\n\n\nREMINDER:\n•Spreads are 1 pip(point in percentage) or .00001\n•This market quotes exchange rates to >= 5 decimal places\n•1000pips = $.01 or a penny of the counter currency"];
     
     return s;
 }

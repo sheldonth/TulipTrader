@@ -82,15 +82,13 @@
 {
     NSScreen* mainScreen = [NSScreen mainScreen];
     NSRect mainScreenFrame = mainScreen.frame;
-    RUDLog(@"Mainscreenframe %@", NSStringFromRect(mainScreenFrame));
     [self.window setFrame:(NSRect){kTTTradeWindowScreenInsets, kTTTradeWindowScreenInsets, mainScreenFrame.size.width - (2 * kTTTradeWindowScreenInsets), mainScreenFrame.size.height - (2 * kTTTradeWindowScreenInsets)} display:YES animate:YES];
     [self.window setTitle:appTitle];
     [self.window setCollectionBehavior:NSWindowCollectionBehaviorFullScreenPrimary];
     [self setOperationsController:[TTOperationsController new]];
     [self setMenuBehaviorController:[TTMenuBehaviorController sharedInstance]];
-    [self setMasterViewController:[[TTMasterViewController alloc]initWithNibName:@"TTMasterViewController" bundle:nil]];
-    [_masterViewController setViewFrameAndInformSubviews:[(NSView*)self.window.contentView bounds]];
-    [self.window.contentView addSubview:_masterViewController.view];
+    [self setMasterViewController:[[TTMasterViewController alloc]initWithFrame:(NSRect){0,0,self.window.frame.size.width, self.window.frame.size.height - 23}]];
+    [self.window.contentView addSubview:_masterViewController];
     [TTAPIControlBoxView publishCommand:RUStringWithFormat(@"Welcome to %@", appTitle)];
     [TTAPIControlBoxView publishCommand:@"Enter \"help\" for command list."];
 }

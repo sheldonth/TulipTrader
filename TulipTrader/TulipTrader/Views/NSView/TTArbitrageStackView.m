@@ -49,12 +49,12 @@
     return self;
 }
 
-//- (void)drawRect:(NSRect)dirtyRect
-//{
-//    [[NSColor orangeColor] setFill];
-//    NSRectFill(dirtyRect);
-//}
-
+- (void)drawRect:(NSRect)dirtyRect
+{
+    [[NSColor orangeColor] setFill];
+    NSRectFill(dirtyRect);
+}
+    
 -(void)setBaseCurrency:(TTGoxCurrency)baseCurrency
 {
     [self willChangeValueForKey:@"baseCurrency"];
@@ -70,6 +70,8 @@
     CGFloat boxWidth = CGRectGetWidth(frameRect) - (2 * boxSideWidth);
     [_arbitrageBoxes enumerateObjectsUsingBlock:^(TTArbitrageBox* obj, NSUInteger idx, BOOL *stop) {
         [obj setFrame:(NSRect){boxSideWidth, 10 + idx * ((boxSideWidth / 2) + kTTArbitrageBoxHeight), boxWidth, kTTArbitrageBoxHeight}];
+        RUDLog(@"%@", NSStringFromRect(obj.frame));
+        RUDLog(@"!");
 //        [obj setFrame:(NSRect){boxSideWidth, CGRectGetHeight(frameRect) - (((idx + 1) * kTTArbitrageBoxHeight) + (idx * 10)), CGRectGetWidth(frameRect) - (2 * boxSideWidth), kTTArbitrageBoxHeight}];
     }];
 }

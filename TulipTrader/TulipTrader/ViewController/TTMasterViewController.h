@@ -7,9 +7,21 @@
 //
 
 #import <Cocoa/Cocoa.h>
+#import "TTArbGridView.h"
+#import "TTDepthGridView.h"
 
-@interface TTMasterViewController : NSViewController
+typedef enum{
+    TTMasterViewControllerBodyContentStateArbTables = 0,
+    TTMasterViewControllerBodyContentStateDepthTables,
+}TTMasterViewControllerBodyContentState;
+
+@interface TTMasterViewController : NSView
 
 -(void)setViewFrameAndInformSubviews:(NSRect)newFrame;
+
+@property(nonatomic, retain)TTArbGridView* arbGridView;
+@property(nonatomic, retain)TTDepthGridView* depthGridView;
+@property(nonatomic)TTMasterViewControllerBodyContentState bodyState;
+-(void)setToBodyState:(TTMasterViewControllerBodyContentState)bodyState;// WithCompletion:(void (^)())completion;
 
 @end

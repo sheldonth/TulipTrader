@@ -24,7 +24,9 @@
 @property(weak)NSMenuItem* loadDBMenuItem;
 @property(weak)NSMenu* visualizationsMenu;
 @property(weak)NSMenuItem* graphsMenuItem;
-
+@property(weak)NSMenu* settingsMenu;
+@property(weak)NSMenuItem* arbTablesMenuItem;
+@property(weak)NSMenuItem* depthTablesMenuItem;
 @property(nonatomic, retain)TTGraphsWindow* graphsWindow;
 
 @end
@@ -32,6 +34,16 @@
 @implementation TTMenuBehaviorController
 
 RU_SYNTHESIZE_SINGLETON_FOR_CLASS_WITH_ACCESSOR(TTMenuBehaviorController, sharedInstance);
+
+-(void)jumpToDepthTable:(id)sender
+{
+    
+}
+
+-(void)jumpToArbTable:(id)sender
+{
+    
+}
 
 -(void)loadDB:(id)sender
 {
@@ -55,6 +67,9 @@ RU_SYNTHESIZE_SINGLETON_FOR_CLASS_WITH_ACCESSOR(TTMenuBehaviorController, shared
     _loadDBMenuItem = [_fileMenu itemWithTitle:@"Load DB"];
     _visualizationsMenu = [[_tulipTraderApplicationMenu itemWithTitle:@"Visualizations"] submenu];
     _graphsMenuItem = [_visualizationsMenu itemWithTitle:@"Graphs"];
+    _settingsMenu = [[_menu itemWithTitle:@"Settings"]submenu];
+    _arbTablesMenuItem = [_settingsMenu itemWithTitle:@"Show Arb Tables"];
+    _depthTablesMenuItem = [_settingsMenu itemWithTitle:@"Show Depth Columns"];
 }
 
 -(void)bind
@@ -68,6 +83,14 @@ RU_SYNTHESIZE_SINGLETON_FOR_CLASS_WITH_ACCESSOR(TTMenuBehaviorController, shared
     [_loadDBMenuItem setEnabled:YES];
     [_loadDBMenuItem setTarget:self];
     [_loadDBMenuItem setAction:@selector(loadDB:)];
+    
+    [_arbTablesMenuItem setEnabled:YES];
+    [_arbTablesMenuItem setTarget:self];
+    [_arbTablesMenuItem setAction:@selector(jumpToArbTable:)];
+    
+    [_depthTablesMenuItem setEnabled:YES];
+    [_depthTablesMenuItem setTarget:self];
+    [_depthTablesMenuItem setAction:@selector(jumpToDepthTable:)];
 }
 
 -(id)init

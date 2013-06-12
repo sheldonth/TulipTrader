@@ -44,6 +44,8 @@ static NSFont* buySellLabelsFont;
 static NSFont* buySellFontForCurrencyLetters;
 static NSFont* spreadFont;
 static NSNumberFormatter* spreadNumberFormatter;
+static NSColor* buyGreen;
+static NSColor* sellRed;
 
 +(void)initialize
 {
@@ -217,11 +219,11 @@ static NSNumberFormatter* spreadNumberFormatter;
 -(void)setFrame:(NSRect)frameRect
 {
     [super setFrame:frameRect];
-    [_buyPriceText setFrame:(NSRect){25, CGRectGetHeight(frameRect) - 55, 120, 30}];
-    [_buyWordText setFrame:(NSRect){-5, CGRectGetHeight(frameRect) - 52, 40, 25}];
+    [_sellPriceText setFrame:(NSRect){25, CGRectGetHeight(frameRect) - 55, 120, 30}];
+    [_sellWordText setFrame:(NSRect){-5, CGRectGetHeight(frameRect) - 52, 40, 25}];
     
-    [_sellPriceText setFrame:(NSRect){25, CGRectGetHeight(frameRect) - 72, 120, 30}];
-    [_sellWordText setFrame:(NSRect){-5, CGRectGetHeight(frameRect) - 69, 40, 25}];
+    [_buyPriceText setFrame:(NSRect){25, CGRectGetHeight(frameRect) - 72, 120, 30}];
+    [_buyWordText setFrame:(NSRect){-5, CGRectGetHeight(frameRect) - 69, 40, 25}];
     
     [_spreadLabel setFrame:(NSRect){0, CGRectGetHeight(frameRect) - 85, CGRectGetWidth([(NSView*)self.contentView frame]), 25}];
     

@@ -49,6 +49,7 @@ NSString* const TTGoxWebsocketLagUpdateNotificationString = @"ttGoxLagUpdateNoti
 
 -(void)recordDepth:(NSDictionary*)depthDictionary
 {
+    RUDLog(@"RecordDepth");
 //    dispatch_async(privateMessageOperationQueue, ^{
         // do depth stuff here
 //    });
