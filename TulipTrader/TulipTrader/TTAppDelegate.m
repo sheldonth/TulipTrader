@@ -9,7 +9,6 @@
 #import "TTAppDelegate.h"
 #import "TTOperationsController.h"
 #import "RUConstants.h"
-#import "TTMasterViewController.h"
 #import "TTMenuBehaviorController.h"
 #import "TTAPIControlBoxView.h"
 
@@ -20,7 +19,6 @@
     NSSize partialScreenSize;
 }
 @property(nonatomic, retain)TTOperationsController* operationsController;
-@property(nonatomic, retain)TTMasterViewController* masterViewController;
 @property(nonatomic, retain)TTMenuBehaviorController* menuBehaviorController;
 @end
 

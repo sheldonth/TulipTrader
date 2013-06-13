@@ -9,11 +9,13 @@
 #import "TTArbGridView.h"
 #import "TTGoxCurrencyController.h"
 #import "TTArbitrageStackView.h"
+#import "JNWLabel.h"
 
 @interface TTArbGridView()
 
 @property(nonatomic, retain)NSMutableArray* arbitrageStackViewsArray;
 @property(nonatomic)CGFloat stackWidth;
+//@property(nonatomic, retain)JNWLabel* 
 
 @end
 
@@ -35,13 +37,9 @@
             [self.arbitrageStackViewsArray addObject:stackView];
         }];
     }
-    
     return self;
 }
 
-//- (void)drawRect:(NSRect)dirtyRect
-//{
-//    // Drawing code here.
-//}
+
 
 @end

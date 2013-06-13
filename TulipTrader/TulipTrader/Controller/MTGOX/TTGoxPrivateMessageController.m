@@ -49,7 +49,9 @@ NSString* const TTGoxWebsocketLagUpdateNotificationString = @"ttGoxLagUpdateNoti
 
 -(void)recordDepth:(NSDictionary*)depthDictionary
 {
-    RUDLog(@"RecordDepth");
+//    NSString* cur = [[depthDictionary objectForKey:@"depth"]objectForKey:@"currency"];
+//    if ([cur isEqualToString:@"USD"])
+//        RUDLog(@"!");
 //    dispatch_async(privateMessageOperationQueue, ^{
         // do depth stuff here
 //    });
@@ -57,7 +59,6 @@ NSString* const TTGoxWebsocketLagUpdateNotificationString = @"ttGoxLagUpdateNoti
 
 -(void)recordTrade:(NSDictionary*)tradeDictionary
 {
-//    dispatch_async(privateMessageOperationQueue, ^{
     NSManagedObjectContext* c = [[NSManagedObjectContext alloc]initWithConcurrencyType:NSPrivateQueueConcurrencyType];
     [c setPersistentStoreCoordinator:primaryContext.persistentStoreCoordinator];
     Trade* trade = [Trade newNetworkTradeInContext:c fromDictionary:[tradeDictionary objectForKey:@"trade"]];
@@ -78,12 +79,10 @@ NSString* const TTGoxWebsocketLagUpdateNotificationString = @"ttGoxLagUpdateNoti
         }
     }];
     [[NSNotificationCenter defaultCenter]postNotificationName:TTGoxWebsocketTradeNotificationString object:self userInfo:@{@"Trade": trade}];
-//    });
 }
 
 -(void)recordTicker:(NSDictionary*)tickerDictionary
 {
-//    dispatch_async(privateMessageOperationQueue, ^{
     NSManagedObjectContext* c = [[NSManagedObjectContext alloc]initWithConcurrencyType:NSPrivateQueueConcurrencyType];
     [c setPersistentStoreCoordinator:primaryContext.persistentStoreCoordinator];
     Ticker* ticker = [Ticker newTickerInContext:c fromDictionary:tickerDictionary];
@@ -94,7 +93,6 @@ NSString* const TTGoxWebsocketLagUpdateNotificationString = @"ttGoxLagUpdateNoti
             RUDLog(@"Error saving ticker on channel: %@", ticker.channel_name);
     }];
     [[NSNotificationCenter defaultCenter]postNotificationName:TTGoxWebsocketTickerNotificationString object:self userInfo:@{@"Ticker": ticker}];
-//    });
 }
 
 -(void)observeLag:(NSDictionary*)lagDictionary

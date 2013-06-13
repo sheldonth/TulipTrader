@@ -10,6 +10,7 @@
 #import "TTGoxCurrency.h"
 #import "RUSingleton.h"
 #import "TTGoxWallet.h"
+#import "TTGoxSocketController.h"
 
 @interface TTGoxHTTPController : NSObject
 
@@ -19,7 +20,7 @@
 
 -(void)getOrdersWithCompletion:(void (^)(NSArray* orders))completionBlock withFailBlock:(void (^)(NSError* e))failBlock;
 
--(void)subscribeToAccountWebsocket;
+-(void)getAccountWebSocketKeyWithCompletion:(void (^)(NSString* accountKey))completion failBlock:(void (^)(NSError* e))failBlock;
 
 -(void)getTransactionsForWallet:(TTGoxWallet*)wallet withCompletion:(void (^)(TTGoxWallet* wallet))completionBlock withFailBlock:(void (^)(NSError* e))failBlock;
 

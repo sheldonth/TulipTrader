@@ -8,11 +8,13 @@
 
 #import <Foundation/Foundation.h>
 #import "RUSingleton.h"
+#import "TTAppDelegate.h"
 
 @interface TTMenuBehaviorController : NSObject
 
 RU_SYNTHESIZE_SINGLETON_DECLARATION_FOR_CLASS_WITH_ACCESSOR(TTMenuBehaviorController, sharedInstance);
 
 @property(nonatomic, readonly, assign)NSMenu* menu;
+@property(weak)TTAppDelegate* appDelegate;
 
 @end

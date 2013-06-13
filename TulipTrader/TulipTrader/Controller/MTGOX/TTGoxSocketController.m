@@ -12,6 +12,7 @@
 #import "TTGoxCurrencyController.h"
 #import "TTAPIControlBoxView.h"
 #import "TTGoxHTTPController.h"
+#import "TTAPIControlBoxView.h"
 
 NSString* const kTTGoxFrameOpenNSString = @"{";
 NSString* const kTTGoxFrameCloseNSString = @"}";
@@ -30,6 +31,7 @@ NSString* const kTTGoxOperationKeyResult = @"result";//    The response for op:c
 
 @property (nonatomic, strong) SRWebSocket* socketConn;
 @property (nonatomic)NSInteger retries;
+@property (nonatomic, retain)NSTimer* keySubscribeTimer;
 
 -(void)open;
 -(void)write:(NSString*)utfString;
@@ -171,7 +173,11 @@ static NSMutableString* kTTGoxSocketIOURL;
     
     [self subscribeToChannelID:@"trade.lag"];
     
-    [[TTGoxHTTPController sharedInstance]subscribeToAccountWebsocket];
+    [[TTGoxHTTPController sharedInstance]getAccountWebSocketKeyWithCompletion:^(NSString *accountKey) {
+        [self subscribeToKeyID:accountKey];
+    } failBlock:^(NSError *e) {
+        [TTAPIControlBoxView publishCommand:@"Account websocket key request failed. Run 'privKey' to retry."];
+    }];
     
 //    [self subscribeToChannelID:@"ticker.BTCEUR"];
 //    [self subscribeToChannelID:@"ticker.BTCCAD"];

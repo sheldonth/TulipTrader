@@ -41,33 +41,47 @@
 
 -(void)setToBodyState:(TTMasterViewControllerBodyContentState)bodyState// WithCompletion:(void (^)())completion
 {
-    NSMutableDictionary* animationDictionaryOut = [NSMutableDictionary dictionaryWithCapacity:2];
-    NSMutableDictionary* animationDictionaryIn = [NSMutableDictionary dictionaryWithCapacity:2];
+    if (![self.subviews containsObject:self.arbGridView])
+        [self addSubview:self.arbGridView];
+    
+    if (![self.subviews containsObject:self.depthGridView])
+        [self addSubview:self.depthGridView];
+    
+    [NSAnimationContext beginGrouping];
+    [[NSAnimationContext currentContext]setDuration:0.3];
     switch (bodyState) {
         case TTMasterViewControllerBodyContentStateArbTables:
-            [animationDictionaryOut setObject:NSViewAnimationEffectKey forKey:NSViewAnimationFadeOutEffect];
-            [animationDictionaryOut setObject:self.depthGridView forKey:@"NSViewAnimationTargetKey"];
-            
-            [animationDictionaryIn setObject:self.arbGridView forKey:@"NSViewAnimationTargetKey"];
-            [animationDictionaryIn setObject:NSViewAnimationEffectKey forKey:NSViewAnimationFadeInEffect];
+        {
+            [[self.depthGridView animator] setAlphaValue:0.0];
+            [[self.arbGridView animator]setAlphaValue:1.0];
+            [[NSAnimationContext currentContext]setCompletionHandler:^{
+                [self.depthGridView removeFromSuperview];
+            }];
             break;
+        }
             
         case TTMasterViewControllerBodyContentStateDepthTables:
-            [animationDictionaryOut setObject:NSViewAnimationEffectKey forKey:NSViewAnimationFadeOutEffect];
-            [animationDictionaryOut setObject:self.arbGridView forKey:@"NSViewAnimationTargetKey"];
-            
-            [animationDictionaryIn setObject:self.depthGridView forKey:@"NSViewAnimationTargetKey"];
-            [animationDictionaryIn setObject:NSViewAnimationEffectKey forKey:NSViewAnimationFadeInEffect];
+        {
+            if (!self.depthGridView)
+            {
+                [self setDepthGridView:[[TTDepthGridView alloc]initWithFrame:_centerBodyRect]];
+                [self.depthGridView setAlphaValue:0.0];
+                [self addSubview:self.depthGridView];
+            }
+            [[self.depthGridView animator]setAlphaValue:1.0];
+            [[self.arbGridView animator]setAlphaValue:0.0];
+            [[NSAnimationContext currentContext]setCompletionHandler:^{
+                [self.arbGridView removeFromSuperview];
+            }];
             break;
-            
+        }
         default:
             break;
     }
-    NSViewAnimation* theAnim = [[NSViewAnimation alloc]initWithViewAnimations:@[animationDictionaryOut, animationDictionaryIn]];
-    [theAnim setDuration:1.5];    // One and a half seconds.
-    [theAnim setAnimationCurve:NSAnimationEaseIn];
-    [theAnim startAnimation];
+    [NSAnimationContext endGrouping];
+    [self willChangeValueForKey:@"bodyState"];
     _bodyState = bodyState;
+    [self didChangeValueForKey:@"bodyState"];
 //    completion();
 }
 
@@ -94,10 +108,6 @@
         
         [self setArbGridView:[[TTArbGridView alloc]initWithFrame:_centerBodyRect]];
         [self addSubview:self.arbGridView];
-        
-        [self setDepthGridView:[[TTDepthGridView alloc]initWithFrame:_centerBodyRect]];
-        [self.depthGridView setAlphaValue:0.0];
-        [self addSubview:self.depthGridView];
         
         _bodyState = TTMasterViewControllerBodyContentStateArbTables;
         

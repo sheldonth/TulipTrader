@@ -10,6 +10,7 @@
 #import "TTGoxCurrency.h"
 #import "RUConstants.h"
 #import "JSONKit.h"
+#import "TTAPIControlBoxView.h"
 
 @interface TTOERatesController ()
 
@@ -140,6 +141,7 @@ NSURL* urlForDataWithBaseCurrency(TTGoxCurrency baseCurrency)
     [self setCurrencyValues:[dict objectForKey:@"rates"]];
     
     [[NSNotificationCenter defaultCenter]postNotificationName:OERatesLoadedNotificationString object:self];
+    [TTAPIControlBoxView publishCommand:@"Fiat Exchange Rates Loaded"];
 }
 
 @end

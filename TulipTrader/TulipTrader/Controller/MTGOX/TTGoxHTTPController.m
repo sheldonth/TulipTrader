@@ -16,7 +16,6 @@
 #import "TTAppDelegate.h"
 #import "Trade.h"
 #import "TTGoxHTTPClient.h"
-#import "TTGoxSocketController.h"
 #import "Order.h"
 #import "TTGoxWallet.h"
 #import "AFHTTPRequestOperation.h"
@@ -117,24 +116,23 @@ RU_SYNTHESIZE_SINGLETON_FOR_CLASS_WITH_ACCESSOR(TTGoxHTTPController, sharedInsta
         NSString* a = [[NSString alloc]initWithData:(NSData*)responseObject encoding:NSUTF8StringEncoding];
         NSDictionary* responseDictionary = [a objectFromJSONString];
         NSDictionary* data = [responseDictionary objectForKey:@"data"];
-        NSArray* bids = [data objectForKey:@"asks"];
-        NSArray* asks = [data objectForKey:@"bids"];
-        
-        
+        NSArray* bids = [data objectForKey:@"bids"];
+        NSArray* asks = [data objectForKey:@"asks"];
+        completionBlock(bids, asks, @{@"filter_max_price": [data objectForKey:@"filter_max_price" ], @"filter_min_price": [data objectForKey:@"filter_min_price"]});
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        
+        failBlock(error);
     }];
 }
 
--(void)subscribeToAccountWebsocket
+-(void)getAccountWebSocketKeyWithCompletion:(void (^)(NSString* accountKey))completion failBlock:(void (^)(NSError* e))failBlock
 {
     [self.networkSecure postPath:@"BTCUSD/money/idkey" parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSString* s = [[NSString alloc]initWithData:(NSData*)responseObject encoding:NSUTF8StringEncoding];
         NSDictionary* d = [s objectFromJSONString];
         NSString* accountKey = [d objectForKey:@"data"];
-        [[TTGoxSocketController sharedInstance]subscribeToKeyID:accountKey];
+        completion(accountKey);
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        RUDLog(@"PrivChannel Failed %@", error);
+        failBlock(error);
     }];
 }
 
