@@ -20,6 +20,7 @@
 #import "TTGoxWallet.h"
 #import "AFHTTPRequestOperation.h"
 #import "Transaction.h"
+#import "TTDepthOrder.h"
 
 #define kTTMTGOXAPIV1 @"http://data.mtgox.com/api/1/"
 #define kTTMTGOXAPIV2 @"https://data.mtgox.com/api/2/"
@@ -116,9 +117,22 @@ RU_SYNTHESIZE_SINGLETON_FOR_CLASS_WITH_ACCESSOR(TTGoxHTTPController, sharedInsta
         NSString* a = [[NSString alloc]initWithData:(NSData*)responseObject encoding:NSUTF8StringEncoding];
         NSDictionary* responseDictionary = [a objectFromJSONString];
         NSDictionary* data = [responseDictionary objectForKey:@"data"];
+
+        NSMutableArray* bidObjects = [NSMutableArray array];
+        NSMutableArray* askObjects = [NSMutableArray array];
+
         NSArray* bids = [data objectForKey:@"bids"];
         NSArray* asks = [data objectForKey:@"asks"];
-        completionBlock(bids, asks, @{@"filter_max_price": [data objectForKey:@"filter_max_price" ], @"filter_min_price": [data objectForKey:@"filter_min_price"]});
+
+        [bids enumerateObjectsUsingBlock:^(NSDictionary* obj, NSUInteger idx, BOOL *stop) {
+            [bidObjects addObject:[TTDepthOrder newDepthOrderFromDictionary:obj]];
+        }];
+        
+        [asks enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+            [askObjects addObject:[TTDepthOrder newDepthOrderFromDictionary:obj]];
+        }];
+        
+        completionBlock(bidObjects, askObjects, @{@"filter_max_price": [data objectForKey:@"filter_max_price"], @"filter_min_price": [data objectForKey:@"filter_min_price"]});
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         failBlock(error);
     }];
