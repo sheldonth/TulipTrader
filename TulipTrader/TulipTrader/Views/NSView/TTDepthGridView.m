@@ -32,11 +32,11 @@
         CGFloat stackWidth = floorf(CGRectGetWidth(frame) / __activeCurrencies.count);
         [__activeCurrencies enumerateObjectsUsingBlock:^(NSString* currencyStr, NSUInteger idx, BOOL *stop) {
             TTDepthStackView* depthStackView = [[TTDepthStackView alloc]initWithFrame:(NSRect){0 + (stackWidth * idx), 0, stackWidth, CGRectGetHeight(frame)}];
-            if (currencyFromString(currencyStr) == TTGoxCurrencyUSD)
-            {
+//            if ((currencyFromString(currencyStr) == TTGoxCurrencyUSD) || (currencyFromString(currencyStr) == TTGoxCurrencyEUR))
+//            {
                 [depthStackView setCurrency:currencyFromString(currencyStr)];
                 [self addSubview:depthStackView];
-            }
+//            }
         }];
     
     }

@@ -26,12 +26,14 @@
 @property(nonatomic, retain)NSArray* bids;
 @property(nonatomic, retain)NSArray* asks;
 @property(nonatomic, retain)NSDictionary* maxMinTicks;
+@property(nonatomic, retain)NSButton* zoomIn;
+@property(nonatomic, retain)NSButton* zoomOut;
 
 @end
 
 @implementation TTDepthStackView
 
-#define depthChartBottomInset 0.f
+#define depthChartBottomInset 20.f
 #define depthChartTopInset 20.f
 #define depthChartLeftSideInsets 17.f
 #define depthChartRightSideInsets 17.f
@@ -68,6 +70,11 @@ void drawLine(CGContextRef context, CGFloat lineWidth, CGColorRef lineColor, CGP
     CGContextStrokePath(context);
 }
 
+-(void)tryReload
+{
+    [self loadDepthForCurrency:self.currency];
+}
+
 -(void)loadDepthForCurrency:(TTGoxCurrency)curr
 {
     [[TTGoxHTTPController sharedInstance]getDepthForCurrency:curr withCompletion:^(NSArray *bids, NSArray *asks, NSDictionary *maxMinTicks) {
@@ -85,7 +92,7 @@ void drawLine(CGContextRef context, CGFloat lineWidth, CGColorRef lineColor, CGP
         [self setHasSeededDepthData:YES];
         [self setNeedsDisplay:YES];
     } withFailBlock:^(NSError *e) {
-        
+        [NSTimer scheduledTimerWithTimeInterval:2.f target:self selector:@selector(tryReload) userInfo:nil repeats:NO];
     }];
 }
 
@@ -124,6 +131,11 @@ void drawLine(CGContextRef context, CGFloat lineWidth, CGColorRef lineColor, CGP
     [stringForPriceNumber(highestBid) drawAtPoint:(NSPoint){0, pixelsPerAssetDeltaUnit * (highestBid.floatValue - lowestBid.floatValue)} withAttributes:attributeDictionaryForGraphYLabel()];
     [stringForPriceNumber(lowestAsk) drawAtPoint:(NSPoint){CGRectGetMaxX(graphRect), pixelsPerAssetDeltaUnit * (lowestAsk.floatValue - lowestBid.floatValue)} withAttributes:attributeDictionaryForGraphYLabel()];
     
+    NSBezierPath* rectPath = [NSBezierPath bezierPath];
+    [rectPath moveToPoint:(NSPoint){CGRectGetMidX(dirtyRect), CGRectGetHeight(dirtyRect) - depthChartTopInset}];
+    [rectPath lineToPoint:(NSPoint){CGRectGetMidX(dirtyRect), depthChartBottomInset}];
+    [rectPath stroke];
+    
     [[NSColor colorWithHexString:@"67C8FF"]set];
     
     [self.bids enumerateObjectsUsingBlock:^(TTDepthOrder* obj, NSUInteger idx, BOOL *stop) {
@@ -145,11 +157,6 @@ void drawLine(CGContextRef context, CGFloat lineWidth, CGColorRef lineColor, CGP
         NSBezierPath* circ = [NSBezierPath bezierPathWithOvalInRect:(NSRect){p.currentPoint.x - 2, p.currentPoint.y - 2, 4, 4}];
         [circ stroke];
     }];
-        
-    NSBezierPath* rectPath = [NSBezierPath bezierPath];
-    [rectPath moveToPoint:(NSPoint){CGRectGetMidX(dirtyRect), CGRectGetHeight(dirtyRect) - depthChartTopInset}];
-    [rectPath lineToPoint:(NSPoint){CGRectGetMidX(dirtyRect), depthChartBottomInset}];
-    [rectPath stroke];
 }
 
 - (void)drawRect:(NSRect)dirtyRect
