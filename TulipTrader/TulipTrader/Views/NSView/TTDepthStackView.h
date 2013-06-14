@@ -13,5 +13,8 @@
 
 @property(nonatomic, readwrite)TTGoxCurrency currency;
 @property(nonatomic)BOOL hasSeededDepthData;
+@property(nonatomic)BOOL lineDataIsDirty;
+
+-(void)reload;
 
 @end

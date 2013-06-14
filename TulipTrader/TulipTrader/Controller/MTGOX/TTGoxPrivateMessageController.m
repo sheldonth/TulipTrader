@@ -100,7 +100,7 @@ NSString* const TTGoxWebsocketLagUpdateNotificationString = @"ttGoxLagUpdateNoti
     if (self.lagDelegate && [self.lagDelegate respondsToSelector:@selector(lagObserved:)])
         [_lagDelegate lagObserved:lagDictionary];
     else
-        [[NSNotificationCenter defaultCenter]postNotificationName:TTGoxWebsocketLagUpdateNotificationString object:self userInfo:@{@"LagDictionary": lagDictionary}];
+        [[NSNotificationCenter defaultCenter]postNotificationName:TTGoxWebsocketLagUpdateNotificationString object:self userInfo:@{@"lagDictionary": lagDictionary}];
 }
 
 -(void)shouldExamineResponseDictionary:(NSDictionary *)dictionary ofMessageType:(TTGoxSocketMessageType)type

@@ -12,7 +12,7 @@
 #import "TTMenuBehaviorController.h"
 #import "TTAPIControlBoxView.h"
 
-#define appTitle @"Tulip Trader v0.1.6"
+#define appTitle @"Tulip Trader v0.1.7"
 
 @interface TTAppDelegate ()
 {
@@ -74,7 +74,7 @@
 
 #pragma mark - NSApplicationDelegate methods
 
-#define kTTTradeWindowScreenInsets 20.f
+#define kTTTradeWindowScreenInsets 16.f
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {
@@ -82,6 +82,7 @@
     NSRect mainScreenFrame = mainScreen.frame;
     [self.window setFrame:(NSRect){kTTTradeWindowScreenInsets, kTTTradeWindowScreenInsets, mainScreenFrame.size.width - (2 * kTTTradeWindowScreenInsets), mainScreenFrame.size.height - (2 * kTTTradeWindowScreenInsets)} display:YES animate:YES];
     [self.window setTitle:appTitle];
+    [self.window setExcludedFromWindowsMenu:YES];
     [self.window setCollectionBehavior:NSWindowCollectionBehaviorFullScreenPrimary];
     [self setOperationsController:[TTOperationsController new]];
     [self setMenuBehaviorController:[TTMenuBehaviorController sharedInstance]];

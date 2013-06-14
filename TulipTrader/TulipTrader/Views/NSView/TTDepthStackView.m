@@ -22,23 +22,28 @@
     NSNumber* assetMidpoint;
     NSNumber* largestBidOrderSize;
     NSNumber* largestAskOrderSize;
+    
+    NSRect graphRectPtr;
+    NSBezierPath* containingRectPath;
 }
 @property(nonatomic, retain)NSArray* bids;
 @property(nonatomic, retain)NSArray* asks;
 @property(nonatomic, retain)NSDictionary* maxMinTicks;
 @property(nonatomic, retain)NSButton* zoomIn;
 @property(nonatomic, retain)NSButton* zoomOut;
+@property(nonatomic, retain)NSMutableArray* drawablePaths;
 
 @end
 
 @implementation TTDepthStackView
 
 #define depthChartBottomInset 20.f
-#define depthChartTopInset 20.f
+#define depthChartTopInset 5.f
 #define depthChartLeftSideInsets 17.f
 #define depthChartRightSideInsets 17.f
 #define intervalsAcrossSpread 20
 #define midPointInterval 10
+#define leadingElementsToDrawBlack 3
 
 NSString* stringForPriceNumber(NSNumber* priceNumber)
 {
@@ -70,7 +75,7 @@ void drawLine(CGContextRef context, CGFloat lineWidth, CGColorRef lineColor, CGP
     CGContextStrokePath(context);
 }
 
--(void)tryReload
+-(void)reload
 {
     [self loadDepthForCurrency:self.currency];
 }
@@ -90,9 +95,10 @@ void drawLine(CGContextRef context, CGFloat lineWidth, CGColorRef lineColor, CGP
         largestAskOrderSize = [[[self.asks sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"amount" ascending:NO]]]objectAtIndex:0] amount];
         [self setMaxMinTicks:maxMinTicks];
         [self setHasSeededDepthData:YES];
+        [self setLineDataIsDirty:YES];
         [self setNeedsDisplay:YES];
     } withFailBlock:^(NSError *e) {
-        [NSTimer scheduledTimerWithTimeInterval:2.f target:self selector:@selector(tryReload) userInfo:nil repeats:NO];
+        [NSTimer scheduledTimerWithTimeInterval:2.f target:self selector:@selector(reload) userInfo:nil repeats:NO];
     }];
 }
 
@@ -101,9 +107,18 @@ void drawLine(CGContextRef context, CGFloat lineWidth, CGColorRef lineColor, CGP
     self = [super initWithFrame:frame];
     if (self) {
         [self setHasSeededDepthData:NO];
+        graphRectPtr = (NSRect){depthChartLeftSideInsets, depthChartBottomInset, CGRectGetWidth(frame) - (depthChartLeftSideInsets + depthChartRightSideInsets), CGRectGetHeight(frame) - (depthChartBottomInset + depthChartTopInset)};
+        containingRectPath = [NSBezierPath bezierPathWithRect:graphRectPtr];
     }
     
     return self;
+}
+
+-(void)setFrame:(NSRect)frameRect
+{
+    graphRectPtr = (NSRect){depthChartLeftSideInsets, depthChartBottomInset, CGRectGetWidth(frameRect) - (depthChartLeftSideInsets + depthChartRightSideInsets), CGRectGetHeight(frameRect) - (depthChartBottomInset + depthChartTopInset)};
+    containingRectPath = [NSBezierPath bezierPathWithRect:graphRectPtr];
+    [super setFrame:frameRect];
 }
 
 -(void)setCurrency:(TTGoxCurrency)currency
@@ -114,55 +129,83 @@ void drawLine(CGContextRef context, CGFloat lineWidth, CGColorRef lineColor, CGP
     [self didChangeValueForKey:@"currency"];
 }
 
--(void)drawDepthTableInRect:(NSRect)dirtyRect
+-(void)drawDepthTableInRect:(NSRect)dirtyRect graphRect:(NSRect)graphRect pixelsPerAssetUnitDelta:(CGFloat)pixelsPerAssetDeltaUnit
 {
-    NSRect graphRect = (NSRect)(NSRect){depthChartLeftSideInsets, depthChartBottomInset, CGRectGetWidth(dirtyRect) - (depthChartLeftSideInsets + depthChartRightSideInsets), CGRectGetHeight(dirtyRect) - (depthChartBottomInset + depthChartTopInset)};
-    
-    NSBezierPath* containingRect = [NSBezierPath bezierPathWithRect:graphRect];
-    [containingRect stroke];
+    [self setDrawablePaths:[NSMutableArray array]];
 
-    CGFloat pixelsPerAssetDeltaUnit = CGRectGetHeight(graphRect) / assetDelta.floatValue;
+    CGFloat dashArray[2];
+    dashArray[0] = 2;
+    dashArray[1] = 2;
     
-    int yBaseOffset = 5;
+    NSBezierPath* bidLine = [NSBezierPath bezierPath];
+    [bidLine setLineDash:dashArray count:2 phase:0];
+    [bidLine moveToPoint:(NSPoint){CGRectGetMinX(graphRect), (pixelsPerAssetDeltaUnit * (highestBid.floatValue - lowestBid.floatValue)) + depthChartBottomInset}];
+    [bidLine lineToPoint:(NSPoint){CGRectGetMidX(graphRect), (pixelsPerAssetDeltaUnit * (highestBid.floatValue - lowestBid.floatValue)) + depthChartBottomInset}];
+    [_drawablePaths addObject:bidLine];
+//    [bidLine stroke];
     
-    [stringForPriceNumber(lowestBid) drawAtPoint:(NSPoint){0, yBaseOffset} withAttributes:attributeDictionaryForGraphYLabel()];
-    [stringForPriceNumber(highestAsk) drawAtPoint:(NSPoint){CGRectGetMaxX(graphRect), CGRectGetMaxY(graphRect) - 5} withAttributes:attributeDictionaryForGraphYLabel()];
+    NSBezierPath* askLine = [NSBezierPath bezierPath];
+    [askLine setLineDash:dashArray count:2 phase:0];
+    [askLine moveToPoint:(NSPoint){CGRectGetMaxX(graphRect), (pixelsPerAssetDeltaUnit * (lowestAsk.floatValue - lowestBid.floatValue)) + depthChartBottomInset}];
+    [askLine lineToPoint:(NSPoint){CGRectGetMaxX(graphRect) - (CGRectGetWidth(graphRect) / 2), (pixelsPerAssetDeltaUnit * (lowestAsk.floatValue - lowestBid.floatValue)) + depthChartBottomInset}];
+    [_drawablePaths addObject:askLine];
+//    [askLine stroke];
     
-    [stringForPriceNumber(highestBid) drawAtPoint:(NSPoint){0, pixelsPerAssetDeltaUnit * (highestBid.floatValue - lowestBid.floatValue)} withAttributes:attributeDictionaryForGraphYLabel()];
-    [stringForPriceNumber(lowestAsk) drawAtPoint:(NSPoint){CGRectGetMaxX(graphRect), pixelsPerAssetDeltaUnit * (lowestAsk.floatValue - lowestBid.floatValue)} withAttributes:attributeDictionaryForGraphYLabel()];
-    
-    NSBezierPath* rectPath = [NSBezierPath bezierPath];
-    [rectPath moveToPoint:(NSPoint){CGRectGetMidX(dirtyRect), CGRectGetHeight(dirtyRect) - depthChartTopInset}];
-    [rectPath lineToPoint:(NSPoint){CGRectGetMidX(dirtyRect), depthChartBottomInset}];
-    [rectPath stroke];
-    
-    [[NSColor colorWithHexString:@"67C8FF"]set];
+    NSBezierPath* rectMidLine = [NSBezierPath bezierPath];
+    [rectMidLine moveToPoint:(NSPoint){CGRectGetMidX(graphRect), CGRectGetHeight(graphRect) - depthChartTopInset}];
+    [rectMidLine lineToPoint:(NSPoint){CGRectGetMidX(graphRect), depthChartBottomInset}];
+    [_drawablePaths addObject:rectMidLine];
+//    [rectMidLine stroke];
     
     [self.bids enumerateObjectsUsingBlock:^(TTDepthOrder* obj, NSUInteger idx, BOOL *stop) {
-        NSBezierPath* p = [NSBezierPath bezierPath];
-        [p setLineWidth:1.0f];
-        [p moveToPoint:(NSPoint){CGRectGetMidX(graphRect), ((obj.price.floatValue - lowestBid.floatValue) * pixelsPerAssetDeltaUnit) + depthChartBottomInset}];
-        [p lineToPoint:(NSPoint){CGRectGetMidX(graphRect) - ((obj.amount.floatValue / largestBidOrderSize.floatValue) * (CGRectGetWidth(graphRect) / 2)), ((obj.price.floatValue - lowestBid.floatValue) * pixelsPerAssetDeltaUnit) + depthChartBottomInset}];
-        [p stroke];
-        NSBezierPath* circ = [NSBezierPath bezierPathWithOvalInRect:(NSRect){p.currentPoint.x - 2, p.currentPoint.y - 2, 4, 4}];
-        [circ stroke];
+        NSBezierPath* bidDepthLine = [NSBezierPath bezierPath];
+        [bidDepthLine setLineWidth:1.0f];
+        [bidDepthLine moveToPoint:(NSPoint){CGRectGetMidX(graphRect), ((obj.price.floatValue - lowestBid.floatValue) * pixelsPerAssetDeltaUnit) + depthChartBottomInset}];
+        [bidDepthLine lineToPoint:(NSPoint){CGRectGetMidX(graphRect) - ((obj.amount.floatValue / largestBidOrderSize.floatValue) * (CGRectGetWidth(graphRect) / 2)), ((obj.price.floatValue - lowestBid.floatValue) * pixelsPerAssetDeltaUnit) + depthChartBottomInset}];
+        [_drawablePaths addObject:bidDepthLine];
+//        [bidDepthLine stroke];
+        NSBezierPath* bidLineCircle = [NSBezierPath bezierPathWithOvalInRect:(NSRect){bidDepthLine.currentPoint.x - 2, bidDepthLine.currentPoint.y - 2, 4, 4}];
+        [_drawablePaths addObject:bidLineCircle];
+//        [circ stroke];
     }];
     
     [self.asks enumerateObjectsUsingBlock:^(TTDepthOrder* obj, NSUInteger idx, BOOL *stop) {
-        NSBezierPath* p = [NSBezierPath bezierPath];
-        [p setLineWidth:1.f];
-        [p moveToPoint:(NSPoint){CGRectGetMidX(graphRect), ((obj.price.floatValue - lowestBid.floatValue) * pixelsPerAssetDeltaUnit) + depthChartBottomInset}];
-        [p lineToPoint:(NSPoint){CGRectGetMidX(graphRect) + ((obj.amount.floatValue / largestAskOrderSize.floatValue) * (CGRectGetWidth(graphRect) / 2)), ((obj.price.floatValue - lowestBid.floatValue) * pixelsPerAssetDeltaUnit) + depthChartBottomInset}];
-        [p stroke];
-        NSBezierPath* circ = [NSBezierPath bezierPathWithOvalInRect:(NSRect){p.currentPoint.x - 2, p.currentPoint.y - 2, 4, 4}];
-        [circ stroke];
+        NSBezierPath* askDepthLine = [NSBezierPath bezierPath];
+        [askDepthLine setLineWidth:1.f];
+        [askDepthLine moveToPoint:(NSPoint){CGRectGetMidX(graphRect), ((obj.price.floatValue - lowestBid.floatValue) * pixelsPerAssetDeltaUnit) + depthChartBottomInset}];
+        [askDepthLine lineToPoint:(NSPoint){CGRectGetMidX(graphRect) + ((obj.amount.floatValue / largestAskOrderSize.floatValue) * (CGRectGetWidth(graphRect) / 2)), ((obj.price.floatValue - lowestBid.floatValue) * pixelsPerAssetDeltaUnit) + depthChartBottomInset}];
+        [_drawablePaths addObject:askDepthLine];
+//        [askDepthLine stroke];
+        NSBezierPath* askLineCircle = [NSBezierPath bezierPathWithOvalInRect:(NSRect){askDepthLine.currentPoint.x - 2, askDepthLine.currentPoint.y - 2, 4, 4}];
+        [_drawablePaths addObject:askLineCircle];
+//        [askLineCircle stroke];
     }];
+    [self setLineDataIsDirty:NO];
 }
 
 - (void)drawRect:(NSRect)dirtyRect
 {
+    [containingRectPath stroke];
+    
+    CGFloat pixelsPerAssetDeltaUnit = CGRectGetHeight(graphRectPtr) / assetDelta.floatValue;
+    
+    [stringForPriceNumber(lowestBid) drawAtPoint:(NSPoint){0, depthChartBottomInset - 5} withAttributes:attributeDictionaryForGraphYLabel()];
+    [stringForPriceNumber(highestAsk) drawAtPoint:(NSPoint){CGRectGetMaxX(graphRectPtr), CGRectGetMaxY(graphRectPtr) - 5} withAttributes:attributeDictionaryForGraphYLabel()];
+    
+    [stringForPriceNumber(highestBid) drawAtPoint:(NSPoint){0, (pixelsPerAssetDeltaUnit * (highestBid.floatValue - lowestBid.floatValue)) + depthChartBottomInset} withAttributes:attributeDictionaryForGraphYLabel()];
+    [stringForPriceNumber(lowestAsk) drawAtPoint:(NSPoint){CGRectGetMaxX(graphRectPtr), (pixelsPerAssetDeltaUnit * (lowestAsk.floatValue - lowestBid.floatValue)) + depthChartBottomInset} withAttributes:attributeDictionaryForGraphYLabel()];
+    
     if (self.hasSeededDepthData)
-        [self drawDepthTableInRect:dirtyRect];
+    {
+        if (self.lineDataIsDirty)
+            [self drawDepthTableInRect:dirtyRect graphRect:graphRectPtr pixelsPerAssetUnitDelta:pixelsPerAssetDeltaUnit];
+        [self.drawablePaths enumerateObjectsUsingBlock:^(NSBezierPath* obj, NSUInteger idx, BOOL *stop) {
+            if (idx == leadingElementsToDrawBlack)
+                [[NSColor colorWithHexString:@"67C8FF"]set];
+            [obj stroke];
+        }];
+    }
+    
 }
 
 

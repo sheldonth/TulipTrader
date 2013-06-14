@@ -79,7 +79,6 @@ NSString* currentIncrementalTonce()
         a = @(1);
     [standardUserDefaults setObject:@(a.intValue + 1) forKey:kTTUserDefaultsNonceKey];
     [standardUserDefaults synchronize];
-    RUDLog(@"Returning Nonce: %@", a.stringValue);
     return a.stringValue;
 }
 
