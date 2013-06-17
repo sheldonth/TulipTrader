@@ -78,8 +78,7 @@
 #define depthChartTopInset 5.f
 #define depthChartLeftSideInsets 17.f
 #define depthChartRightSideInsets 17.f
-#define intervalsAcrossSpread 20
-#define midPointInterval 10
+
 #define leadingElementsToDrawBlack 3
 
 #define numberOfDepthSamples 50
@@ -194,7 +193,7 @@ void drawLine(CGContextRef context, CGFloat lineWidth, CGColorRef lineColor, CGP
         [self setLineDataIsDirty:YES];
         [self setNeedsDisplay:YES];
     } withFailBlock:^(NSError *e) {
-        [NSTimer scheduledTimerWithTimeInterval:2.f target:self selector:@selector(reload) userInfo:nil repeats:NO];
+        [NSTimer scheduledTimerWithTimeInterval:arc4random()%3 target:self selector:@selector(reload) userInfo:nil repeats:NO];
     }];
 }
 

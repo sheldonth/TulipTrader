@@ -54,8 +54,8 @@
         NSArray* __activeCurrencies = [TTGoxCurrencyController activeCurrencys];
         CGFloat stackWidth = floorf(CGRectGetWidth(frame) / __activeCurrencies.count);
         [__activeCurrencies enumerateObjectsUsingBlock:^(NSString* currencyStr, NSUInteger idx, BOOL *stop) {
-            if (currencyFromString(currencyStr) == TTGoxCurrencyUSD)
-            {
+//            if (currencyFromString(currencyStr) == TTGoxCurrencyUSD)
+//            {
                 NSScrollView* scrollView = [[NSScrollView alloc]initWithFrame:(NSRect){0 + (stackWidth * idx), graphsBottomOffset, stackWidth, CGRectGetHeight(frame) - (graphsTopOffset + graphsBottomOffset)}];
                 [scrollView setHasVerticalScroller:YES];
                 [scrollView setHasHorizontalScroller:YES];
@@ -79,7 +79,7 @@
                 [stepper setIncrement:1];
                 [stepper setIntegerValue:1];
                 [self addSubview:stepper];
-             }
+//             }
         }];
     }
     return self;
