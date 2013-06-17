@@ -11,7 +11,8 @@
 
 @interface TTAppDelegate : NSObject <NSApplicationDelegate, NSWindowDelegate>
 
-@property (assign) IBOutlet NSWindow *window;
+//@property (assign) IBOutlet NSWindow *window;
+@property(nonatomic, retain)NSWindow* theWindow;
 
 @property (assign) IBOutlet NSMenu* theMenu;
 

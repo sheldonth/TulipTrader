@@ -12,7 +12,7 @@
 #import "TTMenuBehaviorController.h"
 #import "TTAPIControlBoxView.h"
 
-#define appTitle @"Tulip Trader v0.1.7"
+#define appTitle @"Tulip Trader"
 
 @interface TTAppDelegate ()
 {
@@ -74,22 +74,19 @@
 
 #pragma mark - NSApplicationDelegate methods
 
-#define kTTTradeWindowScreenInsets 16.f
-
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {
     NSScreen* mainScreen = [NSScreen mainScreen];
-    NSRect mainScreenFrame = mainScreen.frame;
-    [self.window setFrame:(NSRect){kTTTradeWindowScreenInsets, kTTTradeWindowScreenInsets, mainScreenFrame.size.width - (2 * kTTTradeWindowScreenInsets), mainScreenFrame.size.height - (2 * kTTTradeWindowScreenInsets)} display:YES animate:YES];
-    [self.window setTitle:appTitle];
-    [self.window setExcludedFromWindowsMenu:YES];
-    [self.window setCollectionBehavior:NSWindowCollectionBehaviorFullScreenPrimary];
+    [self setTheWindow:[[NSWindow alloc]initWithContentRect:(NSRect){0, 0, mainScreen.visibleFrame.size.width, mainScreen.visibleFrame.size.height - 20} styleMask:(NSTitledWindowMask | NSClosableWindowMask | NSMiniaturizableWindowMask) backing:NSBackingStoreBuffered defer:YES]];
+    [self.theWindow setCollectionBehavior:NSWindowCollectionBehaviorFullScreenPrimary];
+    NSDictionary* infoDict = [[NSBundle mainBundle] infoDictionary];
+    NSString* version = [infoDict objectForKey:@"CFBundleShortVersionString"];
+    [self.theWindow setTitle:RUStringWithFormat(@"%@ %@", appTitle, version)];
     [self setOperationsController:[TTOperationsController new]];
     [self setMenuBehaviorController:[TTMenuBehaviorController sharedInstance]];
-    [self setMasterViewController:[[TTMasterViewController alloc]initWithFrame:(NSRect){0,0,self.window.frame.size.width, self.window.frame.size.height - 23}]];
-    [self.window.contentView addSubview:_masterViewController];
-    [TTAPIControlBoxView publishCommand:RUStringWithFormat(@"Welcome to %@", appTitle)];
-    [TTAPIControlBoxView publishCommand:@"Enter \"help\" for command list."];
+    [self setMasterViewController:[[TTMasterViewController alloc]initWithFrame:(NSRect){0,0,self.theWindow.frame.size.width, self.theWindow.frame.size.height - 20}]];
+    [self.theWindow.contentView addSubview:_masterViewController];
+    [self.theWindow makeKeyAndOrderFront:self];
 }
 
 // Returns the directory the application uses to store the Core Data store file. This code uses a directory named "co.resplendent.TulipTrader" in the user's Application Support directory.
