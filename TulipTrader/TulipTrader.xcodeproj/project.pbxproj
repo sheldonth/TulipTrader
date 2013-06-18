@@ -107,6 +107,10 @@
 		477BE456176A212C0049EE4F /* TTDepthStackView.m in Sources */ = {isa = PBXBuildFile; fileRef = 477BE454176A212B0049EE4F /* TTDepthStackView.m */; };
 		477BE459176A64E10049EE4F /* TTDepthOrder.m in Sources */ = {isa = PBXBuildFile; fileRef = 477BE458176A64E10049EE4F /* TTDepthOrder.m */; };
 		477BE45A176A64E10049EE4F /* TTDepthOrder.m in Sources */ = {isa = PBXBuildFile; fileRef = 477BE458176A64E10049EE4F /* TTDepthOrder.m */; };
+		477C3996176F669C0062A272 /* TTDepthGridViewColumnView.m in Sources */ = {isa = PBXBuildFile; fileRef = 477C3995176F669C0062A272 /* TTDepthGridViewColumnView.m */; };
+		477C3997176F669C0062A272 /* TTDepthGridViewColumnView.m in Sources */ = {isa = PBXBuildFile; fileRef = 477C3995176F669C0062A272 /* TTDepthGridViewColumnView.m */; };
+		477C399C176F88650062A272 /* infoBtn.png in Resources */ = {isa = PBXBuildFile; fileRef = 477C399B176F88650062A272 /* infoBtn.png */; };
+		477C399D176F88650062A272 /* infoBtn.png in Resources */ = {isa = PBXBuildFile; fileRef = 477C399B176F88650062A272 /* infoBtn.png */; };
 		478121141731BDAF00879CD6 /* TTArbitrageStackView.m in Sources */ = {isa = PBXBuildFile; fileRef = 478121131731BDAF00879CD6 /* TTArbitrageStackView.m */; };
 		478121151731BDAF00879CD6 /* TTArbitrageStackView.m in Sources */ = {isa = PBXBuildFile; fileRef = 478121131731BDAF00879CD6 /* TTArbitrageStackView.m */; };
 		478121181731C1BE00879CD6 /* TTArbitrageBox.m in Sources */ = {isa = PBXBuildFile; fileRef = 478121171731C1BE00879CD6 /* TTArbitrageBox.m */; };
@@ -305,6 +309,9 @@
 		477BE454176A212B0049EE4F /* TTDepthStackView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTDepthStackView.m; sourceTree = "<group>"; };
 		477BE457176A64E10049EE4F /* TTDepthOrder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTDepthOrder.h; sourceTree = "<group>"; };
 		477BE458176A64E10049EE4F /* TTDepthOrder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTDepthOrder.m; sourceTree = "<group>"; };
+		477C3994176F669C0062A272 /* TTDepthGridViewColumnView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTDepthGridViewColumnView.h; sourceTree = "<group>"; };
+		477C3995176F669C0062A272 /* TTDepthGridViewColumnView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTDepthGridViewColumnView.m; sourceTree = "<group>"; };
+		477C399B176F88650062A272 /* infoBtn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = infoBtn.png; sourceTree = "<group>"; };
 		478121121731BDAF00879CD6 /* TTArbitrageStackView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTArbitrageStackView.h; sourceTree = "<group>"; };
 		478121131731BDAF00879CD6 /* TTArbitrageStackView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTArbitrageStackView.m; sourceTree = "<group>"; };
 		478121161731C1BE00879CD6 /* TTArbitrageBox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTArbitrageBox.h; sourceTree = "<group>"; };
@@ -553,6 +560,7 @@
 			isa = PBXGroup;
 			children = (
 				47458CE2174BF74900FBD5A2 /* icon.icns */,
+				477C399B176F88650062A272 /* infoBtn.png */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -610,6 +618,8 @@
 				477BE4501767B7150049EE4F /* TTDepthGridView.m */,
 				477BE453176A212B0049EE4F /* TTDepthStackView.h */,
 				477BE454176A212B0049EE4F /* TTDepthStackView.m */,
+				477C3994176F669C0062A272 /* TTDepthGridViewColumnView.h */,
+				477C3995176F669C0062A272 /* TTDepthGridViewColumnView.m */,
 			);
 			path = NSView;
 			sourceTree = "<group>";
@@ -976,6 +986,7 @@
 				47458CEC174BF81600FBD5A2 /* icon.icns in Resources */,
 				47458CEE174C04FF00FBD5A2 /* icon_q.icns in Resources */,
 				47E9C5CC1757BDF60069ADA6 /* UserData.plist in Resources */,
+				477C399C176F88650062A272 /* infoBtn.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -989,6 +1000,7 @@
 				47DDDF521710A59E0087EE78 /* TTMasterViewController.xib in Resources */,
 				47458CE5174BF74900FBD5A2 /* icon.icns in Resources */,
 				47E9C5CD1757BDF60069ADA6 /* UserData.plist in Resources */,
+				477C399D176F88650062A272 /* infoBtn.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1081,6 +1093,7 @@
 				477BE4511767B7150049EE4F /* TTDepthGridView.m in Sources */,
 				477BE455176A212C0049EE4F /* TTDepthStackView.m in Sources */,
 				477BE459176A64E10049EE4F /* TTDepthOrder.m in Sources */,
+				477C3996176F669C0062A272 /* TTDepthGridViewColumnView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1149,6 +1162,7 @@
 				477BE4521767B7150049EE4F /* TTDepthGridView.m in Sources */,
 				477BE456176A212C0049EE4F /* TTDepthStackView.m in Sources */,
 				477BE45A176A64E10049EE4F /* TTDepthOrder.m in Sources */,
+				477C3997176F669C0062A272 /* TTDepthGridViewColumnView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

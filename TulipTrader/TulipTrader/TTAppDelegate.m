@@ -12,7 +12,7 @@
 #import "TTMenuBehaviorController.h"
 #import "TTAPIControlBoxView.h"
 
-#define appTitle @"Tulip Trader"
+#define appTitle @"TulipTrader"
 
 @interface TTAppDelegate ()
 {
@@ -81,7 +81,7 @@
     [self.theWindow setCollectionBehavior:NSWindowCollectionBehaviorFullScreenPrimary];
     NSDictionary* infoDict = [[NSBundle mainBundle] infoDictionary];
     NSString* version = [infoDict objectForKey:@"CFBundleShortVersionString"];
-    [self.theWindow setTitle:RUStringWithFormat(@"%@ %@", appTitle, version)];
+    [self.theWindow setTitle:RUStringWithFormat(@"%@ v%@", appTitle, version)];
     [self setOperationsController:[TTOperationsController new]];
     [self setMenuBehaviorController:[TTMenuBehaviorController sharedInstance]];
     [self setMasterViewController:[[TTMasterViewController alloc]initWithFrame:(NSRect){0,0,self.theWindow.frame.size.width, self.theWindow.frame.size.height - 20}]];

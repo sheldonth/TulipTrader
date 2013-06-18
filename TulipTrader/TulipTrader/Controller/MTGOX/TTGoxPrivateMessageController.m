@@ -38,6 +38,7 @@ static dispatch_queue_t privateMessageOperationQueue;
 NSString* const TTGoxWebsocketTickerNotificationString = @"ttGoxTickerUpdateNotification";
 NSString* const TTGoxWebsocketTradeNotificationString = @"ttGoxTradeUpdateNotification";
 NSString* const TTGoxWebsocketLagUpdateNotificationString = @"ttGoxLagUpdateNotification";
+NSString* const TTGoxWebsocketDepthNotificationString = @"ttGoxDepthUpdateNotification";
 
 @implementation TTGoxPrivateMessageController
 
@@ -49,12 +50,7 @@ NSString* const TTGoxWebsocketLagUpdateNotificationString = @"ttGoxLagUpdateNoti
 
 -(void)recordDepth:(NSDictionary*)depthDictionary
 {
-//    NSString* cur = [[depthDictionary objectForKey:@"depth"]objectForKey:@"currency"];
-//    if ([cur isEqualToString:@"USD"])
-//        RUDLog(@"!");
-//    dispatch_async(privateMessageOperationQueue, ^{
-        // do depth stuff here
-//    });
+    [[NSNotificationCenter defaultCenter]postNotificationName:TTGoxWebsocketDepthNotificationString object:nil userInfo:@{@"DepthDictionary": depthDictionary}];
 }
 
 -(void)recordTrade:(NSDictionary*)tradeDictionary

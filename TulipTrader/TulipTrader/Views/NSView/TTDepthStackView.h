@@ -28,6 +28,7 @@ typedef enum{
 @property(nonatomic)BOOL lineDataIsDirty;
 @property(nonatomic)TTDepthViewChartingProcedure chartingProcedure;
 @property(nonatomic)id <TTDepthStackViewXAxisDelegate> xAxisDelegate;
+@property(nonatomic)BOOL isReloading;
 
 -(void)reload;
 

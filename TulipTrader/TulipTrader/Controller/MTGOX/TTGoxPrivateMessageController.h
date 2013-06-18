@@ -32,6 +32,7 @@
 extern NSString* const TTGoxWebsocketTickerNotificationString;
 extern NSString* const TTGoxWebsocketLagUpdateNotificationString;
 extern NSString* const TTGoxWebsocketTradeNotificationString;
+extern NSString* const TTGoxWebsocketDepthNotificationString;
 
 RU_SYNTHESIZE_SINGLETON_DECLARATION_FOR_CLASS_WITH_ACCESSOR(TTGoxPrivateMessageController, sharedInstance);
 

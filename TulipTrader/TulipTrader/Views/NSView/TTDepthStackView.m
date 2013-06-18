@@ -67,6 +67,9 @@
 @property(nonatomic, retain)NSButton* zoomIn;
 @property(nonatomic, retain)NSButton* zoomOut;
 @property(nonatomic, retain)NSMutableArray* drawablePaths;
+@property(nonatomic, retain)NSBezierPath* xAxisCrosshair;
+@property(nonatomic, retain)NSBezierPath* yAxisCrosshair;
+@property(nonatomic, retain)NSTrackingArea* trackingArea;
 
 -(NSInteger)depthSamplesForZoom;
 
@@ -82,6 +85,70 @@
 #define leadingElementsToDrawBlack 3
 
 #define numberOfDepthSamples 50
+
+#pragma mark - mouse events
+
+-(void)mouseUp:(NSEvent *)theEvent
+{
+    
+}
+
+-(void)mouseDown:(NSEvent *)theEvent
+{
+    
+}
+
+-(void)mouseEntered:(NSEvent *)theEvent
+{
+    NSPoint eventLocation = [theEvent locationInWindow];
+    NSPoint convertedPt = [self convertPoint:eventLocation fromView:nil];
+    
+    NSBezierPath* xCross = [NSBezierPath bezierPath];
+    [xCross moveToPoint:(NSPoint){CGRectGetMinX(graphRectPtr), convertedPt.y}];
+    [xCross lineToPoint:(NSPoint){CGRectGetMaxX(graphRectPtr), convertedPt.y}];
+    [self setXAxisCrosshair:xCross];
+    
+    NSBezierPath* yCross = [NSBezierPath bezierPath];
+    [yCross moveToPoint:(NSPoint){convertedPt.x, CGRectGetMinY(graphRectPtr)}];
+    [yCross lineToPoint:(NSPoint){convertedPt.x, CGRectGetMaxY(graphRectPtr)}];
+    [self setYAxisCrosshair:yCross];
+
+    [self setNeedsDisplay:YES];
+}
+
+-(void)mouseExited:(NSEvent *)theEvent
+{
+    [self.xAxisCrosshair removeAllPoints];
+    [self.yAxisCrosshair removeAllPoints];
+    [self setXAxisCrosshair:nil];
+    [self setYAxisCrosshair:nil];
+    [self setNeedsDisplay:YES];
+}
+
+-(void)mouseMoved:(NSEvent *)theEvent
+{
+    NSPoint eventLocation = [theEvent locationInWindow];
+    NSPoint convertedPt = [self convertPoint:eventLocation fromView:nil];
+
+    if (!self.xAxisCrosshair)
+        [self setXAxisCrosshair:[NSBezierPath bezierPath]];
+    [self.xAxisCrosshair removeAllPoints];
+    [self.xAxisCrosshair moveToPoint:(NSPoint){CGRectGetMinX(graphRectPtr), convertedPt.y}];
+    [self.xAxisCrosshair lineToPoint:(NSPoint){CGRectGetMaxX(graphRectPtr), convertedPt.y}];
+
+    if (!self.yAxisCrosshair)
+        [self setYAxisCrosshair:[NSBezierPath bezierPath]];
+    [self.yAxisCrosshair removeAllPoints];
+    [self.yAxisCrosshair moveToPoint:(NSPoint){convertedPt.x, CGRectGetMinY(graphRectPtr)}];
+    [self.yAxisCrosshair lineToPoint:(NSPoint){convertedPt.x, CGRectGetMaxY(graphRectPtr)}];
+    
+    [self setNeedsDisplay:YES];
+}
+
+-(void)cursorUpdate:(NSEvent *)event
+{
+    
+}
 
 -(NSInteger)depthSamplesForZoom
 {
@@ -125,7 +192,8 @@ void drawLine(CGContextRef context, CGFloat lineWidth, CGColorRef lineColor, CGP
 
 -(void)reload
 {
-    [self loadDepthForCurrency:self.currency];
+    if (!_isReloading)
+        [self loadDepthForCurrency:self.currency];
 }
 
 -(void)processData
@@ -184,7 +252,11 @@ void drawLine(CGContextRef context, CGFloat lineWidth, CGColorRef lineColor, CGP
 
 -(void)loadDepthForCurrency:(TTGoxCurrency)curr
 {
+    if (curr != TTGoxCurrencyUSD)
+    {
+    _isReloading = YES;
     [[TTGoxHTTPController sharedInstance]getDepthForCurrency:curr withCompletion:^(NSArray *bids, NSArray *asks, NSDictionary *maxMinTicks) {
+        _isReloading = NO;
         [self setBids:bids];
         [self setAsks:asks];
         [self setMaxMinTicks:maxMinTicks];
@@ -193,8 +265,11 @@ void drawLine(CGContextRef context, CGFloat lineWidth, CGColorRef lineColor, CGP
         [self setLineDataIsDirty:YES];
         [self setNeedsDisplay:YES];
     } withFailBlock:^(NSError *e) {
-        [NSTimer scheduledTimerWithTimeInterval:arc4random()%3 target:self selector:@selector(reload) userInfo:nil repeats:NO];
+        RUDLog(@"reload failed on currency %@",stringFromCurrency(self.currency));
+        _isReloading = NO;
+//        [NSTimer scheduledTimerWithTimeInterval:arc4random()%3 target:self selector:@selector(reload) userInfo:nil repeats:NO];
     }];
+    }
 }
 
 - (id)initWithFrame:(NSRect)frame
@@ -202,9 +277,13 @@ void drawLine(CGContextRef context, CGFloat lineWidth, CGColorRef lineColor, CGP
     self = [super initWithFrame:frame];
     if (self) {
         [self setHasSeededDepthData:NO];
+        [self setZoomLevel:1];
         [self setChartingProcedure:(TTDepthViewChartingProcedureSampling)];
         graphRectPtr = (NSRect){depthChartLeftSideInsets, depthChartBottomInset, CGRectGetWidth(frame) - (depthChartLeftSideInsets + depthChartRightSideInsets), CGRectGetHeight(frame) - (depthChartBottomInset + depthChartTopInset)};
         containingRectPath = [NSBezierPath bezierPathWithRect:graphRectPtr];
+        
+        [self setTrackingArea:[[NSTrackingArea alloc]initWithRect:graphRectPtr options:(NSTrackingMouseEnteredAndExited | NSTrackingMouseMoved+NSTrackingActiveInKeyWindow) owner:self userInfo:nil]];
+        [self addTrackingArea:_trackingArea];
     }
     
     return self;
@@ -337,6 +416,15 @@ void drawLine(CGContextRef context, CGFloat lineWidth, CGColorRef lineColor, CGP
                 [[NSColor colorWithHexString:@"67C8FF"]set];
             [obj stroke];
         }];
+        [[NSColor grayColor]set];
+        if (self.xAxisCrosshair)
+        {
+            [self.xAxisCrosshair stroke];
+        }
+        if (self.yAxisCrosshair)
+        {
+            [self.yAxisCrosshair stroke];
+        }
     }
     
 }
