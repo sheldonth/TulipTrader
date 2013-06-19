@@ -10,7 +10,7 @@
 #import "TTGoxCurrency.h"
 #import "TTDepthStackView.h"
 
-@interface TTDepthGridViewColumnView : NSView <TTDepthStackViewXAxisDelegate>
+@interface TTDepthGridViewColumnView : NSView <TTDepthStackViewLabelingDelegate, NSPopoverDelegate>
 
 @property(nonatomic)TTGoxCurrency currency;
 

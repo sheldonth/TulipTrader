@@ -50,7 +50,10 @@ NSString* const TTGoxWebsocketDepthNotificationString = @"ttGoxDepthUpdateNotifi
 
 -(void)recordDepth:(NSDictionary*)depthDictionary
 {
-    [[NSNotificationCenter defaultCenter]postNotificationName:TTGoxWebsocketDepthNotificationString object:nil userInfo:@{@"DepthDictionary": depthDictionary}];
+    if (self.depthDelegate && [self.depthDelegate respondsToSelector:@selector(depthChangeObserved:)])
+        [self.depthDelegate depthChangeObserved:depthDictionary];
+    else
+        [[NSNotificationCenter defaultCenter]postNotificationName:TTGoxWebsocketDepthNotificationString object:nil userInfo:@{@"DepthDictionary": depthDictionary}];
 }
 
 -(void)recordTrade:(NSDictionary*)tradeDictionary

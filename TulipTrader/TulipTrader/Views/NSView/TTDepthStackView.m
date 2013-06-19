@@ -71,6 +71,9 @@
 @property(nonatomic, retain)NSBezierPath* yAxisCrosshair;
 @property(nonatomic, retain)NSTrackingArea* trackingArea;
 
+@property(nonatomic, retain)NSMutableArray* depthBidCircleBezierPathsArray;
+@property(nonatomic, retain)NSMutableArray* depthAskCircleBezierPathsArray;
+
 -(NSInteger)depthSamplesForZoom;
 
 @end
@@ -141,6 +144,38 @@
     [self.yAxisCrosshair removeAllPoints];
     [self.yAxisCrosshair moveToPoint:(NSPoint){convertedPt.x, CGRectGetMinY(graphRectPtr)}];
     [self.yAxisCrosshair lineToPoint:(NSPoint){convertedPt.x, CGRectGetMaxY(graphRectPtr)}];
+    
+    NSMutableArray* crossHairHits = [NSMutableArray array];
+    switch (self.chartingProcedure)
+    {
+        case TTDepthViewChartingProcedureSampling:
+        {
+            [self.depthAskCircleBezierPathsArray enumerateObjectsUsingBlock:^(NSBezierPath* obj, NSUInteger idx, BOOL *stop) {
+                if ([obj containsPoint:convertedPt])
+                    [crossHairHits addObject:obj];
+            }];
+            [self.depthBidCircleBezierPathsArray enumerateObjectsUsingBlock:^(NSBezierPath* obj, NSUInteger idx, BOOL *stop) {
+                if ([obj containsPoint:convertedPt])
+                    [crossHairHits addObject:obj];
+            }];
+            break;
+        }
+            
+        case TTDepthViewChartingProcedureAllOrders:
+        {
+            [self.depthAskCircleBezierPathsArray enumerateObjectsUsingBlock:^(NSBezierPath* obj, NSUInteger idx, BOOL *stop) {
+                if ([obj containsPoint:convertedPt])
+                    [crossHairHits addObject:obj];
+            }];
+            [self.depthBidCircleBezierPathsArray enumerateObjectsUsingBlock:^(NSBezierPath* obj, NSUInteger idx, BOOL *stop) {
+                if ([obj containsPoint:convertedPt])
+                    [crossHairHits addObject:obj];
+            }];
+            break;
+        }
+        default:
+            break;
+    }
     
     [self setNeedsDisplay:YES];
 }
@@ -252,8 +287,6 @@ void drawLine(CGContextRef context, CGFloat lineWidth, CGColorRef lineColor, CGP
 
 -(void)loadDepthForCurrency:(TTGoxCurrency)curr
 {
-    if (curr != TTGoxCurrencyUSD)
-    {
     _isReloading = YES;
     [[TTGoxHTTPController sharedInstance]getDepthForCurrency:curr withCompletion:^(NSArray *bids, NSArray *asks, NSDictionary *maxMinTicks) {
         _isReloading = NO;
@@ -269,7 +302,6 @@ void drawLine(CGContextRef context, CGFloat lineWidth, CGColorRef lineColor, CGP
         _isReloading = NO;
 //        [NSTimer scheduledTimerWithTimeInterval:arc4random()%3 target:self selector:@selector(reload) userInfo:nil repeats:NO];
     }];
-    }
 }
 
 - (id)initWithFrame:(NSRect)frame
@@ -298,7 +330,6 @@ void drawLine(CGContextRef context, CGFloat lineWidth, CGColorRef lineColor, CGP
 
 -(void)setCurrency:(TTGoxCurrency)currency
 {
-    [self loadDepthForCurrency:currency];
     [self willChangeValueForKey:@"currency"];
     _currency = currency;
     [self didChangeValueForKey:@"currency"];
@@ -307,6 +338,9 @@ void drawLine(CGContextRef context, CGFloat lineWidth, CGColorRef lineColor, CGP
 -(void)drawDepthTableInRect:(NSRect)dirtyRect graphRect:(NSRect)graphRect pixelsPerAssetUnitDelta:(CGFloat)pixelsPerAssetDeltaUnit
 {
     [self setDrawablePaths:[NSMutableArray array]];
+    
+    [self setDepthAskCircleBezierPathsArray:[NSMutableArray array]];
+    [self setDepthBidCircleBezierPathsArray:[NSMutableArray array]];
 
     CGFloat dashArray[2];
     dashArray[0] = 2;
@@ -340,8 +374,11 @@ void drawLine(CGContextRef context, CGFloat lineWidth, CGColorRef lineColor, CGP
                     [bidDepthLine moveToPoint:(NSPoint){CGRectGetMidX(graphRect), ((obj.rangeCenter.floatValue - lowestBid.floatValue) * pixelsPerAssetDeltaUnit) + depthChartBottomInset}];
                     [bidDepthLine lineToPoint:(NSPoint){CGRectGetMidX(graphRect) - ((obj.depth.floatValue / maxGeneralPositionDepth.floatValue) * (CGRectGetWidth(graphRect) / 2)), ((obj.rangeCenter.floatValue - lowestBid.floatValue) * pixelsPerAssetDeltaUnit) + depthChartBottomInset}];
                     [_drawablePaths addObject:bidDepthLine];
+                    if (NSEqualPoints(bidDepthLine.currentPoint, NSZeroPoint))
+                        RUDLog(@"Biddepthline has a zero point");
                     NSBezierPath* bidLineCircle = [NSBezierPath bezierPathWithOvalInRect:(NSRect){bidDepthLine.currentPoint.x - 2, bidDepthLine.currentPoint.y - 2, 4, 4}];
                     [_drawablePaths addObject:bidLineCircle];
+                    [self.depthBidCircleBezierPathsArray addObject:bidLineCircle];
                 }
             }];
             [self.asksPositionValues enumerateObjectsUsingBlock:^(TTDepthPositionValue* obj, NSUInteger idx, BOOL *stop) {
@@ -352,8 +389,9 @@ void drawLine(CGContextRef context, CGFloat lineWidth, CGColorRef lineColor, CGP
                     [askDepthLine moveToPoint:(NSPoint){CGRectGetMidX(graphRect), ((obj.rangeCenter.floatValue - lowestBid.floatValue) * pixelsPerAssetDeltaUnit) + depthChartBottomInset}];
                     [askDepthLine lineToPoint:(NSPoint){CGRectGetMidX(graphRect) + ((obj.depth.floatValue / maxGeneralPositionDepth.floatValue) * (CGRectGetWidth(graphRect) / 2)), ((obj.rangeCenter.floatValue - lowestBid.floatValue) * pixelsPerAssetDeltaUnit) + depthChartBottomInset}];
                     [_drawablePaths addObject:askDepthLine];
-                    NSBezierPath* bidLineCircle = [NSBezierPath bezierPathWithOvalInRect:(NSRect){askDepthLine.currentPoint.x - 2, askDepthLine.currentPoint.y - 2, 4, 4}];
-                    [_drawablePaths addObject:bidLineCircle];
+                    NSBezierPath* askLineCircle = [NSBezierPath bezierPathWithOvalInRect:(NSRect){askDepthLine.currentPoint.x - 2, askDepthLine.currentPoint.y - 2, 4, 4}];
+                    [_drawablePaths addObject:askLineCircle];
+                    [self.depthAskCircleBezierPathsArray addObject:askLineCircle];
                 }
             }];
             break;
@@ -369,6 +407,7 @@ void drawLine(CGContextRef context, CGFloat lineWidth, CGColorRef lineColor, CGP
                 [_drawablePaths addObject:bidDepthLine];
                 NSBezierPath* bidLineCircle = [NSBezierPath bezierPathWithOvalInRect:(NSRect){bidDepthLine.currentPoint.x - 2, bidDepthLine.currentPoint.y - 2, 4, 4}];
                 [_drawablePaths addObject:bidLineCircle];
+                [self.depthBidCircleBezierPathsArray addObject:bidLineCircle];
             }];
             
             [self.asks enumerateObjectsUsingBlock:^(TTDepthOrder* obj, NSUInteger idx, BOOL *stop) {
@@ -379,6 +418,7 @@ void drawLine(CGContextRef context, CGFloat lineWidth, CGColorRef lineColor, CGP
                 [_drawablePaths addObject:askDepthLine];
                 NSBezierPath* askLineCircle = [NSBezierPath bezierPathWithOvalInRect:(NSRect){askDepthLine.currentPoint.x - 2, askDepthLine.currentPoint.y - 2, 4, 4}];
                 [_drawablePaths addObject:askLineCircle];
+                [self.depthAskCircleBezierPathsArray addObject:askLineCircle];
             }];
             break;
         }
@@ -417,14 +457,15 @@ void drawLine(CGContextRef context, CGFloat lineWidth, CGColorRef lineColor, CGP
             [obj stroke];
         }];
         [[NSColor grayColor]set];
-        if (self.xAxisCrosshair)
+        if (self.xAxisCrosshair && self.yAxisCrosshair)
         {
+            [self.labelingDelegate shouldEndShowingInfoPane];
             [self.xAxisCrosshair stroke];
-        }
-        if (self.yAxisCrosshair)
-        {
             [self.yAxisCrosshair stroke];
+            [self.labelingDelegate updatePriceString:RUStringWithFormat(@"%@%.3f",currencySymbolStringFromCurrency(self.currency), ((self.xAxisCrosshair.currentPoint.y - depthChartBottomInset) / pixelsPerAssetDeltaUnit) + lowestBid.floatValue)];
         }
+        else
+            [self.labelingDelegate shouldEndShowingPrice];
     }
     
 }

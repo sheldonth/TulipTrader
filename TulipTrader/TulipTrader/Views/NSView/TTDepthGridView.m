@@ -16,6 +16,21 @@
 
 @implementation TTDepthGridView
 
+-(void)depthNotificationObserved:(NSNotification*)notification
+{
+    
+}
+
+-(void)depthChangeObserved:(NSDictionary *)depthDictionary
+{
+    
+}
+
+-(void)dealloc
+{
+    [[NSNotificationCenter defaultCenter]removeObserver:self forKeyPath:TTGoxWebsocketDepthNotificationString];
+}
+
 - (id)initWithFrame:(NSRect)frame
 {
     self = [super initWithFrame:frame];
@@ -28,6 +43,11 @@
             [column setCurrency:currencyFromString(currencyStr)];
             [self addSubview:column];
         }];
+        
+        TTGoxPrivateMessageController* privateMessageController = [TTGoxPrivateMessageController sharedInstance];
+        [privateMessageController setDepthDelegate:self];
+        
+        [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(depthNotificationObserved:) name:TTGoxWebsocketDepthNotificationString object:nil];
     }
     return self;
 }

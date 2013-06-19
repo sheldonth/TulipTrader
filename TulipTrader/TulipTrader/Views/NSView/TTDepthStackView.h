@@ -9,16 +9,34 @@
 #import <Cocoa/Cocoa.h>
 #import "TTGoxCurrency.h"
 
-@protocol TTDepthStackViewXAxisDelegate <NSObject>
-
--(void)redrawXAxisWithBidSideTicks:(NSArray*)bidTicks sellSideTicks:(NSArray*)sellTicks;
-
-@end
+typedef enum{
+    TTDepthViewLimitOrderMarketSideNone = 0,
+    TTDepthViewLimitOrderMarketSideBid,
+    TTDepthViewLimitOrderMarketSideAsk,
+}TTDepthViewLimitOrderMarketSide;
 
 typedef enum{
     TTDepthViewChartingProcedureSampling = 0,
     TTDepthViewChartingProcedureAllOrders
 }TTDepthViewChartingProcedure;
+
+
+@protocol TTDepthStackViewModalDelegate <NSObject>
+// Depth object can be a TTDepthPositionValue or TTDepthOrder
+-(void)presentDepthPositionModalForDepthObject:(id)depthObject atLocalPoint:(NSPoint)point;
+-(void)dismissAllDepthPositionModals;
+
+@end
+
+@protocol TTDepthStackViewLabelingDelegate <NSObject>
+
+-(void)updatePriceString:(NSString*)priceString;;
+-(void)shouldEndShowingPrice;
+-(void)shouldEndShowingInfoPane;
+
+-(void)redrawXAxisWithBidSideTicks:(NSArray*)bidTicks sellSideTicks:(NSArray*)sellTicks;
+
+@end
 
 @interface TTDepthStackView : NSView
 
@@ -27,8 +45,9 @@ typedef enum{
 @property(nonatomic)BOOL hasSeededDepthData;
 @property(nonatomic)BOOL lineDataIsDirty;
 @property(nonatomic)TTDepthViewChartingProcedure chartingProcedure;
-@property(nonatomic)id <TTDepthStackViewXAxisDelegate> xAxisDelegate;
 @property(nonatomic)BOOL isReloading;
+
+@property(nonatomic)id <TTDepthStackViewLabelingDelegate> labelingDelegate;
 
 -(void)reload;
 

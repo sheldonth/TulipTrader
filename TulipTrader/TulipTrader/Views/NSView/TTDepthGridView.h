@@ -7,7 +7,8 @@
 //
 
 #import <Cocoa/Cocoa.h>
+#import "TTGoxPrivateMessageController.h"
 
-@interface TTDepthGridView : NSView
+@interface TTDepthGridView : NSView <TTGoxPrivateMessageControllerDepthDelegate>
 
 @end

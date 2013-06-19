@@ -24,10 +24,13 @@
 
 @end
 
-@interface TTGoxPrivateMessageController : NSObject <TTGoxSocketControllerMessageDelegate>
+@protocol TTGoxPrivateMessageControllerDepthDelegate <NSObject>
 
-@property(nonatomic) id<TTGoxPrivateMessageControllerLagDelegate>lagDelegate;
-@property(nonatomic) id<TTGoxPrivateMessageControllerTradesDelegate>tradeDelegate;
+-(void)depthChangeObserved:(NSDictionary*)depthDictionary;
+
+@end
+
+@interface TTGoxPrivateMessageController : NSObject <TTGoxSocketControllerMessageDelegate>
 
 extern NSString* const TTGoxWebsocketTickerNotificationString;
 extern NSString* const TTGoxWebsocketLagUpdateNotificationString;
@@ -35,5 +38,9 @@ extern NSString* const TTGoxWebsocketTradeNotificationString;
 extern NSString* const TTGoxWebsocketDepthNotificationString;
 
 RU_SYNTHESIZE_SINGLETON_DECLARATION_FOR_CLASS_WITH_ACCESSOR(TTGoxPrivateMessageController, sharedInstance);
+
+@property(nonatomic) id<TTGoxPrivateMessageControllerLagDelegate>lagDelegate;
+@property(nonatomic) id<TTGoxPrivateMessageControllerTradesDelegate>tradeDelegate;
+@property(nonatomic) id<TTGoxPrivateMessageControllerDepthDelegate>depthDelegate;
 
 @end
