@@ -50,5 +50,6 @@ typedef enum{
 @property(nonatomic)id <TTDepthStackViewLabelingDelegate> labelingDelegate;
 
 -(void)reload;
+-(void)processDepthDictionary:(NSDictionary*)d;
 
 @end

@@ -11,6 +11,7 @@
 #import "TTGoxSocketController.h"
 #import "TTGoxCurrency.h"
 #import "Trade.h"
+#import "Ticker.h"
 
 @protocol TTGoxPrivateMessageControllerLagDelegate <NSObject>
 
@@ -30,17 +31,23 @@
 
 @end
 
-@interface TTGoxPrivateMessageController : NSObject <TTGoxSocketControllerMessageDelegate>
+@protocol TTGoxPrivateMessageControllerTickerDelegate <NSObject>
+
+-(void)tickerObserved:(Ticker*)ticker forChannel:(NSString*)channel;
+
+@end
+
+@interface TTGoxPrivateMessageController : NSObject
 
 extern NSString* const TTGoxWebsocketTickerNotificationString;
 extern NSString* const TTGoxWebsocketLagUpdateNotificationString;
 extern NSString* const TTGoxWebsocketTradeNotificationString;
 extern NSString* const TTGoxWebsocketDepthNotificationString;
 
-RU_SYNTHESIZE_SINGLETON_DECLARATION_FOR_CLASS_WITH_ACCESSOR(TTGoxPrivateMessageController, sharedInstance);
-
 @property(nonatomic) id<TTGoxPrivateMessageControllerLagDelegate>lagDelegate;
 @property(nonatomic) id<TTGoxPrivateMessageControllerTradesDelegate>tradeDelegate;
 @property(nonatomic) id<TTGoxPrivateMessageControllerDepthDelegate>depthDelegate;
+@property(nonatomic) id<TTGoxPrivateMessageControllerTickerDelegate>tickerDelegate;
+-(void)shouldExamineMarketDataDictionary:(NSDictionary *)dictionary;
 
 @end

@@ -625,7 +625,7 @@ NSUInteger numberOfPlotsForDateRange(TTGraphViewDateRange range)
     CGContextSetShouldSmoothFonts(context, false);
     [imageView.layer renderInContext:context];
     CGContextFlush(context);
-    
+    return nil;
 }
 
 //- (void)drawRect:(NSRect)dirtyRect

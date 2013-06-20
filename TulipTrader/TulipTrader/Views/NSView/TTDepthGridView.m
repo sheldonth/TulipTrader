@@ -14,21 +14,24 @@
 #import "TTGoxCurrency.h"
 #import "TTDepthGridViewColumnView.h"
 
+@interface TTDepthGridView()
+
+@property(nonatomic, retain)NSMutableArray* columnsArray;
+
+@end
+
 @implementation TTDepthGridView
 
--(void)depthNotificationObserved:(NSNotification*)notification
+-(void)reloadAtIndex:(NSInteger)index
 {
-    
+    [[self.columnsArray objectAtIndex:index]reload];
 }
 
--(void)depthChangeObserved:(NSDictionary *)depthDictionary
+-(void)successionReload
 {
-    
-}
-
--(void)dealloc
-{
-    [[NSNotificationCenter defaultCenter]removeObserver:self forKeyPath:TTGoxWebsocketDepthNotificationString];
+    for (int i = 0; i < self.columnsArray.count; i++) {
+        [self reloadAtIndex:i];
+    };
 }
 
 - (id)initWithFrame:(NSRect)frame
@@ -36,18 +39,16 @@
     self = [super initWithFrame:frame];
     
     if (self) {
+        [self setColumnsArray:[NSMutableArray array]];
         NSArray* __activeCurrencies = [TTGoxCurrencyController activeCurrencys];
         CGFloat columnWidth = floorf(CGRectGetWidth(frame) / __activeCurrencies.count);
         [__activeCurrencies enumerateObjectsUsingBlock:^(NSString* currencyStr, NSUInteger idx, BOOL *stop) {
             TTDepthGridViewColumnView* column = [[TTDepthGridViewColumnView alloc]initWithFrame:(NSRect){columnWidth * idx, 0, columnWidth, CGRectGetHeight(frame)}];
             [column setCurrency:currencyFromString(currencyStr)];
+            [self.columnsArray addObject:column];
             [self addSubview:column];
         }];
-        
-        TTGoxPrivateMessageController* privateMessageController = [TTGoxPrivateMessageController sharedInstance];
-        [privateMessageController setDepthDelegate:self];
-        
-        [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(depthNotificationObserved:) name:TTGoxWebsocketDepthNotificationString object:nil];
+        [self successionReload];
     }
     return self;
 }

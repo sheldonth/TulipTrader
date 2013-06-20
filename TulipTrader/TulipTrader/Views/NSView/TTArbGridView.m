@@ -66,7 +66,7 @@
         [self setArbTableLabel:[[JNWLabel alloc]initWithFrame:(NSRect){CGRectGetMidX(frame) - 90, CGRectGetHeight(frame) - 20, 180, 20}]];
         [_arbTableLabel setText:@"Arbitrage Tables"];
         [_arbTableLabel setTextAlignment:NSCenterTextAlignment];
-        [self addSubview:self.arbTableLabel];
+//        [self addSubview:self.arbTableLabel];
         
         [self setLagLabel:[[JNWLabel alloc]initWithFrame:(NSRect){CGRectGetMidX(frame) - 40, CGRectGetHeight(frame) - 40, 100, 20}]];
         [self.lagLabel setTextAlignment:NSLeftTextAlignment];
@@ -76,6 +76,12 @@
     }
     return self;
 }
+
+//-(void)drawRect:(NSRect)dirtyRect
+//{
+//    [[NSColor redColor]setFill];
+//    NSRectFill(dirtyRect);
+//}
 
 
 

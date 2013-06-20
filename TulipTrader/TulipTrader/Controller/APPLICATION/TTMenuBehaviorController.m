@@ -14,6 +14,7 @@
 #import "TTDatabaseLoader.h"
 #import "TTMasterViewController.h"
 #import <CorePlot/CorePlot.h>
+#import "TTOrderBookWindow.h"
 
 #define TTGraphWindowInset 25.f
 
@@ -37,12 +38,12 @@ RU_SYNTHESIZE_SINGLETON_FOR_CLASS_WITH_ACCESSOR(TTMenuBehaviorController, shared
 
 -(void)jumpToDepthTable:(id)sender
 {
-    [[_appDelegate masterViewController]setToBodyState:(TTMasterViewControllerBodyContentStateDepthTables)];
+    [[(TTOrderBookWindow*)[[_appDelegate windows]objectAtIndex:0]masterViewController] setToBodyState:(TTMasterViewControllerBodyContentStateDepthTables)];
 }
 
 -(void)jumpToArbTable:(id)sender
 {
-    [[_appDelegate masterViewController]setToBodyState:(TTMasterViewControllerBodyContentStateArbTables)];
+    [[(TTOrderBookWindow*)[[_appDelegate windows]objectAtIndex:0]masterViewController] setToBodyState:(TTMasterViewControllerBodyContentStateDepthTables)];
 }
 
 -(void)loadDB:(id)sender

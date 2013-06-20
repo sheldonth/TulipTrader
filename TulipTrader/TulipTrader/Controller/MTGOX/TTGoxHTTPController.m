@@ -44,7 +44,6 @@ RU_SYNTHESIZE_SINGLETON_FOR_CLASS_WITH_ACCESSOR(TTGoxHTTPController, sharedInsta
     appDelegatePtr = (TTAppDelegate*)[[NSApplication sharedApplication]delegate];
 }
 
-
 -(id)init
 {
     self = [super init];

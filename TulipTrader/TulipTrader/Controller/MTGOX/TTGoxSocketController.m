@@ -27,11 +27,18 @@ NSString* const kTTGoxOperationKeyResult = @"result";//    The response for op:c
 
 #define kTTUseWebSocketURL 1
 
+#define kTTSubscribeToLag 0
+
 @interface TTGoxSocketController ()
 
 @property (nonatomic, strong) SRWebSocket* socketConn;
 @property (nonatomic)NSInteger retries;
 @property (nonatomic, retain)NSTimer* keySubscribeTimer;
+
+//@property (assign) id <TTGoxSocketControllerMessageDelegate> subscribeDelegate;
+//@property (assign) id <TTGoxSocketControllerMessageDelegate> remarkDelegate;
+//@property (assign) id <TTGoxSocketControllerMessageDelegate> privateDelegate;
+//@property (assign) id <TTGoxSocketControllerMessageDelegate> resultDelegate;
 
 -(void)open;
 -(void)write:(NSString*)utfString;
@@ -39,8 +46,6 @@ NSString* const kTTGoxOperationKeyResult = @"result";//    The response for op:c
 @end
 
 @implementation TTGoxSocketController
-
-RU_SYNTHESIZE_SINGLETON_FOR_CLASS_WITH_ACCESSOR(TTGoxSocketController, sharedInstance);
 
 #pragma mark Public Methods
 
@@ -64,14 +69,13 @@ static NSMutableString* kTTGoxSocketIOURL;
 
 +(void)initialize
 {
-    NSDictionary* currencyUsageDict = [[TTGoxCurrencyController sharedInstance] currencyUsagePairs];
+    NSArray* currencyUsageDict = [TTGoxCurrencyController activeCurrencys];
     
     kTTGoxWebSocketURL = [NSMutableString stringWithString:@"wss://websocket.mtgox.com/mtgox?Currency="];
     kTTGoxSocketIOURL = [NSMutableString stringWithString:@"wss://socketio.mtgox.com/mtgox?Currency="];
-    [[currencyUsageDict allKeys] enumerateObjectsUsingBlock:^(NSString* key, NSUInteger idx, BOOL *stop) {
-        if ([[currencyUsageDict objectForKey:key]isEqualToNumber:@(1)])
-            [kTTGoxWebSocketURL appendFormat:@"%@,", key];
-            return;
+    [currencyUsageDict enumerateObjectsUsingBlock:^(NSString* currencyStr, NSUInteger idx, BOOL *stop) {
+        [kTTGoxWebSocketURL appendFormat:@"%@,", currencyStr];
+        [kTTGoxSocketIOURL appendFormat:@"%@,", currencyStr];
     }];
 }
 
@@ -171,7 +175,8 @@ static NSMutableString* kTTGoxSocketIOURL;
     [TTAPIControlBoxView publishCommand:RUStringWithFormat(@"%@ did open", webSocket)];
     [self setIsConnected:TTGoxSocketConnectionStateConnected];
     
-    [self subscribeToChannelID:@"trade.lag"];
+    if (kTTSubscribeToLag)
+        [self subscribeToChannelID:@"trade.lag"];
     
     [[TTGoxHTTPController sharedInstance]getAccountWebSocketKeyWithCompletion:^(NSString *accountKey) {
         [self subscribeToKeyID:accountKey];
@@ -207,28 +212,30 @@ static NSMutableString* kTTGoxSocketIOURL;
 {
     NSDictionary* responseDictionary = (NSDictionary*)[self parseSocketMessage:message];
     TTGoxSocketMessageType type = messageTypeFromDictionary(responseDictionary);
-    switch (type) {
-        case TTGoxSocketMessageTypeRemark:
-            if (_remarkDelegate && [_remarkDelegate respondsToSelector:@selector(shouldExamineResponseDictionary:ofMessageType:)])
-                [_remarkDelegate shouldExamineResponseDictionary:responseDictionary ofMessageType:type];
-            break;
-            
-        case TTGoxSocketMessageTypePrivate:
-            if (_privateDelegate && [_privateDelegate respondsToSelector:@selector(shouldExamineResponseDictionary:ofMessageType:)])
-                [_privateDelegate shouldExamineResponseDictionary:responseDictionary ofMessageType:type];
-            break;
-            
-        case TTGoxSocketMessageTypeResult:
-            if (_resultDelegate && [_resultDelegate respondsToSelector:@selector(shouldExamineResponseDictionary:ofMessageType:)])
-                [_resultDelegate shouldExamineResponseDictionary:responseDictionary ofMessageType:type];
-            break;
-            
-        case TTGoxSocketMessageTypeNone:
-            [NSException raise:@"Socket Message Type" format:@"Cannot have socket message type none"];
-            
-        default:
-            break;
-    }
+    [self.messageDelegate shouldExamineResponseDictionary:responseDictionary ofMessageType:type];
+
+//    switch (type) {
+//        case TTGoxSocketMessageTypeRemark:
+//            if (_remarkDelegate && [_remarkDelegate respondsToSelector:@selector(shouldExamineResponseDictionary:ofMessageType:)])
+//                [_remarkDelegate shouldExamineResponseDictionary:responseDictionary ofMessageType:type];
+//            break;
+//            
+//        case TTGoxSocketMessageTypePrivate:
+//            if (_privateDelegate && [_privateDelegate respondsToSelector:@selector(shouldExamineResponseDictionary:ofMessageType:)])
+//                [_privateDelegate shouldExamineResponseDictionary:responseDictionary ofMessageType:type];
+//            break;
+//            
+//        case TTGoxSocketMessageTypeResult:
+//            if (_resultDelegate && [_resultDelegate respondsToSelector:@selector(shouldExamineResponseDictionary:ofMessageType:)])
+//                [_resultDelegate shouldExamineResponseDictionary:responseDictionary ofMessageType:type];
+//            break;
+//            
+//        case TTGoxSocketMessageTypeNone:
+//            [NSException raise:@"Socket Message Type" format:@"Cannot have socket message type none"];
+//            
+//        default:
+//            break;
+//    }
 }
 
 -(void)webSocket:(SRWebSocket *)webSocket didFailWithError:(NSError *)error

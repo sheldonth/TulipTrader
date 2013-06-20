@@ -14,4 +14,6 @@
 
 @property(nonatomic)TTGoxCurrency currency;
 
+-(void)reload;
+
 @end

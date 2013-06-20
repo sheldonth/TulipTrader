@@ -7,19 +7,18 @@
 //
 
 #import "TTAppDelegate.h"
-#import "TTOperationsController.h"
 #import "RUConstants.h"
 #import "TTMenuBehaviorController.h"
-#import "TTAPIControlBoxView.h"
+#import "TTOrderBookWindow.h"
+#import "TTGoxCurrencyController.h"
 
 #define appTitle @"TulipTrader"
 
 @interface TTAppDelegate ()
-{
-    NSSize partialScreenSize;
-}
-@property(nonatomic, retain)TTOperationsController* operationsController;
+
 @property(nonatomic, retain)TTMenuBehaviorController* menuBehaviorController;
+@property(nonatomic, retain)TTMarketSelectionWelcomeWindow* marketSelectionWindow;
+
 @end
 
 @implementation TTAppDelegate
@@ -27,6 +26,28 @@
 @synthesize persistentStoreCoordinator = _persistentStoreCoordinator;
 @synthesize managedObjectModel = _managedObjectModel;
 @synthesize managedObjectContext = _managedObjectContext;
+
+static NSSize welcomeWindowRect;
+
+#pragma mark - static methods
+
++(void)initialize
+{
+    welcomeWindowRect = NSMakeSize(700, 400);
+}
+
+#pragma mark - MarketSelectionDelegate methods
+
+-(void)didFinishSelectionForWindow:(TTMarketSelectionWelcomeWindow *)window currencies:(NSArray *)currencies
+{
+    [window close];
+    NSScreen* mainScreen = [NSScreen mainScreen];
+    TTOrderBookWindow* orderBookWindow = [[TTOrderBookWindow alloc]initWithContentRect:(NSRect){0, 0, mainScreen.visibleFrame.size.width, mainScreen.visibleFrame.size.height - 20} styleMask:(NSTitledWindowMask | NSClosableWindowMask | NSMiniaturizableWindowMask) backing:NSBackingStoreBuffered defer:YES];
+    [orderBookWindow setTitle:@"Order Book Controller"];
+    [orderBookWindow setCurrencies:currencies];
+    [self.windows addObject:orderBookWindow];
+    [orderBookWindow makeKeyAndOrderFront:self];
+}
 
 #pragma mark - NSWindowDelegate methods
 
@@ -37,56 +58,38 @@
 
 -(NSSize)window:(NSWindow *)window willUseFullScreenContentSize:(NSSize)proposedSize
 {
-    NSRect newSizeAtOrigin = (NSRect){0,0,proposedSize};
-    [window setFrame:newSizeAtOrigin display:YES animate:YES];
-    [_masterViewController setViewFrameAndInformSubviews:newSizeAtOrigin];
-    return proposedSize;
+    return (NSSize){0, 0};
 }
 
 -(void)windowWillEnterFullScreen:(NSNotification *)notification
 {
-    NSWindow* windowPtr = (NSWindow*)notification.object;
-    if (![windowPtr isKindOfClass:[NSWindow class]])
-        return;
-    RUDLog(@"Will Enter: %@", NSStringFromRect([windowPtr.contentView frame]));
-    partialScreenSize = [windowPtr.contentView frame].size;
+
 }
 
 -(void)windowDidEnterFullScreen:(NSNotification *)notification
 {
-    NSWindow* windowPtr = (NSWindow*)notification.object;
-    if (![windowPtr isKindOfClass:[NSWindow class]])
-        return;
-    RUDLog(@"Did Enter: %@", NSStringFromRect([windowPtr.contentView frame]));
 }
 
 -(void)windowWillExitFullScreen:(NSNotification *)notification
 {
-    [_masterViewController setViewFrameAndInformSubviews:(NSRect){0,0,partialScreenSize}];
+
 }
 
 -(void)windowDidExitFullScreen:(NSNotification *)notification
 {
-//    NSWindow* windowPtr = (NSWindow*)notification.object;
-//    NSRect winFrame = [windowPtr.contentView frame];
-//    NSRect newSizeAtOrigin = (NSRect){0,0,winFrame.size};
+
 }
 
 #pragma mark - NSApplicationDelegate methods
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {
-    NSScreen* mainScreen = [NSScreen mainScreen];
-    [self setTheWindow:[[NSWindow alloc]initWithContentRect:(NSRect){0, 0, mainScreen.visibleFrame.size.width, mainScreen.visibleFrame.size.height - 20} styleMask:(NSTitledWindowMask | NSClosableWindowMask | NSMiniaturizableWindowMask) backing:NSBackingStoreBuffered defer:YES]];
-    [self.theWindow setCollectionBehavior:NSWindowCollectionBehaviorFullScreenPrimary];
-    NSDictionary* infoDict = [[NSBundle mainBundle] infoDictionary];
-    NSString* version = [infoDict objectForKey:@"CFBundleShortVersionString"];
-    [self.theWindow setTitle:RUStringWithFormat(@"%@ v%@", appTitle, version)];
-    [self setOperationsController:[TTOperationsController new]];
+    [self setWindows:[NSMutableArray array]];
     [self setMenuBehaviorController:[TTMenuBehaviorController sharedInstance]];
-    [self setMasterViewController:[[TTMasterViewController alloc]initWithFrame:(NSRect){0,0,self.theWindow.frame.size.width, self.theWindow.frame.size.height - 20}]];
-    [self.theWindow.contentView addSubview:_masterViewController];
-    [self.theWindow makeKeyAndOrderFront:self];
+    NSRect r = [[NSScreen mainScreen]visibleFrame];
+    [self setMarketSelectionWindow:[[TTMarketSelectionWelcomeWindow alloc]initWithContentRect:(NSRect){CGRectGetMidX(r) - (welcomeWindowRect.width / 2), CGRectGetHeight(r) - (welcomeWindowRect.height + 150), welcomeWindowRect} styleMask:(NSTitledWindowMask | NSClosableWindowMask | NSMiniaturizableWindowMask) backing:NSBackingStoreBuffered defer:YES]];
+    [self.marketSelectionWindow setMarketSelectionDelegate:self];
+    [self.marketSelectionWindow makeKeyAndOrderFront:self];
 }
 
 // Returns the directory the application uses to store the Core Data store file. This code uses a directory named "co.resplendent.TulipTrader" in the user's Application Support directory.

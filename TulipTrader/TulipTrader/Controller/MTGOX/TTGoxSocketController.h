@@ -49,15 +49,10 @@ typedef enum{
 
 -(void)open;
 
-@property (assign) id <TTGoxSocketControllerMessageDelegate> subscribeDelegate;
-@property (assign) id <TTGoxSocketControllerMessageDelegate> remarkDelegate;
-@property (assign) id <TTGoxSocketControllerMessageDelegate> privateDelegate;
-@property (assign) id <TTGoxSocketControllerMessageDelegate> resultDelegate;
+@property(nonatomic, strong) dispatch_queue_t dispatchQueue;
 
-@property (nonatomic, strong) dispatch_queue_t dispatchQueue;
+@property(nonatomic)TTGoxSocketConnectionState isConnected;
 
-@property (nonatomic)TTGoxSocketConnectionState isConnected;
-
-RU_SYNTHESIZE_SINGLETON_DECLARATION_FOR_CLASS_WITH_ACCESSOR(TTGoxSocketController, sharedInstance);
+@property(nonatomic, retain)id<TTGoxSocketControllerMessageDelegate> messageDelegate;
 
 @end

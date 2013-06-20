@@ -12,22 +12,68 @@
 #import "TTFrameConstants.h"
 #import "TTArbitrageStackView.h"
 #import "TTGoxCurrencyController.h"
-#import "TTAPIControlBoxView.h"
-#import "TTAccountBox.h"
+#import "TTOperationsController.h"
+
 
 @interface TTMasterViewController ()
 
 @property(nonatomic, retain)TTStatusBarView* statusBarView;
 @property(nonatomic, retain)NSMutableArray* arbitrageStackViewsArray;
-@property(nonatomic, retain)TTAPIControlBoxView* controlBoxView;
-@property(nonatomic, retain)TTAccountBox* accountBox;
-
 @property(nonatomic)NSRect centerBodyRect;
 @property(nonatomic)CGFloat centerBodyHeight;
+@property(nonatomic, retain)TTGoxPrivateMessageController* privateMessageController;
 
 @end
 
 @implementation TTMasterViewController
+
+#pragma mark - TTGoxSocketPrivateMessageDelegate methods
+
+-(void)lagObserved:(NSDictionary *)lagDict
+{
+    
+}
+
+-(void)depthChangeObserved:(NSDictionary *)depthDictionary
+{
+    RUDLog(@"Depth");
+}
+
+-(void)tradeOccuredForCurrency:(TTGoxCurrency)currency tradeData:(Trade *)trade
+{
+    RUDLog(@"Trade");
+}
+
+-(void)tickerObserved:(Ticker *)ticker forChannel:(NSString *)channel
+{
+    // For now, NSNotifications are handling informing the currencyboxes. Refactor that eventually.
+}
+
+#pragma mark - TTGoxSocketMessageDelegate methods
+
+-(void)shouldExamineResponseDictionary:(NSDictionary *)dictionary ofMessageType:(TTGoxSocketMessageType)type
+{
+    switch (type) {
+        case TTGoxSocketMessageTypeResult:
+            RUDLog(@"result");
+            break;
+            
+        case TTGoxSocketMessageTypePrivate:
+            [self.privateMessageController shouldExamineMarketDataDictionary:dictionary];
+            break;
+            
+        case TTGoxSocketMessageTypeRemark:
+            RUDLog(@"remark");
+            break;
+            
+        case TTGoxSocketMessageTypeNone:
+            RUDLog(@"Message Type None");
+            break;
+            
+        default:
+            break;
+    }
+}
 
 -(void)swapViews
 {
@@ -39,7 +85,7 @@
         RUDLog(@"No state set");
 }
 
--(void)setToBodyState:(TTMasterViewControllerBodyContentState)bodyState// WithCompletion:(void (^)())completion
+-(void)setToBodyState:(TTMasterViewControllerBodyContentState)bodyState
 {
     if (![self.subviews containsObject:self.arbGridView])
         [self addSubview:self.arbGridView];
@@ -82,37 +128,45 @@
     [self willChangeValueForKey:@"bodyState"];
     _bodyState = bodyState;
     [self didChangeValueForKey:@"bodyState"];
-//    completion();
 }
 
 - (id)initWithFrame:(NSRect)frameRect
 {
     self = [super initWithFrame:frameRect];
     if (self) {
-        [self setStatusBarView:[TTStatusBarView new]];
+        CGFloat statusBarHeight = floorf(CGRectGetHeight(frameRect) / 8);
+
+        _centerBodyHeight = floorf((CGRectGetHeight(frameRect) / 8) * 4) - 40;
+
+        _centerBodyRect = (NSRect){0, CGRectGetHeight(frameRect) - statusBarHeight - _centerBodyHeight, CGRectGetWidth(frameRect), _centerBodyHeight};
+        
+        [self setStatusBarView:[[TTStatusBarView alloc]initWithFrame:(NSRect){0, CGRectGetHeight(frameRect) - statusBarHeight, CGRectGetWidth(frameRect), statusBarHeight}]];
         [self addSubview:_statusBarView];
+        
         [self setControlBoxView:[TTAPIControlBoxView sharedInstance]];
         [self addSubview:_controlBoxView];
-        [self setAccountBox:[TTAccountBox new]];
-        [self addSubview:self.accountBox];
-
-        CGFloat statusBarHeight = floorf(CGRectGetHeight(frameRect) / 8);
-        [_statusBarView setFrame:(NSRect){0, CGRectGetHeight(frameRect) - statusBarHeight, CGRectGetWidth(frameRect), statusBarHeight}];
-        [_statusBarView setNeedsLayout:YES];
-        
-        _centerBodyHeight = floorf((CGRectGetHeight(frameRect) / 8) * 4) - 40;
-        
-        _centerBodyRect = (NSRect){0, CGRectGetHeight(frameRect) - _statusBarView.frame.size.height - _centerBodyHeight, CGRectGetWidth(frameRect), _centerBodyHeight};
-        
         [_controlBoxView setFrame:(NSRect){0, 0, CGRectGetWidth(frameRect) / 4, CGRectGetHeight(frameRect) - statusBarHeight - _centerBodyHeight}];
+        
+        [self setAccountBox:[[TTAccountBox alloc]initWithFrame:(NSRect){CGRectGetWidth(_controlBoxView.frame), 0, ((CGRectGetWidth(frameRect) / 4) * 3), CGRectGetHeight(frameRect) - statusBarHeight - _centerBodyHeight}]];
+        [self.accountBox setFrame:_accountBox.frame];
+        [self addSubview:self.accountBox];
+        
+        [self.accountBox loadSequential];
         
         [self setArbGridView:[[TTArbGridView alloc]initWithFrame:_centerBodyRect]];
         [self addSubview:self.arbGridView];
         
         _bodyState = TTMasterViewControllerBodyContentStateArbTables;
         
-        NSRect acctBoxFrame = (NSRect){CGRectGetWidth(_controlBoxView.frame), 0, ((CGRectGetWidth(frameRect) / 4) * 3), CGRectGetHeight(frameRect) - statusBarHeight - _centerBodyHeight};
-        [_accountBox setFrame:acctBoxFrame];
+        [self setSocketController:[TTGoxSocketController new]];
+        [_socketController setMessageDelegate:self];
+        [_socketController open];
+        
+        [self setPrivateMessageController:[TTGoxPrivateMessageController new]];
+        [_privateMessageController setLagDelegate:self];
+        [_privateMessageController setDepthDelegate:self];
+        [_privateMessageController setTradeDelegate:self];
+        [_privateMessageController setTickerDelegate:self];
     }
     return self;
 }

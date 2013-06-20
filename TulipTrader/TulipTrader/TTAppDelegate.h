@@ -7,16 +7,13 @@
 //
 
 #import <Cocoa/Cocoa.h>
-#import "TTMasterViewController.h"
+#import "TTMarketSelectionWelcomeWindow.h"
 
-@interface TTAppDelegate : NSObject <NSApplicationDelegate, NSWindowDelegate>
+@interface TTAppDelegate : NSObject <NSApplicationDelegate, NSWindowDelegate, MarketSelectionWindowDelegate>
 
-//@property (assign) IBOutlet NSWindow *window;
-@property(nonatomic, retain)NSWindow* theWindow;
+@property(nonatomic, retain)NSMutableArray* windows;
 
 @property (assign) IBOutlet NSMenu* theMenu;
-
-@property(nonatomic, retain)TTMasterViewController* masterViewController;
 
 @property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 @property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;

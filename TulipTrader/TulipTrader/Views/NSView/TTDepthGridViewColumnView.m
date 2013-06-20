@@ -35,6 +35,13 @@
 
 @implementation TTDepthGridViewColumnView
 
+#pragma mark - Public Methods
+
+-(void)reload
+{
+    [self.stackView reload];
+}
+
 #pragma mark - NSPopoverDelegate methods
 
 
@@ -100,6 +107,17 @@
     [_popover showRelativeToRect:sender.frame ofView:self preferredEdge:NSMaxXEdge];
 }
 
+#pragma mark - NotificationCenter methods
+
+-(void)observeDepthNotification:(NSNotification*)sender
+{
+    NSDictionary* notificationDict = [sender.userInfo objectForKey:@"DepthDictionary"];
+    NSDictionary* depthDict = [notificationDict objectForKey:@"depth"];
+    TTGoxCurrency currency = currencyFromString([depthDict objectForKey:@"currency"]);
+    if (self.currency == currency)
+        [self.stackView processDepthDictionary:depthDict];
+}
+
 -(void)reloadDepthWithTickerNotification:(NSNotification*)notification
 {
     Ticker* t = [notification.userInfo objectForKey:@"Ticker"];
@@ -125,6 +143,8 @@
 -(void)dealloc
 {
     [[NSNotificationCenter defaultCenter]removeObserver:self forKeyPath:TTGoxWebsocketTradeNotificationString];
+    [[NSNotificationCenter defaultCenter]removeObserver:self forKeyPath:TTGoxWebsocketDepthNotificationString];
+    [[NSNotificationCenter defaultCenter]removeObserver:self forKeyPath:TTGoxWebsocketTickerNotificationString];
 }
 
 - (id)initWithFrame:(NSRect)frame
@@ -160,6 +180,7 @@
         
         [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(reloadDepthWithTradeNotification:) name:TTGoxWebsocketTradeNotificationString object:nil];
         [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(reloadDepthWithTickerNotification:) name:TTGoxWebsocketTickerNotificationString object:nil];
+        [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(observeDepthNotification:) name:TTGoxWebsocketDepthNotificationString object:nil];
     }
     
     return self;
@@ -168,8 +189,6 @@
 -(void)setCurrency:(TTGoxCurrency)currency
 {
     [_stackView setCurrency:currency];
-    [_stackView reload];
-    [self setLastReload:[NSDate date]];
     _currency = currency;
 }
 

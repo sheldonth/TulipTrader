@@ -57,6 +57,13 @@ static NSDateFormatter* dateFormatter;
     [dateFormatter setDateStyle:NSDateFormatterMediumStyle];
 }
 
+-(void)loadSequential
+{
+    [self getAccountDataWithCompletion:^{
+        [self getOrderData];
+    }];
+}
+
 NSString* accountToString(TTGoxAccount* account)
 {
     NSMutableString* outputStr = [NSMutableString string];
@@ -193,8 +200,6 @@ NSString* ordersArrayToString(NSArray* ordersArray)
         [self.accountDataTextPane.textView setString:RUStringWithFormat(@"%@ Failed %ld\n Retrying in 3 seconds or run 'account'", failingRequest.URL.absoluteString, failingResponse.statusCode)];
         [TTAPIControlBoxView publishCommand:@"Account Data Failed" repeating:YES];
         [self setAccountDataTimer:[NSTimer scheduledTimerWithTimeInterval:3.f target:self selector:@selector(getAccountData) userInfo:nil repeats:NO]];
-        if (completion)
-            completion();
     }];
 }
 
@@ -269,9 +274,6 @@ NSString* ordersArrayToString(NSArray* ordersArray)
         [_walletTransactionsProgressIndicator setDisplayedWhenStopped:NO];
         [self.contentView addSubview:_walletTransactionsProgressIndicator];
     }
-    [self getAccountDataWithCompletion:^{
-        [self getOrderData];
-    }];
 }
 
 

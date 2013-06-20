@@ -11,6 +11,7 @@
 #import "RUConstants.h"
 #import "TTDepthOrder.h"
 #import "NSColor+Hex.h"
+#import "RUClassOrNilUtil.h"
 
 @interface TTDepthPositionValue : NSObject
 
@@ -88,6 +89,71 @@
 #define leadingElementsToDrawBlack 3
 
 #define numberOfDepthSamples 50
+
+#pragma mark - public methods, observing streaming depth changes
+
+-(void)processDepthDictionary:(NSDictionary*)d
+{
+    if (!self.hasSeededDepthData)
+        return;
+
+    TTDepthOrder* deltaOrder = [TTDepthOrder new];
+    [deltaOrder setAmount:@(kRUStringOrNil([d objectForKey:@"volume"]).doubleValue)];
+    [deltaOrder setPrice:@(kRUStringOrNil([d objectForKey:@"price"]).doubleValue)];
+
+    NSString* microsecondTimeString = [d objectForKey:@"now"];
+    [deltaOrder setTime:[NSDate dateWithTimeIntervalSince1970:(microsecondTimeString.doubleValue / 1000000)]];
+    [deltaOrder setTimeStampStr:[d objectForKey:@"now"]];
+    
+    NSString* typeStr = [d objectForKey:@"type_str"];
+    
+    if ([typeStr isEqualToString:@"ask"])
+        [deltaOrder setDepthOrderType:(TTDepthOrderTypeAsk)];
+    else if ([typeStr isEqualToString:@"bid"])
+        [deltaOrder setDepthOrderType:(TTDepthOrderTypeBid)];
+    else
+        [deltaOrder setDepthOrderType:(TTDepthOrderTypeNone)];
+    
+//    RUDLog(@"%i %@ at %@", deltaOrder.depthOrderType, deltaOrder.amount.stringValue, deltaOrder.price.stringValue);
+//    return;
+    
+    if (self.currency == TTGoxCurrencyUSD)
+    {
+        switch (deltaOrder.depthOrderType) {
+            case TTDepthOrderTypeAsk:
+            {
+                __block BOOL isFound = NO;
+                [self.asks enumerateObjectsUsingBlock:^(TTDepthOrder* order, NSUInteger idx, BOOL *stop) {
+                    if ([order isAbsoluteTermsEqualToDepthOrder:deltaOrder])
+                    {
+                        RUDLog(@"Found: %@ %@ at %@", [d objectForKey:@"type_str"], [d objectForKey:@"volume"], [d objectForKey:@"price"]);
+                        isFound = YES;
+                        *stop = YES;
+                    }
+                }];
+                if (!isFound)
+                    RUDLog(@"Failed on ask");
+                break;
+            }
+            case TTDepthOrderTypeBid:
+            {
+                __block BOOL isFound = NO;
+                [self.bids enumerateObjectsUsingBlock:^(TTDepthOrder* order, NSUInteger idx, BOOL *stop) {
+                    if ([order isAbsoluteTermsEqualToDepthOrder:deltaOrder])
+                    {
+                        RUDLog(@"%@ %@ at %@", [d objectForKey:@"type_str"], [d objectForKey:@"volume"], [d objectForKey:@"price"]);
+                        isFound = YES;
+                        *stop = YES;
+                    }
+                }];
+                if (!isFound)
+                    RUDLog(@"Failed on bid");
+            }
+            default:
+                break;
+        }
+    }
+}
 
 #pragma mark - mouse events
 
@@ -288,6 +354,8 @@ void drawLine(CGContextRef context, CGFloat lineWidth, CGColorRef lineColor, CGP
 -(void)loadDepthForCurrency:(TTGoxCurrency)curr
 {
     _isReloading = YES;
+    if (curr == TTGoxCurrencyUSD)
+    {
     [[TTGoxHTTPController sharedInstance]getDepthForCurrency:curr withCompletion:^(NSArray *bids, NSArray *asks, NSDictionary *maxMinTicks) {
         _isReloading = NO;
         [self setBids:bids];
@@ -302,6 +370,7 @@ void drawLine(CGContextRef context, CGFloat lineWidth, CGColorRef lineColor, CGP
         _isReloading = NO;
 //        [NSTimer scheduledTimerWithTimeInterval:arc4random()%3 target:self selector:@selector(reload) userInfo:nil repeats:NO];
     }];
+    }
 }
 
 - (id)initWithFrame:(NSRect)frame

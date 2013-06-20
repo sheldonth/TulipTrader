@@ -18,10 +18,6 @@
 
 @interface TTStatusBarView ()
 
-//@property(nonatomic, retain)TTTextView* connectionStateTextView;
-//@property(nonatomic, retain)TTGoxSocketController* webSocket;
-//@property(nonatomic, retain)NSScrollView* scrollView;
-//@property(nonatomic, retain)TTTextView* lagStateTextView;
 @property(nonatomic, retain)NSMutableArray* currencyBoxes;
 
 NSString* socketStateStringForConnectionState (TTGoxSocketConnectionState state);
@@ -45,12 +41,6 @@ static NSFont* TT_TYPEWRITER_FONT_SMALL;
 #define TTCurrencyBoxWidth 160.f
 #define TTCurrencyBoxHeight 100.f
 
-#pragma mark - lag delegate
--(void)lagObserved:(NSDictionary *)lagDict
-{
-    RUDLog(@"$");
-}
-
 +(void)initialize
 {
     if (self == [TTStatusBarView class])
@@ -65,17 +55,10 @@ static NSFont* TT_TYPEWRITER_FONT_SMALL;
     }
 }
 
--(void)tradeOccuredForCurrency:(TTGoxCurrency)currency tradeData:(Trade *)trade
-{
-    RUDLog(@"");
-}
-
 - (id)initWithFrame:(NSRect)frame
 {
     self = [super initWithFrame:frame];
     if (self) {
-        
-        // Enumerate the active currencies, and add a currency box for each, set their frames in the status bar's setframe method
         
         _currencyBoxes = [NSMutableArray array];
         
@@ -86,22 +69,12 @@ static NSFont* TT_TYPEWRITER_FONT_SMALL;
             [_currencyBoxes addObject:bx];
         }];
         
-        [[TTGoxPrivateMessageController sharedInstance]setLagDelegate:self];
-        [[TTGoxPrivateMessageController sharedInstance]setTradeDelegate:self];
-        
+        CGFloat boxSpace = floorf(CGRectGetWidth(frame) / [TTGoxCurrencyController activeCurrencys].count);
+        [_currencyBoxes enumerateObjectsUsingBlock:^(TTCurrencyBox* box, NSUInteger idx, BOOL *stop) {
+            [box setFrame:(NSRect){((boxSpace / 2) - (TTCurrencyBoxWidth / 2)) + (boxSpace * (idx % 8)), TTStatusBarContentBottomOffset + ((idx / 8) * (TTCurrencyBoxHeight + 20)), TTCurrencyBoxWidth, TTCurrencyBoxHeight}];
+        }];
     }
     return self;
-}
-
--(void)setFrame:(NSRect)frameRect
-{
-    [super setFrame:frameRect];
-//    [_connectionStateTextView setFrame:(NSRect){TTStatusBarContentLeftOffset, CGRectGetHeight(frameRect) - 65, 225, 60}];
-//    [_lagStateTextView setFrame:(NSRect){TTStatusBarContentLeftOffset + 5, 70, 165, 25}];
-    CGFloat boxSpace = CGRectGetWidth(frameRect) / 8;
-    [_currencyBoxes enumerateObjectsUsingBlock:^(TTCurrencyBox* box, NSUInteger idx, BOOL *stop) {
-        [box setFrame:(NSRect){((boxSpace / 2) - (TTCurrencyBoxWidth / 2)) + (boxSpace * (idx % 8)), TTStatusBarContentBottomOffset + ((idx / 8) * (TTCurrencyBoxHeight + 20)), TTCurrencyBoxWidth, TTCurrencyBoxHeight}];
-    }];
 }
 
 - (void)drawRect:(NSRect)dirtyRect
@@ -134,7 +107,5 @@ NSString* socketStateStringForConnectionState (TTGoxSocketConnectionState state)
             break;
     }
 }
-
-// If you invoke display manually, it invokes layout and layout invokes updateConstraints.
 
 @end

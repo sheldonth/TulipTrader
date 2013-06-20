@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "RUSingleton.h"
+#import "TTGoxCurrency.h"
 
 @interface TTGoxCurrencyController : NSObject
 
@@ -17,5 +18,6 @@ RU_SYNTHESIZE_SINGLETON_DECLARATION_FOR_CLASS_WITH_ACCESSOR(TTGoxCurrencyControl
 @property(nonatomic, retain)NSDictionary* currencyUsagePairs;
 
 +(NSArray*)activeCurrencys;
++(void)setCurrency:(TTGoxCurrency)currency active:(BOOL)active;
 
 @end

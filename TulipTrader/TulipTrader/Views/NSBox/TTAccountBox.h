@@ -15,4 +15,6 @@
 @property(nonatomic, retain)TTGoxAccount* account;
 @property(nonatomic, retain)NSArray* orders;
 
+-(void)loadSequential;
+
 @end

@@ -44,8 +44,6 @@ static NSFont* buySellLabelsFont;
 static NSFont* buySellFontForCurrencyLetters;
 static NSFont* spreadFont;
 static NSNumberFormatter* spreadNumberFormatter;
-static NSColor* buyGreen;
-static NSColor* sellRed;
 
 +(void)initialize
 {

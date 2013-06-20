@@ -52,8 +52,8 @@ NSString* const TTGoxWebsocketDepthNotificationString = @"ttGoxDepthUpdateNotifi
 {
     if (self.depthDelegate && [self.depthDelegate respondsToSelector:@selector(depthChangeObserved:)])
         [self.depthDelegate depthChangeObserved:depthDictionary];
-    else
-        [[NSNotificationCenter defaultCenter]postNotificationName:TTGoxWebsocketDepthNotificationString object:nil userInfo:@{@"DepthDictionary": depthDictionary}];
+    
+    [[NSNotificationCenter defaultCenter]postNotificationName:TTGoxWebsocketDepthNotificationString object:nil userInfo:@{@"DepthDictionary": depthDictionary}];
 }
 
 -(void)recordTrade:(NSDictionary*)tradeDictionary
@@ -77,6 +77,8 @@ NSString* const TTGoxWebsocketDepthNotificationString = @"ttGoxDepthUpdateNotifi
             }
         }
     }];
+    if (self.tradeDelegate && [self.tradeDelegate respondsToSelector:@selector(tradeOccuredForCurrency:tradeData:)])
+        [self.tradeDelegate tradeOccuredForCurrency:currencyFromNumber(trade.currency) tradeData:trade];
     [[NSNotificationCenter defaultCenter]postNotificationName:TTGoxWebsocketTradeNotificationString object:self userInfo:@{@"Trade": trade}];
 }
 
@@ -91,6 +93,9 @@ NSString* const TTGoxWebsocketDepthNotificationString = @"ttGoxDepthUpdateNotifi
         if (e)
             RUDLog(@"Error saving ticker on channel: %@", ticker.channel_name);
     }];
+    if (self.tickerDelegate && [self.tickerDelegate respondsToSelector:@selector(tickerObserved:forChannel:)])
+        [self.tickerDelegate tickerObserved:ticker forChannel:ticker.channel_id];
+        
     [[NSNotificationCenter defaultCenter]postNotificationName:TTGoxWebsocketTickerNotificationString object:self userInfo:@{@"Ticker": ticker}];
 }
 
@@ -102,7 +107,7 @@ NSString* const TTGoxWebsocketDepthNotificationString = @"ttGoxDepthUpdateNotifi
         [[NSNotificationCenter defaultCenter]postNotificationName:TTGoxWebsocketLagUpdateNotificationString object:self userInfo:@{@"lagDictionary": lagDictionary}];
 }
 
--(void)shouldExamineResponseDictionary:(NSDictionary *)dictionary ofMessageType:(TTGoxSocketMessageType)type
+-(void)shouldExamineMarketDataDictionary:(NSDictionary *)dictionary
 {
     kTTGoxMarketDataType dataType =  TTGoxPrivateMessageControllerDataType([dictionary objectForKey:@"private"]);
     switch (dataType) {
@@ -145,7 +150,5 @@ kTTGoxMarketDataType TTGoxPrivateMessageControllerDataType(NSString* typeString)
     else
         return kTTGoxMarketNone;
 }
-
-RU_SYNTHESIZE_SINGLETON_FOR_CLASS_WITH_ACCESSOR(TTGoxPrivateMessageController, sharedInstance);
 
 @end
