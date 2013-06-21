@@ -77,6 +77,7 @@ static NSMutableString* kTTGoxSocketIOURL;
         [kTTGoxWebSocketURL appendFormat:@"%@,", currencyStr];
         [kTTGoxSocketIOURL appendFormat:@"%@,", currencyStr];
     }];
+    RUDLog(@"Socket String %@", kTTGoxWebSocketURL);
 }
 
 -(id)init

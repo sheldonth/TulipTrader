@@ -13,7 +13,7 @@
 #import "TTArbitrageStackView.h"
 #import "TTGoxCurrencyController.h"
 #import "TTOperationsController.h"
-
+#import "TTDepthOrder.h"
 
 @interface TTMasterViewController ()
 
@@ -36,7 +36,8 @@
 
 -(void)depthChangeObserved:(NSDictionary *)depthDictionary
 {
-    RUDLog(@"Depth");
+    TTDepthOrder* depthOrder = [TTDepthOrder newDepthOrderFromGoxWebsocketDictionary:[depthDictionary objectForKey:@"depth"]];
+    RUDLog(@"%@", depthOrder);
 }
 
 -(void)tradeOccuredForCurrency:(TTGoxCurrency)currency tradeData:(Trade *)trade

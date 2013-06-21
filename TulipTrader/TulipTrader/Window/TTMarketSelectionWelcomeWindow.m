@@ -10,6 +10,7 @@
 #import "JNWLabel.h"
 #import "RUConstants.h"
 #import "TTGoxCurrencyController.h"
+#import <Carbon/Carbon.h>
 
 @interface TTMarketSelectionWelcomeWindow()
 
@@ -24,16 +25,24 @@
 
 @implementation TTMarketSelectionWelcomeWindow
 
+#pragma mark - Keyboard method overrides
+
+// kVK_Return is in an archaic file /System/Library/Frameworks/Carbon.framework/Versions/A/Frameworks/HIToolbox.framework/Versions/A/Headers
+// Events.h which is included by <Carbon/Carbon.h>
+
+-(void)keyDown:(NSEvent *)theEvent
+{
+    if (theEvent.keyCode == kVK_Return)
+    {
+        [self finishAndInformDelegate];
+    }
+}
+
 #pragma mark - UIButton methods
 
 -(void)completeButtonPressed:(NSButton*)sender
 {
-    NSMutableArray* selectedCurrenciesArray = [NSMutableArray array];
-    NSIndexSet* selectedCurrenciesIndexSet = [self.currenciesTableView selectedRowIndexes];
-    [selectedCurrenciesIndexSet enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL *stop) {
-        [selectedCurrenciesArray addObject:[self.currencyController.currencies objectAtIndex:idx]];
-    }];
-    [self.marketSelectionDelegate didFinishSelectionForWindow:self currencies:selectedCurrenciesArray];
+    [self finishAndInformDelegate];
 }
 
 #pragma mark - NSTableViewDataSource methods
@@ -72,6 +81,18 @@
 }
 
 #pragma mark - NSTableViewDelegate methods
+
+#pragma mark - internal methods
+
+-(void)finishAndInformDelegate
+{
+    NSMutableArray* selectedCurrenciesArray = [NSMutableArray array];
+    NSIndexSet* selectedCurrenciesIndexSet = [self.currenciesTableView selectedRowIndexes];
+    [selectedCurrenciesIndexSet enumerateIndexesUsingBlock:^(NSUInteger idx, BOOL *stop) {
+        [selectedCurrenciesArray addObject:[self.currencyController.currencies objectAtIndex:idx]];
+    }];
+    [self.marketSelectionDelegate didFinishSelectionForWindow:self currencies:selectedCurrenciesArray];
+}
 
 -(id)initWithContentRect:(NSRect)contentRect styleMask:(NSUInteger)aStyle backing:(NSBackingStoreType)bufferingType defer:(BOOL)flag
 {

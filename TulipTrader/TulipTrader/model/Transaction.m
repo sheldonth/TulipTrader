@@ -10,6 +10,11 @@
 #import "Tick.h"
 #import "RUClassOrNilUtil.h"
 
+/*
+ A transaction is an entry into or out of a wallet.
+ It contains a TransactionTrade, which generally has it's most vital details.
+ */
+
 @implementation Transaction
 
 +(Transaction*)transactionFromDictionary:(NSDictionary*)d

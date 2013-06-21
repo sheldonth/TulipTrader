@@ -7,12 +7,19 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "TTGoxCurrency.h"
 
 typedef enum{
     TTDepthOrderTypeNone = 0,
     TTDepthOrderTypeBid,
     TTDepthOrderTypeAsk
 }TTDepthOrderType;
+
+typedef enum{
+    TTDepthOrderActionNone = 0,
+    TTDepthOrderActionAdd,
+    TTDepthOrderActionRemove,
+}TTDepthOrderAction;
 
 @interface TTDepthOrder : NSObject
 
@@ -21,12 +28,16 @@ typedef enum{
 @property(nonatomic, retain)NSDate* time;
 @property(nonatomic, retain)NSString* timeStampStr;
 
+@property(nonatomic)TTGoxCurrency currency;
+
 // Optional, defaults to none
 @property(nonatomic)TTDepthOrderType depthOrderType;
+@property(nonatomic)TTDepthOrderAction* depthOrderAction;
 
 -(BOOL)isAbsoluteTermsEqualToDepthOrder:(TTDepthOrder*)depthOrder consideringTimestampString:(BOOL)considers;
 -(BOOL)isAbsoluteTermsEqualToDepthOrder:(TTDepthOrder*)depthOrder;
 
-+(TTDepthOrder*)newDepthOrderFromDictionary:(NSDictionary*)dictionary;
++(TTDepthOrder*)newDepthOrderFromGOXHTTPDictionary:(NSDictionary*)dictionary;
++(TTDepthOrder*)newDepthOrderFromGoxWebsocketDictionary:(NSDictionary*)d;
 
 @end

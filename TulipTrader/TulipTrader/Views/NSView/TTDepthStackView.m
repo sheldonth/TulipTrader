@@ -97,25 +97,7 @@
     if (!self.hasSeededDepthData)
         return;
 
-    TTDepthOrder* deltaOrder = [TTDepthOrder new];
-    [deltaOrder setAmount:@(kRUStringOrNil([d objectForKey:@"volume"]).doubleValue)];
-    [deltaOrder setPrice:@(kRUStringOrNil([d objectForKey:@"price"]).doubleValue)];
-
-    NSString* microsecondTimeString = [d objectForKey:@"now"];
-    [deltaOrder setTime:[NSDate dateWithTimeIntervalSince1970:(microsecondTimeString.doubleValue / 1000000)]];
-    [deltaOrder setTimeStampStr:[d objectForKey:@"now"]];
-    
-    NSString* typeStr = [d objectForKey:@"type_str"];
-    
-    if ([typeStr isEqualToString:@"ask"])
-        [deltaOrder setDepthOrderType:(TTDepthOrderTypeAsk)];
-    else if ([typeStr isEqualToString:@"bid"])
-        [deltaOrder setDepthOrderType:(TTDepthOrderTypeBid)];
-    else
-        [deltaOrder setDepthOrderType:(TTDepthOrderTypeNone)];
-    
-//    RUDLog(@"%i %@ at %@", deltaOrder.depthOrderType, deltaOrder.amount.stringValue, deltaOrder.price.stringValue);
-//    return;
+    TTDepthOrder* deltaOrder = [TTDepthOrder newDepthOrderFromGoxWebsocketDictionary:d];
     
     if (self.currency == TTGoxCurrencyUSD)
     {

@@ -143,7 +143,7 @@
 -(void)dealloc
 {
     [[NSNotificationCenter defaultCenter]removeObserver:self forKeyPath:TTGoxWebsocketTradeNotificationString];
-    [[NSNotificationCenter defaultCenter]removeObserver:self forKeyPath:TTGoxWebsocketDepthNotificationString];
+//    [[NSNotificationCenter defaultCenter]removeObserver:self forKeyPath:TTGoxWebsocketDepthNotificationString];
     [[NSNotificationCenter defaultCenter]removeObserver:self forKeyPath:TTGoxWebsocketTickerNotificationString];
 }
 
@@ -180,7 +180,7 @@
         
         [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(reloadDepthWithTradeNotification:) name:TTGoxWebsocketTradeNotificationString object:nil];
         [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(reloadDepthWithTickerNotification:) name:TTGoxWebsocketTickerNotificationString object:nil];
-        [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(observeDepthNotification:) name:TTGoxWebsocketDepthNotificationString object:nil];
+//        [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(observeDepthNotification:) name:TTGoxWebsocketDepthNotificationString object:nil];
     }
     
     return self;

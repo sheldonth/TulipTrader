@@ -6,6 +6,10 @@
 //  Copyright (c) 2013  Sheldon Thomas. All rights reserved.
 //
 
+/*
+ A limit order to buy or sell bitcoin in a given currency.
+ */
+
 #import "Order.h"
 #import "RUConstants.h"
 

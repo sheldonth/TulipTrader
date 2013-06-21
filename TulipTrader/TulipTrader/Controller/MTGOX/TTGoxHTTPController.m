@@ -124,11 +124,11 @@ RU_SYNTHESIZE_SINGLETON_FOR_CLASS_WITH_ACCESSOR(TTGoxHTTPController, sharedInsta
         NSArray* asks = [data objectForKey:@"asks"];
 
         [bids enumerateObjectsUsingBlock:^(NSDictionary* obj, NSUInteger idx, BOOL *stop) {
-            [bidObjects addObject:[TTDepthOrder newDepthOrderFromDictionary:obj]];
+            [bidObjects addObject:[TTDepthOrder newDepthOrderFromGOXHTTPDictionary:obj]];
         }];
         
         [asks enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
-            [askObjects addObject:[TTDepthOrder newDepthOrderFromDictionary:obj]];
+            [askObjects addObject:[TTDepthOrder newDepthOrderFromGOXHTTPDictionary:obj]];
         }];
         
         completionBlock(bidObjects, askObjects, @{@"filter_max_price": [data objectForKey:@"filter_max_price"], @"filter_min_price": [data objectForKey:@"filter_min_price"]});
