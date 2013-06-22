@@ -43,7 +43,58 @@
     return self;
 }
 
--(void)getDepthForCurrency:(TTCurrency)currency withCompletion:(void (^)(NSArray* bids, NSArray* asks, NSDictionary* maxMinTicks))completionBlock withFailBlock:(void (^)(NSError* e))failBlock
+-(void)loadAccountDataWithCompletion:(void (^)(NSDictionary* accountInformationDictionary))callbackBlock andFailBlock:(void (^)(NSError* e))failBlock
+{
+    NSString* path = @"BTCUSD/money/info";
+    [self.networkSecure postPath:path parameters:@{@"test": @"object"} success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSString* str = [[NSString alloc]initWithData:responseObject encoding:NSUTF8StringEncoding];
+        NSDictionary* d = [str objectFromJSONString];
+        if (![[d objectForKey:@"result"]isEqualToString:@"success"])
+            failBlock(nil);
+        else
+            callbackBlock([d objectForKey:@"data"]);
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        failBlock(error);
+    }];
+}
+
+-(void)getFullDepthForCurrency:(TTCurrency)currency withCompletion:(void (^)(NSArray *bids, NSArray *asks, NSDictionary *maxMinTicks))completionBlock withFailBlock:(void (^)(NSError* error))failBlock
+{
+    [self.networkSecure postPath:RUStringWithFormat(@"BTC%@/money/depth/full", stringFromCurrency(currency)) parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSString* a = [[NSString alloc]initWithData:(NSData*)responseObject encoding:NSUTF8StringEncoding];
+        NSDictionary* responseDictionary = [a objectFromJSONString];
+        NSDictionary* data = [responseDictionary objectForKey:@"data"];
+        
+        NSMutableArray* bidObjects = [NSMutableArray array];
+        NSMutableArray* askObjects = [NSMutableArray array];
+        
+        NSArray* bids = [data objectForKey:@"bids"];
+        NSArray* asks = [data objectForKey:@"asks"];
+        
+        [bids enumerateObjectsUsingBlock:^(NSDictionary* obj, NSUInteger idx, BOOL *stop) {
+            TTDepthOrder* order = [TTDepthOrder newDepthOrderFromGOXHTTPDictionary:obj];
+            [order setCurrency:currency];
+            [order setDepthDeltaAction:TTDepthOrderActionNone];
+            [order setDepthDeltaType:TTDepthOrderTypeBid];
+            [bidObjects addObject:order];
+        }];
+        
+        [asks enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+            TTDepthOrder* order = [TTDepthOrder newDepthOrderFromGOXHTTPDictionary:obj];
+            [order setCurrency:currency];
+            [order setDepthDeltaAction:TTDepthOrderActionNone];
+            [order setDepthDeltaType:TTDepthOrderTypeAsk];
+            [askObjects addObject:order];
+        }];
+        
+        completionBlock(bidObjects, askObjects, nil);
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        failBlock(error);
+    }];
+}
+
+
+-(void)getDepthForCurrency:(TTCurrency)currency withCompletion:(void (^)(NSArray *bids, NSArray *asks, NSDictionary *maxMinTicks))completionBlock withFailBlock:(void (^)(NSError* error))failBlock
 {
     [self.networkSecure postPath:RUStringWithFormat(@"BTC%@/money/depth/fetch", stringFromCurrency(currency)) parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSString* a = [[NSString alloc]initWithData:(NSData*)responseObject encoding:NSUTF8StringEncoding];

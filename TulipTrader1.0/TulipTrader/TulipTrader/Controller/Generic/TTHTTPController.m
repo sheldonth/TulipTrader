@@ -12,7 +12,7 @@
 
 @interface TTHTTPController()
 
-@property(nonatomic) dispatch_queue_t dataProcessQueue;
+@property(nonatomic, retain) dispatch_queue_t dataProcessQueue;
 @property(nonatomic) TTAppDelegate* appDelegatePtr;
 
 
@@ -25,7 +25,7 @@
     self = [super init];
     if (self)
     {
-        self.dataProcessQueue = dispatch_queue_create("mtgox.api.processQueue", NULL);
+        [self setDataProcessQueue:dispatch_queue_create("mtgox.api.processQueue", NULL)];
         self.appDelegatePtr = (TTAppDelegate*)[[NSApplication sharedApplication]delegate];
     }
     return self;
@@ -37,9 +37,15 @@
     return nil;
 }
 
--(void)getDepthForCurrency:(TTCurrency)currency withCompletion:(void (^)(NSArray *, NSArray *, NSDictionary *))completionBlock withFailBlock:(void (^)(NSError *))failBlock
+-(void)getFullDepthForCurrency:(TTCurrency)currency withCompletion:(void (^)(NSArray *bids, NSArray *asks, NSDictionary *maxMinTicks))completionBlock withFailBlock:(void (^)(NSError* error))failBlock
 {
     RU_MUST_OVERRIDE
 }
+
+-(void)getDepthForCurrency:(TTCurrency)currency withCompletion:(void (^)(NSArray *bids, NSArray *asks, NSDictionary *maxMinTicks))completionBlock withFailBlock:(void (^)(NSError* error))failBlock
+{
+    RU_MUST_OVERRIDE
+}
+
 
 @end

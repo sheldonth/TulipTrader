@@ -12,9 +12,9 @@
 
 @interface TTOrderBook : NSObject <TTSocketControllerDelegate>
 
-@property(nonatomic, readonly)NSArray* bids;
-@property(nonatomic, readonly)NSArray* asks;
-@property(nonatomic, readonly)NSDictionary* maxMinTicks;
+@property(nonatomic, retain)NSArray* bids;
+@property(nonatomic, retain)NSArray* asks;
+@property(nonatomic, retain)NSDictionary* maxMinTicks;
 @property(nonatomic) TTCurrency currency;
 
 +(TTOrderBook*)newOrderBookForMTGOXwithCurrency:(TTCurrency)currency;
