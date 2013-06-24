@@ -67,8 +67,10 @@ NSArray* arrayAfterRemovingDepthOrder(NSArray* array, TTDepthOrder* depthOrder)
     NSUInteger index = indexSetOfObjectWithPrice(array, depthOrder);
     
     if (index == NSNotFound)
-        RUDLog(@"Didn't find price to remove amount from");
-    
+    {
+        RUDLog(@"Inconsistent depth change message: %@", depthOrder);
+        return array;
+    }
     TTDepthOrder* depthOrderBeingModified = [array objectAtIndex:index];
     if ([depthOrderBeingModified.amount isEqualToNumber:depthOrder.amount])
     {
