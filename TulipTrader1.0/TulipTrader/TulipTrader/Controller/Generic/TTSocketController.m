@@ -55,8 +55,9 @@ NSString* const kTTWebsocketFrameCloseNSString = @"}";
     return self;
 }
 
--(void)open
+-(void)openWithCurrency:(TTCurrency)currency
 {
+    [self setCurrency:currency];
     _socketConn = nil;
     if (self.usesWebsocketURL)
         _socketConn = [[SRWebSocket alloc]initWithURL:[NSURL URLWithString:self.websocketURL]];
@@ -110,7 +111,7 @@ NSString* stringFromUnichar(unichar t)
 {
     RUDLog(@"%@ Closed with code %li and reason %@ and is clean %i", webSocket, code, reason, wasClean);
     [self setConnectionState:TTSocketConnectionStateNotConnected];
-    [self open];
+    [self openWithCurrency:self.currency];
 }
 
 -(void)webSocket:(SRWebSocket *)webSocket didReceiveMessage:(id)message
@@ -121,7 +122,7 @@ NSString* stringFromUnichar(unichar t)
 -(void)webSocket:(SRWebSocket *)webSocket didFailWithError:(NSError *)error
 {
     RUDLog(@"%li Reconnect Attempt", _retries);
-    [self open];
+    [self openWithCurrency:self.currency];
 }
 
 -(void)dealloc

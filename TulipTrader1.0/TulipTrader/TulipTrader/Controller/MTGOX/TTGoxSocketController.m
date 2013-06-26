@@ -64,12 +64,12 @@ NSString* const kTTGoxSocketDepthChannelID  = @"24e67e0d-1cad-4cc0-9e7a-f8523ef4
 
 -(NSString *)websocketURL
 {
-    return [NSMutableString stringWithString:@"wss://websocket.mtgox.com/mtgox?Currency="];
+    return RUStringWithFormat(@"wss://websocket.mtgox.com/mtgox?Currency=%@", stringFromCurrency(self.currency));
 }
 
 -(NSString *)socketIOURL
 {
-    return [NSMutableString stringWithString:@"wss://socketio.mtgox.com/mtgox?Currency="];
+    return RUStringWithFormat(@"wss://socketio.mtgox.com/mtgox?Currency=%@", stringFromCurrency(self.currency));
 }
 
 -(void)subscribeToChannelID:(NSString*)channelID
@@ -124,18 +124,19 @@ NSString* const kTTGoxSocketDepthChannelID  = @"24e67e0d-1cad-4cc0-9e7a-f8523ef4
                 }
                 case kTTGoxMarketLag:
                 {
-                    RUDLog(@"!");
+                    RUDLog(@"kTTGoxMarketLag");
                     break;
                 }
                     
                 case kTTGoxMarketTicker:
                 {
-                    TTTicker* ticker = [TTTicker newTickerFromDictionary:kRUDictionaryOrNil([responseDictionary objectForKey:@"ticker"])];
+                    TTTicker* ticker = [TTTicker newTickerFromDictionary:responseDictionary];
                     [self.delegate socketController:self tickerObserved:ticker];
                     break;
                 }
                 case kTTGoxMarketTrade:
                 {
+                    
                     break;
                 }
                 case kTTGoxMarketNone:

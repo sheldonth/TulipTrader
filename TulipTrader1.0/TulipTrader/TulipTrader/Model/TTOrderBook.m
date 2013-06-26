@@ -23,10 +23,25 @@
 
 @implementation TTOrderBook
 
+#define NOISYORDERBOOK 0
+
+#pragma mark - Static per-market constructors
+
++(TTOrderBook*)newOrderBookForMTGOXwithCurrency:(TTCurrency)currency
+{
+    TTOrderBook* orderBook = [[TTOrderBook alloc]initWithCurrency:currency];
+    [orderBook setWebsocket:[TTGoxSocketController new]];
+    [orderBook setHttpController:[TTGoxHTTPController new]];
+    [orderBook setTitle:RUStringWithFormat(@"MtGox%@", stringFromCurrency(currency))];
+    return orderBook;
+}
+
+#pragma mark - C style sorting methods
+
 NSUInteger indexSetOfObjectWithPrice(NSArray* array, TTDepthOrder* depthOrder)
 {
     NSIndexSet* indexSet = [array indexesOfObjectsPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
-        if ([[obj price]isEqualToNumber:depthOrder.price])
+        if ([[obj price]floatValue] == depthOrder.price.floatValue)
         {
             *stop = YES;
             return YES;
@@ -47,6 +62,7 @@ NSArray* arrayAfterAddingDepthOrder(NSArray* array, TTDepthOrder* depthOrder)
     
     if (index == NSNotFound)
     {
+        if (NOISYORDERBOOK) RUDLog(@"+ %@ at %@",depthOrder.amount, depthOrder.price);
         NSMutableArray* mutableCpy = [array mutableCopy];
         [mutableCpy addObject:depthOrder];
         [mutableCpy sortUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"price" ascending:YES]]];
@@ -54,6 +70,7 @@ NSArray* arrayAfterAddingDepthOrder(NSArray* array, TTDepthOrder* depthOrder)
     }
     else
     {
+        if (NOISYORDERBOOK) RUDLog(@"+ %@ p at %@",depthOrder.amount, depthOrder.price);
         TTDepthOrder* depthOrderBeingModified = [array objectAtIndex:index];
         [depthOrderBeingModified setAmount:@(depthOrderBeingModified.amount.floatValue + depthOrder.amount.floatValue)];
         NSMutableArray* mutablePtr = [array mutableCopy];
@@ -68,18 +85,20 @@ NSArray* arrayAfterRemovingDepthOrder(NSArray* array, TTDepthOrder* depthOrder)
     
     if (index == NSNotFound)
     {
-        RUDLog(@"Inconsistent depth change message: %@", depthOrder);
+        if (NOISYORDERBOOK) RUDLog(@"Inconsistent depth change message: %@", depthOrder);
         return array;
     }
     TTDepthOrder* depthOrderBeingModified = [array objectAtIndex:index];
-    if ([depthOrderBeingModified.amount isEqualToNumber:depthOrder.amount])
+    if (depthOrderBeingModified.amount.floatValue == depthOrder.amount.floatValue)
     {
+        if (NOISYORDERBOOK) RUDLog(@"- %@ at %@",depthOrder.amount, depthOrder.price);
         NSMutableArray* mutablePtr = [array mutableCopy];
         [mutablePtr removeObjectAtIndex:index];
         return mutablePtr;
     }
     else
     {
+        if (NOISYORDERBOOK) RUDLog(@"- %@ p at %@",depthOrder.amount, depthOrder.price);
         [depthOrderBeingModified setAmount:@(depthOrderBeingModified.amount.floatValue - depthOrder.amount.floatValue)];
         NSMutableArray* mutableArray = [array mutableCopy];
         [mutableArray replaceObjectAtIndex:index withObject:depthOrderBeingModified];
@@ -87,24 +106,30 @@ NSArray* arrayAfterRemovingDepthOrder(NSArray* array, TTDepthOrder* depthOrder)
     }
 }
 
+#pragma mark - logical order book
+
 -(void)removeAskOrder:(TTDepthOrder*)ord
 {
     [self setAsks:arrayAfterRemovingDepthOrder(self.asks, ord)];
+    [self.delegate orderBookHasNewDepth:self];
 }
 
 -(void)removeBidOrder:(TTDepthOrder*)ord
 {
     [self setBids:arrayAfterRemovingDepthOrder(self.bids, ord)];
+    [self.delegate orderBookHasNewDepth:self];
 }
 
 -(void)addAskOrder:(TTDepthOrder*)ord
 {
     [self setAsks:arrayAfterAddingDepthOrder(self.asks, ord)];
+    [self.delegate orderBookHasNewDepth:self];
 }
 
 -(void)addBidOrder:(TTDepthOrder*)ord
 {
     [self setBids:arrayAfterAddingDepthOrder(self.bids, ord)];
+    [self.delegate orderBookHasNewDepth:self];
 }
 
 -(void)socketController:(TTSocketController*)socketController orderBookDeltaObserved:(TTDepthOrder*)orderBookDelta;
@@ -143,20 +168,14 @@ NSArray* arrayAfterRemovingDepthOrder(NSArray* array, TTDepthOrder* depthOrder)
 
 -(void)socketController:(TTSocketController *)socketController tickerObserved:(TTTicker *)theTicker
 {
-    RUDLog(@"!");
+    [self setLastTicker:theTicker];
+    [self.delegate orderBookHasNewTicker:self];
 }
 
 -(void)socketController:(TTSocketController *)socketController tradeObserved:(TTTrade *)theTrade
 {
-    RUDLog(@"!");
-}
-
-+(TTOrderBook*)newOrderBookForMTGOXwithCurrency:(TTCurrency)currency
-{
-    TTOrderBook* orderBook = [[TTOrderBook alloc]initWithCurrency:currency];
-    [orderBook setWebsocket:[TTGoxSocketController new]];
-    [orderBook setHttpController:[TTGoxHTTPController new]];
-    return orderBook;
+    RUDLog(@"tradeObserved");
+    [self.delegate orderBookHasNewTrade:self];
 }
 
 -(id)initWithCurrency:(TTCurrency)currency
@@ -173,15 +192,14 @@ NSArray* arrayAfterRemovingDepthOrder(NSArray* array, TTDepthOrder* depthOrder)
 -(void)start
 {
     [self.websocket setDelegate:self];
-     
-    [self.httpController getFullDepthForCurrency:self.currency withCompletion:^(NSArray *bids, NSArray *asks, NSDictionary *maxMinTicks) {
+    [self.httpController getDepthForCurrency:self.currency withCompletion:^(NSArray *bids, NSArray *asks, NSDictionary *maxMinTicks) {
         // Using iVars so as not to set of observers until the bids or asks are updated by the websocket.
         _bids = bids;
         _asks = asks;
         [self setFirstLoad:YES];
-        [self.websocket open];
+        [self.websocket openWithCurrency:self.currency];
     } withFailBlock:^(NSError *e) {
-        
+        RUDLog(@"FAIL");
     }];
 }
 

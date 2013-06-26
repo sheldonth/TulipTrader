@@ -9,8 +9,14 @@
 #import "TTTick.h"
 #import "TTCurrency.h"
 #import "RUClassOrNilUtil.h"
+#import "RUConstants.h"
 
 @implementation TTTick
+
+-(NSString *)description
+{
+    return RUStringWithFormat(@"%@ %@ %@", stringFromCurrency(currencyFromNumber(self.currency)), self.display, self.value.stringValue);
+}
 
 +(TTTick*)newTickfromDictionary:(NSDictionary*)d
 {

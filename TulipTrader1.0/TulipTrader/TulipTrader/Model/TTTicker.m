@@ -9,10 +9,16 @@
 #import "TTTicker.h"
 #import "RUClassOrNilUtil.h"
 #import "TTTick.h"
+#import "RUConstants.h"
 
 #define OneMillion 1000000.f
 
 @implementation TTTicker
+
+-(NSString *)description
+{
+    return RUStringWithFormat(@"%@ %@", self.channel_name, self.average);
+}
 
 +(TTTicker*)newTickerFromDictionary:(NSDictionary*)d
 {

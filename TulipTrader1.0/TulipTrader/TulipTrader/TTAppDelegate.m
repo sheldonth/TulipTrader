@@ -8,10 +8,12 @@
 
 #import "TTAppDelegate.h"
 #import "TTOrderBook.h"
+#import "TTOrderBookWindow.h"
 
 @interface TTAppDelegate()
 
-@property(nonatomic, retain)TTOrderBook* orderBook;
+@property(nonatomic, retain)NSMutableArray* orderBookWindows;
+@property(nonatomic, retain)TTNewOrderBookWindow* orderBookWindow;
 
 @end
 
@@ -21,10 +23,48 @@
 @synthesize managedObjectModel = _managedObjectModel;
 @synthesize managedObjectContext = _managedObjectContext;
 
+static NSSize defaultWelcomeWindowSize;
+
+#pragma mark - Static Methods
+
++(void)initialize
+{
+    defaultWelcomeWindowSize = (NSSize){700, 400};
+}
+
+#pragma mark - TTNewOrderBookWindowDelegate
+
+-(void)didFinishSelectionForWindow:(TTNewOrderBookWindow *)window currencies:(NSArray *)currencies
+{
+    [window close];
+    TTCurrency c = currencyFromString([currencies objectAtIndex:0]);
+    NSScreen* mainScreen = [NSScreen mainScreen];
+    NSRect orderBookWindowRect = (NSRect){0, 0, floorf((CGRectGetWidth(mainScreen.frame) * 3) / 4), CGRectGetHeight(mainScreen.frame) - 45};
+    TTOrderBookWindow* orderBookWindow = [[TTOrderBookWindow alloc]initWithContentRect:orderBookWindowRect styleMask:(NSTitledWindowMask | NSClosableWindowMask | NSMiniaturizableWindowMask | NSResizableWindowMask) backing:NSBackingStoreBuffered defer:YES currency:c];
+    if (!self.orderBookWindows)
+        [self setOrderBookWindows:[NSMutableArray array]];
+    [self.orderBookWindows addObject:orderBookWindow];
+    [orderBookWindow makeKeyAndOrderFront:self];
+}
+
+#pragma mark - Private Methods
+
+-(void)presentCurrencySelectionScreen
+{
+    NSRect r = [[NSScreen mainScreen]visibleFrame];
+    if (!self.orderBookWindow)
+    {
+        [self setOrderBookWindow:[[TTNewOrderBookWindow alloc]initWithContentRect:(NSRect){CGRectGetMidX(r) - (defaultWelcomeWindowSize.width / 2), CGRectGetHeight(r) - (defaultWelcomeWindowSize.height + 150), defaultWelcomeWindowSize} styleMask:(NSTitledWindowMask | NSClosableWindowMask | NSMiniaturizableWindowMask | NSResizableWindowMask) backing:NSBackingStoreBuffered defer:YES]];
+    }
+    [self.orderBookWindow setOrderBookWindowDelegate:self];
+    [self.orderBookWindow makeKeyAndOrderFront:self];
+}
+
+#pragma mark - UIApplicationDelegate Methods
+
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {
-    [self setOrderBook:[TTOrderBook newOrderBookForMTGOXwithCurrency:TTCurrencyUSD]];
-    [self.orderBook start];
+    [self presentCurrencySelectionScreen];
 }
 
 // Returns the directory the application uses to store the Core Data store file. This code uses a directory named "net.tuliptrader.TulipTrader" in the user's Application Support directory.

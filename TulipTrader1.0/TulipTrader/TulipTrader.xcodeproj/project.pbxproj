@@ -108,6 +108,20 @@
 		4772E2781775043E00967847 /* TTTicker.m in Sources */ = {isa = PBXBuildFile; fileRef = 4772E2761775043D00967847 /* TTTicker.m */; };
 		4772E27B177504CD00967847 /* TTTick.m in Sources */ = {isa = PBXBuildFile; fileRef = 4772E27A177504CC00967847 /* TTTick.m */; };
 		4772E27C177504CD00967847 /* TTTick.m in Sources */ = {isa = PBXBuildFile; fileRef = 4772E27A177504CC00967847 /* TTTick.m */; };
+		47BEA71E177963210020F6BE /* TTVerticalOBView.m in Sources */ = {isa = PBXBuildFile; fileRef = 47BEA71D177963210020F6BE /* TTVerticalOBView.m */; };
+		47BEA71F177963210020F6BE /* TTVerticalOBView.m in Sources */ = {isa = PBXBuildFile; fileRef = 47BEA71D177963210020F6BE /* TTVerticalOBView.m */; };
+		47BEA722177B41E10020F6BE /* TTOrderBookListView.m in Sources */ = {isa = PBXBuildFile; fileRef = 47BEA721177B41E10020F6BE /* TTOrderBookListView.m */; };
+		47BEA723177B41E10020F6BE /* TTOrderBookListView.m in Sources */ = {isa = PBXBuildFile; fileRef = 47BEA721177B41E10020F6BE /* TTOrderBookListView.m */; };
+		47D872D61777DACC0052DB29 /* TTNewOrderBookWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 47D872D51777DACC0052DB29 /* TTNewOrderBookWindow.m */; };
+		47D872D71777DACC0052DB29 /* TTNewOrderBookWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 47D872D51777DACC0052DB29 /* TTNewOrderBookWindow.m */; };
+		47D872DA1778A72C0052DB29 /* TTCurrencyController.m in Sources */ = {isa = PBXBuildFile; fileRef = 47D872D91778A72B0052DB29 /* TTCurrencyController.m */; };
+		47D872DB1778A72C0052DB29 /* TTCurrencyController.m in Sources */ = {isa = PBXBuildFile; fileRef = 47D872D91778A72B0052DB29 /* TTCurrencyController.m */; };
+		47D872DE1778AB940052DB29 /* TTGoxCurrencyController.m in Sources */ = {isa = PBXBuildFile; fileRef = 47D872DD1778AB940052DB29 /* TTGoxCurrencyController.m */; };
+		47D872DF1778AB940052DB29 /* TTGoxCurrencyController.m in Sources */ = {isa = PBXBuildFile; fileRef = 47D872DD1778AB940052DB29 /* TTGoxCurrencyController.m */; };
+		47D872E21778C4430052DB29 /* TTOrderBookWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 47D872E11778C4430052DB29 /* TTOrderBookWindow.m */; };
+		47D872E31778C4430052DB29 /* TTOrderBookWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 47D872E11778C4430052DB29 /* TTOrderBookWindow.m */; };
+		47D872E71778D4AD0052DB29 /* TTCurrencyBox.m in Sources */ = {isa = PBXBuildFile; fileRef = 47D872E61778D4AD0052DB29 /* TTCurrencyBox.m */; };
+		47D872E81778D4AD0052DB29 /* TTCurrencyBox.m in Sources */ = {isa = PBXBuildFile; fileRef = 47D872E61778D4AD0052DB29 /* TTCurrencyBox.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -239,6 +253,20 @@
 		4772E2761775043D00967847 /* TTTicker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTTicker.m; sourceTree = "<group>"; };
 		4772E279177504CC00967847 /* TTTick.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTTick.h; sourceTree = "<group>"; };
 		4772E27A177504CC00967847 /* TTTick.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTTick.m; sourceTree = "<group>"; };
+		47BEA71C177963210020F6BE /* TTVerticalOBView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTVerticalOBView.h; sourceTree = "<group>"; };
+		47BEA71D177963210020F6BE /* TTVerticalOBView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTVerticalOBView.m; sourceTree = "<group>"; };
+		47BEA720177B41E10020F6BE /* TTOrderBookListView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTOrderBookListView.h; sourceTree = "<group>"; };
+		47BEA721177B41E10020F6BE /* TTOrderBookListView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTOrderBookListView.m; sourceTree = "<group>"; };
+		47D872D41777DACC0052DB29 /* TTNewOrderBookWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTNewOrderBookWindow.h; sourceTree = "<group>"; };
+		47D872D51777DACC0052DB29 /* TTNewOrderBookWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTNewOrderBookWindow.m; sourceTree = "<group>"; };
+		47D872D81778A72B0052DB29 /* TTCurrencyController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTCurrencyController.h; sourceTree = "<group>"; };
+		47D872D91778A72B0052DB29 /* TTCurrencyController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTCurrencyController.m; sourceTree = "<group>"; };
+		47D872DC1778AB940052DB29 /* TTGoxCurrencyController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTGoxCurrencyController.h; sourceTree = "<group>"; };
+		47D872DD1778AB940052DB29 /* TTGoxCurrencyController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTGoxCurrencyController.m; sourceTree = "<group>"; };
+		47D872E01778C4430052DB29 /* TTOrderBookWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTOrderBookWindow.h; sourceTree = "<group>"; };
+		47D872E11778C4430052DB29 /* TTOrderBookWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTOrderBookWindow.m; sourceTree = "<group>"; };
+		47D872E51778D4AD0052DB29 /* TTCurrencyBox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTCurrencyBox.h; sourceTree = "<group>"; };
+		47D872E61778D4AD0052DB29 /* TTCurrencyBox.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTCurrencyBox.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -395,6 +423,8 @@
 				4772E0D11774D87500967847 /* TTGoxHTTPController.m */,
 				4772E0D21774D87500967847 /* TTGoxSocketController.h */,
 				4772E0D31774D87500967847 /* TTGoxSocketController.m */,
+				47D872DC1778AB940052DB29 /* TTGoxCurrencyController.h */,
+				47D872DD1778AB940052DB29 /* TTGoxCurrencyController.m */,
 			);
 			path = MTGOX;
 			sourceTree = "<group>";
@@ -587,6 +617,8 @@
 		4772E2521774D99700967847 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				47BEA7171779623D0020F6BE /* NSView */,
+				47D872E41778D4AD0052DB29 /* NSBox */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -594,6 +626,10 @@
 		4772E2531774D9A300967847 /* Windows */ = {
 			isa = PBXGroup;
 			children = (
+				47D872D41777DACC0052DB29 /* TTNewOrderBookWindow.h */,
+				47D872D51777DACC0052DB29 /* TTNewOrderBookWindow.m */,
+				47D872E01778C4430052DB29 /* TTOrderBookWindow.h */,
+				47D872E11778C4430052DB29 /* TTOrderBookWindow.m */,
 			);
 			path = Windows;
 			sourceTree = "<group>";
@@ -622,6 +658,8 @@
 				4772E2621774E7E200967847 /* TTSocketController.m */,
 				4772E2651774F15F00967847 /* TTHTTPController.h */,
 				4772E2661774F15F00967847 /* TTHTTPController.m */,
+				47D872D81778A72B0052DB29 /* TTCurrencyController.h */,
+				47D872D91778A72B0052DB29 /* TTCurrencyController.m */,
 			);
 			path = Generic;
 			sourceTree = "<group>";
@@ -632,6 +670,26 @@
 				4772E26E1774FBC100967847 /* UserData.plist */,
 			);
 			path = UserData;
+			sourceTree = "<group>";
+		};
+		47BEA7171779623D0020F6BE /* NSView */ = {
+			isa = PBXGroup;
+			children = (
+				47BEA71C177963210020F6BE /* TTVerticalOBView.h */,
+				47BEA71D177963210020F6BE /* TTVerticalOBView.m */,
+				47BEA720177B41E10020F6BE /* TTOrderBookListView.h */,
+				47BEA721177B41E10020F6BE /* TTOrderBookListView.m */,
+			);
+			path = NSView;
+			sourceTree = "<group>";
+		};
+		47D872E41778D4AD0052DB29 /* NSBox */ = {
+			isa = PBXGroup;
+			children = (
+				47D872E51778D4AD0052DB29 /* TTCurrencyBox.h */,
+				47D872E61778D4AD0052DB29 /* TTCurrencyBox.m */,
+			);
+			path = NSBox;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -791,6 +849,13 @@
 				4772E2731774FE6E00967847 /* TTDepthOrder.m in Sources */,
 				4772E2771775043E00967847 /* TTTicker.m in Sources */,
 				4772E27B177504CD00967847 /* TTTick.m in Sources */,
+				47D872D61777DACC0052DB29 /* TTNewOrderBookWindow.m in Sources */,
+				47D872DA1778A72C0052DB29 /* TTCurrencyController.m in Sources */,
+				47D872DE1778AB940052DB29 /* TTGoxCurrencyController.m in Sources */,
+				47D872E21778C4430052DB29 /* TTOrderBookWindow.m in Sources */,
+				47D872E71778D4AD0052DB29 /* TTCurrencyBox.m in Sources */,
+				47BEA71E177963210020F6BE /* TTVerticalOBView.m in Sources */,
+				47BEA722177B41E10020F6BE /* TTOrderBookListView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -836,6 +901,13 @@
 				4772E2741774FE6E00967847 /* TTDepthOrder.m in Sources */,
 				4772E2781775043E00967847 /* TTTicker.m in Sources */,
 				4772E27C177504CD00967847 /* TTTick.m in Sources */,
+				47D872D71777DACC0052DB29 /* TTNewOrderBookWindow.m in Sources */,
+				47D872DB1778A72C0052DB29 /* TTCurrencyController.m in Sources */,
+				47D872DF1778AB940052DB29 /* TTGoxCurrencyController.m in Sources */,
+				47D872E31778C4430052DB29 /* TTOrderBookWindow.m in Sources */,
+				47D872E81778D4AD0052DB29 /* TTCurrencyBox.m in Sources */,
+				47BEA71F177963210020F6BE /* TTVerticalOBView.m in Sources */,
+				47BEA723177B41E10020F6BE /* TTOrderBookListView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1025,6 +1097,7 @@
 				4772E0C21774D6A900967847 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		4772E0C31774D6A900967847 /* Build configuration list for PBXNativeTarget "TulipTraderTests" */ = {
 			isa = XCConfigurationList;
@@ -1033,6 +1106,7 @@
 				4772E0C51774D6A900967847 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 

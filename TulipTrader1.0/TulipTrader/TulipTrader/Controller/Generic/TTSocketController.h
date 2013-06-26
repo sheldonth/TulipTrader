@@ -40,7 +40,7 @@ typedef enum{
 
 @property(nonatomic, weak)id <TTSocketControllerDelegate> delegate;
 
--(void)open;
+-(void)openWithCurrency:(TTCurrency)currency;
 -(void)write:(NSString*)utfString;
 
 -(NSString*)websocketURL;

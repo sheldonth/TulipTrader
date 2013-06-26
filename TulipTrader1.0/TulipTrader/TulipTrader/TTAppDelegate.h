@@ -7,8 +7,9 @@
 //
 
 #import <Cocoa/Cocoa.h>
+#import "TTNewOrderBookWindow.h"
 
-@interface TTAppDelegate : NSObject <NSApplicationDelegate>
+@interface TTAppDelegate : NSObject <NSApplicationDelegate, TTNewOrderBookWindowDelegate>
 
 @property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 @property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;
