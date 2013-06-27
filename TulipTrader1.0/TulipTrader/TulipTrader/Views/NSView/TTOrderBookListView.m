@@ -9,6 +9,7 @@
 #import "TTOrderBookListView.h"
 #import "JNWLabel.h"
 #import "RUConstants.h"
+#import "TTDepthOrder.h"
 
 @interface TTOrderBookListView()
 
@@ -34,12 +35,14 @@ static NSFont* titleFont;
 
 -(id)tableView:(NSTableView *)tableView objectValueForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row
 {
-    return [self.orders objectAtIndex:row];
+    TTDepthOrder* cellDepthOrder = [self.orders objectAtIndex:row];
+    return @1;
 }
 
 -(NSCell *)tableView:(NSTableView *)tableView dataCellForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row
 {
-    return [[NSCell alloc]initTextCell:@"sheldon"];;
+    NSCell* aCell = [[NSTextFieldCell alloc]initTextCell:@"sheldon"];
+    return aCell;
 }
 
 -(BOOL)tableView:(NSTableView *)tableView shouldReorderColumn:(NSInteger)columnIndex toColumn:(NSInteger)newColumnIndex
@@ -59,12 +62,12 @@ static NSFont* titleFont;
 
 -(void)tableView:(NSTableView *)tableView setObjectValue:(id)object forTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row
 {
-    
+    RUDLog(@"");
 }
 
 -(void)tableView:(NSTableView *)tableView sortDescriptorsDidChange:(NSArray *)oldDescriptors
 {
-    
+    RUDLog(@"");
 }
 
 - (id)initWithFrame:(NSRect)frame
@@ -87,8 +90,17 @@ static NSFont* titleFont;
         [_tableView setDelegate:self];
         
         [self setPositionColumn:[[NSTableColumn alloc]initWithIdentifier:@"Position"]];
+        [_positionColumn setEditable:NO];
+        [_positionColumn setWidth:20.f];
         [[_positionColumn headerCell] setStringValue:@"#"];
         [_tableView addTableColumn:_positionColumn];
+        
+        [self setPriceColumn:[[NSTableColumn alloc]initWithIdentifier:@"Price"]];
+        [_priceColumn setEditable:NO];
+//        [_priceColumn setDataCell:]
+        [_priceColumn setWidth:40.f];
+        [[_priceColumn headerCell]setStringValue:@"Price"];
+        [_tableView addTableColumn:_priceColumn];
         
         [_scrollView setDocumentView:_tableView];
     }

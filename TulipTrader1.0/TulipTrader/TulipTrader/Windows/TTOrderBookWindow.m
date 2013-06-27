@@ -82,7 +82,9 @@
         [_bidOrderBookListView setTitle:@"BIDS"];
         [self.contentView addSubview:self.bidOrderBookListView];
         
-//        [self ]
+        [self setAskOrderBookListView:[[TTOrderBookListView alloc]initWithFrame:(NSRect){CGRectGetMaxX(self.verticalOBView.frame), CGRectGetMaxY(_bidOrderBookListView.frame), graphWidth / 2, _verticalOBView.frame.size.height / 2}]];
+        [_askOrderBookListView setTitle:@"ASKS"];
+        [self.contentView addSubview:_askOrderBookListView];
         
         [self.orderBook start];
     }

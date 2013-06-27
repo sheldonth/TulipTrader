@@ -12,6 +12,11 @@
 
 @property(nonatomic, retain)NSArray* orders;
 @property(nonatomic, retain)NSTableColumn* positionColumn;
+@property(nonatomic, retain)NSTableColumn* priceColumn;
+@property(nonatomic, retain)NSTableColumn* amountColumn;
+@property(nonatomic, retain)NSTableColumn* sumColumn;
+@property(nonatomic, retain)NSTableColumn* ageColumn;
 
 -(void)setTitle:(NSString*)titleString;
+
 @end

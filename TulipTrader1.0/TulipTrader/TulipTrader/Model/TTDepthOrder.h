@@ -28,6 +28,9 @@ typedef enum{
 @property(nonatomic, retain)NSDate* time;
 @property(nonatomic, retain)NSString* timeStampStr;
 
+@property(nonatomic)NSInteger amountInt;
+@property(nonatomic)NSInteger priceInt;
+
 @property(nonatomic)TTCurrency currency;
 
 // Optional, defaults to none

@@ -23,7 +23,7 @@
 
 @implementation TTOrderBook
 
-#define NOISYORDERBOOK 0
+#define NOISYORDERBOOK 1
 
 #pragma mark - Static per-market constructors
 
@@ -41,7 +41,7 @@
 NSUInteger indexSetOfObjectWithPrice(NSArray* array, TTDepthOrder* depthOrder)
 {
     NSIndexSet* indexSet = [array indexesOfObjectsPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
-        if ([[obj price]floatValue] == depthOrder.price.floatValue)
+        if ([obj priceInt] == depthOrder.priceInt)
         {
             *stop = YES;
             return YES;
@@ -73,6 +73,7 @@ NSArray* arrayAfterAddingDepthOrder(NSArray* array, TTDepthOrder* depthOrder)
         if (NOISYORDERBOOK) RUDLog(@"+ %@ p at %@",depthOrder.amount, depthOrder.price);
         TTDepthOrder* depthOrderBeingModified = [array objectAtIndex:index];
         [depthOrderBeingModified setAmount:@(depthOrderBeingModified.amount.floatValue + depthOrder.amount.floatValue)];
+        [depthOrderBeingModified setAmountInt:depthOrderBeingModified.amountInt + depthOrder.amountInt];
         NSMutableArray* mutablePtr = [array mutableCopy];
         [mutablePtr replaceObjectAtIndex:index withObject:depthOrderBeingModified];
         return mutablePtr;
@@ -89,7 +90,7 @@ NSArray* arrayAfterRemovingDepthOrder(NSArray* array, TTDepthOrder* depthOrder)
         return array;
     }
     TTDepthOrder* depthOrderBeingModified = [array objectAtIndex:index];
-    if (depthOrderBeingModified.amount.floatValue == depthOrder.amount.floatValue)
+    if (depthOrderBeingModified.amountInt == depthOrder.amountInt)
     {
         if (NOISYORDERBOOK) RUDLog(@"- %@ at %@",depthOrder.amount, depthOrder.price);
         NSMutableArray* mutablePtr = [array mutableCopy];
@@ -99,7 +100,10 @@ NSArray* arrayAfterRemovingDepthOrder(NSArray* array, TTDepthOrder* depthOrder)
     else
     {
         if (NOISYORDERBOOK) RUDLog(@"- %@ p at %@",depthOrder.amount, depthOrder.price);
+        if (depthOrderBeingModified.amountInt < depthOrder.amountInt)
+            RUDLog(@"NEGATIVE BALANCE");
         [depthOrderBeingModified setAmount:@(depthOrderBeingModified.amount.floatValue - depthOrder.amount.floatValue)];
+        [depthOrderBeingModified setAmountInt:depthOrderBeingModified.amountInt - depthOrder.amountInt];
         NSMutableArray* mutableArray = [array mutableCopy];
         [mutableArray replaceObjectAtIndex:index withObject:depthOrderBeingModified];
         return mutableArray;

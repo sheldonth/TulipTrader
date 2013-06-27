@@ -22,14 +22,17 @@
     TTDepthOrder* deltaOrder = [TTDepthOrder new];
     [deltaOrder setAmount:@(kRUStringOrNil([d objectForKey:@"volume"]).doubleValue)];
     [deltaOrder setPrice:@(kRUStringOrNil([d objectForKey:@"price"]).doubleValue)];
+    [deltaOrder setPriceInt:[kRUStringOrNil([d objectForKey:@"price_int"]) integerValue]];
     
     if (deltaOrder.amount.floatValue < 0)
     {
         [deltaOrder setDepthDeltaAction:TTDepthOrderActionRemove];
         [deltaOrder setAmount:@(fabsf(deltaOrder.amount.floatValue))];
+        [deltaOrder setAmountInt:ABS([kRUStringOrNil([d objectForKey:@"volume_int"])integerValue])];
     }
     else if (deltaOrder.amount.floatValue > 0)
     {
+        [deltaOrder setAmountInt:[kRUStringOrNil([d objectForKey:@"volume_int"])integerValue]];
         [deltaOrder setDepthDeltaAction:TTDepthOrderActionAdd];
     }
     
@@ -47,6 +50,7 @@
         [deltaOrder setDepthDeltaType:(TTDepthOrderTypeNone)];
     
     [deltaOrder setCurrency:currencyFromString([d objectForKey:@"currency"])];
+    
     return deltaOrder;
 }
 
@@ -58,6 +62,8 @@
     NSString* microsecondTimeString = [dictionary objectForKey:@"stamp"];
     [d setTime:[NSDate dateWithTimeIntervalSince1970:(microsecondTimeString.doubleValue / 1000000)]];
     [d setTimeStampStr:[dictionary objectForKey:@"stamp"]];
+    [d setAmountInt:[kRUStringOrNil([dictionary objectForKey:@"amount_int"])integerValue]];
+    [d setPriceInt:[kRUStringOrNil([dictionary objectForKey:@"price_int"]) integerValue]];
     return d;
 }
 
