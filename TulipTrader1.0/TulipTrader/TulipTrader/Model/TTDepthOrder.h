@@ -30,8 +30,10 @@ typedef enum{
 
 @property(nonatomic)NSInteger amountInt;
 @property(nonatomic)NSInteger priceInt;
+@property(nonatomic)NSInteger totalVolumeInt;
 
 @property(nonatomic)TTCurrency currency;
+
 
 // Optional, defaults to none
 @property(nonatomic)TTDepthOrderType depthDeltaType;

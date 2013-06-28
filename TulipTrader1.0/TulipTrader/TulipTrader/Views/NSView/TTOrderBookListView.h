@@ -7,16 +7,18 @@
 //
 
 #import <Cocoa/Cocoa.h>
+#import "TTOrderBook.h"
 
 @interface TTOrderBookListView : NSView <NSTableViewDataSource, NSTableViewDelegate>
 
 @property(nonatomic, retain)NSArray* orders;
 @property(nonatomic, retain)NSTableColumn* positionColumn;
 @property(nonatomic, retain)NSTableColumn* priceColumn;
-@property(nonatomic, retain)NSTableColumn* amountColumn;
+@property(nonatomic, retain)NSTableColumn* quantityColumn;
 @property(nonatomic, retain)NSTableColumn* sumColumn;
 @property(nonatomic, retain)NSTableColumn* ageColumn;
 
 -(void)setTitle:(NSString*)titleString;
+-(void)updateForDepthUpdate:(TTDepthUpdate*)update;
 
 @end

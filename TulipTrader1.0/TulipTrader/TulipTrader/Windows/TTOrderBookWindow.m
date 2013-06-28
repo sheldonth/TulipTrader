@@ -25,8 +25,24 @@
 
 #pragma mark - TTOrderBookDelegate methods
 
--(void)orderBookHasNewDepth:(TTOrderBook *)orderBook
+-(void)orderBook:(TTOrderBook *)orderBook hasNewDepthUpdate:(TTDepthUpdate *)update orderBookSide:(TTOrderBookSide)side
 {
+    switch (side) {
+        case TTOrderBookSideAsk:
+            [self.askOrderBookListView updateForDepthUpdate:update];
+            break;
+            
+        case TTOrderBookSideBid:
+            [self.bidOrderBookListView updateForDepthUpdate:update];
+            break;
+            
+        case TTOrderBookSideNone:
+            RUDLog(@"TTOrderBookSideNone");
+            break;
+        default:
+            break;
+    }
+    
     if (!self.verticalOBView.needsCalibration)
     {
         [self.verticalOBView setAllBids:orderBook.bids];
@@ -36,7 +52,6 @@
             [self.verticalOBView display];
         });
     }
-    [self.bidOrderBookListView setOrders:orderBook.bids];
 }
 
 -(void)orderBookHasNewLag:(TTOrderBook *)orderBook

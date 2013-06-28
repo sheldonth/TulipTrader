@@ -51,6 +51,8 @@
     
     [deltaOrder setCurrency:currencyFromString([d objectForKey:@"currency"])];
     
+    [deltaOrder setTotalVolumeInt:[kRUStringOrNil([d objectForKey:@"total_volume_int"])integerValue]];
+    
     return deltaOrder;
 }
 

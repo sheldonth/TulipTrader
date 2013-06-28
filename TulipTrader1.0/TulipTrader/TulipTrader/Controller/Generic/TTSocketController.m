@@ -104,6 +104,7 @@ NSString* stringFromUnichar(unichar t)
 
 -(void)webSocketDidOpen:(SRWebSocket *)webSocket
 {
+    RUDLog(@"Socket did open");
     [self setConnectionState:TTSocketConnectionStateConnected];
 }
 

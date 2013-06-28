@@ -10,12 +10,14 @@
 #import "JNWLabel.h"
 #import "RUConstants.h"
 #import "TTDepthOrder.h"
+#import "TTOrderBook.h"
 
 @interface TTOrderBookListView()
 
 @property(nonatomic, retain)NSScrollView* scrollView;
 @property(nonatomic, retain)NSTableView* tableView;
 @property(nonatomic, retain)JNWLabel* titleLabel;
+@property(nonatomic, retain)NSMutableArray* columnsArray;
 
 @end
 
@@ -31,13 +33,137 @@ static NSFont* titleFont;
     }
 }
 
+#pragma mark - public methods
+
+-(void)updateForDepthUpdate:(TTDepthUpdate*)update
+{
+    [self setOrders:[update.updateArrayPointer copy]];
+
+    RUDLog(@"%i", update.updateType);
+    switch (update.updateType) {
+        case TTDepthOrderUpdateTypeInsert://1
+        {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.tableView beginUpdates];
+                [self.tableView insertRowsAtIndexes:[NSIndexSet indexSetWithIndex:update.affectedIndex] withAnimation:NSTableViewAnimationSlideDown];
+                [self.tableView endUpdates];
+            });
+            break;
+        }
+        case TTDepthOrderUpdateTypeRemove://2
+        {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.tableView beginUpdates];
+                [self.tableView removeRowsAtIndexes:[NSIndexSet indexSetWithIndex:update.affectedIndex] withAnimation:NSTableViewAnimationSlideUp];
+                [self.tableView endUpdates];
+            });
+            break;
+        }
+        case TTDepthOrderUpdateTypeUpdate://3
+        {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.tableView beginUpdates];
+                [self.tableView reloadDataForRowIndexes:[NSIndexSet indexSetWithIndex:update.affectedIndex] columnIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, self.tableView.tableColumns.count)]];
+                [self.tableView endUpdates];
+            });
+            break;
+        }
+        case TTDepthOrderUpdateTypeNone://0
+        {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.tableView reloadData];
+            });
+            break;
+        }
+        default:
+            break;
+    }
+}
+
+
 #pragma mark - nstableviewdelegate/datasource
 
--(id)tableView:(NSTableView *)tableView objectValueForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row
+-(NSView *)tableView:(NSTableView *)tableView viewForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row
 {
-    TTDepthOrder* cellDepthOrder = [self.orders objectAtIndex:row];
-    return @1;
+    NSTextField* tf = [tableView makeViewWithIdentifier:@"willy" owner:self];
+    
+    if (tf == nil)
+    {
+        tf = [[NSTextField alloc]initWithFrame:(NSRect){0, 0, tableColumn.width, 20}];
+        [tf setIdentifier:@"willy"];
+    }
+    
+    NSIndexSet* indexSetOfColumn = [self.columnsArray indexesOfObjectsPassingTest:^BOOL(NSTableColumn* obj, NSUInteger idx, BOOL *stop) {
+        if ([obj.identifier isEqualToString:tableColumn.identifier])
+        {
+            *stop = YES;
+            return YES;
+        }
+        return NO;
+    }];
+    
+    if (indexSetOfColumn.count != 1)
+        RUDLog(@"Found TWO Columns Passing Test");
+    
+    TTDepthOrder* pertainingDepthOrder = [self.orders objectAtIndex:row];
+    NSNumber* result;
+    switch (indexSetOfColumn.firstIndex) {
+        case 0:
+            result = @(indexSetOfColumn.firstIndex);
+            break;
+
+        case 1:
+            result = pertainingDepthOrder.price;
+            break;
+
+        case 2:
+            result = pertainingDepthOrder.amount;
+            break;
+
+        default:
+            break;
+    }
+    [tf setStringValue:result.stringValue];
+    return tf;
 }
+
+-(CGFloat)tableView:(NSTableView *)tableView heightOfRow:(NSInteger)row
+{
+    return 20.f;
+}
+
+//-(id)tableView:(NSTableView *)tableView objectValueForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row
+//{
+//    NSIndexSet* indexSetOfColumn = [self.columnsArray indexesOfObjectsPassingTest:^BOOL(NSTableColumn* obj, NSUInteger idx, BOOL *stop) {
+//        if ([obj.identifier isEqualToString:tableColumn.identifier])
+//        {
+//            *stop = YES;
+//            return YES;
+//        }
+//        return NO;
+//    }];
+//    if (indexSetOfColumn.count != 1)
+//        RUDLog(@"Found TWO Columns Passing Test");
+//    TTDepthOrder* pertainingDepthOrder = [self.orders objectAtIndex:row];
+//    NSNumber* result;
+//    switch (indexSetOfColumn.firstIndex) {
+//        case 0:
+//            result = @(row);
+//            break;
+//            
+//        case 1:
+//            result = pertainingDepthOrder.price;
+//            break;
+//            
+//        case 2:
+//            result = pertainingDepthOrder.amount;
+//            break;
+//            
+//        default:
+//            break;
+//    }
+//    return result;
+//}
 
 -(NSCell *)tableView:(NSTableView *)tableView dataCellForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row
 {
@@ -74,6 +200,7 @@ static NSFont* titleFont;
 {
     self = [super initWithFrame:frame];
     if (self) {
+        [self setColumnsArray:[NSMutableArray array]];
         
         [self setTitleLabel:[[JNWLabel alloc]initWithFrame:(NSRect){CGRectGetMidX(self.bounds) - 40, CGRectGetHeight(self.bounds) - 20, 80, 20}]];
         [_titleLabel setFont:titleFont];
@@ -83,25 +210,35 @@ static NSFont* titleFont;
         [self addSubview:_titleLabel];
     
         [self setScrollView:[[NSScrollView alloc]initWithFrame:(NSRect){1, 1, CGRectGetWidth(self.bounds) - 3,CGRectGetHeight(self.bounds) - _titleLabel.frame.size.height}]];
+        [_scrollView setHasVerticalScroller:YES];
+        [_scrollView setAutoresizingMask:NSViewWidthSizable | NSViewHeightSizable];
         [self addSubview:_scrollView];
         
         [self setTableView:[[NSTableView alloc]initWithFrame:_scrollView.frame]];
         [_tableView setDataSource:self];
         [_tableView setDelegate:self];
         
-        [self setPositionColumn:[[NSTableColumn alloc]initWithIdentifier:@"Position"]];
+        [self setPositionColumn:[[NSTableColumn alloc]initWithIdentifier:@"Pos"]];
         [_positionColumn setEditable:NO];
         [_positionColumn setWidth:20.f];
         [[_positionColumn headerCell] setStringValue:@"#"];
         [_tableView addTableColumn:_positionColumn];
+        [self.columnsArray addObject:_positionColumn];
         
-        [self setPriceColumn:[[NSTableColumn alloc]initWithIdentifier:@"Price"]];
+        [self setPriceColumn:[[NSTableColumn alloc]initWithIdentifier:@"price"]];
         [_priceColumn setEditable:NO];
-//        [_priceColumn setDataCell:]
-        [_priceColumn setWidth:40.f];
+        [_priceColumn setWidth:60.f];
         [[_priceColumn headerCell]setStringValue:@"Price"];
         [_tableView addTableColumn:_priceColumn];
+        [self.columnsArray addObject:_priceColumn];
         
+        [self setQuantityColumn:[[NSTableColumn alloc]initWithIdentifier:@"amount"]];
+        [_quantityColumn setEditable:NO];
+        [_quantityColumn setWidth:60.f];
+        [[_quantityColumn headerCell]setStringValue:@"Quantity"];
+        [_tableView addTableColumn:_quantityColumn];
+        [self.columnsArray addObject:_quantityColumn];
+
         [_scrollView setDocumentView:_tableView];
     }
     return self;
@@ -109,10 +246,18 @@ static NSFont* titleFont;
 
 -(void)setOrders:(NSArray *)orders
 {
+    BOOL firstLoad = NO;
+    if (!self.orders)
+        firstLoad = YES;
     [self willChangeValueForKey:@"orders"];
     _orders = orders;
     [self didChangeValueForKey:@"orders"];
-    [self.tableView reloadData];
+//    if (firstLoad)
+//    {
+//        dispatch_sync(dispatch_get_main_queue(), ^{
+//            [self.tableView reloadData];
+//        });
+//    }
 }
 
 -(void)setTitle:(NSString*)titleString

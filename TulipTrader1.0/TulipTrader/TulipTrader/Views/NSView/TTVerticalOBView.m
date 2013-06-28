@@ -87,7 +87,7 @@
 
 #define leadingElementsToDrawBlack 3
 
-#define numberOfDepthSamples 200
+#define numberOfDepthSamples 50
 
 #pragma mark - mouse events
 

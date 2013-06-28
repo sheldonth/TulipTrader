@@ -71,7 +71,7 @@
         NSArray* bids = [data objectForKey:@"bids"];
         NSArray* asks = [data objectForKey:@"asks"];
         
-        [bids enumerateObjectsUsingBlock:^(NSDictionary* obj, NSUInteger idx, BOOL *stop) {
+        [[[bids reverseObjectEnumerator]allObjects] enumerateObjectsUsingBlock:^(NSDictionary* obj, NSUInteger idx, BOOL *stop) {
             TTDepthOrder* order = [TTDepthOrder newDepthOrderFromGOXHTTPDictionary:obj];
             [order setCurrency:currency];
             [order setDepthDeltaAction:TTDepthOrderActionNone];

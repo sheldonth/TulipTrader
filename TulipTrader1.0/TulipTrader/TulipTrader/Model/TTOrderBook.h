@@ -11,11 +11,32 @@
 #import "TTCurrency.h"
 #import "TTTicker.h"
 
+typedef enum{
+    TTDepthOrderUpdateTypeNone = 0,
+    TTDepthOrderUpdateTypeInsert,
+    TTDepthOrderUpdateTypeRemove,
+    TTDepthOrderUpdateTypeUpdate
+}TTDepthOrderUpdateType;
+
+typedef enum{
+    TTOrderBookSideNone = 0,
+    TTOrderBookSideBid,
+    TTOrderBookSideAsk
+}TTOrderBookSide;
+
 @class TTOrderBook;
+
+@interface TTDepthUpdate : NSObject
+
+@property(nonatomic)NSInteger affectedIndex;
+@property(nonatomic)TTDepthOrderUpdateType updateType;
+@property(nonatomic)NSArray* updateArrayPointer;
+
+@end
 
 @protocol TTOrderBookDelegate <NSObject>
 
--(void)orderBookHasNewDepth:(TTOrderBook*)orderBook;
+-(void)orderBook:(TTOrderBook*)orderBook hasNewDepthUpdate:(TTDepthUpdate*)update orderBookSide:(TTOrderBookSide)side;
 -(void)orderBookHasNewTicker:(TTOrderBook*)orderBook;
 -(void)orderBookHasNewLag:(TTOrderBook*)orderBook;
 -(void)orderBookHasNewTrade:(TTOrderBook*)orderBook;
