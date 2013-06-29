@@ -18,6 +18,8 @@
 @property(nonatomic, retain)NSTableColumn* sumColumn;
 @property(nonatomic, retain)NSTableColumn* ageColumn;
 
+@property(nonatomic)BOOL invertsDataSource;
+
 -(void)setTitle:(NSString*)titleString;
 -(void)updateForDepthUpdate:(TTDepthUpdate*)update;
 

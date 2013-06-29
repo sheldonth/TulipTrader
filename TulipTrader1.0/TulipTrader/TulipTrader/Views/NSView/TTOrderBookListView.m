@@ -78,6 +78,9 @@ static NSFont* titleFont;
         default:
             break;
     }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.tableView reloadDataForRowIndexes: columnIndexes:<#(NSIndexSet *)#>]
+    });
 }
 
 
@@ -104,12 +107,16 @@ static NSFont* titleFont;
     
     if (indexSetOfColumn.count != 1)
         RUDLog(@"Found TWO Columns Passing Test");
-    
-    TTDepthOrder* pertainingDepthOrder = [self.orders objectAtIndex:row];
+    TTDepthOrder* pertainingDepthOrder;
+    if (self.invertsDataSource)
+        pertainingDepthOrder = [self.orders objectAtIndex:(self.orders.count - 1 - row)];
+    else
+        pertainingDepthOrder = [self.orders objectAtIndex:row];
     NSNumber* result;
     switch (indexSetOfColumn.firstIndex) {
         case 0:
-            result = @(indexSetOfColumn.firstIndex);
+            RUDLog(@"%lu", indexSetOfColumn.firstIndex);
+            result = @(row);
             break;
 
         case 1:
@@ -119,6 +126,16 @@ static NSFont* titleFont;
         case 2:
             result = pertainingDepthOrder.amount;
             break;
+            
+        case 3:
+        {
+            double sum = 0.0;
+            for (int i = 0; i < row; i++) {
+                sum = sum + pertainingDepthOrder.amount.doubleValue;
+            }
+            result = @(sum);
+            break;
+        }
 
         default:
             break;
@@ -220,7 +237,7 @@ static NSFont* titleFont;
         
         [self setPositionColumn:[[NSTableColumn alloc]initWithIdentifier:@"Pos"]];
         [_positionColumn setEditable:NO];
-        [_positionColumn setWidth:20.f];
+        [_positionColumn setWidth:40.f];
         [[_positionColumn headerCell] setStringValue:@"#"];
         [_tableView addTableColumn:_positionColumn];
         [self.columnsArray addObject:_positionColumn];
@@ -238,6 +255,13 @@ static NSFont* titleFont;
         [[_quantityColumn headerCell]setStringValue:@"Quantity"];
         [_tableView addTableColumn:_quantityColumn];
         [self.columnsArray addObject:_quantityColumn];
+        
+        [self setSumColumn:[[NSTableColumn alloc]initWithIdentifier:@"sum"]];
+        [_sumColumn setEditable:NO];
+        [_sumColumn setWidth:60.f];
+        [[_sumColumn headerCell]setStringValue:@"Sum"];
+        [_tableView addTableColumn:_sumColumn];
+        [self.columnsArray addObject:_sumColumn];
 
         [_scrollView setDocumentView:_tableView];
     }
