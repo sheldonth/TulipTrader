@@ -21,6 +21,7 @@
 @property(nonatomic)BOOL invertsDataSource;
 
 -(void)setTitle:(NSString*)titleString;
+
 -(void)updateForDepthUpdate:(TTDepthUpdate*)update;
 
 @end

@@ -39,7 +39,6 @@ static NSFont* titleFont;
 {
     [self setOrders:[update.updateArrayPointer copy]];
 
-    RUDLog(@"%i", update.updateType);
     switch (update.updateType) {
         case TTDepthOrderUpdateTypeInsert://1
         {
@@ -79,7 +78,9 @@ static NSFont* titleFont;
             break;
     }
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self.tableView reloadDataForRowIndexes: columnIndexes:<#(NSIndexSet *)#>]
+        [self.tableView reloadDataForRowIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(update.affectedIndex, (self.orders.count - update.affectedIndex))] columnIndexes:[self.tableView.tableColumns indexesOfObjectsPassingTest:^BOOL(NSTableColumn* obj, NSUInteger idx, BOOL *stop) {
+            return [obj.identifier isEqualToString:@"sum"];
+        }]];
     });
 }
 
@@ -92,7 +93,7 @@ static NSFont* titleFont;
     
     if (tf == nil)
     {
-        tf = [[NSTextField alloc]initWithFrame:(NSRect){0, 0, tableColumn.width, 20}];
+        tf = [[NSTextField alloc]initWithFrame:(NSRect){0, 2, tableColumn.width, 20}];
         [tf setIdentifier:@"willy"];
     }
     
@@ -115,7 +116,6 @@ static NSFont* titleFont;
     NSNumber* result;
     switch (indexSetOfColumn.firstIndex) {
         case 0:
-            RUDLog(@"%lu", indexSetOfColumn.firstIndex);
             result = @(row);
             break;
 
@@ -130,9 +130,20 @@ static NSFont* titleFont;
         case 3:
         {
             double sum = 0.0;
-            for (int i = 0; i < row; i++) {
-                sum = sum + pertainingDepthOrder.amount.doubleValue;
+            if (self.invertsDataSource)
+            {
+                int idx = (int)[self.orders indexOfObject:pertainingDepthOrder];
+                for (int i = idx; i < self.orders.count; i++) {
+                    sum = sum + [[[self.orders objectAtIndex:i] amount]doubleValue];
+                }
             }
+            else
+            {
+                for (int i = 0; i < (row + 1); i++) {
+                    sum = sum + [[[self.orders objectAtIndex:i] amount]doubleValue];
+                }
+            }
+                
             result = @(sum);
             break;
         }

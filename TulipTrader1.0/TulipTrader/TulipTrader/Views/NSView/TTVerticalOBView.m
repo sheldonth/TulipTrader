@@ -153,11 +153,13 @@
     {
         case TTDepthViewChartingProcedureSampling:
         {
-            [askDepthCircles enumerateObjectsUsingBlock:^(NSBezierPath* obj, NSUInteger idx, BOOL *stop) {
+            NSArray* a = [askDepthCircles copy];
+            NSArray* b = [bidDepthCircles copy];
+            [a enumerateObjectsUsingBlock:^(NSBezierPath* obj, NSUInteger idx, BOOL *stop) {
                 if ([obj containsPoint:convertedPt])
                     [crossHairHits addObject:obj];
             }];
-            [bidDepthCircles enumerateObjectsUsingBlock:^(NSBezierPath* obj, NSUInteger idx, BOOL *stop) {
+            [b enumerateObjectsUsingBlock:^(NSBezierPath* obj, NSUInteger idx, BOOL *stop) {
                 if ([obj containsPoint:convertedPt])
                     [crossHairHits addObject:obj];
             }];
@@ -166,11 +168,13 @@
             
         case TTDepthViewChartingProcedureAllOrders:
         {
-            [askDepthCircles enumerateObjectsUsingBlock:^(NSBezierPath* obj, NSUInteger idx, BOOL *stop) {
+            NSArray* a = [askDepthCircles copy];
+            NSArray* b = [bidDepthCircles copy];
+            [a enumerateObjectsUsingBlock:^(NSBezierPath* obj, NSUInteger idx, BOOL *stop) {
                 if ([obj containsPoint:convertedPt])
                     [crossHairHits addObject:obj];
             }];
-            [bidDepthCircles enumerateObjectsUsingBlock:^(NSBezierPath* obj, NSUInteger idx, BOOL *stop) {
+            [b enumerateObjectsUsingBlock:^(NSBezierPath* obj, NSUInteger idx, BOOL *stop) {
                 if ([obj containsPoint:convertedPt])
                     [crossHairHits addObject:obj];
             }];
