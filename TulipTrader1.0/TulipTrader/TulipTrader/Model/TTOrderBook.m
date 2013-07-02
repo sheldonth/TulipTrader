@@ -12,6 +12,7 @@
 #import "RUConstants.h"
 #import "TTGoxHTTPController.h"
 #import "TTDepthOrder.h"
+#import "RulesPreferencesViewController.h"
 
 @interface TTOrderBook()
 
@@ -28,7 +29,7 @@
 @implementation TTOrderBook
 
 #define NOISYORDERBOOK 0
-#define NOISYMISTAKES 1
+#define NOISYMISTAKES 0
 
 #pragma mark - Static per-market constructors
 
@@ -76,11 +77,12 @@ TTDepthUpdate* updateObjectAfterAddingDepthOrder(NSArray* array, TTDepthOrder* d
         [mutableCpy sortUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"price" ascending:YES]]];
         NSUInteger i = [mutableCpy indexOfObject:depthOrder];
         [updateObj setAffectedIndex:i];
-        if (NOISYMISTAKES)
+
+        if (depthOrder.totalVolumeInt != depthOrder.amountInt)
         {
-            if (depthOrder.totalVolumeInt != depthOrder.amountInt)
-                RUDLog(@"Created order for %li at %li, server said final volume should've been %li", depthOrder.amountInt, depthOrder.priceInt, depthOrder.totalVolumeInt);
+            if (NOISYMISTAKES) RUDLog(@"Created order for %li at %li, server said final volume should've been %li", depthOrder.amountInt, depthOrder.priceInt, depthOrder.totalVolumeInt);
         }
+        
         [updateObj setUpdateArrayPointer:mutableCpy];
     }
     else
@@ -106,52 +108,75 @@ TTDepthUpdate* updateObjectAfterAddingDepthOrder(NSArray* array, TTDepthOrder* d
 TTDepthUpdate* updateObjectAfterRemovingDepthOrder(NSArray* array, TTDepthOrder* depthOrder)
 {
     TTDepthUpdate* updateObj = [TTDepthUpdate new];
+    
     NSUInteger index = indexSetOfObjectWithPrice(array, depthOrder);
     
     if (index == NSNotFound)
     {
-        if (NOISYMISTAKES) RUDLog(@"Order not present at %li", depthOrder.priceInt);//if (NOISYORDERBOOK)
-        [updateObj setUpdateType:TTDepthOrderUpdateTypeNone];
-        [updateObj setUpdateArrayPointer:array];
-        return updateObj;
-    }
-    
-    [updateObj setAffectedIndex:index];
-    
-    TTDepthOrder* depthOrderBeingModified = [array objectAtIndex:index];
-    
-    if (depthOrderBeingModified.amountInt == depthOrder.amountInt)
-    {
-        if (NOISYORDERBOOK) RUDLog(@"- %@ at %@",depthOrder.amount, depthOrder.price);
-        [updateObj setUpdateType:TTDepthOrderUpdateTypeRemove];
-        NSMutableArray* mutablePtr = [array mutableCopy];
-        [mutablePtr removeObjectAtIndex:index];
         if (NOISYMISTAKES)
+            RUDLog(@"Order not present at %li -- total_vol: %li adjusted to float: %f", depthOrder.priceInt, depthOrder.totalVolumeInt, (float)depthOrder.totalVolumeInt / 100000000.f);
+        
+        if ([depthOrder totalVolumeInt])
         {
-            if (depthOrder.totalVolumeInt != 0)
-                RUDLog(@"Order being removed when server indicated remaining value");
+            // Since we do not have a depth order to modify, however the totalVolumeInt indicates a remaining depth, set the amount of the depth order
+            // to that totalVolumeInt adjusted for float and insert, sort and organize that.
+            [updateObj setUpdateType:TTDepthOrderUpdateTypeInsert];
+            [depthOrder setAmountInt:depthOrder.totalVolumeInt];
+            [depthOrder setAmount:@((float)depthOrder.totalVolumeInt / 100000000.f)];
+            NSMutableArray* mutableCpy = [array mutableCopy];
+            [mutableCpy addObject:depthOrder];
+            [mutableCpy sortUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"price" ascending:YES]]];
+            NSUInteger i = [mutableCpy indexOfObject:depthOrder];
+            [updateObj setAffectedIndex:i];
+            [updateObj setUpdateArrayPointer:mutableCpy];
         }
-        [updateObj setUpdateArrayPointer:mutablePtr];
+        else
+        {
+            // The total volume is 0, since we didn't find a depth order we were aiming to remove anyways, set the update type to none and move along.
+            [updateObj setUpdateType:TTDepthOrderUpdateTypeNone];
+            [updateObj setUpdateArrayPointer:array];
+        }
     }
     else
     {
-        if (NOISYORDERBOOK) RUDLog(@"- %@ p at %@",depthOrder.amount, depthOrder.price);
-        if (NOISYMISTAKES)
+        [updateObj setAffectedIndex:index];
+        
+        TTDepthOrder* depthOrderBeingModified = [array objectAtIndex:index];
+        
+        if (depthOrderBeingModified.amountInt == depthOrder.amountInt)
         {
+            if (NOISYORDERBOOK) RUDLog(@"- %@ at %@",depthOrder.amount, depthOrder.price);
+            [updateObj setUpdateType:TTDepthOrderUpdateTypeRemove];
+            NSMutableArray* mutablePtr = [array mutableCopy];
+            [mutablePtr removeObjectAtIndex:index];
+            if (depthOrder.totalVolumeInt != 0)
+            {
+                if (NOISYMISTAKES)
+                {
+                    RUDLog(@"Removed Complete Order, Server indicated remaining value: %f", (float)depthOrder.totalVolumeInt / 100000000.f);
+                }
+            }
+            [updateObj setUpdateArrayPointer:mutablePtr];
+        }
+        else
+        {
+            if (NOISYORDERBOOK) RUDLog(@"- %@ p at %@",depthOrder.amount, depthOrder.price);
             if (depthOrderBeingModified.amountInt < depthOrder.amountInt)
-                RUDLog(@"NEGATIVE BALANCE");
+            {
+                [updateObj setUpdateType:TTDepthOrderUpdateTypeRemove];
+                NSMutableArray* mutableCpy = [array mutableCopy];
+                [mutableCpy removeObjectAtIndex:index];
+                [updateObj setUpdateArrayPointer:mutableCpy];
+            }
+            else
+            {
+                [updateObj setUpdateType:TTDepthOrderUpdateTypeUpdate];
+                [depthOrderBeingModified setAmount:@(depthOrderBeingModified.amount.floatValue - depthOrder.amount.floatValue)];
+                [depthOrderBeingModified setAmountInt:(depthOrderBeingModified.amountInt - depthOrder.amountInt)];
+                [updateObj setUpdateArrayPointer:array];
+            }
         }
-        [updateObj setUpdateType:TTDepthOrderUpdateTypeUpdate];
-        [depthOrderBeingModified setAmount:@(depthOrderBeingModified.amount.floatValue - depthOrder.amount.floatValue)];
-        [depthOrderBeingModified setAmountInt:(depthOrderBeingModified.amountInt - depthOrder.amountInt)];
-        NSMutableArray* mutableArray = [array mutableCopy];
-        if (NOISYMISTAKES)
-        {
-            if (depthOrderBeingModified.amountInt != depthOrder.totalVolumeInt)
-                RUDLog(@"Server Expected: %li We Got: %li", depthOrder.totalVolumeInt, depthOrderBeingModified.amountInt);
-        }
-        [mutableArray replaceObjectAtIndex:index withObject:depthOrderBeingModified];
-        [updateObj setUpdateArrayPointer:mutableArray];
+
     }
     return updateObj;
 }

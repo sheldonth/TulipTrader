@@ -457,7 +457,9 @@ void drawLine(CGContextRef context, CGFloat lineWidth, CGColorRef lineColor, CGP
     [stringForPriceNumber(highestBid) drawAtPoint:(NSPoint){0, (pixelsPerAssetDeltaUnit * (highestBid.floatValue - lowestBid.floatValue)) + depthChartBottomInset - (renderedHighestBidTextSize.height / 2)} withAttributes:attributeDictionaryForGraphYLabel()];
     [stringForPriceNumber(lowestAsk) drawAtPoint:(NSPoint){CGRectGetMaxX(graphRectPtr), (pixelsPerAssetDeltaUnit * (lowestAsk.floatValue - lowestBid.floatValue)) + depthChartBottomInset - (renderedLowestAskTextSize.height / 2)} withAttributes:attributeDictionaryForGraphYLabel()];
 
-    [self.drawablePaths enumerateObjectsUsingBlock:^(NSBezierPath* obj, NSUInteger idx, BOOL *stop) {
+    NSArray* pathsCopy = [self.drawablePaths copy];
+    
+    [pathsCopy enumerateObjectsUsingBlock:^(NSBezierPath* obj, NSUInteger idx, BOOL *stop) {
         if (idx == leadingElementsToDrawBlack)
             [[NSColor colorWithHexString:@"67C8FF"]set];
         [obj stroke];

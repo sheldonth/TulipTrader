@@ -9,11 +9,15 @@
 #import "TTAppDelegate.h"
 #import "TTOrderBook.h"
 #import "TTOrderBookWindow.h"
+#import "MASPreferencesWindowController.h"
+#import "GeneralPreferencesViewController.h"
+#import "RulesPreferencesViewController.h"
 
 @interface TTAppDelegate()
 
 @property(nonatomic, retain)NSMutableArray* orderBookWindows;
 @property(nonatomic, retain)TTNewOrderBookWindow* orderBookWindow;
+@property(nonatomic, retain)MASPreferencesWindowController* preferencesWindowController;
 
 @end
 
@@ -30,6 +34,34 @@ static NSSize defaultWelcomeWindowSize;
 +(void)initialize
 {
     defaultWelcomeWindowSize = (NSSize){700, 400};
+}
+
+#pragma mark - Menu Events
+
+NSString *const kFocusedAdvancedControlIndex = @"FocusedAdvancedControlIndex";
+
+- (NSInteger)focusedAdvancedControlIndex
+{
+    return [[NSUserDefaults standardUserDefaults] integerForKey:kFocusedAdvancedControlIndex];
+}
+
+- (void)setFocusedAdvancedControlIndex:(NSInteger)focusedAdvancedControlIndex
+{
+    [[NSUserDefaults standardUserDefaults] setInteger:focusedAdvancedControlIndex forKey:kFocusedAdvancedControlIndex];
+}
+
+-(void)showPreferences:(id)sender
+{
+    if (!self.preferencesWindowController)
+    {
+        NSViewController* generalViewController = [[GeneralPreferencesViewController alloc]init];
+        NSString *title = NSLocalizedString(@"Preferences", @"Common title for Preferences window");
+        
+        NSViewController* rulesViewController = [[RulesPreferencesViewController alloc]init];
+        
+        _preferencesWindowController = [[MASPreferencesWindowController alloc]initWithViewControllers:@[generalViewController,rulesViewController] title:title];
+    }
+    [self.preferencesWindowController showWindow:nil];
 }
 
 #pragma mark - TTNewOrderBookWindowDelegate

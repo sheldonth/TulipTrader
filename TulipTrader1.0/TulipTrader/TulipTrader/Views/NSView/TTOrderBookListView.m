@@ -42,6 +42,7 @@ static NSFont* titleFont;
     switch (update.updateType) {
         case TTDepthOrderUpdateTypeInsert://1
         {
+            RUDLog(@"Insert Of %@", [update.updateArrayPointer objectAtIndex:update.affectedIndex]);
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self.tableView beginUpdates];
                 [self.tableView insertRowsAtIndexes:[NSIndexSet indexSetWithIndex:update.affectedIndex] withAnimation:NSTableViewAnimationSlideDown];
@@ -51,6 +52,7 @@ static NSFont* titleFont;
         }
         case TTDepthOrderUpdateTypeRemove://2
         {
+            RUDLog(@"Removal Of %@", [update.updateArrayPointer objectAtIndex:update.affectedIndex]);
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self.tableView beginUpdates];
                 [self.tableView removeRowsAtIndexes:[NSIndexSet indexSetWithIndex:update.affectedIndex] withAnimation:NSTableViewAnimationSlideUp];
@@ -60,6 +62,7 @@ static NSFont* titleFont;
         }
         case TTDepthOrderUpdateTypeUpdate://3
         {
+            RUDLog(@"Update Of %@", [update.updateArrayPointer objectAtIndex:update.affectedIndex]);
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self.tableView beginUpdates];
                 [self.tableView reloadDataForRowIndexes:[NSIndexSet indexSetWithIndex:update.affectedIndex] columnIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, self.tableView.tableColumns.count)]];

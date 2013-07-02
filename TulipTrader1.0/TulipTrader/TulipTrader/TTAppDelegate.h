@@ -17,4 +17,6 @@
 
 - (IBAction)saveAction:(id)sender;
 
+- (IBAction)showPreferences:(id)sender;
+
 @end
