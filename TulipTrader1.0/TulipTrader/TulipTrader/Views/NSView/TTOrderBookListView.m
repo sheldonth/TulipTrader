@@ -163,39 +163,6 @@ static NSFont* titleFont;
     return 20.f;
 }
 
-//-(id)tableView:(NSTableView *)tableView objectValueForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row
-//{
-//    NSIndexSet* indexSetOfColumn = [self.columnsArray indexesOfObjectsPassingTest:^BOOL(NSTableColumn* obj, NSUInteger idx, BOOL *stop) {
-//        if ([obj.identifier isEqualToString:tableColumn.identifier])
-//        {
-//            *stop = YES;
-//            return YES;
-//        }
-//        return NO;
-//    }];
-//    if (indexSetOfColumn.count != 1)
-//        RUDLog(@"Found TWO Columns Passing Test");
-//    TTDepthOrder* pertainingDepthOrder = [self.orders objectAtIndex:row];
-//    NSNumber* result;
-//    switch (indexSetOfColumn.firstIndex) {
-//        case 0:
-//            result = @(row);
-//            break;
-//            
-//        case 1:
-//            result = pertainingDepthOrder.price;
-//            break;
-//            
-//        case 2:
-//            result = pertainingDepthOrder.amount;
-//            break;
-//            
-//        default:
-//            break;
-//    }
-//    return result;
-//}
-
 -(NSCell *)tableView:(NSTableView *)tableView dataCellForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row
 {
     NSCell* aCell = [[NSTextFieldCell alloc]initTextCell:@"sheldon"];
@@ -290,12 +257,6 @@ static NSFont* titleFont;
     [self willChangeValueForKey:@"orders"];
     _orders = orders;
     [self didChangeValueForKey:@"orders"];
-//    if (firstLoad)
-//    {
-//        dispatch_sync(dispatch_get_main_queue(), ^{
-//            [self.tableView reloadData];
-//        });
-//    }
 }
 
 -(void)setTitle:(NSString*)titleString
