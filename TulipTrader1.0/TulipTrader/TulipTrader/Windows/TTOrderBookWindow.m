@@ -11,6 +11,7 @@
 #import "RUConstants.h"
 #import "TTVerticalOBView.h"
 #import "TTOrderBookListView.h"
+#import "TTStatusBox.h"
 
 @interface TTOrderBookWindow()
 
@@ -18,6 +19,7 @@
 @property(nonatomic, retain)TTVerticalOBView* verticalOBView;
 @property(nonatomic, retain)TTOrderBookListView* bidOrderBookListView;
 @property(nonatomic, retain)TTOrderBookListView* askOrderBookListView;
+@property(nonatomic, retain)TTStatusBox* statusBox;
 
 @end
 
@@ -94,13 +96,19 @@
         [self.verticalOBView setChartingProcedure:TTDepthViewChartingProcedureSampling];
         [self.contentView addSubview:_verticalOBView];
         
-        [self setBidOrderBookListView:[[TTOrderBookListView alloc]initWithFrame:(NSRect){CGRectGetMaxX(self.verticalOBView.frame), statusBarHeight, graphWidth / 2, _verticalOBView.frame.size.height / 2}]];
+        [self setBidOrderBookListView:[[TTOrderBookListView alloc]initWithFrame:(NSRect){CGRectGetMaxX(self.verticalOBView.frame), statusBarHeight - 5, graphWidth / 2, _verticalOBView.frame.size.height / 2}]];
         [_bidOrderBookListView setTitle:@"BIDS"];
         [self.contentView addSubview:self.bidOrderBookListView];
         
-        [self setAskOrderBookListView:[[TTOrderBookListView alloc]initWithFrame:(NSRect){CGRectGetMaxX(self.verticalOBView.frame), CGRectGetMaxY(_bidOrderBookListView.frame), graphWidth / 2, _verticalOBView.frame.size.height / 2}]];
+        [self setAskOrderBookListView:[[TTOrderBookListView alloc]initWithFrame:(NSRect){CGRectGetMaxX(self.verticalOBView.frame), CGRectGetMaxY(_bidOrderBookListView.frame) + 5, graphWidth / 2, _verticalOBView.frame.size.height / 2}]];
         [_askOrderBookListView setTitle:@"ASKS"];
         [self.contentView addSubview:_askOrderBookListView];
+        
+        [self setStatusBox:[[TTStatusBox alloc]initWithFrame:(NSRect){0, 0, CGRectGetWidth(contentRect), statusBarHeight - 10}]];
+        [self.contentView addSubview:_statusBox];
+        
+        [self.orderBook setEventDelegate:self.statusBox];
+
         
         [self.orderBook start];
     }

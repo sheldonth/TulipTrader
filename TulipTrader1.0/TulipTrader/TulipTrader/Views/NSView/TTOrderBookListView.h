@@ -9,10 +9,10 @@
 #import <Cocoa/Cocoa.h>
 #import "TTOrderBook.h"
 
-@interface TTOrderBookListView : NSView <NSTableViewDataSource, NSTableViewDelegate>
+@interface TTOrderBookListView : NSBox <NSTableViewDataSource, NSTableViewDelegate>
 
 @property(nonatomic, retain)NSArray* orders;
-@property(nonatomic, retain)NSTableColumn* positionColumn;
+//@property(nonatomic, retain)NSTableColumn* positionColumn;
 @property(nonatomic, retain)NSTableColumn* priceColumn;
 @property(nonatomic, retain)NSTableColumn* quantityColumn;
 @property(nonatomic, retain)NSTableColumn* sumColumn;

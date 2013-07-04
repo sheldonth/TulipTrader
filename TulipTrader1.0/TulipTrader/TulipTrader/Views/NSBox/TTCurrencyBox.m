@@ -33,6 +33,10 @@
 @property (nonatomic, retain) JNWLabel* averageLabel;
 @property (nonatomic, retain) JNWLabel* averageValueLabel;
 
+@property (nonatomic, retain) JNWLabel* requestCountLabel;
+@property (nonatomic, retain) JNWLabel* fullDepthLabel;
+@property (nonatomic, retain) JNWLabel* partialDepthLabel;
+
 @property (nonatomic, retain) NSTimer* refreshTimer;
 
 NSUInteger numberOfLeadingCharactersToAffectForCurrency(TTCurrency currency);

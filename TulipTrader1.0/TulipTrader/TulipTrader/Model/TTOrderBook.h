@@ -24,6 +24,14 @@ typedef enum{
     TTOrderBookSideAsk
 }TTOrderBookSide;
 
+typedef enum{
+    TTOrderBookConnectionStateNone = 0,
+    TTOrderBookConnectionStateSocketUnavailable,
+    TTOrderBookConnectionStateSocketDisconnected,
+    TTOrderBookConnectionStateSocketConnected,
+    TTOrderBookConnectionStateSocketConnecting
+}TTOrderBookConnectionState;
+
 @class TTOrderBook;
 
 @interface TTDepthUpdate : NSObject
@@ -43,6 +51,13 @@ typedef enum{
 
 @end
 
+@protocol TTOrderBookEventDelegate <NSObject>
+
+-(void)orderBook:(TTOrderBook*)orderBook hasNewConnectionState:(TTOrderBookConnectionState)connectionState;
+-(void)orderBook:(TTOrderBook*)orderBook hasNewEvent:(id)event;
+
+@end
+
 @interface TTOrderBook : NSObject <TTSocketControllerDelegate>
 
 @property(nonatomic, retain)NSArray* bids;
@@ -52,10 +67,12 @@ typedef enum{
 @property(nonatomic, retain)TTTicker* lastTicker;
 @property(nonatomic, retain)NSString* title;
 
-@property(nonatomic, retain)id<TTOrderBookDelegate>delegate;
+@property(nonatomic)id<TTOrderBookDelegate>delegate;
+@property(nonatomic)id<TTOrderBookEventDelegate>eventDelegate;
 
 +(TTOrderBook*)newOrderBookForMTGOXwithCurrency:(TTCurrency)currency;
 
+//-(id)objectAtInvertedBidsIndex:(NSInteger)index;
 -(id)initWithCurrency:(TTCurrency)currency;
 -(void)start;
 

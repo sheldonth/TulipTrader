@@ -123,6 +123,7 @@ NSString* stringFromUnichar(unichar t)
 -(void)webSocket:(SRWebSocket *)webSocket didFailWithError:(NSError *)error
 {
     RUDLog(@"%li Reconnect Attempt", _retries);
+    [self setConnectionState:TTSocketConnectionStateFailed];
     [self openWithCurrency:self.currency];
 }
 

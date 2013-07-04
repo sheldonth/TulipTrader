@@ -14,6 +14,7 @@
 #import "RUClassOrNilUtil.h"
 #import "TTTicker.h"
 #import "TTDepthOrder.h"
+#import "TTTrade.h"
 
 typedef enum{
     TTGoxSocketMessageTypeNone = 0,
@@ -136,7 +137,8 @@ NSString* const kTTGoxSocketDepthChannelID  = @"24e67e0d-1cad-4cc0-9e7a-f8523ef4
                 }
                 case kTTGoxMarketTrade:
                 {
-                    
+                    TTTrade* t = [TTTrade newTradeFromDictionary:responseDictionary];
+                    [self.delegate socketController:self tradeObserved:t];
                     break;
                 }
                 case kTTGoxMarketNone:

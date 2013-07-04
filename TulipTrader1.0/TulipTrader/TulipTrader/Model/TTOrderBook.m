@@ -243,18 +243,20 @@ TTDepthUpdate* updateObjectAfterRemovingDepthOrder(NSArray* array, TTDepthOrder*
         default:
             break;
     }
+    [self.eventDelegate orderBook:self hasNewEvent:orderBookDelta];
 }
 
 -(void)socketController:(TTSocketController *)socketController tickerObserved:(TTTicker *)theTicker
 {
     [self setLastTicker:theTicker];
     [self.delegate orderBookHasNewTicker:self];
+    [self.eventDelegate orderBook:self hasNewEvent:theTicker];
 }
 
 -(void)socketController:(TTSocketController *)socketController tradeObserved:(TTTrade *)theTrade
 {
-    RUDLog(@"tradeObserved");
     [self.delegate orderBookHasNewTrade:self];
+    [self.eventDelegate orderBook:self hasNewEvent:theTrade];
 }
 
 -(id)initWithCurrency:(TTCurrency)currency
@@ -268,11 +270,54 @@ TTDepthUpdate* updateObjectAfterRemovingDepthOrder(NSArray* array, TTDepthOrder*
     return self;
 }
 
+-(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context
+{
+    NSNumber* newState = [change objectForKey:@"new"];
+    switch (newState.integerValue) {
+        case 0:
+            [self.eventDelegate orderBook:self hasNewConnectionState:(TTOrderBookConnectionStateNone)];
+            break;
+            
+        case 1:
+            [self.eventDelegate orderBook:self hasNewConnectionState:(TTOrderBookConnectionStateSocketDisconnected)];
+            break;
+            
+        case 2:
+            [self.eventDelegate orderBook:self hasNewConnectionState:(TTOrderBookConnectionStateSocketConnecting)];
+            break;
+            
+        case 3:
+            [self.eventDelegate orderBook:self hasNewConnectionState:(TTOrderBookConnectionStateSocketConnected)];
+            break;
+            
+        case 4:
+            [self.eventDelegate orderBook:self hasNewConnectionState:(TTOrderBookConnectionStateSocketUnavailable)];
+            break;
+            
+        default:
+            break;
+    }
+}
+
+-(void)setWebsocket:(TTSocketController *)websocket
+{
+    [_websocket removeObserver:self forKeyPath:@"connectionState"];
+    [self willChangeValueForKey:@"websocket"];
+    _websocket = websocket;
+    [self didChangeValueForKey:@"websocket"];
+    [self.websocket addObserver:self forKeyPath:@"connectionState" options:NSKeyValueObservingOptionNew context:nil];
+}
+
 -(void)start
 {
-    [self.websocket setDelegate:self];
+    if (self.websocket)
+    {
+        [self.websocket setDelegate:self];
+    }
+    else
+        [self.eventDelegate orderBook:self hasNewConnectionState:TTOrderBookConnectionStateSocketUnavailable];
+    
     [self.httpController getDepthForCurrency:self.currency withCompletion:^(NSArray *bids, NSArray *asks, NSDictionary *maxMinTicks) {
-        // Using iVars so as not to set of observers until the bids or asks are updated by the websocket.
         _bids = bids;
         _asks = asks;
         TTDepthUpdate* bidUpdate = [TTDepthUpdate new];
@@ -283,10 +328,12 @@ TTDepthUpdate* updateObjectAfterRemovingDepthOrder(NSArray* array, TTDepthOrder*
         [askUpdate setUpdateType:(TTDepthOrderUpdateTypeNone)];
         [askUpdate setUpdateArrayPointer:_asks];
         
-        
         [self.delegate orderBook:self hasNewDepthUpdate:bidUpdate orderBookSide:(TTOrderBookSideBid)];
+        
         [self.delegate orderBook:self hasNewDepthUpdate:askUpdate orderBookSide:(TTOrderBookSideAsk)];
+        
         [self setFirstLoad:YES];
+        
         [self.websocket openWithCurrency:self.currency];
     } withFailBlock:^(NSError *e) {
         RUDLog(@"FAIL");

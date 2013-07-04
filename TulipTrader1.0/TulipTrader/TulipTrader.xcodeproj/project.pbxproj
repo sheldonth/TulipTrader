@@ -124,6 +124,12 @@
 		47BEA73C1781D83E0020F6BE /* RulesPreferencesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 47BEA7391781D83E0020F6BE /* RulesPreferencesViewController.m */; };
 		47BEA73D1781D83E0020F6BE /* RulesPreferencesViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 47BEA73A1781D83E0020F6BE /* RulesPreferencesViewController.xib */; };
 		47BEA73E1781D83E0020F6BE /* RulesPreferencesViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 47BEA73A1781D83E0020F6BE /* RulesPreferencesViewController.xib */; };
+		47BEA74217834EA40020F6BE /* TTLabelCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = 47BEA74117834EA40020F6BE /* TTLabelCellView.m */; };
+		47BEA74317834EA40020F6BE /* TTLabelCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = 47BEA74117834EA40020F6BE /* TTLabelCellView.m */; };
+		47BEA746178487F30020F6BE /* TTStatusBox.m in Sources */ = {isa = PBXBuildFile; fileRef = 47BEA745178487F30020F6BE /* TTStatusBox.m */; };
+		47BEA747178487F30020F6BE /* TTStatusBox.m in Sources */ = {isa = PBXBuildFile; fileRef = 47BEA745178487F30020F6BE /* TTStatusBox.m */; };
+		47BEA74B1784D4C00020F6BE /* TTTrade.m in Sources */ = {isa = PBXBuildFile; fileRef = 47BEA74A1784D4C00020F6BE /* TTTrade.m */; };
+		47BEA74C1784D4C00020F6BE /* TTTrade.m in Sources */ = {isa = PBXBuildFile; fileRef = 47BEA74A1784D4C00020F6BE /* TTTrade.m */; };
 		47D872D61777DACC0052DB29 /* TTNewOrderBookWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 47D872D51777DACC0052DB29 /* TTNewOrderBookWindow.m */; };
 		47D872D71777DACC0052DB29 /* TTNewOrderBookWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 47D872D51777DACC0052DB29 /* TTNewOrderBookWindow.m */; };
 		47D872DA1778A72C0052DB29 /* TTCurrencyController.m in Sources */ = {isa = PBXBuildFile; fileRef = 47D872D91778A72B0052DB29 /* TTCurrencyController.m */; };
@@ -279,6 +285,12 @@
 		47BEA7381781D83E0020F6BE /* RulesPreferencesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RulesPreferencesViewController.h; sourceTree = "<group>"; };
 		47BEA7391781D83E0020F6BE /* RulesPreferencesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RulesPreferencesViewController.m; sourceTree = "<group>"; };
 		47BEA73A1781D83E0020F6BE /* RulesPreferencesViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = RulesPreferencesViewController.xib; sourceTree = "<group>"; };
+		47BEA74017834EA40020F6BE /* TTLabelCellView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTLabelCellView.h; sourceTree = "<group>"; };
+		47BEA74117834EA40020F6BE /* TTLabelCellView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTLabelCellView.m; sourceTree = "<group>"; };
+		47BEA744178487F30020F6BE /* TTStatusBox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTStatusBox.h; sourceTree = "<group>"; };
+		47BEA745178487F30020F6BE /* TTStatusBox.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTStatusBox.m; sourceTree = "<group>"; };
+		47BEA7491784D4C00020F6BE /* TTTrade.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTTrade.h; sourceTree = "<group>"; };
+		47BEA74A1784D4C00020F6BE /* TTTrade.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTTrade.m; sourceTree = "<group>"; };
 		47D872D41777DACC0052DB29 /* TTNewOrderBookWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTNewOrderBookWindow.h; sourceTree = "<group>"; };
 		47D872D51777DACC0052DB29 /* TTNewOrderBookWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTNewOrderBookWindow.m; sourceTree = "<group>"; };
 		47D872D81778A72B0052DB29 /* TTCurrencyController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTCurrencyController.h; sourceTree = "<group>"; };
@@ -671,6 +683,8 @@
 				4772E2761775043D00967847 /* TTTicker.m */,
 				4772E279177504CC00967847 /* TTTick.h */,
 				4772E27A177504CC00967847 /* TTTick.m */,
+				47BEA7491784D4C00020F6BE /* TTTrade.h */,
+				47BEA74A1784D4C00020F6BE /* TTTrade.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -703,6 +717,8 @@
 				47BEA71D177963210020F6BE /* TTVerticalOBView.m */,
 				47BEA720177B41E10020F6BE /* TTOrderBookListView.h */,
 				47BEA721177B41E10020F6BE /* TTOrderBookListView.m */,
+				47BEA74017834EA40020F6BE /* TTLabelCellView.h */,
+				47BEA74117834EA40020F6BE /* TTLabelCellView.m */,
 			);
 			path = NSView;
 			sourceTree = "<group>";
@@ -736,6 +752,8 @@
 			children = (
 				47D872E51778D4AD0052DB29 /* TTCurrencyBox.h */,
 				47D872E61778D4AD0052DB29 /* TTCurrencyBox.m */,
+				47BEA744178487F30020F6BE /* TTStatusBox.h */,
+				47BEA745178487F30020F6BE /* TTStatusBox.m */,
 			);
 			path = NSBox;
 			sourceTree = "<group>";
@@ -913,6 +931,9 @@
 				47BEA72E1781CDC50020F6BE /* MASPreferencesWindowController.m in Sources */,
 				47BEA7361781D2980020F6BE /* GeneralPreferencesViewController.m in Sources */,
 				47BEA73B1781D83E0020F6BE /* RulesPreferencesViewController.m in Sources */,
+				47BEA74217834EA40020F6BE /* TTLabelCellView.m in Sources */,
+				47BEA746178487F30020F6BE /* TTStatusBox.m in Sources */,
+				47BEA74B1784D4C00020F6BE /* TTTrade.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -968,6 +989,9 @@
 				47BEA72F1781CDC50020F6BE /* MASPreferencesWindowController.m in Sources */,
 				47BEA7371781D2980020F6BE /* GeneralPreferencesViewController.m in Sources */,
 				47BEA73C1781D83E0020F6BE /* RulesPreferencesViewController.m in Sources */,
+				47BEA74317834EA40020F6BE /* TTLabelCellView.m in Sources */,
+				47BEA747178487F30020F6BE /* TTStatusBox.m in Sources */,
+				47BEA74C1784D4C00020F6BE /* TTTrade.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
