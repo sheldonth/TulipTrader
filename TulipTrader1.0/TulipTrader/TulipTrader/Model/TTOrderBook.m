@@ -201,6 +201,7 @@ TTDepthUpdate* updateObjectAfterRemovingDepthOrder(NSArray* array, TTDepthOrder*
 {
     TTDepthUpdate* update = updateObjectAfterAddingDepthOrder(self.bids, ord);
     [self setBids:update.updateArrayPointer];
+//    [self setBids:[update.updateArrayPointer sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"price" ascending:NO]]]];
     [self.delegate orderBook:self hasNewDepthUpdate:update orderBookSide:TTOrderBookSideBid];
 }
 
@@ -208,6 +209,7 @@ TTDepthUpdate* updateObjectAfterRemovingDepthOrder(NSArray* array, TTDepthOrder*
 {
     TTDepthUpdate* update = updateObjectAfterRemovingDepthOrder(self.bids, ord);
     [self setBids:update.updateArrayPointer];
+//    [self setBids:[update.updateArrayPointer sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"price" ascending:NO]]]];
     [self.delegate orderBook:self hasNewDepthUpdate:update orderBookSide:TTOrderBookSideBid];
 }
 

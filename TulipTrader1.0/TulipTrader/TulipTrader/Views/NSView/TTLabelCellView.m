@@ -61,10 +61,10 @@ static NSDictionary* labelStringPropertiesDictionary;
 
 - (void)drawRect:(NSRect)dirtyRect
 {
-    NSBezierPath* bPath = [NSBezierPath bezierPathWithRect:(NSRect){2, 2, self.frame.size.width - 4, self.frame.size.height - 2}];
-    [bPath setLineWidth:2.f];
-    [[NSColor lightGrayColor]set];
-    [bPath stroke];
+//    NSBezierPath* bPath = [NSBezierPath bezierPathWithRect:(NSRect){2, 2, self.frame.size.width - 4, self.frame.size.height - 2}];
+//    [bPath setLineWidth:2.f];
+//    [[NSColor lightGrayColor]set];
+//    [bPath stroke];
     
     if (self.valueString)
     {

@@ -24,6 +24,7 @@
 @end
 
 static NSFont* titleFont;
+static NSFont* titleFontBold;
 
 @implementation TTOrderBookListView
 
@@ -32,6 +33,7 @@ static NSFont* titleFont;
     if (self == [TTOrderBookListView class])
     {
         titleFont = [NSFont fontWithName:@"Menlo" size:12.f];
+        titleFontBold = [NSFont fontWithName:@"Menlo-Bold" size:12.f];
     }
 }
 
@@ -39,43 +41,45 @@ static NSFont* titleFont;
 
 -(void)processUpdates
 {
-    @synchronized(self.pendingUpdates)
-    {
-        [self.tableView beginUpdates];
-        for (TTDepthUpdate* update in self.pendingUpdates) {
-            switch (update.updateType) {
-                case TTDepthOrderUpdateTypeInsert:
-                    [self.tableView insertRowsAtIndexes:[NSIndexSet indexSetWithIndex:update.affectedIndex] withAnimation:NSTableViewAnimationSlideDown];
-                    break;
-                    
-                case TTDepthOrderUpdateTypeRemove:
-                    [self.tableView removeRowsAtIndexes:[NSIndexSet indexSetWithIndex:update.affectedIndex] withAnimation:NSTableViewAnimationSlideUp];
-                    break;
-                    
-                case TTDepthOrderUpdateTypeUpdate:
-                    [self.tableView reloadDataForRowIndexes:[NSIndexSet indexSetWithIndex:update.affectedIndex] columnIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, self.tableView.tableColumns.count)]];
-                    break;
-                    
-                case TTDepthOrderUpdateTypeNone:
-                    
-                    break;
-                    
-                default:
-                    break;
-            }
-        };
-        [self.tableView endUpdates];
-        [self.pendingUpdates removeAllObjects];
-        [self.tableView reloadDataForRowIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, self.tableView.numberOfRows)] columnIndexes:[self.tableView.tableColumns indexesOfObjectsPassingTest:^BOOL(NSTableColumn* obj, NSUInteger idx, BOOL *stop) {
-            if ([[obj identifier]isEqualToString:@"sum"])
-            {
-                *stop = YES;
-                return YES;
-            }
-            else
-                return NO;
-        }]];
-    }
+        @synchronized(self.pendingUpdates)
+        {
+            [self.tableView beginUpdates];
+            for (TTDepthUpdate* update in self.pendingUpdates) {
+                NSInteger index = update.affectedIndex;
+    //            NSInteger index = self.invertsDataSource ? update.affectedIndex - 1 : update.affectedIndex;
+                switch (update.updateType) {
+                    case TTDepthOrderUpdateTypeInsert:
+                        [self.tableView insertRowsAtIndexes:[NSIndexSet indexSetWithIndex:index] withAnimation:NSTableViewAnimationSlideDown];
+                        break;
+                        
+                    case TTDepthOrderUpdateTypeRemove:
+                        [self.tableView removeRowsAtIndexes:[NSIndexSet indexSetWithIndex:index] withAnimation:NSTableViewAnimationSlideUp];
+                        break;
+                        
+                    case TTDepthOrderUpdateTypeUpdate:
+                        [self.tableView reloadDataForRowIndexes:[NSIndexSet indexSetWithIndex:index] columnIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, self.tableView.tableColumns.count)]];
+                        break;
+                        
+                    case TTDepthOrderUpdateTypeNone:
+                        
+                        break;
+                        
+                    default:
+                        break;
+                }
+            };
+            [self.tableView reloadDataForRowIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, self.tableView.numberOfRows)] columnIndexes:[self.tableView.tableColumns indexesOfObjectsPassingTest:^BOOL(NSTableColumn* obj, NSUInteger idx, BOOL *stop) {
+                if ([[obj identifier]isEqualToString:@"sum"])
+                {
+                    *stop = YES;
+                    return YES;
+                }
+                else
+                    return NO;
+            }]];
+            [self.tableView endUpdates];
+            [self.pendingUpdates removeAllObjects];
+        }
 }
 
 -(void)updateForDepthUpdate:(TTDepthUpdate*)update
@@ -86,8 +90,8 @@ static NSFont* titleFont;
         NSTimer* t = [NSTimer timerWithTimeInterval:1.f target:self selector:@selector(processUpdates) userInfo:nil repeats:YES];
         [[NSRunLoop mainRunLoop]addTimer:t forMode:NSDefaultRunLoopMode];
     }
-    [self setOrders:[update updateArrayPointer]];
     [self.pendingUpdates addObject:update];
+    [self setOrders:[[update updateArrayPointer]copy]];
 }
 
 //-(void)updateForDepthUpdate:(TTDepthUpdate*)update
@@ -170,7 +174,9 @@ static NSFont* titleFont;
     if (self.invertsDataSource)
         pertainingDepthOrder = [self.orders objectAtIndex:(self.orders.count - 1 - row)];
     else
+    {
         pertainingDepthOrder = [self.orders objectAtIndex:row];
+    }
     NSNumber* result;
     switch (indexSetOfColumn.firstIndex) {
 //        case 0:
@@ -182,28 +188,33 @@ static NSFont* titleFont;
             break;
 
         case 1:
+            if (self.invertsDataSource)
+            RUDLog(@"row %ld got %@", row, pertainingDepthOrder.amount);
             result = pertainingDepthOrder.amount;
             break;
             
         case 2:
         {
-            double sum = 0.0;
-            if (self.invertsDataSource)
+            @synchronized(self.orders)
             {
-                int idx = (int)[self.orders indexOfObject:pertainingDepthOrder];
-                for (int i = idx; i < self.orders.count; i++) {
-                    sum = sum + [[[self.orders objectAtIndex:i] amount]doubleValue];
+                double sum = 0.0;
+                if (self.invertsDataSource)
+                {
+                    int idx = (int)[self.orders indexOfObject:pertainingDepthOrder];
+                    for (int i = idx; i < self.orders.count; i++) {
+                        sum = sum + [[[self.orders objectAtIndex:i] amount]doubleValue];
+                    }
                 }
-            }
-            else
-            {
-                for (int i = 0; i < (row + 1); i++) {
-                    sum = sum + [[[self.orders objectAtIndex:i] amount]doubleValue];
+                else
+                {
+                    for (int i = 0; i < (row + 1); i++) {
+                        sum = sum + [[[self.orders objectAtIndex:i] amount]doubleValue];
+                    }
                 }
+                    
+                result = @(sum);
+                break;
             }
-                
-            result = @(sum);
-            break;
         }
 
         default:
@@ -257,13 +268,15 @@ static NSFont* titleFont;
         [self setTitlePosition:NSNoTitle];
         [self setBoxType:NSBoxCustom];
         [self setCornerRadius:2.f];
-        [self setBorderWidth:1.f];
+        [self setBorderWidth:2.f];
         [self setBorderColor:[NSColor lightGrayColor]];
+        
+        [self setContentViewMargins:(NSSize){0, 0}];
         
         [self setColumnsArray:[NSMutableArray array]];
         
-        [self setTitleLabel:[[JNWLabel alloc]initWithFrame:(NSRect){CGRectGetMidX(self.bounds) - 40, CGRectGetHeight(self.bounds) - 20, 80, 20}]];
-        [_titleLabel setFont:titleFont];
+        [self setTitleLabel:[[JNWLabel alloc]initWithFrame:(NSRect){CGRectGetMidX([self.contentView bounds]) - 40, CGRectGetHeight([self.contentView bounds]) - 20, 80, 20}]];
+        [_titleLabel setFont:titleFontBold];
         [_titleLabel setTextAlignment:NSCenterTextAlignment];
         [self.contentView addSubview:_titleLabel];
     
@@ -275,6 +288,8 @@ static NSFont* titleFont;
         [self setTableView:[[NSTableView alloc]initWithFrame:(NSRect){0, 0, CGRectGetWidth([self.contentView frame]), CGRectGetHeight([self.contentView frame])}]];
         [_tableView setDataSource:self];
         [_tableView setDelegate:self];
+        [_tableView setUsesAlternatingRowBackgroundColors:YES];
+        [_tableView setGridStyleMask:(NSTableViewSolidVerticalGridLineMask | NSTableViewSolidHorizontalGridLineMask)];
         
 //        [self setPositionColumn:[[NSTableColumn alloc]initWithIdentifier:@"Pos"]];
 //        [_positionColumn setEditable:NO];

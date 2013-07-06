@@ -9,7 +9,7 @@
 #import <Cocoa/Cocoa.h>
 #import "JNWLabel.h"
 
-@interface TTLabelCellView : NSView
+@interface TTLabelCellView : NSTableCellView
 
 @property(nonatomic, retain)NSString* valueString;
 @property(nonatomic)BOOL alignsValue;

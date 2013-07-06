@@ -36,7 +36,7 @@
             
         case TTOrderBookSideBid:
             [self.bidOrderBookListView updateForDepthUpdate:update];
-            [self.bidOrderBookListView setInvertsDataSource:YES];
+            [self.bidOrderBookListView setInvertsDataSource:NO];
             break;
             
         case TTOrderBookSideNone:
