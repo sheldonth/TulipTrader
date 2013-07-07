@@ -253,7 +253,13 @@ TTDepthUpdate* updateObjectAfterRemovingDepthOrder(NSArray* array, TTDepthOrder*
     [self setLastTicker:theTicker];
     [self.delegate orderBookHasNewTicker:self];
     NSArray* inconsistentInsideBids = [self.bids filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"priceInt > %@", theTicker.buy.value_int]];
-    NSArray* inconsistentInsideAsks = [self.asks filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"priceInt > %@", theTicker.sell.value_int]];
+    [inconsistentInsideBids enumerateObjectsUsingBlock:^(TTDepthOrder* obj, NSUInteger idx, BOOL *stop) {
+        [self removeBidOrder:obj];
+    }];
+    NSArray* inconsistentInsideAsks = [self.asks filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"priceInt < %@", theTicker.sell.value_int]];
+    [inconsistentInsideAsks enumerateObjectsUsingBlock:^(TTDepthOrder* obj, NSUInteger idx, BOOL *stop) {
+        [self removeAskOrder:obj];
+    }];
     [self.eventDelegate orderBook:self hasNewEvent:theTicker];
 }
 

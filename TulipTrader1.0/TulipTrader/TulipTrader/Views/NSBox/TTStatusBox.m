@@ -151,11 +151,11 @@ NSString* englishNounForDepthOrderType(TTDepthOrderType type)
         TTDepthOrder* dOrder = (TTDepthOrder*)event;
         switch ([dOrder depthDeltaType]) {
             case TTDepthOrderTypeAsk:
-                assignmentString = RUStringWithFormat(@"%@ %@ for %.4f at %.4f", englishVerbForDepthOrderAction(dOrder.depthDeltaAction), englishNounForDepthOrderType(dOrder.depthDeltaType), dOrder.amount.floatValue, dOrder.price.floatValue);
+                assignmentString = RUStringWithFormat(@"%@ %@ for %.5f at %.5f", englishVerbForDepthOrderAction(dOrder.depthDeltaAction), englishNounForDepthOrderType(dOrder.depthDeltaType), dOrder.amount.floatValue, dOrder.price.floatValue);
                 break;
             
             case TTDepthOrderTypeBid:
-                assignmentString = RUStringWithFormat(@"%@ %@ for %.4f at %.4f", englishVerbForDepthOrderAction(dOrder.depthDeltaAction), englishNounForDepthOrderType(dOrder.depthDeltaType), dOrder.amount.floatValue, dOrder.price.floatValue);
+                assignmentString = RUStringWithFormat(@"%@ %@ for %.5f at %.5f", englishVerbForDepthOrderAction(dOrder.depthDeltaAction), englishNounForDepthOrderType(dOrder.depthDeltaType), dOrder.amount.floatValue, dOrder.price.floatValue);
                 break;
                 
             case TTDepthOrderTypeNone:

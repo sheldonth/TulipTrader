@@ -44,7 +44,6 @@ static NSFont* titleFontBold;
 -(void)processUpdates
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self.tableView beginUpdates];
         
         for (TTDepthUpdate* update in self.pendingUpdates) {
             
@@ -52,21 +51,37 @@ static NSFont* titleFontBold;
             
             NSInteger index = update.affectedIndex;
             
-            //            NSInteger index = self.invertsDataSource ? update.affectedIndex - 1 : update.affectedIndex;
-            
             switch (update.updateType) {
                 case TTDepthOrderUpdateTypeInsert:
-                    [self.tableView insertRowsAtIndexes:[NSIndexSet indexSetWithIndex:index] withAnimation:NSTableViewAnimationSlideDown];
+                    if (self.invertsDataSource)
+                    {
+                        [self.tableView insertRowsAtIndexes:[NSIndexSet indexSetWithIndex:self.orders.count - 1 - index] withAnimation:NSTableViewAnimationSlideDown];
+                    }
+                    else
+                    {
+                        [self.tableView insertRowsAtIndexes:[NSIndexSet indexSetWithIndex:index] withAnimation:NSTableViewAnimationSlideDown];
+                    }
                     break;
                     
                 case TTDepthOrderUpdateTypeRemove:
-                    [self.tableView removeRowsAtIndexes:[NSIndexSet indexSetWithIndex:index] withAnimation:NSTableViewAnimationSlideUp | NSTableViewAnimationEffectFade];
+                    if (self.invertsDataSource)
+                    {
+                        [self.tableView removeRowsAtIndexes:[NSIndexSet indexSetWithIndex:self.orders.count - index] withAnimation:NSTableViewAnimationSlideUp];
+                    }
+                    else
+                    {
+                        [self.tableView removeRowsAtIndexes:[NSIndexSet indexSetWithIndex:index] withAnimation:NSTableViewAnimationSlideUp];
+                    }
                     break;
                     
                 case TTDepthOrderUpdateTypeUpdate:
-                    [self.tableView endUpdates];
-                    [self.tableView reloadDataForRowIndexes:[NSIndexSet indexSetWithIndex:index] columnIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, self.tableView.tableColumns.count)]];
-                    [self.tableView beginUpdates];
+                    if (self.invertsDataSource)
+                    {
+                        [self.tableView reloadDataForRowIndexes:[NSIndexSet indexSetWithIndex:self.orders.count - 1 - index] columnIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, self.tableView.tableColumns.count)]];
+                    }
+                    else
+                        [self.tableView reloadDataForRowIndexes:[NSIndexSet indexSetWithIndex:index] columnIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, self.tableView.tableColumns.count)]];
+
                     break;
                     
                 case TTDepthOrderUpdateTypeNone:
@@ -78,7 +93,6 @@ static NSFont* titleFontBold;
                     break;
             }
         };
-        [self.tableView endUpdates];
         NSIndexSet* indexesBehindThisOne = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, self.orders.count)];
         
         NSIndexSet* sumColumn  = [self.tableView.tableColumns indexesOfObjectsPassingTest:^BOOL(NSTableColumn* obj, NSUInteger idx, BOOL *stop) {
@@ -101,7 +115,7 @@ static NSFont* titleFontBold;
     if (!self.pendingUpdates)
     {
         [self setPendingUpdates:[NSMutableArray array]];
-        NSTimer* t = [NSTimer timerWithTimeInterval:1.f target:self selector:@selector(processUpdates) userInfo:nil repeats:YES];
+        NSTimer* t = [NSTimer timerWithTimeInterval:0.5f target:self selector:@selector(processUpdates) userInfo:nil repeats:YES];
         [[NSRunLoop mainRunLoop]addTimer:t forMode:NSDefaultRunLoopMode];
     }
     dispatch_async(dispatch_get_main_queue(), ^{

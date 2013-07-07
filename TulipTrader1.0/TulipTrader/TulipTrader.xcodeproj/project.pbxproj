@@ -1120,6 +1120,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COMBINE_HIDPI_IMAGES = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "TulipTrader/TulipTrader-Prefix.pch";
 				INFOPLIST_FILE = "TulipTrader/TulipTrader-Info.plist";
