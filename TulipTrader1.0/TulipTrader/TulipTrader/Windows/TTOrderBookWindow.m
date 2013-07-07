@@ -36,7 +36,7 @@
             
         case TTOrderBookSideBid:
             [self.bidOrderBookListView updateForDepthUpdate:update];
-            [self.bidOrderBookListView setInvertsDataSource:NO];
+            [self.bidOrderBookListView setInvertsDataSource:YES];
             break;
             
         case TTOrderBookSideNone:
@@ -50,10 +50,10 @@
     {
         [self.verticalOBView setAllBids:orderBook.bids];
         [self.verticalOBView setAllAsks:orderBook.asks];
-        [self.verticalOBView processData];
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self.verticalOBView display];
-        });
+//        [self.verticalOBView processData];
+//        dispatch_async(dispatch_get_main_queue(), ^{
+//            [self.verticalOBView display];
+//        });
     }
 }
 
@@ -78,8 +78,11 @@
     self = [super initWithContentRect:contentRect styleMask:aStyle backing:bufferingType defer:flag];
     if (self)
     {
+        [self setTitle:@"Order Book"];
         _currency = currency;
+
         [self setOrderBook:[TTOrderBook newOrderBookForMTGOXwithCurrency:self.currency]];
+        
         [self.orderBook setDelegate:self];
         
         CGFloat currencyBoxHeight = floorf(CGRectGetHeight(contentRect) / 10);
@@ -89,15 +92,21 @@
         CGFloat graphWidth = floorf(CGRectGetWidth(contentRect) / 3) * 2;
         
         [self setCurrencyBox:[[TTCurrencyBox alloc]initWithFrame:(NSRect){0, CGRectGetHeight(contentRect) - currencyBoxHeight, CGRectGetWidth(contentRect), currencyBoxHeight}]];
+        
         [_currencyBox setOrderBookPtr:self.orderBook];
+        
         [self.contentView addSubview:_currencyBox];
         
         [self setVerticalOBView:[[TTVerticalOBView alloc]initWithFrame:(NSRect){0, statusBarHeight, graphWidth, CGRectGetHeight(contentRect) - (currencyBoxHeight + statusBarHeight)}]];
+        
         [self.verticalOBView setChartingProcedure:TTDepthViewChartingProcedureSampling];
+        
         [self.contentView addSubview:_verticalOBView];
         
         [self setBidOrderBookListView:[[TTOrderBookListView alloc]initWithFrame:(NSRect){CGRectGetMaxX(self.verticalOBView.frame), statusBarHeight - 5, graphWidth / 2, _verticalOBView.frame.size.height / 2}]];
+        
         [_bidOrderBookListView setTitle:@"BIDS"];
+        
         [self.contentView addSubview:self.bidOrderBookListView];
         
         [self setAskOrderBookListView:[[TTOrderBookListView alloc]initWithFrame:(NSRect){CGRectGetMaxX(self.verticalOBView.frame), CGRectGetMaxY(_bidOrderBookListView.frame) + 5, graphWidth / 2, _verticalOBView.frame.size.height / 2}]];

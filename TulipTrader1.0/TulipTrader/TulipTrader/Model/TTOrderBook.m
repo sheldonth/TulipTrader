@@ -252,6 +252,8 @@ TTDepthUpdate* updateObjectAfterRemovingDepthOrder(NSArray* array, TTDepthOrder*
 {
     [self setLastTicker:theTicker];
     [self.delegate orderBookHasNewTicker:self];
+    NSArray* inconsistentInsideBids = [self.bids filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"priceInt > %@", theTicker.buy.value_int]];
+    NSArray* inconsistentInsideAsks = [self.asks filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"priceInt > %@", theTicker.sell.value_int]];
     [self.eventDelegate orderBook:self hasNewEvent:theTicker];
 }
 
@@ -310,6 +312,22 @@ TTDepthUpdate* updateObjectAfterRemovingDepthOrder(NSArray* array, TTDepthOrder*
     [self.websocket addObserver:self forKeyPath:@"connectionState" options:NSKeyValueObservingOptionNew context:nil];
 }
 
+-(TTDepthOrder *)insideBuy
+{
+    @synchronized(self.bids)
+    {
+        return [self.bids lastObject];
+    }
+}
+
+-(TTDepthOrder *)insideSell
+{
+    @synchronized(self.asks)
+    {
+        return [self.asks objectAtIndex:0];
+    }
+}
+
 -(void)start
 {
     if (self.websocket)
@@ -337,6 +355,7 @@ TTDepthUpdate* updateObjectAfterRemovingDepthOrder(NSArray* array, TTDepthOrder*
         [self setFirstLoad:YES];
         
         [self.websocket openWithCurrency:self.currency];
+        
     } withFailBlock:^(NSError *e) {
         RUDLog(@"FAIL");
     }];

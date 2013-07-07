@@ -21,6 +21,8 @@
 @property(nonatomic, retain)NSMutableArray* columnsArray;
 @property(nonatomic, retain)NSMutableArray* pendingUpdates;
 
+@property(nonatomic, retain)dispatch_queue_t ordersUpdateDispatchQueue;
+
 @end
 
 static NSFont* titleFont;
@@ -41,45 +43,57 @@ static NSFont* titleFontBold;
 
 -(void)processUpdates
 {
-        @synchronized(self.pendingUpdates)
-        {
-            [self.tableView beginUpdates];
-            for (TTDepthUpdate* update in self.pendingUpdates) {
-                NSInteger index = update.affectedIndex;
-    //            NSInteger index = self.invertsDataSource ? update.affectedIndex - 1 : update.affectedIndex;
-                switch (update.updateType) {
-                    case TTDepthOrderUpdateTypeInsert:
-                        [self.tableView insertRowsAtIndexes:[NSIndexSet indexSetWithIndex:index] withAnimation:NSTableViewAnimationSlideDown];
-                        break;
-                        
-                    case TTDepthOrderUpdateTypeRemove:
-                        [self.tableView removeRowsAtIndexes:[NSIndexSet indexSetWithIndex:index] withAnimation:NSTableViewAnimationSlideUp];
-                        break;
-                        
-                    case TTDepthOrderUpdateTypeUpdate:
-                        [self.tableView reloadDataForRowIndexes:[NSIndexSet indexSetWithIndex:index] columnIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, self.tableView.tableColumns.count)]];
-                        break;
-                        
-                    case TTDepthOrderUpdateTypeNone:
-                        
-                        break;
-                        
-                    default:
-                        break;
-                }
-            };
-            [self.tableView reloadDataForRowIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, self.tableView.numberOfRows)] columnIndexes:[self.tableView.tableColumns indexesOfObjectsPassingTest:^BOOL(NSTableColumn* obj, NSUInteger idx, BOOL *stop) {
-                if ([[obj identifier]isEqualToString:@"sum"])
-                {
-                    *stop = YES;
-                    return YES;
-                }
-                else
-                    return NO;
-            }]];
-            [self.tableView endUpdates];
-            [self.pendingUpdates removeAllObjects];
-        }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.tableView beginUpdates];
+        
+        for (TTDepthUpdate* update in self.pendingUpdates) {
+            
+            [self setOrders:[[update updateArrayPointer]copy]];
+            
+            NSInteger index = update.affectedIndex;
+            
+            //            NSInteger index = self.invertsDataSource ? update.affectedIndex - 1 : update.affectedIndex;
+            
+            switch (update.updateType) {
+                case TTDepthOrderUpdateTypeInsert:
+                    [self.tableView insertRowsAtIndexes:[NSIndexSet indexSetWithIndex:index] withAnimation:NSTableViewAnimationSlideDown];
+                    break;
+                    
+                case TTDepthOrderUpdateTypeRemove:
+                    [self.tableView removeRowsAtIndexes:[NSIndexSet indexSetWithIndex:index] withAnimation:NSTableViewAnimationSlideUp | NSTableViewAnimationEffectFade];
+                    break;
+                    
+                case TTDepthOrderUpdateTypeUpdate:
+                    [self.tableView endUpdates];
+                    [self.tableView reloadDataForRowIndexes:[NSIndexSet indexSetWithIndex:index] columnIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, self.tableView.tableColumns.count)]];
+                    [self.tableView beginUpdates];
+                    break;
+                    
+                case TTDepthOrderUpdateTypeNone:
+                    
+                    break;
+                    
+                    
+                default:
+                    break;
+            }
+        };
+        [self.tableView endUpdates];
+        NSIndexSet* indexesBehindThisOne = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, self.orders.count)];
+        
+        NSIndexSet* sumColumn  = [self.tableView.tableColumns indexesOfObjectsPassingTest:^BOOL(NSTableColumn* obj, NSUInteger idx, BOOL *stop) {
+            if ([[obj identifier]isEqualToString:@"sum"])
+            {
+                *stop = YES;
+                return YES;
+            }
+            else
+                return NO;
+        }];
+        
+        [self.tableView reloadDataForRowIndexes:indexesBehindThisOne columnIndexes:sumColumn];
+        [self.pendingUpdates removeAllObjects];
+    });
 }
 
 -(void)updateForDepthUpdate:(TTDepthUpdate*)update
@@ -90,70 +104,21 @@ static NSFont* titleFontBold;
         NSTimer* t = [NSTimer timerWithTimeInterval:1.f target:self selector:@selector(processUpdates) userInfo:nil repeats:YES];
         [[NSRunLoop mainRunLoop]addTimer:t forMode:NSDefaultRunLoopMode];
     }
-    [self.pendingUpdates addObject:update];
-    [self setOrders:[[update updateArrayPointer]copy]];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.pendingUpdates addObject:update];
+    });
 }
-
-//-(void)updateForDepthUpdate:(TTDepthUpdate*)update
-//{
-//    [self setOrders:[update.updateArrayPointer copy]];
-//
-//    switch (update.updateType) {
-//        case TTDepthOrderUpdateTypeInsert://1
-//        {
-//            RUDLog(@"Insert Of %@", [update.updateArrayPointer objectAtIndex:update.affectedIndex]);
-//            dispatch_async(dispatch_get_main_queue(), ^{
-//                [self.tableView beginUpdates];
-//                [self.tableView insertRowsAtIndexes:[NSIndexSet indexSetWithIndex:update.affectedIndex] withAnimation:NSTableViewAnimationSlideDown];
-//                [self.tableView endUpdates];
-//            });
-//            break;
-//        }
-//        case TTDepthOrderUpdateTypeRemove://2
-//        {
-//            RUDLog(@"Removal Of %@", [update.updateArrayPointer objectAtIndex:update.affectedIndex]);
-//            dispatch_async(dispatch_get_main_queue(), ^{
-//                [self.tableView beginUpdates];
-//                [self.tableView removeRowsAtIndexes:[NSIndexSet indexSetWithIndex:update.affectedIndex] withAnimation:NSTableViewAnimationSlideUp];
-//                [self.tableView endUpdates];
-//            });
-//            break;
-//        }
-//        case TTDepthOrderUpdateTypeUpdate://3
-//        {
-//            RUDLog(@"Update Of %@", [update.updateArrayPointer objectAtIndex:update.affectedIndex]);
-//            dispatch_async(dispatch_get_main_queue(), ^{
-//                [self.tableView beginUpdates];
-//                [self.tableView reloadDataForRowIndexes:[NSIndexSet indexSetWithIndex:update.affectedIndex] columnIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, self.tableView.tableColumns.count)]];
-//                [self.tableView endUpdates];
-//            });
-//            break;
-//        }
-//        case TTDepthOrderUpdateTypeNone://0
-//        {
-//            dispatch_async(dispatch_get_main_queue(), ^{
-//                [self.tableView reloadData];
-//            });
-//            break;
-//        }
-//        default:
-//            break;
-//    }
-//    dispatch_async(dispatch_get_main_queue(), ^{
-//        [self.tableView reloadDataForRowIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(update.affectedIndex, (self.orders.count - update.affectedIndex))] columnIndexes:[self.tableView.tableColumns indexesOfObjectsPassingTest:^BOOL(NSTableColumn* obj, NSUInteger idx, BOOL *stop) {
-//            return [obj.identifier isEqualToString:@"sum"];
-//        }]];
-//    });
-//}
-
 
 #pragma mark - nstableviewdelegate/datasource
 
 -(NSView *)tableView:(NSTableView *)tableView viewForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row
 {
+    if (!(row < self.orders.count))
+    {NSException* e = [[NSException alloc]initWithName:NSInternalInconsistencyException reason:@"Bad number of rows for self.orders count" userInfo:nil];@throw e;}
+
     TTLabelCellView* view = [tableView makeViewWithIdentifier:@"OrderBookListView" owner:self];
     
-    if (view== nil)
+    if (view == nil)
     {
         view = [[TTLabelCellView alloc]initWithFrame:(NSRect){0, 0, tableColumn.width, 20}];
         [view setIdentifier:@"OrderBookListView"];
@@ -175,21 +140,21 @@ static NSFont* titleFontBold;
         pertainingDepthOrder = [self.orders objectAtIndex:(self.orders.count - 1 - row)];
     else
     {
-        pertainingDepthOrder = [self.orders objectAtIndex:row];
+        if (row < self.orders.count)
+            pertainingDepthOrder = [self.orders objectAtIndex:row];
+        else
+        {
+            NSException* e = [[NSException alloc]initWithName:NSInternalInconsistencyException reason:@"row was not less than the count of self.orders" userInfo:nil];
+            @throw e;
+        }
     }
     NSNumber* result;
     switch (indexSetOfColumn.firstIndex) {
-//        case 0:
-//            result = @(row);
-//            break;
-
         case 0:
             result = pertainingDepthOrder.price;
             break;
 
         case 1:
-            if (self.invertsDataSource)
-            RUDLog(@"row %ld got %@", row, pertainingDepthOrder.amount);
             result = pertainingDepthOrder.amount;
             break;
             
@@ -271,6 +236,8 @@ static NSFont* titleFontBold;
         [self setBorderWidth:2.f];
         [self setBorderColor:[NSColor lightGrayColor]];
         
+        [self setOrdersUpdateDispatchQueue:dispatch_queue_create("com.tuliptrader.OrderBookListViewDispatch", NULL)];
+        
         [self setContentViewMargins:(NSSize){0, 0}];
         
         [self setColumnsArray:[NSMutableArray array]];
@@ -290,13 +257,10 @@ static NSFont* titleFontBold;
         [_tableView setDelegate:self];
         [_tableView setUsesAlternatingRowBackgroundColors:YES];
         [_tableView setGridStyleMask:(NSTableViewSolidVerticalGridLineMask | NSTableViewSolidHorizontalGridLineMask)];
-        
-//        [self setPositionColumn:[[NSTableColumn alloc]initWithIdentifier:@"Pos"]];
-//        [_positionColumn setEditable:NO];
-//        [_positionColumn setWidth:40.f];
-//        [[_positionColumn headerCell] setStringValue:@"#"];
-//        [_tableView addTableColumn:_positionColumn];
-//        [self.columnsArray addObject:_positionColumn];
+        [_tableView setAllowsColumnReordering:YES];
+        [_tableView setAllowsColumnResizing:YES];
+        [_tableView setAllowsExpansionToolTips:YES];
+        [_tableView setAllowsMultipleSelection:YES];
         
         CGFloat columnWidth = floorf(CGRectGetWidth([self.contentView bounds])/3.f);
         
@@ -347,7 +311,6 @@ static NSFont* titleFontBold;
 
 - (void)drawRect:(NSRect)dirtyRect
 {
-//    if (NSContainsRect(dirtyRect, self.frame))
     [super drawRect:dirtyRect];
 }
 

@@ -15,7 +15,7 @@
 
 -(NSString *)description
 {
-    return RUStringWithFormat(@"%@ %@ %@", stringFromCurrency(currencyFromNumber(self.currency)), self.display, self.value.stringValue);
+    return RUStringWithFormat(@"%@ %@ %@ int: %@", stringFromCurrency(currencyFromNumber(self.currency)), self.display, self.value.stringValue, self.value_int);
 }
 
 +(TTTick*)newTickfromDictionary:(NSDictionary*)d

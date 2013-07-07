@@ -70,6 +70,9 @@ typedef enum{
 @property(nonatomic)id<TTOrderBookDelegate>delegate;
 @property(nonatomic)id<TTOrderBookEventDelegate>eventDelegate;
 
+-(TTDepthOrder*)insideBuy;
+-(TTDepthOrder*)insideSell;
+
 +(TTOrderBook*)newOrderBookForMTGOXwithCurrency:(TTCurrency)currency;
 
 //-(id)objectAtInvertedBidsIndex:(NSInteger)index;
