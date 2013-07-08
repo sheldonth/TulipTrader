@@ -153,6 +153,9 @@ NSString* englishNounForDepthOrderType(TTDepthOrderType type)
         
         [self.broadcastTrades addObject:event];
         
+        if (self.tradesWindow)
+            [self.tradesWindow addTrade:trade];
+        
         __block double sum = 0;
         __block double count = 0;
         
@@ -226,10 +229,13 @@ NSString* englishNounForDepthOrderType(TTDepthOrderType type)
     {
         if (!self.tradesWindow)
         {
-            [self setTradesWindow:[[TTTradesWindow alloc]initWithContentRect:(NSRect){20, 20, 300, 200} styleMask:(NSTitledWindowMask | NSClosableWindowMask | NSMiniaturizableWindowMask | NSResizableWindowMask) backing:NSBackingStoreBuffered defer:YES]];
+            NSRect mainScreenFrame = [[NSScreen mainScreen]frame];
+            [self setTradesWindow:[[TTTradesWindow alloc]initWithContentRect:(NSRect){CGRectGetWidth(mainScreenFrame) - 350, CGRectGetHeight(mainScreenFrame) - 250, 600, 400} styleMask:(NSTitledWindowMask | NSClosableWindowMask | NSMiniaturizableWindowMask | NSResizableWindowMask | NSTexturedBackgroundWindowMask) backing:NSBackingStoreBuffered defer:YES]];
             [self.tradesWindow setTitle:@"Trades"];
+            [self.tradesWindow setAnimationBehavior:NSWindowAnimationBehaviorDocumentWindow];
             [self.tradesWindow setReleasedWhenClosed:NO];
             [self.tradesWindow setDelegate:self];
+            [self.tradesWindow setTrades:self.broadcastTrades];
         }
         [self.tradesWindow makeKeyAndOrderFront:self];
     }

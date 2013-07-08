@@ -8,6 +8,14 @@
 
 #import <Cocoa/Cocoa.h>
 
-@interface TTTradesWindow : NSWindow
+@class TTTrade;
+
+@interface TTTradesWindow : NSWindow <NSTableViewDataSource, NSTableViewDelegate>
+
+@property(nonatomic, retain)NSArray* trades;
+@property(nonatomic, readonly)NSScrollView* scrollView;
+@property(nonatomic, readonly)NSTableView* tableView;
+
+-(void)addTrade:(TTTrade*)trade;
 
 @end
