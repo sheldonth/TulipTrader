@@ -108,6 +108,14 @@
 		4772E2781775043E00967847 /* TTTicker.m in Sources */ = {isa = PBXBuildFile; fileRef = 4772E2761775043D00967847 /* TTTicker.m */; };
 		4772E27B177504CD00967847 /* TTTick.m in Sources */ = {isa = PBXBuildFile; fileRef = 4772E27A177504CC00967847 /* TTTick.m */; };
 		4772E27C177504CD00967847 /* TTTick.m in Sources */ = {isa = PBXBuildFile; fileRef = 4772E27A177504CC00967847 /* TTTick.m */; };
+		47742755178A089B00515BD1 /* accountsMan.png in Resources */ = {isa = PBXBuildFile; fileRef = 47742754178A089B00515BD1 /* accountsMan.png */; };
+		47742756178A089B00515BD1 /* accountsMan.png in Resources */ = {isa = PBXBuildFile; fileRef = 47742754178A089B00515BD1 /* accountsMan.png */; };
+		4774275A178A094200515BD1 /* AccountPreferencesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 47742758178A094200515BD1 /* AccountPreferencesViewController.m */; };
+		4774275B178A094200515BD1 /* AccountPreferencesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 47742758178A094200515BD1 /* AccountPreferencesViewController.m */; };
+		4774275C178A094200515BD1 /* AccountPreferencesViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 47742759178A094200515BD1 /* AccountPreferencesViewController.xib */; };
+		4774275D178A094200515BD1 /* AccountPreferencesViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 47742759178A094200515BD1 /* AccountPreferencesViewController.xib */; };
+		47742760178A364300515BD1 /* TTTradesWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 4774275F178A364300515BD1 /* TTTradesWindow.m */; };
+		47742761178A364300515BD1 /* TTTradesWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 4774275F178A364300515BD1 /* TTTradesWindow.m */; };
 		47BEA71E177963210020F6BE /* TTVerticalOBView.m in Sources */ = {isa = PBXBuildFile; fileRef = 47BEA71D177963210020F6BE /* TTVerticalOBView.m */; };
 		47BEA71F177963210020F6BE /* TTVerticalOBView.m in Sources */ = {isa = PBXBuildFile; fileRef = 47BEA71D177963210020F6BE /* TTVerticalOBView.m */; };
 		47BEA722177B41E10020F6BE /* TTOrderBookListView.m in Sources */ = {isa = PBXBuildFile; fileRef = 47BEA721177B41E10020F6BE /* TTOrderBookListView.m */; };
@@ -271,6 +279,12 @@
 		4772E2761775043D00967847 /* TTTicker.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTTicker.m; sourceTree = "<group>"; };
 		4772E279177504CC00967847 /* TTTick.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTTick.h; sourceTree = "<group>"; };
 		4772E27A177504CC00967847 /* TTTick.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTTick.m; sourceTree = "<group>"; };
+		47742754178A089B00515BD1 /* accountsMan.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = accountsMan.png; sourceTree = "<group>"; };
+		47742757178A094200515BD1 /* AccountPreferencesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AccountPreferencesViewController.h; sourceTree = "<group>"; };
+		47742758178A094200515BD1 /* AccountPreferencesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AccountPreferencesViewController.m; sourceTree = "<group>"; };
+		47742759178A094200515BD1 /* AccountPreferencesViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AccountPreferencesViewController.xib; sourceTree = "<group>"; };
+		4774275E178A364300515BD1 /* TTTradesWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTTradesWindow.h; sourceTree = "<group>"; };
+		4774275F178A364300515BD1 /* TTTradesWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTTradesWindow.m; sourceTree = "<group>"; };
 		47BEA71C177963210020F6BE /* TTVerticalOBView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTVerticalOBView.h; sourceTree = "<group>"; };
 		47BEA71D177963210020F6BE /* TTVerticalOBView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTVerticalOBView.m; sourceTree = "<group>"; };
 		47BEA720177B41E10020F6BE /* TTOrderBookListView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTOrderBookListView.h; sourceTree = "<group>"; };
@@ -644,6 +658,7 @@
 		4772E23F1774D88600967847 /* images-png */ = {
 			isa = PBXGroup;
 			children = (
+				47742754178A089B00515BD1 /* accountsMan.png */,
 				4772E2401774D88600967847 /* infoBtn.png */,
 			);
 			path = "images-png";
@@ -666,6 +681,8 @@
 				47D872D51777DACC0052DB29 /* TTNewOrderBookWindow.m */,
 				47D872E01778C4430052DB29 /* TTOrderBookWindow.h */,
 				47D872E11778C4430052DB29 /* TTOrderBookWindow.m */,
+				4774275E178A364300515BD1 /* TTTradesWindow.h */,
+				4774275F178A364300515BD1 /* TTTradesWindow.m */,
 			);
 			path = Windows;
 			sourceTree = "<group>";
@@ -737,12 +754,15 @@
 		47BEA7301781D2980020F6BE /* Preferences */ = {
 			isa = PBXGroup;
 			children = (
-				47BEA7311781D2980020F6BE /* GeneralPreferencesView.xib */,
 				47BEA7321781D2980020F6BE /* GeneralPreferencesViewController.h */,
 				47BEA7331781D2980020F6BE /* GeneralPreferencesViewController.m */,
+				47BEA7311781D2980020F6BE /* GeneralPreferencesView.xib */,
 				47BEA7381781D83E0020F6BE /* RulesPreferencesViewController.h */,
 				47BEA7391781D83E0020F6BE /* RulesPreferencesViewController.m */,
 				47BEA73A1781D83E0020F6BE /* RulesPreferencesViewController.xib */,
+				47742757178A094200515BD1 /* AccountPreferencesViewController.h */,
+				47742758178A094200515BD1 /* AccountPreferencesViewController.m */,
+				47742759178A094200515BD1 /* AccountPreferencesViewController.xib */,
 			);
 			path = Preferences;
 			sourceTree = "<group>";
@@ -840,6 +860,8 @@
 				47BEA72C1781CDC50020F6BE /* MASPreferencesWindow.xib in Resources */,
 				47BEA7341781D2980020F6BE /* GeneralPreferencesView.xib in Resources */,
 				47BEA73D1781D83E0020F6BE /* RulesPreferencesViewController.xib in Resources */,
+				47742755178A089B00515BD1 /* accountsMan.png in Resources */,
+				4774275C178A094200515BD1 /* AccountPreferencesViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -855,6 +877,8 @@
 				47BEA72D1781CDC50020F6BE /* MASPreferencesWindow.xib in Resources */,
 				47BEA7351781D2980020F6BE /* GeneralPreferencesView.xib in Resources */,
 				47BEA73E1781D83E0020F6BE /* RulesPreferencesViewController.xib in Resources */,
+				47742756178A089B00515BD1 /* accountsMan.png in Resources */,
+				4774275D178A094200515BD1 /* AccountPreferencesViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -934,6 +958,8 @@
 				47BEA74217834EA40020F6BE /* TTLabelCellView.m in Sources */,
 				47BEA746178487F30020F6BE /* TTStatusBox.m in Sources */,
 				47BEA74B1784D4C00020F6BE /* TTTrade.m in Sources */,
+				4774275A178A094200515BD1 /* AccountPreferencesViewController.m in Sources */,
+				47742760178A364300515BD1 /* TTTradesWindow.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -992,6 +1018,8 @@
 				47BEA74317834EA40020F6BE /* TTLabelCellView.m in Sources */,
 				47BEA747178487F30020F6BE /* TTStatusBox.m in Sources */,
 				47BEA74C1784D4C00020F6BE /* TTTrade.m in Sources */,
+				4774275B178A094200515BD1 /* AccountPreferencesViewController.m in Sources */,
+				47742761178A364300515BD1 /* TTTradesWindow.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

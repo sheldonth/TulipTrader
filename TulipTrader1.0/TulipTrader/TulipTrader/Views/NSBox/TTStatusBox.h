@@ -9,6 +9,6 @@
 #import <Cocoa/Cocoa.h>
 #import "TTOrderBook.h"
 
-@interface TTStatusBox : NSBox <TTOrderBookEventDelegate>
+@interface TTStatusBox : NSBox <TTOrderBookEventDelegate, NSWindowDelegate>
 
 @end

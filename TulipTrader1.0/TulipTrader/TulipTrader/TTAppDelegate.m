@@ -12,6 +12,7 @@
 #import "MASPreferencesWindowController.h"
 #import "GeneralPreferencesViewController.h"
 #import "RulesPreferencesViewController.h"
+#import "AccountPreferencesViewController.h"
 
 @interface TTAppDelegate()
 
@@ -58,8 +59,8 @@ NSString *const kFocusedAdvancedControlIndex = @"FocusedAdvancedControlIndex";
         NSString *title = NSLocalizedString(@"Preferences", @"Common title for Preferences window");
         
         NSViewController* rulesViewController = [[RulesPreferencesViewController alloc]init];
-        
-        _preferencesWindowController = [[MASPreferencesWindowController alloc]initWithViewControllers:@[generalViewController,rulesViewController] title:title];
+        NSViewController* accountsViewController = [[AccountPreferencesViewController alloc]init];
+        _preferencesWindowController = [[MASPreferencesWindowController alloc]initWithViewControllers:@[generalViewController,rulesViewController, accountsViewController] title:title];
     }
     [self.preferencesWindowController showWindow:nil];
 }

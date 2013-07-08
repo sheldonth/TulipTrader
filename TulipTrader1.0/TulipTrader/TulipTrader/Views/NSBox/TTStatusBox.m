@@ -13,6 +13,7 @@
 #import "TTTrade.h"
 #import "TTDepthOrder.h"
 #import "JNWLabel.h"
+#import "TTTradesWindow.h"
 
 @interface TTStatusBox()
 {
@@ -25,10 +26,12 @@
 @property(nonatomic) CGFloat labelingGroup2Width;
 @property(nonatomic, retain) NSMutableDictionary* labelingProperties2Dictionary;
 
+@property(nonatomic, retain)NSMutableArray* broadcastTrades;
 @property(nonatomic, retain)JNWLabel* fadingDepthEventLabel;
 @property(nonatomic, retain)JNWLabel* fadingTradeEventLabel;
-
 @property(nonatomic, retain)NSTrackingArea* trackingArea;
+
+@property(nonatomic, strong)TTTradesWindow* tradesWindow;
 
 @end
 
@@ -91,6 +94,13 @@ NSString* englishNounForDepthOrderType(TTDepthOrderType type)
     return str;
 }
 
+#pragma mark - nswindowdelegate methods
+
+-(void)windowWillClose:(NSNotification *)notification
+{
+
+}
+    
 -(NSRect)depthButtonRect
 {
     return (NSRect){_labelingGroup1Width + 1.f, 0, CGRectGetWidth(_fadingTradeEventLabel.frame), CGRectGetHeight(self.frame)};
@@ -139,7 +149,29 @@ NSString* englishNounForDepthOrderType(TTDepthOrderType type)
 {
     if ([event class] == [TTTrade class])
     {
-//        RUDLog(@"Trade");
+        TTTrade* trade = (TTTrade*)event;
+        
+        [self.broadcastTrades addObject:event];
+        
+        __block double sum = 0;
+        __block double count = 0;
+        
+        [[self.broadcastTrades.reverseObjectEnumerator allObjects]enumerateObjectsUsingBlock:^(TTTrade* obj, NSUInteger idx, BOOL *stop) {
+            if (obj.trade_type != trade.trade_type)
+            {
+                *stop = YES;
+            }
+            else
+            {
+                sum = sum + obj.amount.doubleValue;
+                count++;
+            }
+        }];
+        
+        NSString* tradeStr = RUStringWithFormat(@"%.5f at %.5f %@ : %.0f(%.0f)", trade.amount.floatValue, trade.price.floatValue, stringFromCurrency(currencyFromNumber(trade.currency)), sum, count);
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.fadingTradeEventLabel setText:tradeStr];
+        });
     }
     else if ([event class] == [TTTicker class])
     {
@@ -188,6 +220,19 @@ NSString* englishNounForDepthOrderType(TTDepthOrderType type)
 
 -(void)mouseUp:(NSEvent *)theEvent
 {
+    NSPoint eventLocation = [theEvent locationInWindow];
+    NSPoint convertedPt = [self convertPoint:eventLocation fromView:nil];
+    if (CGRectContainsPoint([self depthButtonRect], convertedPt))
+    {
+        if (!self.tradesWindow)
+        {
+            [self setTradesWindow:[[TTTradesWindow alloc]initWithContentRect:(NSRect){20, 20, 300, 200} styleMask:(NSTitledWindowMask | NSClosableWindowMask | NSMiniaturizableWindowMask | NSResizableWindowMask) backing:NSBackingStoreBuffered defer:YES]];
+            [self.tradesWindow setTitle:@"Trades"];
+            [self.tradesWindow setReleasedWhenClosed:NO];
+            [self.tradesWindow setDelegate:self];
+        }
+        [self.tradesWindow makeKeyAndOrderFront:self];
+    }
     drawsBackground = NO;
     [self setNeedsDisplay:YES];
 }
@@ -219,6 +264,8 @@ NSString* englishNounForDepthOrderType(TTDepthOrderType type)
         [self.fadingDepthEventLabel setTextAlignment:NSCenterTextAlignment];
         [self.fadingDepthEventLabel setFont:statusBarFont];
         [self addSubview:_fadingDepthEventLabel];
+        
+        [self setBroadcastTrades:[NSMutableArray array]];
         
         [self setTrackingArea:[[NSTrackingArea alloc]initWithRect:frame options:(NSTrackingMouseEnteredAndExited | NSTrackingMouseMoved+NSTrackingActiveInKeyWindow) owner:self userInfo:nil]];
         [self addTrackingArea:_trackingArea];
