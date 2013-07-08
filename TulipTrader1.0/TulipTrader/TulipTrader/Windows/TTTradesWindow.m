@@ -160,6 +160,7 @@
             break;
             
         default:
+            return;
             break;
     }
     [self.tableView reloadData];
@@ -200,13 +201,40 @@
             break;
             
         case 2:
-            [cellView setValueString:RUStringWithFormat(@"%@", trade.price)];
+            [cellView setValueString:RUStringWithFormat(@"%.5f", trade.price.floatValue)];
             break;
             
         case 3:
             [cellView setValueString:RUStringWithFormat(@"%@", trade.amount)];
             break;
             
+        case 4:
+        {
+            double tradeVal = trade.amount.floatValue * trade.price.floatValue;
+            [cellView setValueString:RUStringWithFormat(@"%@%.2f", currencySymbolStringFromCurrency(currencyFromNumber(trade.currency)), tradeVal)];
+            break;
+        }
+        case 5:
+        {
+            switch (trade.trade_type) {
+                case TTTradeTypeBid:
+                    [cellView setValueString:@"BID"];
+                    break;
+                    
+                case TTTradeTypeAsk:
+                    [cellView setValueString:@"ASK"];
+                    break;
+                    
+                case TTTradeTypeNone:
+                    
+                    break;
+                    
+                default:
+                    break;
+            }
+        }
+            
+
         default:
             break;
     }
@@ -227,7 +255,7 @@
         
         [timeFormatter setDateFormat:@"hh:mm:ss"];
         
-        _columnTitleArray = @[@"Time", @"Currency", @"Price", @"Volume", @"Eq. Value"];
+        _columnTitleArray = @[@"Time", @"Currency", @"Price", @"Volume", @"Eq. Value", @"Trade Type"];
         _columnArray = [NSMutableArray array];
         
         _scrollView = [[NSScrollView alloc]initWithFrame:(NSRect){0, 0, CGRectGetWidth([self.contentView frame]), CGRectGetHeight([self.contentView frame])}];

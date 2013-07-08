@@ -178,7 +178,7 @@ NSString* englishNounForDepthOrderType(TTDepthOrderType type)
     }
     else if ([event class] == [TTTicker class])
     {
-//        RUDLog(@"Ticker");
+        // Ticker events go here
     }
     else if ([event class] == [TTDepthOrder class])
     {
