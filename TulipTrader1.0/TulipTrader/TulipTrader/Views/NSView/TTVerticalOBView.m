@@ -80,25 +80,16 @@
 
 @implementation TTVerticalOBView
 
-#define depthChartBottomInset 35.f
-#define depthChartTopInset 35.f
-#define depthChartLeftSideInsets 35.f
-#define depthChartRightSideInsets 35.f
-
-#define leadingElementsToDrawBlack 3
-
-#define numberOfDepthSamples 50
-
 #pragma mark - mouse events
 
 -(void)mouseUp:(NSEvent *)theEvent
 {
-    
+    [super mouseUp:theEvent];
 }
 
 -(void)mouseDown:(NSEvent *)theEvent
 {
-    
+    [super mouseDown:theEvent];
 }
 
 -(void)mouseEntered:(NSEvent *)theEvent
@@ -117,6 +108,8 @@
     [self setYAxisCrosshair:yCross];
 
     [self setNeedsDisplay:YES];
+    
+    [super mouseEntered:theEvent];
 }
 
 -(void)mouseExited:(NSEvent *)theEvent
@@ -126,70 +119,72 @@
     [self setXAxisCrosshair:nil];
     [self setYAxisCrosshair:nil];
     [self setNeedsDisplay:YES];
+    [super mouseExited:theEvent];
 }
 
--(void)mouseMoved:(NSEvent *)theEvent
-{
-    NSPoint eventLocation = [theEvent locationInWindow];
-    NSPoint convertedPt = [self convertPoint:eventLocation fromView:nil];
-
-    if (!self.xAxisCrosshair)
-        [self setXAxisCrosshair:[NSBezierPath bezierPath]];
-    [self.xAxisCrosshair removeAllPoints];
-    [self.xAxisCrosshair moveToPoint:(NSPoint){CGRectGetMinX(graphRectPtr), convertedPt.y}];
-    [self.xAxisCrosshair lineToPoint:(NSPoint){CGRectGetMaxX(graphRectPtr), convertedPt.y}];
-
-    if (!self.yAxisCrosshair)
-        [self setYAxisCrosshair:[NSBezierPath bezierPath]];
-    [self.yAxisCrosshair removeAllPoints];
-    [self.yAxisCrosshair moveToPoint:(NSPoint){convertedPt.x, CGRectGetMinY(graphRectPtr)}];
-    [self.yAxisCrosshair lineToPoint:(NSPoint){convertedPt.x, CGRectGetMaxY(graphRectPtr)}];
-    
-    NSMutableArray* crossHairHits = [NSMutableArray array];
-    
-    NSArray* askDepthCircles = [self.depthAskCircleBezierPathsArray copy];
-    NSArray* bidDepthCircles = [self.depthBidCircleBezierPathsArray copy];
-    switch (self.chartingProcedure)
-    {
-        case TTDepthViewChartingProcedureSampling:
-        {
-            NSArray* a = [askDepthCircles copy];
-            NSArray* b = [bidDepthCircles copy];
-            [a enumerateObjectsUsingBlock:^(NSBezierPath* obj, NSUInteger idx, BOOL *stop) {
-                if ([obj containsPoint:convertedPt])
-                    [crossHairHits addObject:obj];
-            }];
-            [b enumerateObjectsUsingBlock:^(NSBezierPath* obj, NSUInteger idx, BOOL *stop) {
-                if ([obj containsPoint:convertedPt])
-                    [crossHairHits addObject:obj];
-            }];
-            break;
-        }
-            
-        case TTDepthViewChartingProcedureAllOrders:
-        {
-            NSArray* a = [askDepthCircles copy];
-            NSArray* b = [bidDepthCircles copy];
-            [a enumerateObjectsUsingBlock:^(NSBezierPath* obj, NSUInteger idx, BOOL *stop) {
-                if ([obj containsPoint:convertedPt])
-                    [crossHairHits addObject:obj];
-            }];
-            [b enumerateObjectsUsingBlock:^(NSBezierPath* obj, NSUInteger idx, BOOL *stop) {
-                if ([obj containsPoint:convertedPt])
-                    [crossHairHits addObject:obj];
-            }];
-            break;
-        }
-        default:
-            break;
-    }
-    
-    [self setNeedsDisplay:YES];
-}
+//-(void)mouseMoved:(NSEvent *)theEvent
+//{
+//    NSPoint eventLocation = [theEvent locationInWindow];
+//    NSPoint convertedPt = [self convertPoint:eventLocation fromView:nil];
+//
+//    if (!self.xAxisCrosshair)
+//        [self setXAxisCrosshair:[NSBezierPath bezierPath]];
+//    [self.xAxisCrosshair removeAllPoints];
+//    [self.xAxisCrosshair moveToPoint:(NSPoint){CGRectGetMinX(graphRectPtr), convertedPt.y}];
+//    [self.xAxisCrosshair lineToPoint:(NSPoint){CGRectGetMaxX(graphRectPtr), convertedPt.y}];
+//
+//    if (!self.yAxisCrosshair)
+//        [self setYAxisCrosshair:[NSBezierPath bezierPath]];
+//    [self.yAxisCrosshair removeAllPoints];
+//    [self.yAxisCrosshair moveToPoint:(NSPoint){convertedPt.x, CGRectGetMinY(graphRectPtr)}];
+//    [self.yAxisCrosshair lineToPoint:(NSPoint){convertedPt.x, CGRectGetMaxY(graphRectPtr)}];
+//    
+//    NSMutableArray* crossHairHits = [NSMutableArray array];
+//    
+//    NSArray* askDepthCircles = [self.depthAskCircleBezierPathsArray copy];
+//    NSArray* bidDepthCircles = [self.depthBidCircleBezierPathsArray copy];
+//    switch (self.chartingProcedure)
+//    {
+//        case TTDepthViewChartingProcedureSampling:
+//        {
+//            NSArray* a = [askDepthCircles copy];
+//            NSArray* b = [bidDepthCircles copy];
+//            [a enumerateObjectsUsingBlock:^(NSBezierPath* obj, NSUInteger idx, BOOL *stop) {
+//                if ([obj containsPoint:convertedPt])
+//                    [crossHairHits addObject:obj];
+//            }];
+//            [b enumerateObjectsUsingBlock:^(NSBezierPath* obj, NSUInteger idx, BOOL *stop) {
+//                if ([obj containsPoint:convertedPt])
+//                    [crossHairHits addObject:obj];
+//            }];
+//            break;
+//        }
+//            
+//        case TTDepthViewChartingProcedureAllOrders:
+//        {
+//            NSArray* a = [askDepthCircles copy];
+//            NSArray* b = [bidDepthCircles copy];
+//            [a enumerateObjectsUsingBlock:^(NSBezierPath* obj, NSUInteger idx, BOOL *stop) {
+//                if ([obj containsPoint:convertedPt])
+//                    [crossHairHits addObject:obj];
+//            }];
+//            [b enumerateObjectsUsingBlock:^(NSBezierPath* obj, NSUInteger idx, BOOL *stop) {
+//                if ([obj containsPoint:convertedPt])
+//                    [crossHairHits addObject:obj];
+//            }];
+//            break;
+//        }
+//        default:
+//            break;
+//    }
+//    
+//    [self setNeedsDisplay:YES];
+//    [super mouseMoved:theEvent];
+//}
 
 -(void)cursorUpdate:(NSEvent *)event
 {
-    
+    [super cursorUpdate:event];
 }
 
 -(void)setBids:(NSArray *)bids
@@ -315,6 +310,7 @@ void drawLine(CGContextRef context, CGFloat lineWidth, CGColorRef lineColor, CGP
             [self.asksPositionValues addObject:depthPositionValue];
         }
     }
+    
     TTDepthPositionValue* maxAskDepth = [[self.asksPositionValues sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"depth" ascending:NO]]]objectAtIndex:0];
     maxAskPositionDepth = [maxAskDepth depth];
     
@@ -342,8 +338,8 @@ void drawLine(CGContextRef context, CGFloat lineWidth, CGColorRef lineColor, CGP
         
         headerRectPtr = (NSRect){depthChartLeftSideInsets, CGRectGetMaxY(graphRectPtr), CGRectGetWidth(graphRectPtr), 15};
         
-        [self setTrackingArea:[[NSTrackingArea alloc]initWithRect:graphRectPtr options:(NSTrackingMouseEnteredAndExited | NSTrackingMouseMoved+NSTrackingActiveInKeyWindow) owner:self userInfo:nil]];
-        [self addTrackingArea:_trackingArea];
+//        [self setTrackingArea:[[NSTrackingArea alloc]initWithRect:graphRectPtr options:(NSTrackingMouseEnteredAndExited | NSTrackingMouseMoved+NSTrackingActiveInKeyWindow) owner:self userInfo:nil]];
+//        [self addTrackingArea:_trackingArea];
     }
     
     return self;

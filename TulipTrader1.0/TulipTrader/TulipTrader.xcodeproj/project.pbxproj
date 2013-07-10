@@ -116,6 +116,22 @@
 		4774275D178A094200515BD1 /* AccountPreferencesViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 47742759178A094200515BD1 /* AccountPreferencesViewController.xib */; };
 		47742760178A364300515BD1 /* TTTradesWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 4774275F178A364300515BD1 /* TTTradesWindow.m */; };
 		47742761178A364300515BD1 /* TTTradesWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 4774275F178A364300515BD1 /* TTTradesWindow.m */; };
+		47742765178C6C6400515BD1 /* TTVerticalOBGraphView.m in Sources */ = {isa = PBXBuildFile; fileRef = 47742764178C6C6400515BD1 /* TTVerticalOBGraphView.m */; };
+		47742766178C6C6400515BD1 /* TTVerticalOBGraphView.m in Sources */ = {isa = PBXBuildFile; fileRef = 47742764178C6C6400515BD1 /* TTVerticalOBGraphView.m */; };
+		47742769178C95F900515BD1 /* TTVerticalPanningView.m in Sources */ = {isa = PBXBuildFile; fileRef = 47742768178C95F900515BD1 /* TTVerticalPanningView.m */; };
+		4774276A178C95F900515BD1 /* TTVerticalPanningView.m in Sources */ = {isa = PBXBuildFile; fileRef = 47742768178C95F900515BD1 /* TTVerticalPanningView.m */; };
+		4774276E178CE25900515BD1 /* TTRulerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4774276D178CE25900515BD1 /* TTRulerView.m */; };
+		4774276F178CE25900515BD1 /* TTRulerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4774276D178CE25900515BD1 /* TTRulerView.m */; };
+		47742773178D132100515BD1 /* TTAxisView.m in Sources */ = {isa = PBXBuildFile; fileRef = 47742772178D132100515BD1 /* TTAxisView.m */; };
+		47742774178D132100515BD1 /* TTAxisView.m in Sources */ = {isa = PBXBuildFile; fileRef = 47742772178D132100515BD1 /* TTAxisView.m */; };
+		47742777178D247200515BD1 /* TTAxisMarkView.m in Sources */ = {isa = PBXBuildFile; fileRef = 47742776178D247200515BD1 /* TTAxisMarkView.m */; };
+		47742778178D247200515BD1 /* TTAxisMarkView.m in Sources */ = {isa = PBXBuildFile; fileRef = 47742776178D247200515BD1 /* TTAxisMarkView.m */; };
+		4774277B178DBAE400515BD1 /* TTOrderBookView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4774277A178DBAE300515BD1 /* TTOrderBookView.m */; };
+		4774277C178DBAE400515BD1 /* TTOrderBookView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4774277A178DBAE300515BD1 /* TTOrderBookView.m */; };
+		4774277F178DBB1F00515BD1 /* TTOrderBookWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 4774277E178DBB1F00515BD1 /* TTOrderBookWindow.m */; };
+		47742780178DBB1F00515BD1 /* TTOrderBookWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 4774277E178DBB1F00515BD1 /* TTOrderBookWindow.m */; };
+		47742783178DC34200515BD1 /* TTTabBarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 47742782178DC34100515BD1 /* TTTabBarView.m */; };
+		47742784178DC34200515BD1 /* TTTabBarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 47742782178DC34100515BD1 /* TTTabBarView.m */; };
 		47BEA71E177963210020F6BE /* TTVerticalOBView.m in Sources */ = {isa = PBXBuildFile; fileRef = 47BEA71D177963210020F6BE /* TTVerticalOBView.m */; };
 		47BEA71F177963210020F6BE /* TTVerticalOBView.m in Sources */ = {isa = PBXBuildFile; fileRef = 47BEA71D177963210020F6BE /* TTVerticalOBView.m */; };
 		47BEA722177B41E10020F6BE /* TTOrderBookListView.m in Sources */ = {isa = PBXBuildFile; fileRef = 47BEA721177B41E10020F6BE /* TTOrderBookListView.m */; };
@@ -144,8 +160,6 @@
 		47D872DB1778A72C0052DB29 /* TTCurrencyController.m in Sources */ = {isa = PBXBuildFile; fileRef = 47D872D91778A72B0052DB29 /* TTCurrencyController.m */; };
 		47D872DE1778AB940052DB29 /* TTGoxCurrencyController.m in Sources */ = {isa = PBXBuildFile; fileRef = 47D872DD1778AB940052DB29 /* TTGoxCurrencyController.m */; };
 		47D872DF1778AB940052DB29 /* TTGoxCurrencyController.m in Sources */ = {isa = PBXBuildFile; fileRef = 47D872DD1778AB940052DB29 /* TTGoxCurrencyController.m */; };
-		47D872E21778C4430052DB29 /* TTOrderBookWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 47D872E11778C4430052DB29 /* TTOrderBookWindow.m */; };
-		47D872E31778C4430052DB29 /* TTOrderBookWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = 47D872E11778C4430052DB29 /* TTOrderBookWindow.m */; };
 		47D872E71778D4AD0052DB29 /* TTCurrencyBox.m in Sources */ = {isa = PBXBuildFile; fileRef = 47D872E61778D4AD0052DB29 /* TTCurrencyBox.m */; };
 		47D872E81778D4AD0052DB29 /* TTCurrencyBox.m in Sources */ = {isa = PBXBuildFile; fileRef = 47D872E61778D4AD0052DB29 /* TTCurrencyBox.m */; };
 /* End PBXBuildFile section */
@@ -285,6 +299,22 @@
 		47742759178A094200515BD1 /* AccountPreferencesViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AccountPreferencesViewController.xib; sourceTree = "<group>"; };
 		4774275E178A364300515BD1 /* TTTradesWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTTradesWindow.h; sourceTree = "<group>"; };
 		4774275F178A364300515BD1 /* TTTradesWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTTradesWindow.m; sourceTree = "<group>"; };
+		47742763178C6C6400515BD1 /* TTVerticalOBGraphView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTVerticalOBGraphView.h; sourceTree = "<group>"; };
+		47742764178C6C6400515BD1 /* TTVerticalOBGraphView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTVerticalOBGraphView.m; sourceTree = "<group>"; };
+		47742767178C95F900515BD1 /* TTVerticalPanningView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTVerticalPanningView.h; sourceTree = "<group>"; };
+		47742768178C95F900515BD1 /* TTVerticalPanningView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTVerticalPanningView.m; sourceTree = "<group>"; };
+		4774276C178CE25900515BD1 /* TTRulerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTRulerView.h; sourceTree = "<group>"; };
+		4774276D178CE25900515BD1 /* TTRulerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTRulerView.m; sourceTree = "<group>"; };
+		47742771178D132100515BD1 /* TTAxisView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTAxisView.h; sourceTree = "<group>"; };
+		47742772178D132100515BD1 /* TTAxisView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTAxisView.m; sourceTree = "<group>"; };
+		47742775178D247200515BD1 /* TTAxisMarkView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTAxisMarkView.h; sourceTree = "<group>"; };
+		47742776178D247200515BD1 /* TTAxisMarkView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTAxisMarkView.m; sourceTree = "<group>"; };
+		47742779178DBAE300515BD1 /* TTOrderBookView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTOrderBookView.h; sourceTree = "<group>"; };
+		4774277A178DBAE300515BD1 /* TTOrderBookView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTOrderBookView.m; sourceTree = "<group>"; };
+		4774277D178DBB1F00515BD1 /* TTOrderBookWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTOrderBookWindow.h; sourceTree = "<group>"; };
+		4774277E178DBB1F00515BD1 /* TTOrderBookWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTOrderBookWindow.m; sourceTree = "<group>"; };
+		47742781178DC34100515BD1 /* TTTabBarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTTabBarView.h; sourceTree = "<group>"; };
+		47742782178DC34100515BD1 /* TTTabBarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTTabBarView.m; sourceTree = "<group>"; };
 		47BEA71C177963210020F6BE /* TTVerticalOBView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTVerticalOBView.h; sourceTree = "<group>"; };
 		47BEA71D177963210020F6BE /* TTVerticalOBView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTVerticalOBView.m; sourceTree = "<group>"; };
 		47BEA720177B41E10020F6BE /* TTOrderBookListView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTOrderBookListView.h; sourceTree = "<group>"; };
@@ -311,8 +341,6 @@
 		47D872D91778A72B0052DB29 /* TTCurrencyController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTCurrencyController.m; sourceTree = "<group>"; };
 		47D872DC1778AB940052DB29 /* TTGoxCurrencyController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTGoxCurrencyController.h; sourceTree = "<group>"; };
 		47D872DD1778AB940052DB29 /* TTGoxCurrencyController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTGoxCurrencyController.m; sourceTree = "<group>"; };
-		47D872E01778C4430052DB29 /* TTOrderBookWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTOrderBookWindow.h; sourceTree = "<group>"; };
-		47D872E11778C4430052DB29 /* TTOrderBookWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTOrderBookWindow.m; sourceTree = "<group>"; };
 		47D872E51778D4AD0052DB29 /* TTCurrencyBox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTCurrencyBox.h; sourceTree = "<group>"; };
 		47D872E61778D4AD0052DB29 /* TTCurrencyBox.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTCurrencyBox.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -667,6 +695,8 @@
 		4772E2521774D99700967847 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				4774276B178CE21300515BD1 /* NSRulerView */,
+				47742762178C67D600515BD1 /* NSScrollView */,
 				47BEA7301781D2980020F6BE /* Preferences */,
 				47BEA7171779623D0020F6BE /* NSView */,
 				47D872E41778D4AD0052DB29 /* NSBox */,
@@ -679,10 +709,10 @@
 			children = (
 				47D872D41777DACC0052DB29 /* TTNewOrderBookWindow.h */,
 				47D872D51777DACC0052DB29 /* TTNewOrderBookWindow.m */,
-				47D872E01778C4430052DB29 /* TTOrderBookWindow.h */,
-				47D872E11778C4430052DB29 /* TTOrderBookWindow.m */,
 				4774275E178A364300515BD1 /* TTTradesWindow.h */,
 				4774275F178A364300515BD1 /* TTTradesWindow.m */,
+				4774277D178DBB1F00515BD1 /* TTOrderBookWindow.h */,
+				4774277E178DBB1F00515BD1 /* TTOrderBookWindow.m */,
 			);
 			path = Windows;
 			sourceTree = "<group>";
@@ -727,15 +757,51 @@
 			path = UserData;
 			sourceTree = "<group>";
 		};
+		47742762178C67D600515BD1 /* NSScrollView */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = NSScrollView;
+			sourceTree = "<group>";
+		};
+		4774276B178CE21300515BD1 /* NSRulerView */ = {
+			isa = PBXGroup;
+			children = (
+				4774276C178CE25900515BD1 /* TTRulerView.h */,
+				4774276D178CE25900515BD1 /* TTRulerView.m */,
+			);
+			path = NSRulerView;
+			sourceTree = "<group>";
+		};
+		47742770178D130200515BD1 /* Graphing */ = {
+			isa = PBXGroup;
+			children = (
+				47742771178D132100515BD1 /* TTAxisView.h */,
+				47742772178D132100515BD1 /* TTAxisView.m */,
+				47742775178D247200515BD1 /* TTAxisMarkView.h */,
+				47742776178D247200515BD1 /* TTAxisMarkView.m */,
+			);
+			path = Graphing;
+			sourceTree = "<group>";
+		};
 		47BEA7171779623D0020F6BE /* NSView */ = {
 			isa = PBXGroup;
 			children = (
+				47742770178D130200515BD1 /* Graphing */,
 				47BEA71C177963210020F6BE /* TTVerticalOBView.h */,
 				47BEA71D177963210020F6BE /* TTVerticalOBView.m */,
 				47BEA720177B41E10020F6BE /* TTOrderBookListView.h */,
 				47BEA721177B41E10020F6BE /* TTOrderBookListView.m */,
 				47BEA74017834EA40020F6BE /* TTLabelCellView.h */,
 				47BEA74117834EA40020F6BE /* TTLabelCellView.m */,
+				47742763178C6C6400515BD1 /* TTVerticalOBGraphView.h */,
+				47742764178C6C6400515BD1 /* TTVerticalOBGraphView.m */,
+				47742767178C95F900515BD1 /* TTVerticalPanningView.h */,
+				47742768178C95F900515BD1 /* TTVerticalPanningView.m */,
+				47742779178DBAE300515BD1 /* TTOrderBookView.h */,
+				4774277A178DBAE300515BD1 /* TTOrderBookView.m */,
+				47742781178DC34100515BD1 /* TTTabBarView.h */,
+				47742782178DC34100515BD1 /* TTTabBarView.m */,
 			);
 			path = NSView;
 			sourceTree = "<group>";
@@ -948,7 +1014,6 @@
 				47D872D61777DACC0052DB29 /* TTNewOrderBookWindow.m in Sources */,
 				47D872DA1778A72C0052DB29 /* TTCurrencyController.m in Sources */,
 				47D872DE1778AB940052DB29 /* TTGoxCurrencyController.m in Sources */,
-				47D872E21778C4430052DB29 /* TTOrderBookWindow.m in Sources */,
 				47D872E71778D4AD0052DB29 /* TTCurrencyBox.m in Sources */,
 				47BEA71E177963210020F6BE /* TTVerticalOBView.m in Sources */,
 				47BEA722177B41E10020F6BE /* TTOrderBookListView.m in Sources */,
@@ -960,6 +1025,14 @@
 				47BEA74B1784D4C00020F6BE /* TTTrade.m in Sources */,
 				4774275A178A094200515BD1 /* AccountPreferencesViewController.m in Sources */,
 				47742760178A364300515BD1 /* TTTradesWindow.m in Sources */,
+				47742765178C6C6400515BD1 /* TTVerticalOBGraphView.m in Sources */,
+				47742769178C95F900515BD1 /* TTVerticalPanningView.m in Sources */,
+				4774276E178CE25900515BD1 /* TTRulerView.m in Sources */,
+				47742773178D132100515BD1 /* TTAxisView.m in Sources */,
+				47742777178D247200515BD1 /* TTAxisMarkView.m in Sources */,
+				4774277B178DBAE400515BD1 /* TTOrderBookView.m in Sources */,
+				4774277F178DBB1F00515BD1 /* TTOrderBookWindow.m in Sources */,
+				47742783178DC34200515BD1 /* TTTabBarView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1008,7 +1081,6 @@
 				47D872D71777DACC0052DB29 /* TTNewOrderBookWindow.m in Sources */,
 				47D872DB1778A72C0052DB29 /* TTCurrencyController.m in Sources */,
 				47D872DF1778AB940052DB29 /* TTGoxCurrencyController.m in Sources */,
-				47D872E31778C4430052DB29 /* TTOrderBookWindow.m in Sources */,
 				47D872E81778D4AD0052DB29 /* TTCurrencyBox.m in Sources */,
 				47BEA71F177963210020F6BE /* TTVerticalOBView.m in Sources */,
 				47BEA723177B41E10020F6BE /* TTOrderBookListView.m in Sources */,
@@ -1020,6 +1092,14 @@
 				47BEA74C1784D4C00020F6BE /* TTTrade.m in Sources */,
 				4774275B178A094200515BD1 /* AccountPreferencesViewController.m in Sources */,
 				47742761178A364300515BD1 /* TTTradesWindow.m in Sources */,
+				47742766178C6C6400515BD1 /* TTVerticalOBGraphView.m in Sources */,
+				4774276A178C95F900515BD1 /* TTVerticalPanningView.m in Sources */,
+				4774276F178CE25900515BD1 /* TTRulerView.m in Sources */,
+				47742774178D132100515BD1 /* TTAxisView.m in Sources */,
+				47742778178D247200515BD1 /* TTAxisMarkView.m in Sources */,
+				4774277C178DBAE400515BD1 /* TTOrderBookView.m in Sources */,
+				47742780178DBB1F00515BD1 /* TTOrderBookWindow.m in Sources */,
+				47742784178DC34200515BD1 /* TTTabBarView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

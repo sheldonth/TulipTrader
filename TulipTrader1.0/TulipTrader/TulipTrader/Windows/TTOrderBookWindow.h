@@ -2,19 +2,16 @@
 //  TTOrderBookWindow.h
 //  TulipTrader
 //
-//  Created by Sheldon Thomas on 6/24/13.
+//  Created by Sheldon Thomas on 7/10/13.
 //  Copyright (c) 2013 Sheldon Thomas. All rights reserved.
 //
 
 #import <Cocoa/Cocoa.h>
-#import "TTOrderBook.h"
 #import "TTCurrency.h"
+#import "TTTabBarView.h"
 
-@interface TTOrderBookWindow : NSWindow <TTOrderBookDelegate>
+@interface TTOrderBookWindow : NSWindow <TTTabBarViewSelectionDelegate>
 
-@property(nonatomic, retain)TTOrderBook*orderBook;
-@property(nonatomic, readonly)TTCurrency currency;
-
--(id)initWithContentRect:(NSRect)contentRect styleMask:(NSUInteger)aStyle backing:(NSBackingStoreType)bufferingType defer:(BOOL)flag currency:(TTCurrency)currency;
+-(id)initWithContentRect:(NSRect)contentRect styleMask:(NSUInteger)aStyle backing:(NSBackingStoreType)bufferingType defer:(BOOL)flag currencies:(NSArray*)currencies;
 
 @end

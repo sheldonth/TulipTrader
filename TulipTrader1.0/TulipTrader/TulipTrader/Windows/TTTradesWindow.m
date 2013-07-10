@@ -29,45 +29,46 @@
 
 -(void)addTrade:(TTTrade *)trade
 {
-    NSMutableArray* tradesCpy = [self.trades mutableCopy];
-    [tradesCpy addObject:trade];
-    NSInteger indexOfUpdate;
-    switch (self.indexOfSelectedColumn) {
-        case 0:
-        {
-            [self setTrades:[tradesCpy sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"date" ascending:self.ascending]]]];
-            indexOfUpdate = [self.trades indexOfObject:trade];
-            break;
-         
+        NSMutableArray* tradesCpy = [self.trades mutableCopy];
+        [tradesCpy addObject:trade];
+        NSSortDescriptor* s = nil;
+
+        switch (self.indexOfSelectedColumn) {
+            case 0:
+            {
+                s = [NSSortDescriptor sortDescriptorWithKey:@"date" ascending:self.ascending];
+                break;
+            }
+                
+            case 1:
+            {
+                s = [NSSortDescriptor sortDescriptorWithKey:@"currency" ascending:self.ascending];
+                break;
+            }
+                
+            case 2:
+            {
+                s = [NSSortDescriptor sortDescriptorWithKey:@"price" ascending:self.ascending];
+                break;
+            }
+                
+            case 3:
+            {
+                s = [NSSortDescriptor sortDescriptorWithKey:@"amount" ascending:self.ascending];
+                break;
+            }
+                
+            default:
+                break;
         }
-        case 1:
+        if (s)
         {
-            [self setTrades:[tradesCpy sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"currency" ascending:self.ascending]]]];
-            indexOfUpdate = [self.trades indexOfObject:trade];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self setTrades:[tradesCpy sortedArrayUsingDescriptors:@[s]]];
+                NSInteger indexOfUpdate = [self.trades indexOfObject:trade];
+                [self.tableView insertRowsAtIndexes:[NSIndexSet indexSetWithIndex:indexOfUpdate] withAnimation:NSTableViewAnimationSlideDown];
+            });
         }
-            
-        case 2:
-        {
-            [self setTrades:[tradesCpy sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"price" ascending:self.ascending]]]];
-            indexOfUpdate = [self.trades indexOfObject:trade];
-        }
-            
-        case 3:
-        {
-            [self setTrades:[tradesCpy sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"amount" ascending:self.ascending]]]];
-            indexOfUpdate = [self.trades indexOfObject:trade];
-        }
-            
-        default:
-            indexOfUpdate = -1;
-            break;
-    }
-    if (indexOfUpdate >= 0)
-    {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self.tableView insertRowsAtIndexes:[NSIndexSet indexSetWithIndex:indexOfUpdate] withAnimation:NSTableViewAnimationSlideDown];
-        });
-    }
 }
 
 -(void)tableView:(NSTableView *)tableView sortDescriptorsDidChange:(NSArray *)oldDescriptors
@@ -90,80 +91,47 @@
 -(void)tableView:(NSTableView *)tableView didClickTableColumn:(NSTableColumn *)tableColumn
 {
     NSInteger index = [self.columnArray indexOfObject:tableColumn];
+    NSString* columnSortDescriptorKey;
     switch (index) {
         case 0:
-            if (self.indexOfSelectedColumn == index)
-            {
-                self.ascending ? [self.tableView setIndicatorImage:[NSImage imageNamed:@"NSDescendingSortIndicator"] inTableColumn:tableColumn] : [self.tableView setIndicatorImage:[NSImage imageNamed:@"NSAscendingSortIndicator"] inTableColumn:tableColumn];
-                [self setAscending:!self.ascending];
-            }
-            else
-            {
-                [self clearTableColumnSelectionsForTableView:tableView];
-                [self.tableView setIndicatorImage:[NSImage imageNamed:@"NSDescendingSortIndicator"] inTableColumn:tableColumn];
-                [self setAscending:NO];
-                [self setIndexOfSelectedColumn:index];
-            }
-            [self setTrades:[self.trades sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"date" ascending:self.ascending]]]];
+            columnSortDescriptorKey = @"date";
             break;
         
         case 1:
-            if (self.indexOfSelectedColumn == index)
-            {
-                self.ascending ? [self.tableView setIndicatorImage:[NSImage imageNamed:@"NSDescendingSortIndicator"] inTableColumn:tableColumn] : [self.tableView setIndicatorImage:[NSImage imageNamed:@"NSAscendingSortIndicator"] inTableColumn:tableColumn];
-                [self setAscending:!self.ascending];
-            }
-            else
-            {
-                [self clearTableColumnSelectionsForTableView:tableView];
-                [self.tableView setIndicatorImage:[NSImage imageNamed:@"NSDescendingSortIndicator"] inTableColumn:tableColumn];
-                [self setAscending:NO];
-                [self setIndexOfSelectedColumn:index];
-            }
-            [self setTrades:[self.trades sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"currency" ascending:self.ascending]]]];
+            columnSortDescriptorKey = @"currency";
             break;
             
         case 2:
-            if (self.indexOfSelectedColumn == index)
-            {
-                self.ascending ? [self.tableView setIndicatorImage:[NSImage imageNamed:@"NSDescendingSortIndicator"] inTableColumn:tableColumn] : [self.tableView setIndicatorImage:[NSImage imageNamed:@"NSAscendingSortIndicator"] inTableColumn:tableColumn];
-                [self setAscending:!self.ascending];
-            }
-            else
-            {
-                [self clearTableColumnSelectionsForTableView:tableView];
-                [self.tableView setIndicatorImage:[NSImage imageNamed:@"NSDescendingSortIndicator"] inTableColumn:tableColumn];
-                [self setAscending:NO];
-                [self setIndexOfSelectedColumn:index];
-            }
-            [self setTrades:[self.trades sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"price" ascending:self.ascending]]]];
+            columnSortDescriptorKey = @"price";
             break;
             
         case 3:
-            if (self.indexOfSelectedColumn == index)
-            {
-                self.ascending ? [self.tableView setIndicatorImage:[NSImage imageNamed:@"NSDescendingSortIndicator"] inTableColumn:tableColumn] : [self.tableView setIndicatorImage:[NSImage imageNamed:@"NSAscendingSortIndicator"] inTableColumn:tableColumn];
-                [self setAscending:!self.ascending];
-            }
-            else
-            {
-                [self clearTableColumnSelectionsForTableView:tableView];
-                [self.tableView setIndicatorImage:[NSImage imageNamed:@"NSDescendingSortIndicator"] inTableColumn:tableColumn];
-                [self setAscending:NO];
-                [self setIndexOfSelectedColumn:index];
-            }
-            [self setTrades:[self.trades sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"amount" ascending:self.ascending]]]];
-            break;
-            
-        case 4:
-            return;
+            columnSortDescriptorKey = @"amount";
             break;
             
         default:
-            return;
+            columnSortDescriptorKey = nil;
             break;
     }
-    [self.tableView reloadData];
+    if (columnSortDescriptorKey)
+    {
+        if (self.indexOfSelectedColumn == index)
+        {
+            self.ascending ? [self.tableView setIndicatorImage:[NSImage imageNamed:@"NSDescendingSortIndicator"] inTableColumn:tableColumn] : [self.tableView setIndicatorImage:[NSImage imageNamed:@"NSAscendingSortIndicator"] inTableColumn:tableColumn];
+            [self setAscending:!self.ascending];
+        }
+        else
+        {
+            [self clearTableColumnSelectionsForTableView:tableView];
+            [self.tableView setIndicatorImage:[NSImage imageNamed:@"NSDescendingSortIndicator"] inTableColumn:tableColumn];
+            [self setAscending:NO];
+            [self setIndexOfSelectedColumn:index];
+        }
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self setTrades:[self.trades sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:columnSortDescriptorKey ascending:self.ascending]]]];
+            [self.tableView reloadData];
+        });
+    }
 }
 
 -(CGFloat)tableView:(NSTableView *)tableView heightOfRow:(NSInteger)row
@@ -214,6 +182,7 @@
             [cellView setValueString:RUStringWithFormat(@"%@%.2f", currencySymbolStringFromCurrency(currencyFromNumber(trade.currency)), tradeVal)];
             break;
         }
+            
         case 5:
         {
             switch (trade.trade_type) {
@@ -232,6 +201,34 @@
                 default:
                     break;
             }
+            break;
+        }
+            
+        case 6:
+        {
+            if (self.indexOfSelectedColumn == 0)
+            {
+                __block double sum = 0;
+                __block double count = 0;
+                
+                [self.trades enumerateObjectsUsingBlock:^(TTTrade* obj, NSUInteger idx, BOOL *stop) {
+                    if (obj.trade_type != trade.trade_type)
+                    {
+                        *stop = YES;
+                    }
+                    else
+                    {
+                        sum = sum + obj.amount.doubleValue;
+                        count++;
+                    }
+                }];
+                [cellView setValueString:RUStringWithFormat(@"%.1f", sum)];
+            }
+            else
+            {
+                [cellView setValueString:@"--"];
+            }
+            break;
         }
             
 
@@ -255,11 +252,12 @@
         
         [timeFormatter setDateFormat:@"hh:mm:ss"];
         
-        _columnTitleArray = @[@"Time", @"Currency", @"Price", @"Volume", @"Eq. Value", @"Trade Type"];
+        _columnTitleArray = @[@"Time", @"Currency", @"Price", @"Volume", @"Eq. Value", @"Trade Type", @"Trend"];
         _columnArray = [NSMutableArray array];
         
         _scrollView = [[NSScrollView alloc]initWithFrame:(NSRect){0, 0, CGRectGetWidth([self.contentView frame]), CGRectGetHeight([self.contentView frame])}];
         [_scrollView setHasVerticalScroller:YES];
+        [_scrollView setAutoresizingMask:NSViewWidthSizable | NSViewHeightSizable];
         
         _tableView = [[NSTableView alloc]initWithFrame:(NSRect){0, 0, CGRectGetWidth([self.contentView frame]), CGRectGetHeight([self.contentView frame])}];
         [_tableView setDataSource:self];
@@ -270,6 +268,7 @@
         [_tableView setAllowsColumnResizing:YES];
         [_tableView setAllowsExpansionToolTips:YES];
         [_tableView setAllowsMultipleSelection:YES];
+        [_tableView setAutoresizingMask:NSViewWidthSizable | NSViewHeightSizable];
         
         CGFloat columnWidth = floorf(CGRectGetWidth([self.contentView frame]) / (float)self.columnTitleArray.count);
         

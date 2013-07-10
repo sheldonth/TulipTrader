@@ -31,6 +31,13 @@ typedef enum{
 
 @end
 
+#define depthChartBottomInset 0.f
+#define depthChartTopInset 0.f
+#define depthChartLeftSideInsets 35.f
+#define depthChartRightSideInsets 35.f
+#define leadingElementsToDrawBlack 3
+#define numberOfDepthSamples 50
+
 @interface TTVerticalOBView : NSView
 
 // The entire corresponding side of the order book as the TTOrderBook Object believes it to be

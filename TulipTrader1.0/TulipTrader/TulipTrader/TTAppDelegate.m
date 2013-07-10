@@ -70,10 +70,9 @@ NSString *const kFocusedAdvancedControlIndex = @"FocusedAdvancedControlIndex";
 -(void)didFinishSelectionForWindow:(TTNewOrderBookWindow *)window currencies:(NSArray *)currencies
 {
     [window close];
-    TTCurrency c = currencyFromString([currencies objectAtIndex:0]);
     NSScreen* mainScreen = [NSScreen mainScreen];
     NSRect orderBookWindowRect = (NSRect){0, 0, floorf((CGRectGetWidth(mainScreen.frame) * 3) / 4), CGRectGetHeight(mainScreen.frame) - 45};
-    TTOrderBookWindow* orderBookWindow = [[TTOrderBookWindow alloc]initWithContentRect:orderBookWindowRect styleMask:(NSTitledWindowMask | NSClosableWindowMask | NSMiniaturizableWindowMask | NSResizableWindowMask) backing:NSBackingStoreBuffered defer:YES currency:c];
+    TTOrderBookWindow* orderBookWindow = [[TTOrderBookWindow alloc]initWithContentRect:orderBookWindowRect styleMask:(NSTitledWindowMask | NSClosableWindowMask | NSMiniaturizableWindowMask | NSResizableWindowMask) backing:NSBackingStoreBuffered defer:YES currencies:currencies];
     if (!self.orderBookWindows)
         [self setOrderBookWindows:[NSMutableArray array]];
     [self.orderBookWindows addObject:orderBookWindow];

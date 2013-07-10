@@ -344,14 +344,21 @@ TTDepthUpdate* updateObjectAfterRemovingDepthOrder(NSArray* array, TTDepthOrder*
         [self.eventDelegate orderBook:self hasNewConnectionState:TTOrderBookConnectionStateSocketUnavailable];
     
     [self.httpController getDepthForCurrency:self.currency withCompletion:^(NSArray *bids, NSArray *asks, NSDictionary *maxMinTicks) {
+        
         _bids = bids;
+        
         _asks = asks;
+        
         TTDepthUpdate* bidUpdate = [TTDepthUpdate new];
+        
         [bidUpdate setUpdateType:(TTDepthOrderUpdateTypeNone)];
+        
         [bidUpdate setUpdateArrayPointer:_bids];
         
         TTDepthUpdate* askUpdate = [TTDepthUpdate new];
+        
         [askUpdate setUpdateType:(TTDepthOrderUpdateTypeNone)];
+        
         [askUpdate setUpdateArrayPointer:_asks];
         
         [self.delegate orderBook:self hasNewDepthUpdate:bidUpdate orderBookSide:(TTOrderBookSideBid)];
