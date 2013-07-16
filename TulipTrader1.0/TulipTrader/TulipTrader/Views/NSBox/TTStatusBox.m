@@ -22,9 +22,6 @@
 @property(nonatomic, retain)NSString* labelingGroup1Text;
 @property(nonatomic) CGFloat labelingGroup1Width;
 @property(nonatomic, retain) NSMutableDictionary* labelingProperties1Dictionary;
-@property(nonatomic, retain)NSString* labelingGround2Text;
-@property(nonatomic) CGFloat labelingGroup2Width;
-@property(nonatomic, retain) NSMutableDictionary* labelingProperties2Dictionary;
 
 @property(nonatomic, retain)NSMutableArray* broadcastTrades;
 @property(nonatomic, retain)JNWLabel* fadingDepthEventLabel;
@@ -243,6 +240,14 @@ NSString* englishNounForDepthOrderType(TTDepthOrderType type)
     [self setNeedsDisplay:YES];
 }
 
+-(void)setFrame:(NSRect)frameRect
+{
+    [super setFrame:frameRect];
+    [self setLabelingGroup1Width:floorf(CGRectGetWidth(frameRect) / 8)];
+    [_fadingTradeEventLabel setFrame:(NSRect){_labelingGroup1Width, 0, _labelingGroup1Width * 4, CGRectGetHeight([self.contentView frame])}];
+    [_fadingDepthEventLabel setFrame:(NSRect){CGRectGetMaxX(self.fadingTradeEventLabel.frame), 0, _labelingGroup1Width * 3, CGRectGetHeight([self.contentView frame])}];
+}
+
 - (id)initWithFrame:(NSRect)frame
 {
     self = [super initWithFrame:frame];
@@ -254,19 +259,16 @@ NSString* englishNounForDepthOrderType(TTDepthOrderType type)
         [self setBorderWidth:2.f];
         [self setBorderColor:[NSColor lightGrayColor]];
         
-        [self setLabelingGroup1Width:floorf(CGRectGetWidth(frame) / 8)];
-        
         NSMutableParagraphStyle *style = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
         [style setAlignment:NSCenterTextAlignment];
         _labelingProperties1Dictionary = [NSMutableDictionary dictionaryWithDictionary:@{NSParagraphStyleAttributeName : style, NSFontAttributeName : statusBarFont}];
-        _labelingProperties2Dictionary = [NSMutableDictionary dictionaryWithDictionary:@{NSParagraphStyleAttributeName : style, NSFontAttributeName : statusBarFont}];
         
-        [self setFadingTradeEventLabel:[[JNWLabel alloc]initWithFrame:(NSRect){_labelingGroup1Width, 0, _labelingGroup1Width * 4, CGRectGetHeight([self.contentView frame])}]];
+        [self setFadingTradeEventLabel:[[JNWLabel alloc]initWithFrame:NSZeroRect]];
         [self.fadingTradeEventLabel setTextAlignment:NSCenterTextAlignment];
         [self.fadingTradeEventLabel setFont:statusBarFont];
         [self addSubview:_fadingTradeEventLabel];
         
-        [self setFadingDepthEventLabel:[[JNWLabel alloc]initWithFrame:(NSRect){CGRectGetMaxX(self.fadingTradeEventLabel.frame), 0, _labelingGroup1Width * 3, CGRectGetHeight([self.contentView frame])}]];
+        [self setFadingDepthEventLabel:[[JNWLabel alloc]initWithFrame:NSZeroRect]];
         [self.fadingDepthEventLabel setTextAlignment:NSCenterTextAlignment];
         [self.fadingDepthEventLabel setFont:statusBarFont];
         [self addSubview:_fadingDepthEventLabel];
@@ -290,6 +292,7 @@ NSString* englishNounForDepthOrderType(TTDepthOrderType type)
     [super drawRect:dirtyRect];
     
     [self.labelingGroup1Text drawInRect:(NSRect){0, 0, _labelingGroup1Width, CGRectGetHeight(self.frame) - 2} withAttributes:self.labelingProperties1Dictionary];
+    
     NSBezierPath* bp = [NSBezierPath bezierPath];
     [bp moveToPoint:(NSPoint){_labelingGroup1Width, 0}];
     [bp lineToPoint:(NSPoint){_labelingGroup1Width, CGRectGetHeight(self.frame)}];

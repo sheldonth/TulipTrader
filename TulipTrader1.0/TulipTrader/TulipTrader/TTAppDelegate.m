@@ -13,12 +13,17 @@
 #import "GeneralPreferencesViewController.h"
 #import "RulesPreferencesViewController.h"
 #import "AccountPreferencesViewController.h"
+#import "TTBrowser.h"
+#import "CTBrowserWindowController.h"
+#import "RUConstants.h"
+#import "TTAccountWindow.h"
 
 @interface TTAppDelegate()
 
-@property(nonatomic, retain)NSMutableArray* orderBookWindows;
 @property(nonatomic, retain)TTNewOrderBookWindow* orderBookWindow;
 @property(nonatomic, retain)MASPreferencesWindowController* preferencesWindowController;
+@property(nonatomic, retain)TTBrowser* browser;
+@property(nonatomic, retain)TTAccountWindow* accountWindow;
 
 @end
 
@@ -65,18 +70,38 @@ NSString *const kFocusedAdvancedControlIndex = @"FocusedAdvancedControlIndex";
     [self.preferencesWindowController showWindow:nil];
 }
 
+-(void)showAccount
+{
+    NSRect browserRect = [self.browser.windowController.window frame];
+    CGFloat browserHorizontalSize = browserRect.origin.x + browserRect.size.width;
+    CGFloat screenWidth = [[NSScreen mainScreen]frame].size.width;
+    [self setAccountWindow:[[TTAccountWindow alloc]initWithContentRect:(NSRect){browserHorizontalSize, 0, screenWidth - browserHorizontalSize, browserRect.size.height} styleMask:(NSTitledWindowMask | NSClosableWindowMask | NSMiniaturizableWindowMask | NSResizableWindowMask) backing:NSBackingStoreBuffered defer:YES]];
+    [self.accountWindow setTitle:@"Account"];
+    [self.accountWindow setOrderbook:self.browser.orderBook];
+    [self.accountWindow setAnimationBehavior:NSWindowAnimationBehaviorDocumentWindow];
+    [self.accountWindow makeKeyAndOrderFront:self];
+}
+
+-(void)showBrowser
+{
+    [self setBrowser:[[TTBrowser alloc]initWithCurrencies:nil]];
+    [_browser setWindowController:[[CTBrowserWindowController alloc]initWithBrowser:_browser]];
+    [_browser addBlankTabInForeground:YES];
+    [self.browser.windowController showWindow:self];
+}
+
 #pragma mark - TTNewOrderBookWindowDelegate
 
 -(void)didFinishSelectionForWindow:(TTNewOrderBookWindow *)window currencies:(NSArray *)currencies
 {
     [window close];
-    NSScreen* mainScreen = [NSScreen mainScreen];
-    NSRect orderBookWindowRect = (NSRect){0, 0, floorf((CGRectGetWidth(mainScreen.frame) * 3) / 4), CGRectGetHeight(mainScreen.frame) - 45};
-    TTOrderBookWindow* orderBookWindow = [[TTOrderBookWindow alloc]initWithContentRect:orderBookWindowRect styleMask:(NSTitledWindowMask | NSClosableWindowMask | NSMiniaturizableWindowMask | NSResizableWindowMask) backing:NSBackingStoreBuffered defer:YES currencies:currencies];
-    if (!self.orderBookWindows)
-        [self setOrderBookWindows:[NSMutableArray array]];
-    [self.orderBookWindows addObject:orderBookWindow];
-    [orderBookWindow makeKeyAndOrderFront:self];
+//    NSScreen* mainScreen = [NSScreen mainScreen];
+//    NSRect orderBookWindowRect = (NSRect){0, 0, floorf((CGRectGetWidth(mainScreen.frame) * 3) / 4), CGRectGetHeight(mainScreen.frame) - 45};
+//    TTOrderBookWindow* orderBookWindow = [[TTOrderBookWindow alloc]initWithContentRect:orderBookWindowRect styleMask:(NSTitledWindowMask | NSClosableWindowMask | NSMiniaturizableWindowMask | NSResizableWindowMask) backing:NSBackingStoreBuffered defer:YES currencies:currencies];
+//    if (!self.orderBookWindows)
+//        [self setOrderBookWindows:[NSMutableArray array]];
+//    [self.orderBookWindows addObject:orderBookWindow];
+//    [orderBookWindow makeKeyAndOrderFront:self];
 }
 
 #pragma mark - Private Methods
@@ -96,7 +121,8 @@ NSString *const kFocusedAdvancedControlIndex = @"FocusedAdvancedControlIndex";
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {
-    [self presentCurrencySelectionScreen];
+    [self showBrowser];
+    [self showAccount];
 }
 
 // Returns the directory the application uses to store the Core Data store file. This code uses a directory named "net.tuliptrader.TulipTrader" in the user's Application Support directory.

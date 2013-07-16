@@ -93,6 +93,30 @@ NSString* stringForTick(TTTick* tick)
     [self.orderBookTitleLabel setText:self.orderBookPtr.title];
 }
 
+-(void)setFrame:(NSRect)frameRect
+{
+    [super setFrame:frameRect];
+    NSRect contentViewFrame = [(NSView*)self.contentView frame];
+    CGFloat tickerElementWidth = floorf(CGRectGetWidth(contentViewFrame) / 10);
+    [_orderBookTitleLabel setFrame:(NSRect){0, 0, tickerElementWidth * 2, CGRectGetHeight(contentViewFrame) - 10}];
+    [_lastLabel setFrame:(NSRect){CGRectGetMaxX(self.orderBookTitleLabel.frame), CGRectGetHeight(contentViewFrame) - valueLabelHeight, tickerElementWidth, valueLabelHeight}];
+    [_lastValueLabel setFrame:(NSRect){CGRectGetMaxX(self.orderBookTitleLabel.frame), 0, tickerElementWidth, valueHeight}];
+    [_buyLabel setFrame:(NSRect){CGRectGetMaxX(_lastLabel.frame), CGRectGetHeight(contentViewFrame) - valueLabelHeight, tickerElementWidth, valueLabelHeight}];
+    [_buyValueLabel setFrame:(NSRect){CGRectGetMaxX(_lastLabel.frame), 0, tickerElementWidth, valueHeight}];
+    [_sellLabel setFrame:(NSRect){CGRectGetMaxX(_buyLabel.frame), CGRectGetHeight(contentViewFrame) - valueLabelHeight, tickerElementWidth, valueLabelHeight}];
+    [_sellValueLabel setFrame:(NSRect){CGRectGetMaxX(_buyLabel.frame), 0, tickerElementWidth, valueHeight}];
+    [_highLabel setFrame:(NSRect){CGRectGetMaxX(_sellLabel.frame), CGRectGetHeight(contentViewFrame) - valueLabelHeight, tickerElementWidth, valueLabelHeight}];
+    [_highValueLabel setFrame:(NSRect){CGRectGetMaxX(_sellLabel.frame), 0, tickerElementWidth, valueHeight}];
+    [_lowLabel setFrame:(NSRect){CGRectGetMaxX(_highLabel.frame), CGRectGetHeight(contentViewFrame) - valueLabelHeight, tickerElementWidth, valueLabelHeight}];
+    [_lowValueLabel setFrame:(NSRect){CGRectGetMaxX(_highLabel.frame), 0, tickerElementWidth, valueHeight}];
+    [_volumeLabel setFrame:(NSRect){CGRectGetMaxX(_lowLabel.frame), CGRectGetHeight(contentViewFrame) - valueLabelHeight, tickerElementWidth, valueLabelHeight}];
+    [_volumeValueLabel setFrame:(NSRect){CGRectGetMaxX(_lowLabel.frame), 0, tickerElementWidth, valueHeight}];
+    [_vwapLabel setFrame:(NSRect){CGRectGetMaxX(_volumeLabel.frame), CGRectGetHeight(contentViewFrame) - valueLabelHeight, tickerElementWidth, valueLabelHeight}];
+    [_vwapValueLabel setFrame:(NSRect){CGRectGetMaxX(_volumeLabel.frame), 0, tickerElementWidth, valueHeight}];
+    [_averageLabel setFrame:(NSRect){CGRectGetMaxX(_vwapLabel.frame), CGRectGetHeight(contentViewFrame) - valueLabelHeight, tickerElementWidth, valueLabelHeight}];
+    [_averageValueLabel setFrame:(NSRect){CGRectGetMaxX(_vwapLabel.frame), 0, tickerElementWidth, valueHeight}];
+}
+
 - (id)initWithFrame:(NSRect)frame
 {
     self = [super initWithFrame:frame];
@@ -107,105 +131,104 @@ NSString* stringForTick(TTTick* tick)
         [self setTitlePosition:NSNoTitle];
         
         NSRect contentViewFrame = [(NSView*)self.contentView frame];
-        CGFloat tickerElementWidth = floorf(CGRectGetWidth(contentViewFrame) / 10);
         NSString* defaultValueLabel = RUStringWithFormat(@"---.-----");
         
-        [self setOrderBookTitleLabel:[[JNWLabel alloc]initWithFrame:(NSRect){0, 0, tickerElementWidth * 2, CGRectGetHeight(contentViewFrame) - 10}]];
+        [self setOrderBookTitleLabel:[[JNWLabel alloc]initWithFrame:NSZeroRect]];
         [self.orderBookTitleLabel setFont:titleFont];
         [self.orderBookTitleLabel setTextAlignment:NSCenterTextAlignment];
         [self.contentView addSubview:self.orderBookTitleLabel];
         
-        [self setLastLabel:[[JNWLabel alloc]initWithFrame:(NSRect){CGRectGetMaxX(self.orderBookTitleLabel.frame), CGRectGetHeight(contentViewFrame) - valueLabelHeight, tickerElementWidth, valueLabelHeight}]];
+        [self setLastLabel:[[JNWLabel alloc]initWithFrame:NSZeroRect]];
         [_lastLabel setFont:valueLabelFont];
         [_lastLabel setTextAlignment:NSCenterTextAlignment];
         [_lastLabel setText:@"LAST"];
         [self.contentView addSubview:self.lastLabel];
         
-        [self setLastValueLabel:[[JNWLabel alloc]initWithFrame:(NSRect){CGRectGetMaxX(self.orderBookTitleLabel.frame), 0, tickerElementWidth, valueHeight}]];
+        [self setLastValueLabel:[[JNWLabel alloc]initWithFrame:NSZeroRect]];
         [_lastValueLabel setFont:valueFont];
         [_lastValueLabel setText:defaultValueLabel];
         [_lastValueLabel setTextAlignment:NSCenterTextAlignment];
         [self.contentView addSubview:self.lastValueLabel];
         
-        [self setBuyLabel:[[JNWLabel alloc]initWithFrame:(NSRect){CGRectGetMaxX(_lastLabel.frame), CGRectGetHeight(contentViewFrame) - valueLabelHeight, tickerElementWidth, valueLabelHeight}]];
+        [self setBuyLabel:[[JNWLabel alloc]initWithFrame:NSZeroRect]];
         [_buyLabel setFont:valueLabelFont];
         [_buyLabel setTextAlignment:NSCenterTextAlignment];
         [_buyLabel setText:@"BUY"];
         [self.contentView addSubview:_buyLabel];
         
-        [self setBuyValueLabel:[[JNWLabel alloc]initWithFrame:(NSRect){CGRectGetMaxX(_lastLabel.frame), 0, tickerElementWidth, valueHeight}]];
+        [self setBuyValueLabel:[[JNWLabel alloc]initWithFrame:NSZeroRect]];
         [_buyValueLabel setFont:valueFont];
         [_buyValueLabel setTextAlignment:NSCenterTextAlignment];
         [_buyValueLabel setText:defaultValueLabel];
         [self.contentView addSubview:_buyValueLabel];
         
-        [self setSellLabel:[[JNWLabel alloc]initWithFrame:(NSRect){CGRectGetMaxX(_buyLabel.frame), CGRectGetHeight(contentViewFrame) - valueLabelHeight, tickerElementWidth, valueLabelHeight}]];
+        [self setSellLabel:[[JNWLabel alloc]initWithFrame:NSZeroRect]];
         [_sellLabel setFont:valueLabelFont];
         [_sellLabel setTextAlignment:NSCenterTextAlignment];
         [_sellLabel setText:@"SELL"];
         [self.contentView addSubview:_sellLabel];
         
-        [self setSellValueLabel:[[JNWLabel alloc]initWithFrame:(NSRect){CGRectGetMaxX(_buyLabel.frame), 0, tickerElementWidth, valueHeight}]];
+        [self setSellValueLabel:[[JNWLabel alloc]initWithFrame:NSZeroRect]];
         [_sellValueLabel setTextAlignment:NSCenterTextAlignment];
         [_sellValueLabel setFont:valueFont];
         [_sellValueLabel setText:defaultValueLabel];
         [self.contentView addSubview:_sellValueLabel];
         
-        [self setHighLabel:[[JNWLabel alloc]initWithFrame:(NSRect){CGRectGetMaxX(_sellLabel.frame), CGRectGetHeight(contentViewFrame) - valueLabelHeight, tickerElementWidth, valueLabelHeight}]];
+        [self setHighLabel:[[JNWLabel alloc]initWithFrame:NSZeroRect]];
         [_highLabel setTextAlignment:NSCenterTextAlignment];
         [_highLabel setFont:valueLabelFont];
         [_highLabel setText:@"HIGH"];
         [self.contentView addSubview:_highLabel];
         
-        [self setHighValueLabel:[[JNWLabel alloc]initWithFrame:(NSRect){CGRectGetMaxX(_sellLabel.frame), 0, tickerElementWidth, valueHeight}]];
+        [self setHighValueLabel:[[JNWLabel alloc]initWithFrame:NSZeroRect]];
         [_highValueLabel setTextAlignment:NSCenterTextAlignment];
         [_highValueLabel setFont:valueFont];
         [_highValueLabel setText:defaultValueLabel];
         [self.contentView addSubview:_highValueLabel];
         
-        [self setLowLabel:[[JNWLabel alloc]initWithFrame:(NSRect){CGRectGetMaxX(_highLabel.frame), CGRectGetHeight(contentViewFrame) - valueLabelHeight, tickerElementWidth, valueLabelHeight}]];
+        [self setLowLabel:[[JNWLabel alloc]initWithFrame:NSZeroRect]];
         [_lowLabel setTextAlignment:NSCenterTextAlignment];
         [_lowLabel setFont:valueLabelFont];
         [_lowLabel setText:@"LOW"];
         [self.contentView addSubview:_lowLabel];
 
-        [self setLowValueLabel:[[JNWLabel alloc]initWithFrame:(NSRect){CGRectGetMaxX(_highLabel.frame), 0, tickerElementWidth, valueHeight}]];
+        [self setLowValueLabel:[[JNWLabel alloc]initWithFrame:NSZeroRect]];
         [_lowValueLabel setTextAlignment:NSCenterTextAlignment];
         [_lowValueLabel setFont:valueFont];
         [_lowValueLabel setText:defaultValueLabel];
         [self.contentView addSubview:_lowValueLabel];
         
-        [self setVolumeLabel:[[JNWLabel alloc]initWithFrame:(NSRect){CGRectGetMaxX(_lowLabel.frame), CGRectGetHeight(contentViewFrame) - valueLabelHeight, tickerElementWidth, valueLabelHeight}]];
+        [self setVolumeLabel:[[JNWLabel alloc]initWithFrame:NSZeroRect]];
         [_volumeLabel setTextAlignment:NSCenterTextAlignment];
         [_volumeLabel setFont:valueLabelFont];
         [_volumeLabel setText:@"VOLUME"];
         [self.contentView addSubview:_volumeLabel];
         
-        [self setVolumeValueLabel:[[JNWLabel alloc]initWithFrame:(NSRect){CGRectGetMaxX(_lowLabel.frame), 0, tickerElementWidth, valueHeight}]];
+        [self setVolumeValueLabel:[[JNWLabel alloc]initWithFrame:NSZeroRect]];
         [_volumeValueLabel setTextAlignment:NSCenterTextAlignment];
         [_volumeValueLabel setFont:valueFont];
         [_volumeValueLabel setText:defaultValueLabel];
         [self.contentView addSubview:_volumeValueLabel];
         
-        [self setVwapLabel:[[JNWLabel alloc]initWithFrame:(NSRect){CGRectGetMaxX(_volumeLabel.frame), CGRectGetHeight(contentViewFrame) - valueLabelHeight, tickerElementWidth, valueLabelHeight}]];
+        [self setVwapLabel:[[JNWLabel alloc]initWithFrame:NSZeroRect]];
         [_vwapLabel setTextAlignment:NSCenterTextAlignment];
         [_vwapLabel setFont:valueLabelFont];
         [_vwapLabel setText:@"VWAP"];
         [self.contentView addSubview:_vwapLabel];
         
-        [self setVwapValueLabel:[[JNWLabel alloc]initWithFrame:(NSRect){CGRectGetMaxX(_volumeLabel.frame), 0, tickerElementWidth, valueHeight}]];
+        [self setVwapValueLabel:[[JNWLabel alloc]initWithFrame:NSZeroRect]];
         [_vwapValueLabel setTextAlignment:NSCenterTextAlignment];
         [_vwapValueLabel setFont:valueFont];
         [_vwapValueLabel setText:defaultValueLabel];
         [self.contentView addSubview:_vwapValueLabel];
         
-        [self setAverageLabel:[[JNWLabel alloc]initWithFrame:(NSRect){CGRectGetMaxX(_vwapLabel.frame), CGRectGetHeight(contentViewFrame) - valueLabelHeight, tickerElementWidth, valueLabelHeight}]];
+        [self setAverageLabel:[[JNWLabel alloc]initWithFrame:NSZeroRect]];
         [_averageLabel setTextAlignment:NSCenterTextAlignment];
         [_averageLabel setFont:valueLabelFont];
         [_averageLabel setText:@"AVERAGE"];
         [self.contentView addSubview:_averageLabel];
         
-        [self setAverageValueLabel:[[JNWLabel alloc]initWithFrame:(NSRect){CGRectGetMaxX(_vwapLabel.frame), 0, tickerElementWidth, valueHeight}]];
+        [self setAverageValueLabel:[[JNWLabel alloc]initWithFrame:NSZeroRect]];
         [_averageValueLabel setTextAlignment:NSCenterTextAlignment];
         [_averageValueLabel setFont:valueFont];
         [_averageValueLabel setText:defaultValueLabel];

@@ -11,6 +11,7 @@
 #import "RUConstants.h"
 #import "TTCurrency.h"
 #import "TTTrade.h"
+#import <pthread.h>
 
 @interface TTTradesWindow()
 {
@@ -27,48 +28,50 @@
 
 @implementation TTTradesWindow
 
+static pthread_mutex_t tradesMutex = PTHREAD_MUTEX_INITIALIZER;
+
 -(void)addTrade:(TTTrade *)trade
 {
-        NSMutableArray* tradesCpy = [self.trades mutableCopy];
-        [tradesCpy addObject:trade];
-        NSSortDescriptor* s = nil;
+        dispatch_async(dispatch_get_main_queue(), ^{
+            NSMutableArray* tradesCpy = [self.trades mutableCopy];
+            [tradesCpy addObject:trade];
+            NSSortDescriptor* s = nil;
 
-        switch (self.indexOfSelectedColumn) {
-            case 0:
-            {
-                s = [NSSortDescriptor sortDescriptorWithKey:@"date" ascending:self.ascending];
-                break;
+            switch (self.indexOfSelectedColumn) {
+                case 0:
+                {
+                    s = [NSSortDescriptor sortDescriptorWithKey:@"date" ascending:self.ascending];
+                    break;
+                }
+                    
+                case 1:
+                {
+                    s = [NSSortDescriptor sortDescriptorWithKey:@"currency" ascending:self.ascending];
+                    break;
+                }
+                    
+                case 2:
+                {
+                    s = [NSSortDescriptor sortDescriptorWithKey:@"price" ascending:self.ascending];
+                    break;
+                }
+                    
+                case 3:
+                {
+                    s = [NSSortDescriptor sortDescriptorWithKey:@"amount" ascending:self.ascending];
+                    break;
+                }
+                    
+                default:
+                    break;
             }
-                
-            case 1:
+            if (s)
             {
-                s = [NSSortDescriptor sortDescriptorWithKey:@"currency" ascending:self.ascending];
-                break;
+                    [self setTrades:[tradesCpy sortedArrayUsingDescriptors:@[s]]];
+                    NSInteger indexOfUpdate = [self.trades indexOfObject:trade];
+                    [self.tableView insertRowsAtIndexes:[NSIndexSet indexSetWithIndex:indexOfUpdate] withAnimation:NSTableViewAnimationSlideDown];
             }
-                
-            case 2:
-            {
-                s = [NSSortDescriptor sortDescriptorWithKey:@"price" ascending:self.ascending];
-                break;
-            }
-                
-            case 3:
-            {
-                s = [NSSortDescriptor sortDescriptorWithKey:@"amount" ascending:self.ascending];
-                break;
-            }
-                
-            default:
-                break;
-        }
-        if (s)
-        {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [self setTrades:[tradesCpy sortedArrayUsingDescriptors:@[s]]];
-                NSInteger indexOfUpdate = [self.trades indexOfObject:trade];
-                [self.tableView insertRowsAtIndexes:[NSIndexSet indexSetWithIndex:indexOfUpdate] withAnimation:NSTableViewAnimationSlideDown];
-            });
-        }
+        });
 }
 
 -(void)tableView:(NSTableView *)tableView sortDescriptorsDidChange:(NSArray *)oldDescriptors
@@ -140,9 +143,9 @@
 }
 
 -(NSView *)tableView:(NSTableView *)tableView viewForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row
-{
+{    
     TTLabelCellView* cellView = [tableView makeViewWithIdentifier:@"TradesTableView" owner:self];
-    
+
     if (cellView == nil)
     {
         cellView = [[TTLabelCellView alloc]initWithFrame:(NSRect){0, 0, tableColumn.width, 20.f}];
@@ -156,9 +159,15 @@
         }
         return NO;
     }];
+
+    if (row == self.trades.count)
+    {
+        NSException* x = [[NSException alloc]initWithName:NSInternalInconsistencyException reason:@"err" userInfo:nil];
+        @throw x;
+    }
     
     TTTrade* trade = [self.trades objectAtIndex:row];
-    
+
     switch (indexSetOfColumn.firstIndex) {
         case 0:
             [cellView setValueString:[timeFormatter stringFromDate:trade.date]];
@@ -231,7 +240,7 @@
             break;
         }
             
-
+            
         default:
             break;
     }

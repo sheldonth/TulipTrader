@@ -239,6 +239,18 @@ static NSFont* titleFontBold;
     RUDLog(@"");
 }
 
+-(void)setFrame:(NSRect)frameRect
+{
+    [super setFrame:frameRect];
+    CGFloat columnWidth = floorf(CGRectGetWidth([self.contentView bounds])/3.f);
+    [_titleLabel setFrame:(NSRect){CGRectGetMidX([self.contentView bounds]) - 40, CGRectGetHeight([self.contentView bounds]) - 18, 80, 15}];
+    [_scrollView setFrame:(NSRect){0, 0, CGRectGetWidth([self.contentView bounds]),CGRectGetHeight([self.contentView bounds]) - _titleLabel.frame.size.height - 5}];
+    [_tableView setFrame:(NSRect){0, 0, CGRectGetWidth([self.contentView frame]), CGRectGetHeight([self.contentView frame])}];
+    [_priceColumn setWidth:columnWidth];
+    [_quantityColumn setWidth:columnWidth];
+    [_sumColumn setWidth:columnWidth - 20];
+}
+
 - (id)initWithFrame:(NSRect)frame
 {
     self = [super initWithFrame:frame];
@@ -248,7 +260,7 @@ static NSFont* titleFontBold;
         [self setBoxType:NSBoxCustom];
         [self setCornerRadius:2.f];
         [self setBorderWidth:2.f];
-        [self setBorderColor:[NSColor lightGrayColor]];
+        [self setBorderColor:[NSColor whiteColor]];
         
         [self setOrdersUpdateDispatchQueue:dispatch_queue_create("com.tuliptrader.OrderBookListViewDispatch", NULL)];
         
@@ -256,17 +268,17 @@ static NSFont* titleFontBold;
         
         [self setColumnsArray:[NSMutableArray array]];
         
-        [self setTitleLabel:[[JNWLabel alloc]initWithFrame:(NSRect){CGRectGetMidX([self.contentView bounds]) - 40, CGRectGetHeight([self.contentView bounds]) - 20, 80, 20}]];
+        [self setTitleLabel:[[JNWLabel alloc]initWithFrame:NSZeroRect]];
         [_titleLabel setFont:titleFontBold];
         [_titleLabel setTextAlignment:NSCenterTextAlignment];
         [self.contentView addSubview:_titleLabel];
     
-        [self setScrollView:[[NSScrollView alloc]initWithFrame:(NSRect){0, 0, CGRectGetWidth([self.contentView bounds]),CGRectGetHeight([self.contentView bounds]) - _titleLabel.frame.size.height}]];
+        [self setScrollView:[[NSScrollView alloc]initWithFrame:NSZeroRect]];
         [_scrollView setHasVerticalScroller:YES];
         [_scrollView setAutoresizingMask:NSViewWidthSizable | NSViewHeightSizable];
         [self.contentView addSubview:_scrollView];
         
-        [self setTableView:[[NSTableView alloc]initWithFrame:(NSRect){0, 0, CGRectGetWidth([self.contentView frame]), CGRectGetHeight([self.contentView frame])}]];
+        [self setTableView:[[NSTableView alloc]initWithFrame:NSZeroRect]];
         [_tableView setDataSource:self];
         [_tableView setDelegate:self];
         [_tableView setUsesAlternatingRowBackgroundColors:YES];
@@ -276,25 +288,20 @@ static NSFont* titleFontBold;
         [_tableView setAllowsExpansionToolTips:YES];
         [_tableView setAllowsMultipleSelection:YES];
         
-        CGFloat columnWidth = floorf(CGRectGetWidth([self.contentView bounds])/3.f);
-        
         [self setPriceColumn:[[NSTableColumn alloc]initWithIdentifier:@"price"]];
         [_priceColumn setEditable:NO];
-        [_priceColumn setWidth:columnWidth];
         [[_priceColumn headerCell]setStringValue:@"Price"];
         [_tableView addTableColumn:_priceColumn];
         [self.columnsArray addObject:_priceColumn];
         
         [self setQuantityColumn:[[NSTableColumn alloc]initWithIdentifier:@"amount"]];
         [_quantityColumn setEditable:NO];
-        [_quantityColumn setWidth:columnWidth];
         [[_quantityColumn headerCell]setStringValue:@"Quantity"];
         [_tableView addTableColumn:_quantityColumn];
         [self.columnsArray addObject:_quantityColumn];
         
         [self setSumColumn:[[NSTableColumn alloc]initWithIdentifier:@"sum"]];
         [_sumColumn setEditable:NO];
-        [_sumColumn setWidth:columnWidth - 20];
         [[_sumColumn headerCell]setStringValue:@"Sum"];
         [_tableView addTableColumn:_sumColumn];
         [self.columnsArray addObject:_sumColumn];
@@ -320,7 +327,9 @@ static NSFont* titleFontBold;
 
 -(void)setTitle:(NSString*)titleString
 {
-    [_titleLabel setText:titleString];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [_titleLabel setText:titleString];
+    });
 }
 
 - (void)drawRect:(NSRect)dirtyRect

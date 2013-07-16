@@ -36,11 +36,13 @@
         case TTOrderBookSideAsk:
             [self.askOrderBookListView updateForDepthUpdate:update];
             [self.graphView updateForAskSide:update];
+            [self.askOrderBookListView setTitle:RUStringWithFormat(@"%lu ASKS", update.updateArrayPointer.count)];
             break;
             
         case TTOrderBookSideBid:
             [self.bidOrderBookListView updateForDepthUpdate:update];
             [self.graphView updateForBidSide:update];
+            [self.bidOrderBookListView setTitle:RUStringWithFormat(@"%lu BIDS", update.updateArrayPointer.count)];
             break;
             
         case TTOrderBookSideNone:
@@ -91,21 +93,13 @@
         
         [self.orderBook setDelegate:self];
         
-        CGFloat currencyBoxHeight = floorf(CGRectGetHeight(frameRect) / 10);
-        
-        CGFloat statusBarHeight = floorf(CGRectGetHeight(frameRect) / 20);
-        
-        CGFloat graphWidth = floorf(CGRectGetWidth(frameRect) / 3) * 2;
-        
-        CGFloat graphHeight = floorf(CGRectGetHeight(frameRect) - (currencyBoxHeight + statusBarHeight));
-        
-        [self setCurrencyBox:[[TTCurrencyBox alloc]initWithFrame:(NSRect){0, CGRectGetHeight(frameRect) - currencyBoxHeight, CGRectGetWidth(frameRect), currencyBoxHeight}]];
+        [self setCurrencyBox:[[TTCurrencyBox alloc]initWithFrame:NSZeroRect]];
         
         [_currencyBox setOrderBookPtr:self.orderBook];
         
         [self addSubview:_currencyBox];
         
-        [self setGraphView:[[TTVerticalOBGraphView alloc]initWithFrame:(NSRect){0, statusBarHeight, graphWidth, graphHeight}]];
+        [self setGraphView:[[TTVerticalOBGraphView alloc]initWithFrame:NSZeroRect]];
         
         [self addSubview:_graphView];
         
@@ -115,7 +109,7 @@
         
         //        [self.contentView addSubview:_verticalOBView];
         
-        [self setBidOrderBookListView:[[TTOrderBookListView alloc]initWithFrame:(NSRect){graphWidth, statusBarHeight - 5, graphWidth / 2, graphHeight / 2}]];
+        [self setBidOrderBookListView:[[TTOrderBookListView alloc]initWithFrame:NSZeroRect]];
         
         [_bidOrderBookListView setTitle:@"BIDS"];
         
@@ -123,13 +117,13 @@
         
         [self addSubview:self.bidOrderBookListView];
         
-        [self setAskOrderBookListView:[[TTOrderBookListView alloc]initWithFrame:(NSRect){graphWidth, CGRectGetMaxY(_bidOrderBookListView.frame) + 5, graphWidth / 2, graphHeight / 2}]];
+        [self setAskOrderBookListView:[[TTOrderBookListView alloc]initWithFrame:NSZeroRect]];
         
         [_askOrderBookListView setTitle:@"ASKS"];
         
         [self addSubview:_askOrderBookListView];
         
-        [self setStatusBox:[[TTStatusBox alloc]initWithFrame:(NSRect){0, 0, CGRectGetWidth(frameRect), statusBarHeight - 10}]];
+        [self setStatusBox:[[TTStatusBox alloc]initWithFrame:NSZeroRect]];
         
         [self addSubview:_statusBox];
         
@@ -139,6 +133,29 @@
         
     }
     return self;
+}
+
+-(void)setFrame:(NSRect)frameRect
+{
+    [super setFrame:frameRect];
+    
+    CGFloat currencyBoxHeight = floorf(CGRectGetHeight(frameRect) / 10);
+    
+    CGFloat statusBarHeight = floorf(CGRectGetHeight(frameRect) / 20);
+    
+    CGFloat graphWidth = floorf(CGRectGetWidth(frameRect) / 3) * 2;
+    
+    CGFloat graphHeight = floorf(CGRectGetHeight(frameRect) - (currencyBoxHeight + statusBarHeight));
+    
+    [_currencyBox setFrame:(NSRect){0, CGRectGetHeight(frameRect) - currencyBoxHeight, CGRectGetWidth(frameRect), currencyBoxHeight}];
+    
+    [_graphView setFrame:(NSRect){0, statusBarHeight, graphWidth, graphHeight}];
+    
+    [_bidOrderBookListView setFrame:(NSRect){graphWidth, statusBarHeight - 5, graphWidth / 2, graphHeight / 2}];
+    
+    [_askOrderBookListView setFrame:(NSRect){graphWidth, CGRectGetMaxY(_bidOrderBookListView.frame) + 5, graphWidth / 2, graphHeight / 2}];
+    
+    [_statusBox setFrame:(NSRect){0, 0, CGRectGetWidth(frameRect), statusBarHeight - 10}];
 }
 
 @end

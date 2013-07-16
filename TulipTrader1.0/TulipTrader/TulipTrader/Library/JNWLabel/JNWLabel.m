@@ -94,10 +94,12 @@
 }
 
 - (void)setText:(NSString *)text {
-	if (_text != text) {
-		_text = text;
-		self.layer.string = text;
-	}
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (_text != text) {
+            _text = text;
+            self.layer.string = text;
+        }
+    });
 }
 
 - (void)setTextColor:(NSColor *)textColor {
