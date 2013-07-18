@@ -13,6 +13,7 @@
 #import "TTOrderBookListView.h"
 #import "TTStatusBox.h"
 #import "TTVerticalOBGraphView.h"
+#import <WebKit/WebKit.h>
 
 @interface TTOrderBookView()
 
@@ -21,6 +22,8 @@
 @property(nonatomic, retain)TTOrderBookListView* askOrderBookListView;
 @property(nonatomic, retain)TTStatusBox* statusBox;
 @property(nonatomic, retain)TTVerticalOBGraphView* graphView;
+
+@property(nonatomic, retain)WebView* webView;
 
 //@property(nonatomic, retain)TTVerticalOBView* verticalOBView;
 
@@ -99,9 +102,15 @@
         
         [self addSubview:_currencyBox];
         
-        [self setGraphView:[[TTVerticalOBGraphView alloc]initWithFrame:NSZeroRect]];
+        [self setWebView:[[WebView alloc]initWithFrame:NSZeroRect frameName:@"SheldonsFrame" groupName:@"TulipTrader"]];
         
-        [self addSubview:_graphView];
+        [self addSubview:_webView];
+        
+        [_webView reload:self];
+        
+//        [self setGraphView:[[TTVerticalOBGraphView alloc]initWithFrame:NSZeroRect]];
+        
+//        [self addSubview:_graphView];
         
         //        [self setVerticalOBView:[[TTVerticalOBView alloc]initWithFrame:(NSRect){0, statusBarHeight, graphWidth, CGRectGetHeight(contentRect) - (currencyBoxHeight + statusBarHeight)}]];
         
@@ -149,7 +158,8 @@
     
     [_currencyBox setFrame:(NSRect){0, CGRectGetHeight(frameRect) - currencyBoxHeight, CGRectGetWidth(frameRect), currencyBoxHeight}];
     
-    [_graphView setFrame:(NSRect){0, statusBarHeight, graphWidth, graphHeight}];
+//    [_graphView setFrame:(NSRect){0, statusBarHeight, graphWidth, graphHeight}];
+    [_webView setFrame:(NSRect){0, statusBarHeight, graphWidth, graphHeight}];
     
     [_bidOrderBookListView setFrame:(NSRect){graphWidth, statusBarHeight - 5, graphWidth / 2, graphHeight / 2}];
     
