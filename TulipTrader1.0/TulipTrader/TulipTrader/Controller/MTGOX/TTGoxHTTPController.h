@@ -7,9 +7,10 @@
 //
 
 #import <Foundation/Foundation.h>
-
 #import "RUSingleton.h"
 #import "TTHTTPController.h"
+
+@class TTGoxWallet;
 
 @interface TTGoxHTTPController : TTHTTPController
 
@@ -30,5 +31,7 @@
 -(void)getDepthForCurrency:(TTCurrency)currency withCompletion:(void (^)(NSArray* bids, NSArray* asks, NSDictionary* maxMinTicks))completionBlock withFailBlock:(void (^)(NSError* error))failBlock;
 
 -(void)getFullDepthForCurrency:(TTCurrency)currency withCompletion:(void (^)(NSArray *bids, NSArray *asks, NSDictionary *maxMinTicks))completionBlock withFailBlock:(void (^)(NSError* error))failBlock;
+
+-(void)getTransactionsForWallet:(TTGoxWallet*)wallet withCompletion:(void (^)(TTGoxWallet* wallet))completionBlock withFailBlock:(void (^)(NSError* e))failBlock;
 
 @end

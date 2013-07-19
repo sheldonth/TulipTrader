@@ -12,6 +12,8 @@
 		474A9229179882E1007F0A22 /* arrow_left.png in Resources */ = {isa = PBXBuildFile; fileRef = 474A9226179882E1007F0A22 /* arrow_left.png */; };
 		474A922A179882E1007F0A22 /* arrow_right.png in Resources */ = {isa = PBXBuildFile; fileRef = 474A9227179882E1007F0A22 /* arrow_right.png */; };
 		474A922B179882E1007F0A22 /* arrow_right.png in Resources */ = {isa = PBXBuildFile; fileRef = 474A9227179882E1007F0A22 /* arrow_right.png */; };
+		474A922D17989DAF007F0A22 /* tradeexecutionbtn.png in Resources */ = {isa = PBXBuildFile; fileRef = 474A922C17989DAF007F0A22 /* tradeexecutionbtn.png */; };
+		474A922E17989DAF007F0A22 /* tradeexecutionbtn.png in Resources */ = {isa = PBXBuildFile; fileRef = 474A922C17989DAF007F0A22 /* tradeexecutionbtn.png */; };
 		4772E0901774D6A900967847 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4772E08F1774D6A900967847 /* Cocoa.framework */; };
 		4772E09A1774D6A900967847 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4772E0981774D6A900967847 /* InfoPlist.strings */; };
 		4772E09C1774D6A900967847 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4772E09B1774D6A900967847 /* main.m */; };
@@ -290,6 +292,10 @@
 		47D872DF1778AB940052DB29 /* TTGoxCurrencyController.m in Sources */ = {isa = PBXBuildFile; fileRef = 47D872DD1778AB940052DB29 /* TTGoxCurrencyController.m */; };
 		47D872E71778D4AD0052DB29 /* TTCurrencyBox.m in Sources */ = {isa = PBXBuildFile; fileRef = 47D872E61778D4AD0052DB29 /* TTCurrencyBox.m */; };
 		47D872E81778D4AD0052DB29 /* TTCurrencyBox.m in Sources */ = {isa = PBXBuildFile; fileRef = 47D872E61778D4AD0052DB29 /* TTCurrencyBox.m */; };
+		47E04D671798D33B00AEABAE /* TTGoxTransaction.m in Sources */ = {isa = PBXBuildFile; fileRef = 47E04D661798D33B00AEABAE /* TTGoxTransaction.m */; };
+		47E04D681798D33B00AEABAE /* TTGoxTransaction.m in Sources */ = {isa = PBXBuildFile; fileRef = 47E04D661798D33B00AEABAE /* TTGoxTransaction.m */; };
+		47E04D6B1798D42800AEABAE /* TTGoxTransactionTrade.m in Sources */ = {isa = PBXBuildFile; fileRef = 47E04D6A1798D42800AEABAE /* TTGoxTransactionTrade.m */; };
+		47E04D6C1798D42800AEABAE /* TTGoxTransactionTrade.m in Sources */ = {isa = PBXBuildFile; fileRef = 47E04D6A1798D42800AEABAE /* TTGoxTransactionTrade.m */; };
 		47FD0C60178F244700737579 /* TTBrowser.m in Sources */ = {isa = PBXBuildFile; fileRef = 47FD0C5F178F244700737579 /* TTBrowser.m */; };
 		47FD0C61178F244700737579 /* TTBrowser.m in Sources */ = {isa = PBXBuildFile; fileRef = 47FD0C5F178F244700737579 /* TTBrowser.m */; };
 		47FD0C6C178F301200737579 /* TTTabContents.m in Sources */ = {isa = PBXBuildFile; fileRef = 47FD0C6A178F301200737579 /* TTTabContents.m */; };
@@ -312,6 +318,7 @@
 		474A922417985EB5007F0A22 /* TulipTraderTRIM.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = TulipTraderTRIM.icns; sourceTree = "<group>"; };
 		474A9226179882E1007F0A22 /* arrow_left.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = arrow_left.png; sourceTree = "<group>"; };
 		474A9227179882E1007F0A22 /* arrow_right.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = arrow_right.png; sourceTree = "<group>"; };
+		474A922C17989DAF007F0A22 /* tradeexecutionbtn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tradeexecutionbtn.png; sourceTree = "<group>"; };
 		4772E08C1774D6A900967847 /* TulipTrader.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TulipTrader.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4772E08F1774D6A900967847 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		4772E0921774D6A900967847 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -588,6 +595,10 @@
 		47D872DD1778AB940052DB29 /* TTGoxCurrencyController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTGoxCurrencyController.m; sourceTree = "<group>"; };
 		47D872E51778D4AD0052DB29 /* TTCurrencyBox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTCurrencyBox.h; sourceTree = "<group>"; };
 		47D872E61778D4AD0052DB29 /* TTCurrencyBox.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTCurrencyBox.m; sourceTree = "<group>"; };
+		47E04D651798D33B00AEABAE /* TTGoxTransaction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTGoxTransaction.h; sourceTree = "<group>"; };
+		47E04D661798D33B00AEABAE /* TTGoxTransaction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTGoxTransaction.m; sourceTree = "<group>"; };
+		47E04D691798D42800AEABAE /* TTGoxTransactionTrade.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTGoxTransactionTrade.h; sourceTree = "<group>"; };
+		47E04D6A1798D42800AEABAE /* TTGoxTransactionTrade.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTGoxTransactionTrade.m; sourceTree = "<group>"; };
 		47FD0C5E178F244700737579 /* TTBrowser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTBrowser.h; sourceTree = "<group>"; };
 		47FD0C5F178F244700737579 /* TTBrowser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTBrowser.m; sourceTree = "<group>"; };
 		47FD0C69178F301200737579 /* TTTabContents.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTTabContents.h; sourceTree = "<group>"; };
@@ -947,6 +958,7 @@
 				477B402A1795845800D2365D /* refreshIconLG.png */,
 				47742754178A089B00515BD1 /* accountsMan.png */,
 				4772E2401774D88600967847 /* infoBtn.png */,
+				474A922C17989DAF007F0A22 /* tradeexecutionbtn.png */,
 			);
 			path = "images-png";
 			sourceTree = "<group>";
@@ -1270,6 +1282,10 @@
 			children = (
 				477B401F17946F7A00D2365D /* TTGoxWallet.h */,
 				477B402017946F7A00D2365D /* TTGoxWallet.m */,
+				47E04D651798D33B00AEABAE /* TTGoxTransaction.h */,
+				47E04D661798D33B00AEABAE /* TTGoxTransaction.m */,
+				47E04D691798D42800AEABAE /* TTGoxTransactionTrade.h */,
+				47E04D6A1798D42800AEABAE /* TTGoxTransactionTrade.m */,
 			);
 			path = Mtgox;
 			sourceTree = "<group>";
@@ -1465,6 +1481,7 @@
 				474A922517985EB5007F0A22 /* TulipTraderTRIM.icns in Resources */,
 				474A9228179882E1007F0A22 /* arrow_left.png in Resources */,
 				474A922A179882E1007F0A22 /* arrow_right.png in Resources */,
+				474A922D17989DAF007F0A22 /* tradeexecutionbtn.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1506,6 +1523,7 @@
 				477B402E1795845800D2365D /* refreshIconLG.png in Resources */,
 				474A9229179882E1007F0A22 /* arrow_left.png in Resources */,
 				474A922B179882E1007F0A22 /* arrow_right.png in Resources */,
+				474A922E17989DAF007F0A22 /* tradeexecutionbtn.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1636,6 +1654,8 @@
 				477B401B17943A9000D2365D /* TTAccountWindow.m in Sources */,
 				477B402117946F7A00D2365D /* TTGoxWallet.m in Sources */,
 				477B40261794D80700D2365D /* TTBlockChainSocketController.m in Sources */,
+				47E04D671798D33B00AEABAE /* TTGoxTransaction.m in Sources */,
+				47E04D6B1798D42800AEABAE /* TTGoxTransactionTrade.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1745,6 +1765,8 @@
 				477B401C17943A9000D2365D /* TTAccountWindow.m in Sources */,
 				477B402217946F7A00D2365D /* TTGoxWallet.m in Sources */,
 				477B40271794D80700D2365D /* TTBlockChainSocketController.m in Sources */,
+				47E04D681798D33B00AEABAE /* TTGoxTransaction.m in Sources */,
+				47E04D6C1798D42800AEABAE /* TTGoxTransactionTrade.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

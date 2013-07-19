@@ -12,8 +12,11 @@
 #import "JNWLabel.h"
 #import "TTGoxWallet.h"
 #import "TTLabelCellView.h"
+#import "TTTick.h"
+#import "TTGoxTransaction.h"
+#import "TTGoxTransactionTrade.h"
 
-#define primaryCurrency @"USD"
+//#define primaryCurrency @"USD"
 
 @interface TTAccountWindow()
 
@@ -24,8 +27,13 @@
 @property(nonatomic, retain)NSMutableArray* walletsArray;
 @property(nonatomic, retain)NSBox* accountBalancesBox;
 
+@property(nonatomic, retain)NSPopUpButton* walletSelectionPopUpButton;
+
 @property(nonatomic, retain)NSScrollView* accountTransactionsScrollView;
 @property(nonatomic, retain)NSTableView* accountTransactionsTableView;
+
+@property(nonatomic, retain)NSArray* tableColumnTitles;
+@property(nonatomic, retain)NSMutableArray* tableColumns;
 
 @property(nonatomic, retain)NSButton* accountValuesReloadButton;
 
@@ -43,6 +51,10 @@
 
 @property(nonatomic, retain)NSButton* fastBuyButton;
 @property(nonatomic, retain)NSButton* fastSellButton;
+
+@property(nonatomic, retain)NSButton* tradeExecutionButton;
+
+@property(nonatomic)TTCurrency currentCurrency;
 
 @end
 
@@ -89,8 +101,6 @@ static NSFont* accountActionsFont;
     {
         [self setPrimaryCurrencyLabel:[[JNWLabel alloc]initWithFrame:(NSRect){10, CGRectGetMinY(_accountValueLabel.frame) - 50, CGRectGetWidth(self.frame) / 2, 25}]];
         [self.primaryCurrencyLabel setFont:accountFont];
-//        [self.primaryCurrencyLabel setDrawsBackground:YES];
-//        [self.primaryCurrencyLabel setBackgroundColor:[NSColor redColor]];
         [self.primaryCurrencyLabel setTextAlignment:NSCenterTextAlignment];
         [self.accountBalancesBox.contentView addSubview:self.primaryCurrencyLabel];
     }
@@ -119,7 +129,7 @@ static NSFont* accountActionsFont;
     }
 }
 
--(double)walletBalanceForCurrency:(TTCurrency)currency
+-(TTGoxWallet*)walletForCurrency:(TTCurrency)currency
 {
     NSInteger idx = [self.walletsArray indexOfObjectPassingTest:^BOOL(TTGoxWallet* obj, NSUInteger idx, BOOL *stop) {
         if (obj.currency == currency)
@@ -130,21 +140,20 @@ static NSFont* accountActionsFont;
         return NO;
     }];
     if (idx == NSNotFound)
-        return 0.f;
+        return nil;
     else
     {
-        double b = [[[[self.walletsArray objectAtIndex:idx]balance]value]floatValue];
-        return b;
+        return [self.walletsArray objectAtIndex:idx];
     }
 }
 
 -(void)setAccountValueLabels
 {
-    double btcInDollars = ([self walletBalanceForCurrency:TTCurrencyBTC] * self.orderbook.lastTicker.last.value.floatValue);
-    double acctVal = btcInDollars + [self walletBalanceForCurrency:TTCurrencyUSD];
+    double btcInDollars = ([self walletForCurrency:TTCurrencyBTC].balance.value.floatValue * self.orderbook.lastTicker.last.value.floatValue);
+    double acctVal = btcInDollars + [self walletForCurrency:TTCurrencyUSD].balance.value.floatValue;
     [self.accountValueLabel setText:RUStringWithFormat(@"$%.2f", acctVal)];
-    [self.primaryCurrencyLabel setText:RUStringWithFormat(@"%.5fBTC", [self walletBalanceForCurrency:TTCurrencyBTC])];
-    [self.bitcoinCurrencyLabel setText:RUStringWithFormat(@"$%.2f", [self walletBalanceForCurrency:TTCurrencyUSD])];
+    [self.primaryCurrencyLabel setText:RUStringWithFormat(@"%.5fBTC", [[[[self walletForCurrency:TTCurrencyBTC]balance]value]floatValue])];
+    [self.bitcoinCurrencyLabel setText:RUStringWithFormat(@"$%.2f", [[[[self walletForCurrency:TTCurrencyUSD]balance]value]floatValue])];
 }
 
 -(void)reloadAccountData
@@ -152,13 +161,21 @@ static NSFont* accountActionsFont;
     [_httpController loadAccountDataWithCompletion:^(NSDictionary *accountInformationDictionary) {
         [self setupLabels];
         [self.walletsArray removeAllObjects];
+        [self.walletSelectionPopUpButton removeAllItems];
         NSDictionary* walletsDic = [accountInformationDictionary objectForKey:@"Wallets"];
         [walletsDic enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
             TTGoxWallet* wallet = [TTGoxWallet walletFromDictionary:obj];
             [wallet setCurrency:currencyFromString(key)];
             [self.walletsArray addObject:wallet];
+            [self.walletSelectionPopUpButton addItemWithTitle:key];
         }];
+        [self.walletSelectionPopUpButton selectItemWithTitle:stringFromCurrency(self.currentCurrency)];
         [self setAccountValueLabels];
+        [_httpController getTransactionsForWallet:[self walletForCurrency:self.currentCurrency] withCompletion:^(TTGoxWallet *wallet) {
+            [self.accountTransactionsTableView reloadData];
+        } withFailBlock:^(NSError *e) {
+            RUDLog(@"Wallet History Request Failed");
+        }];
     } andFailBlock:^(NSError *e) {
         [self.accountValueLabel setText:RUStringWithFormat(@"--.--")];
         [self.primaryCurrencyLabel setText:RUStringWithFormat(@"--.--")];
@@ -210,14 +227,52 @@ static NSFont* accountActionsFont;
 
 -(NSView *)tableView:(NSTableView *)tableView viewForTableColumn:(NSTableColumn *)tableColumn row:(NSInteger)row
 {
-    TTLabelCellView* labelCellView = [[TTLabelCellView alloc]initWithFrame:(NSRect){0, 0, 20.f, 20.f}];
-    [labelCellView setValueString:@"fuck"];
-    return labelCellView;
+    TTLabelCellView* cellView = [tableView makeViewWithIdentifier:@"TransactionsTableView" owner:self];
+    if (!cellView)
+    {
+        cellView = [[TTLabelCellView alloc]initWithFrame:(NSRect){0, 0, 20.f, 20.f}];
+        [cellView setIdentifier:@"TransactionsTableView"];
+    }
+    TTGoxTransaction* transaction = [[self walletForCurrency:self.currentCurrency].transactions objectAtIndex:row];
+    
+    NSDateFormatter* dateFormatter = [NSDateFormatter new];
+    [dateFormatter setDateStyle:NSDateFormatterShortStyle];
+    
+    NSInteger idx = [self.tableColumns indexOfObject:tableColumn];
+    switch (idx) {
+        case 0://Date
+            [cellView setValueString:[dateFormatter stringFromDate:transaction.date]];
+            break;
+            
+        case 1://Type
+            [cellView setValueString:transaction.type];
+            break;
+            
+        case 2://Category
+            [cellView setValueString:[transaction.linkArray objectAtIndex:1]];
+            break;
+            
+        case 3://Balance
+            [cellView setValueString:[[transaction balance]display]];
+            break;
+        
+        case 4:// Value
+            [cellView setValueString:[[transaction value]display]];
+            break;
+            
+        case 5://Acquired
+            [cellView setValueString:[[[transaction trade]amount]display]];
+            break;
+
+        default:
+            break;
+    }
+    return cellView;
 }
 
 -(NSInteger)numberOfRowsInTableView:(NSTableView *)tableView
 {
-    return 5;
+    return [self walletForCurrency:self.currentCurrency].transactions.count;
 }
 
 -(void)dealloc
@@ -227,12 +282,23 @@ static NSFont* accountActionsFont;
     [_orderbook removeObserver:self forKeyPath:@"lastTicker"];
 }
 
+-(void)walletSelectionPopUpButtonDidChange:(NSPopUpButton*)sender
+{
+    [self setCurrentCurrency:currencyFromString(sender.selectedItem.title)];
+    [_httpController getTransactionsForWallet:[self walletForCurrency:self.currentCurrency] withCompletion:^(TTGoxWallet *wallet) {
+        [self.accountTransactionsTableView reloadData];
+    } withFailBlock:^(NSError *e) {
+        RUDLog(@"Wallet history failed");
+    }];
+}
+
 -(id)initWithContentRect:(NSRect)contentRect styleMask:(NSUInteger)aStyle backing:(NSBackingStoreType)bufferingType defer:(BOOL)flag
 {
     self = [super initWithContentRect:contentRect styleMask:aStyle backing:bufferingType defer:flag];
     if (self)
     {
         [self setHttpController:[[TTGoxHTTPController alloc]init]];
+        [self setCurrentCurrency:TTCurrencyUSD];
         [self reloadAccountData];
         [self setDelegate:self];
         [self setWalletsArray:[NSMutableArray array]];
@@ -240,6 +306,11 @@ static NSFont* accountActionsFont;
         [self setAccountBalancesBox:[[NSBox alloc]initWithFrame:(NSRect){0, CGRectGetHeight(self.frame) - 150, CGRectGetWidth(self.frame), 100}]];
         [self.accountBalancesBox setTitlePosition:NSNoTitle];
         [self.contentView addSubview:_accountBalancesBox];
+        
+        [self setWalletSelectionPopUpButton:[[NSPopUpButton alloc]initWithFrame:(NSRect){20, CGRectGetHeight(self.accountBalancesBox.frame) - 40, 80, 25} pullsDown:NO]];
+        [self.walletSelectionPopUpButton setAction:@selector(walletSelectionPopUpButtonDidChange:)];
+        [self.walletSelectionPopUpButton setTarget:self];
+        [self.accountBalancesBox.contentView addSubview:_walletSelectionPopUpButton];
         
         [self setAccountTransactionsScrollView:[[NSScrollView alloc]initWithFrame:(NSRect){0, CGRectGetMinY(_accountBalancesBox.frame) - 130, CGRectGetWidth(self.frame), 150}]];
         [self.accountTransactionsScrollView setHasVerticalScroller:YES];
@@ -256,10 +327,25 @@ static NSFont* accountActionsFont;
         [_accountTransactionsTableView setAllowsMultipleSelection:YES];
         [_accountTransactionsTableView setAutoresizingMask:NSViewWidthSizable | NSViewHeightSizable];
         
+        [self setTableColumnTitles:@[@"Date", @"Type", @"Category", @"Balance", @"Value", @"Acquired"]];
+        [self setTableColumns:[NSMutableArray array]];
+        
+        [self.tableColumnTitles enumerateObjectsUsingBlock:^(NSString* title, NSUInteger idx, BOOL *stop) {
+            NSTableColumn* tableColumn = [[NSTableColumn alloc]initWithIdentifier:title];
+            [tableColumn setEditable:NO];
+            if ([title isEqualToString:@"Acquired"])
+                [tableColumn setWidth:120.f];
+            else
+                [tableColumn setWidth:60.f];
+            [[tableColumn headerCell]setStringValue:title];
+            [_accountTransactionsTableView addTableColumn:tableColumn];
+            [self.tableColumns addObject:tableColumn];
+        }];
+        
         [self.accountTransactionsScrollView setDocumentView:_accountTransactionsTableView];
         [self.contentView addSubview:_accountTransactionsScrollView];
     
-        [self.accountTransactionsTableView reloadData];
+//        [self.accountTransactionsTableView reloadData];
         
         [self setAccountValuesReloadButton:[[NSButton alloc]initWithFrame:(NSRect){CGRectGetWidth(self.accountBalancesBox.frame) - 40, CGRectGetHeight(self.accountBalancesBox.frame) - 40, 25, 25}]];
         [self.accountValuesReloadButton setImagePosition:NSImageOnly];
@@ -320,7 +406,7 @@ static NSFont* accountActionsFont;
         [_orderPriceLabel setText:@"Price:"];
         [self.contentView addSubview:_orderPriceLabel];
         
-        [self setOrderAmountTextField:[[NSTextField alloc]initWithFrame:(NSRect){CGRectGetMaxX(_orderAmountlabel.frame), CGRectGetMinY(_sellActionButton.frame) - 60, 80, 45}]];
+        [self setOrderAmountTextField:[[NSTextField alloc]initWithFrame:(NSRect){CGRectGetMaxX(_orderAmountlabel.frame), CGRectGetMinY(_sellActionButton.frame) - 60, 120, 45}]];
         [_orderAmountTextField setAlignment:NSCenterTextAlignment];
         [_orderAmountTextField.cell setPlaceholderString:@"0 BTC"];
         [_orderAmountTextField.cell setBezelStyle:NSTextFieldRoundedBezel];
@@ -329,7 +415,7 @@ static NSFont* accountActionsFont;
         [_orderAmountTextField setDelegate:self];
         [self.contentView addSubview:_orderAmountTextField];
 
-        [self setOrderPriceTextField:[[NSTextField alloc]initWithFrame:(NSRect){CGRectGetMaxX(_orderPriceLabel.frame), CGRectGetMinY(_orderPriceLabel.frame) + 3, 80, 25}]];
+        [self setOrderPriceTextField:[[NSTextField alloc]initWithFrame:(NSRect){CGRectGetMaxX(_orderPriceLabel.frame), CGRectGetMinY(_orderPriceLabel.frame) + 3, 120, 25}]];
         [_orderPriceTextField setAlignment:NSCenterTextAlignment];
         [_orderPriceTextField.cell setPlaceholderString:@"$0.00"];
         [_orderPriceTextField setBezeled:YES];
@@ -338,7 +424,13 @@ static NSFont* accountActionsFont;
         [_orderPriceTextField.cell setBezelStyle:NSTextFieldRoundedBezel];
         [self.contentView addSubview:_orderPriceTextField];
         
-        
+        [self setTradeExecutionButton:[[NSButton alloc]initWithFrame:(NSRect){(CGRectGetWidth(contentRect) - 278) / 2, 200, 278, 45}]];
+        NSImage* excBtnImage = [NSImage imageNamed:@"tradeexecutionbtn.png"];
+        [excBtnImage setSize:_tradeExecutionButton.frame.size];
+        [_tradeExecutionButton setImage:excBtnImage];
+        [_tradeExecutionButton setImagePosition:NSImageOnly];
+        [_tradeExecutionButton setBordered:NO];
+        [self.contentView addSubview:_tradeExecutionButton];
     }
     return self;
 }

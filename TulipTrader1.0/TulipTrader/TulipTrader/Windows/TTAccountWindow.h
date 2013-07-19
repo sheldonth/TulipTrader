@@ -20,4 +20,6 @@ typedef enum{
 @property(nonatomic, retain)TTOrderBook* orderbook;
 @property(nonatomic)TTAccountWindowExecutionState executionState;
 
+-(void)reloadAccountData;
+
 @end
