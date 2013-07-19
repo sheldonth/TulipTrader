@@ -169,6 +169,62 @@
     }];
 }
 
+-(void)placeOrder:(TTOrderType)orderType amountInteger:(NSInteger)amountInteger placementType:(TTOrderPlacementType)placementType priceInteger:(NSInteger)priceInteger withCompletion:(void (^)(BOOL success, NSDictionary* callbackData))completionBlock withFailBlock:(void (^)(NSError* error))failBlock
+{
+    NSDictionary* paramDic;
+    switch (orderType) {
+        case TTOrderTypeBid:
+        {
+            switch (placementType) {
+                case TTOrderPlacementTypeLimit:
+                    paramDic = @{@"type" : @"bid", @"amount_int": @(amountInteger), @"price_int" : @(priceInteger)};
+                    break;
+                    
+                case TTOrderPlacementTypeMarket:
+                case TTOrderPlacementTypeNone:
+                default:
+                    paramDic = @{@"type" : @"bid", @"amount_int": @(amountInteger)};
+                    break;
+            }
+            break;
+        }
+        case TTOrderTypeAsk:
+        {
+            switch (placementType) {
+                case TTOrderPlacementTypeLimit:
+                    paramDic = @{@"type" : @"ask", @"amount_int" : @(amountInteger), @"price_int" : @(priceInteger)};
+                    break;
+                    
+                case TTOrderPlacementTypeMarket:
+                case TTOrderPlacementTypeNone:
+                default:
+                    paramDic = @{@"type" : @"ask", @"amount_int" : @(amountInteger)};
+                    break;
+            }
+            break;
+        }
+        case TTOrderTypeNone:
+        {
+            NSException* e = [[NSException alloc]initWithName:NSInternalInconsistencyException reason:@"Can't have order type none" userInfo:nil];
+            @throw e;
+            break;
+        }
+        default:
+            break;
+    }
+    [self.networkSecure postPath:@"BTCUSD/money/order/add" parameters:paramDic success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSString* result = [[NSString alloc]initWithData:responseObject encoding:NSUTF8StringEncoding];
+        NSDictionary* d = [result objectFromJSONString];
+        NSString* resultStr = [d objectForKey:@"result"];
+        if ([resultStr isEqualToString:@"success"])
+            completionBlock(YES, d);
+        else
+            completionBlock(NO, d);
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        failBlock(error);
+    }];
+}
+
 //-(void)getOrdersWithCompletion:(void (^)(NSArray* orders))completionBlock withFailBlock:(void (^)(NSError* e))failBlock
 //{
 //    [self.networkSecure postPath:@"BTCUSD/money/orders" parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
@@ -187,32 +243,17 @@
 //}
 
 
-//-(void)getAccountWebSocketKeyWithCompletion:(void (^)(NSString* accountKey))completion failBlock:(void (^)(NSError* e))failBlock
-//{
-//    [self.networkSecure postPath:@"BTCUSD/money/idkey" parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
-//        NSString* s = [[NSString alloc]initWithData:(NSData*)responseObject encoding:NSUTF8StringEncoding];
-//        NSDictionary* d = [s objectFromJSONString];
-//        NSString* accountKey = [d objectForKey:@"data"];
-//        completion(accountKey);
-//    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-//        failBlock(error);
-//    }];
-//}
-
-//-(void)loadAccountDataWithCompletion:(void (^)(NSDictionary* accountInformationDictionary))callbackBlock andFailBlock:(void (^)(NSError* e))failBlock
-//{
-//    NSString* path = @"BTCUSD/money/info";
-//    [self.networkSecure postPath:path parameters:@{@"test": @"object"} success:^(AFHTTPRequestOperation *operation, id responseObject) {
-//        NSString* str = [[NSString alloc]initWithData:responseObject encoding:NSUTF8StringEncoding];
-//        NSDictionary* d = [str objectFromJSONString];
-//        if (![[d objectForKey:@"result"]isEqualToString:@"success"])
-//            failBlock(nil);
-//        else
-//            callbackBlock([d objectForKey:@"data"]);
-//    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-//            failBlock(error);
-//    }];
-//}
+-(void)getAccountWebSocketKeyWithCompletion:(void (^)(NSString* accountKey))completion failBlock:(void (^)(NSError* e))failBlock
+{
+    [self.networkSecure postPath:@"BTCUSD/money/idkey" parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSString* s = [[NSString alloc]initWithData:(NSData*)responseObject encoding:NSUTF8StringEncoding];
+        NSDictionary* d = [s objectFromJSONString];
+        NSString* accountKey = [d objectForKey:@"data"];
+        completion(accountKey);
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        failBlock(error);
+    }];
+}
 
 //-(void)updateLatestTradesForCurrency:(TTGoxCurrency)currency
 //{

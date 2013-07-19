@@ -7,7 +7,7 @@
 	<key>CFBundleExecutable</key>
 	<string>${EXECUTABLE_NAME}</string>
 	<key>CFBundleIconFile</key>
-	<string>TulipTraderTRIM</string>
+	<string>TulipTraderTRIM-1</string>
 	<key>CFBundleIdentifier</key>
 	<string>net.tuliptrader.${PRODUCT_NAME:rfc1034identifier}</string>
 	<key>CFBundleInfoDictionaryVersion</key>

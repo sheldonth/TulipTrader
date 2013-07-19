@@ -12,6 +12,18 @@
 
 @class TTGoxWallet;
 
+typedef enum{
+    TTOrderTypeNone = 0,
+    TTOrderTypeBid,
+    TTOrderTypeAsk
+}TTOrderType;
+
+typedef enum{
+    TTOrderPlacementTypeNone = 0,
+    TTOrderPlacementTypeLimit,
+    TTOrderPlacementTypeMarket
+}TTOrderPlacementType;
+
 @interface TTGoxHTTPController : TTHTTPController
 
 //-(void)updateLatestTradesForCurrency:(TTCurrency)currency;
@@ -33,5 +45,9 @@
 -(void)getFullDepthForCurrency:(TTCurrency)currency withCompletion:(void (^)(NSArray *bids, NSArray *asks, NSDictionary *maxMinTicks))completionBlock withFailBlock:(void (^)(NSError* error))failBlock;
 
 -(void)getTransactionsForWallet:(TTGoxWallet*)wallet withCompletion:(void (^)(TTGoxWallet* wallet))completionBlock withFailBlock:(void (^)(NSError* e))failBlock;
+
+-(void)placeOrder:(TTOrderType)orderType amountInteger:(NSInteger)amountInteger placementType:(TTOrderPlacementType)placementType priceInteger:(NSInteger)priceInteger withCompletion:(void (^)(BOOL success, NSDictionary* callbackData))completionBlock withFailBlock:(void (^)(NSError* error))failBlock;
+
+-(void)getAccountWebSocketKeyWithCompletion:(void (^)(NSString* accountKey))completion failBlock:(void (^)(NSError* e))failBlock;
 
 @end

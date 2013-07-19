@@ -88,6 +88,24 @@ static NSFont* accountActionsFont;
     }
 }
 
+-(void)fastBuy:(id)sender
+{
+    [_httpController placeOrder:TTOrderTypeBid amountInteger:100000000 placementType:TTOrderPlacementTypeMarket priceInteger:0 withCompletion:^(BOOL success, NSDictionary *callbackData) {
+        [self reloadAccountData];
+    } withFailBlock:^(NSError *error) {
+        RUDLog(@"!");
+    }];
+}
+
+-(void)fastSell:(id)sender
+{
+    [_httpController placeOrder:TTOrderTypeAsk amountInteger:100000000 placementType:TTOrderPlacementTypeMarket priceInteger:0 withCompletion:^(BOOL success, NSDictionary *callbackData) {
+        [self reloadAccountData];
+    } withFailBlock:^(NSError *error) {
+        RUDLog(@"!");
+    }];
+}
+
 -(void)setupLabels
 {
     if (!_accountValueLabel)
@@ -114,6 +132,8 @@ static NSFont* accountActionsFont;
     if (!self.fastBuyButton)
     {
         [self setFastBuyButton:[[NSButton alloc]initWithFrame:(NSRect){5, 5, 20, 35}]];
+        [_fastBuyButton setTarget:self];
+        [_fastBuyButton setAction:@selector(fastBuy:)];
         NSImage* icn = [NSImage imageNamed:@"arrow_left.png"];
         [icn setSize:_fastBuyButton.frame.size];
         [_fastBuyButton setImage:icn];
@@ -122,6 +142,8 @@ static NSFont* accountActionsFont;
     if (!self.fastSellButton)
     {
         [self setFastSellButton:[[NSButton alloc]initWithFrame:(NSRect){CGRectGetWidth([self.accountBalancesBox.contentView frame]) - 25, 5, 20, 35}]];
+        [_fastSellButton setTarget:self];
+        [_fastSellButton setAction:@selector(fastSell:)];
         NSImage* icn = [NSImage imageNamed:@"arrow_right.png"];
         [icn setSize:_fastSellButton.frame.size];
         [_fastSellButton setImage:icn];
@@ -171,6 +193,7 @@ static NSFont* accountActionsFont;
         }];
         [self.walletSelectionPopUpButton selectItemWithTitle:stringFromCurrency(self.currentCurrency)];
         [self setAccountValueLabels];
+        RUDLog(@"Dollars: %.2f", [[[[self walletForCurrency:TTCurrencyUSD]balance]value]floatValue]);
         [_httpController getTransactionsForWallet:[self walletForCurrency:self.currentCurrency] withCompletion:^(TTGoxWallet *wallet) {
             [self.accountTransactionsTableView reloadData];
         } withFailBlock:^(NSError *e) {

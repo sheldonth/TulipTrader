@@ -15,6 +15,7 @@
 #import "TTTicker.h"
 #import "TTDepthOrder.h"
 #import "TTTrade.h"
+#import "TTGoxHTTPController.h"
 
 typedef enum{
     TTGoxSocketMessageTypeNone = 0,
@@ -30,6 +31,12 @@ typedef enum{
     kTTGoxMarketTicker = 3,
     kTTGoxMarketLag = 4
 }kTTGoxMarketDataType;
+
+@interface TTGoxSocketController()
+
+@property(nonatomic, retain)TTGoxHTTPController* httpController;
+
+@end
 
 NSString* const kTTGoxOperationKey = @"op";
 
@@ -97,11 +104,13 @@ NSString* const kTTGoxSocketDepthChannelID  = @"24e67e0d-1cad-4cc0-9e7a-f8523ef4
     [super webSocketDidOpen:webSocket];
     if (kTTSubscribeToLag)
         [self subscribeToChannelID:@"trade.lag"];
-//    [[TTGoxHTTPController sharedInstance]getAccountWebSocketKeyWithCompletion:^(NSString *accountKey) {
-//        [self subscribeToKeyID:accountKey];
-//    } failBlock:^(NSError *e) {
-//        [TTAPIControlBoxView publishCommand:@"Account websocket key request failed. Run 'privKey' to retry."];
-//    }];
+
+    [self setHttpController:[[TTGoxHTTPController alloc]init]];
+    [_httpController getAccountWebSocketKeyWithCompletion:^(NSString *accountKey) {
+       [self subscribeToKeyID:accountKey];
+    } failBlock:^(NSError *e) {
+        
+    }];
 }
 
 -(void)webSocket:(SRWebSocket *)webSocket didReceiveMessage:(id)message

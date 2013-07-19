@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		474A922517985EB5007F0A22 /* TulipTraderTRIM.icns in Resources */ = {isa = PBXBuildFile; fileRef = 474A922417985EB5007F0A22 /* TulipTraderTRIM.icns */; };
 		474A9228179882E1007F0A22 /* arrow_left.png in Resources */ = {isa = PBXBuildFile; fileRef = 474A9226179882E1007F0A22 /* arrow_left.png */; };
 		474A9229179882E1007F0A22 /* arrow_left.png in Resources */ = {isa = PBXBuildFile; fileRef = 474A9226179882E1007F0A22 /* arrow_left.png */; };
 		474A922A179882E1007F0A22 /* arrow_right.png in Resources */ = {isa = PBXBuildFile; fileRef = 474A9227179882E1007F0A22 /* arrow_right.png */; };
@@ -296,6 +295,7 @@
 		47E04D681798D33B00AEABAE /* TTGoxTransaction.m in Sources */ = {isa = PBXBuildFile; fileRef = 47E04D661798D33B00AEABAE /* TTGoxTransaction.m */; };
 		47E04D6B1798D42800AEABAE /* TTGoxTransactionTrade.m in Sources */ = {isa = PBXBuildFile; fileRef = 47E04D6A1798D42800AEABAE /* TTGoxTransactionTrade.m */; };
 		47E04D6C1798D42800AEABAE /* TTGoxTransactionTrade.m in Sources */ = {isa = PBXBuildFile; fileRef = 47E04D6A1798D42800AEABAE /* TTGoxTransactionTrade.m */; };
+		47E04D6E1799A2AF00AEABAE /* TulipTraderTRIM-1.icns in Resources */ = {isa = PBXBuildFile; fileRef = 47E04D6D1799A2AF00AEABAE /* TulipTraderTRIM-1.icns */; };
 		47FD0C60178F244700737579 /* TTBrowser.m in Sources */ = {isa = PBXBuildFile; fileRef = 47FD0C5F178F244700737579 /* TTBrowser.m */; };
 		47FD0C61178F244700737579 /* TTBrowser.m in Sources */ = {isa = PBXBuildFile; fileRef = 47FD0C5F178F244700737579 /* TTBrowser.m */; };
 		47FD0C6C178F301200737579 /* TTTabContents.m in Sources */ = {isa = PBXBuildFile; fileRef = 47FD0C6A178F301200737579 /* TTTabContents.m */; };
@@ -315,7 +315,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		474A922417985EB5007F0A22 /* TulipTraderTRIM.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = TulipTraderTRIM.icns; sourceTree = "<group>"; };
 		474A9226179882E1007F0A22 /* arrow_left.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = arrow_left.png; sourceTree = "<group>"; };
 		474A9227179882E1007F0A22 /* arrow_right.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = arrow_right.png; sourceTree = "<group>"; };
 		474A922C17989DAF007F0A22 /* tradeexecutionbtn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tradeexecutionbtn.png; sourceTree = "<group>"; };
@@ -599,6 +598,7 @@
 		47E04D661798D33B00AEABAE /* TTGoxTransaction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTGoxTransaction.m; sourceTree = "<group>"; };
 		47E04D691798D42800AEABAE /* TTGoxTransactionTrade.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTGoxTransactionTrade.h; sourceTree = "<group>"; };
 		47E04D6A1798D42800AEABAE /* TTGoxTransactionTrade.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTGoxTransactionTrade.m; sourceTree = "<group>"; };
+		47E04D6D1799A2AF00AEABAE /* TulipTraderTRIM-1.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = "TulipTraderTRIM-1.icns"; sourceTree = "<group>"; };
 		47FD0C5E178F244700737579 /* TTBrowser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTBrowser.h; sourceTree = "<group>"; };
 		47FD0C5F178F244700737579 /* TTBrowser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTBrowser.m; sourceTree = "<group>"; };
 		47FD0C69178F301200737579 /* TTTabContents.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTTabContents.h; sourceTree = "<group>"; };
@@ -639,7 +639,7 @@
 		4772E0831774D6A900967847 = {
 			isa = PBXGroup;
 			children = (
-				474A922417985EB5007F0A22 /* TulipTraderTRIM.icns */,
+				47E04D6D1799A2AF00AEABAE /* TulipTraderTRIM-1.icns */,
 				4772E0951774D6A900967847 /* TulipTrader */,
 				4772E0B51774D6A900967847 /* TulipTraderTests */,
 				4772E08E1774D6A900967847 /* Frameworks */,
@@ -1478,10 +1478,10 @@
 				47FD0C6E178F301200737579 /* TTTabContents.xib in Resources */,
 				477B402B1795845800D2365D /* refreshIconSM.png in Resources */,
 				477B402D1795845800D2365D /* refreshIconLG.png in Resources */,
-				474A922517985EB5007F0A22 /* TulipTraderTRIM.icns in Resources */,
 				474A9228179882E1007F0A22 /* arrow_left.png in Resources */,
 				474A922A179882E1007F0A22 /* arrow_right.png in Resources */,
 				474A922D17989DAF007F0A22 /* tradeexecutionbtn.png in Resources */,
+				47E04D6E1799A2AF00AEABAE /* TulipTraderTRIM-1.icns in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
