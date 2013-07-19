@@ -107,9 +107,9 @@ NSString* const kTTGoxSocketDepthChannelID  = @"24e67e0d-1cad-4cc0-9e7a-f8523ef4
 
     [self setHttpController:[[TTGoxHTTPController alloc]init]];
     [_httpController getAccountWebSocketKeyWithCompletion:^(NSString *accountKey) {
-       [self subscribeToKeyID:accountKey];
+        [self subscribeToKeyID:accountKey];
     } failBlock:^(NSError *e) {
-        
+        RUDLog(@"!");
     }];
 }
 
