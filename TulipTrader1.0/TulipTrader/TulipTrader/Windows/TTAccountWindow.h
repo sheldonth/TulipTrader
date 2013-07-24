@@ -9,16 +9,9 @@
 #import <Cocoa/Cocoa.h>
 #import "TTOrderBook.h"
 
-typedef enum{
-    TTAccountWindowExecutionStateNone = 0,
-    TTAccountWindowExecutionStateBuying = 1,
-    TTAccountWindowExecutionStateSelling
-}TTAccountWindowExecutionState;
-
-@interface TTAccountWindow : NSWindow <NSWindowDelegate, NSTableViewDataSource, NSTableViewDelegate, NSTextFieldDelegate>
+@interface TTAccountWindow : NSWindow <NSWindowDelegate, NSTableViewDataSource, NSTableViewDelegate, NSTextFieldDelegate, TTOrderBookAccountEventDelegate>
 
 @property(nonatomic, retain)TTOrderBook* orderbook;
-@property(nonatomic)TTAccountWindowExecutionState executionState;
 
 -(void)reloadAccountData;
 

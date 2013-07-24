@@ -296,6 +296,10 @@
 		47E04D6B1798D42800AEABAE /* TTGoxTransactionTrade.m in Sources */ = {isa = PBXBuildFile; fileRef = 47E04D6A1798D42800AEABAE /* TTGoxTransactionTrade.m */; };
 		47E04D6C1798D42800AEABAE /* TTGoxTransactionTrade.m in Sources */ = {isa = PBXBuildFile; fileRef = 47E04D6A1798D42800AEABAE /* TTGoxTransactionTrade.m */; };
 		47E04D6E1799A2AF00AEABAE /* TulipTraderTRIM-1.icns in Resources */ = {isa = PBXBuildFile; fileRef = 47E04D6D1799A2AF00AEABAE /* TulipTraderTRIM-1.icns */; };
+		47E04D71179DA65C00AEABAE /* TTFeeBox.m in Sources */ = {isa = PBXBuildFile; fileRef = 47E04D70179DA65C00AEABAE /* TTFeeBox.m */; };
+		47E04D72179DA65C00AEABAE /* TTFeeBox.m in Sources */ = {isa = PBXBuildFile; fileRef = 47E04D70179DA65C00AEABAE /* TTFeeBox.m */; };
+		47E04D75179E024700AEABAE /* TTTradeExecutionBox.m in Sources */ = {isa = PBXBuildFile; fileRef = 47E04D74179E024700AEABAE /* TTTradeExecutionBox.m */; };
+		47E04D76179E024700AEABAE /* TTTradeExecutionBox.m in Sources */ = {isa = PBXBuildFile; fileRef = 47E04D74179E024700AEABAE /* TTTradeExecutionBox.m */; };
 		47FD0C60178F244700737579 /* TTBrowser.m in Sources */ = {isa = PBXBuildFile; fileRef = 47FD0C5F178F244700737579 /* TTBrowser.m */; };
 		47FD0C61178F244700737579 /* TTBrowser.m in Sources */ = {isa = PBXBuildFile; fileRef = 47FD0C5F178F244700737579 /* TTBrowser.m */; };
 		47FD0C6C178F301200737579 /* TTTabContents.m in Sources */ = {isa = PBXBuildFile; fileRef = 47FD0C6A178F301200737579 /* TTTabContents.m */; };
@@ -599,6 +603,10 @@
 		47E04D691798D42800AEABAE /* TTGoxTransactionTrade.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTGoxTransactionTrade.h; sourceTree = "<group>"; };
 		47E04D6A1798D42800AEABAE /* TTGoxTransactionTrade.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTGoxTransactionTrade.m; sourceTree = "<group>"; };
 		47E04D6D1799A2AF00AEABAE /* TulipTraderTRIM-1.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = "TulipTraderTRIM-1.icns"; sourceTree = "<group>"; };
+		47E04D6F179DA65C00AEABAE /* TTFeeBox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTFeeBox.h; sourceTree = "<group>"; };
+		47E04D70179DA65C00AEABAE /* TTFeeBox.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTFeeBox.m; sourceTree = "<group>"; };
+		47E04D73179E024700AEABAE /* TTTradeExecutionBox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTTradeExecutionBox.h; sourceTree = "<group>"; };
+		47E04D74179E024700AEABAE /* TTTradeExecutionBox.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTTradeExecutionBox.m; sourceTree = "<group>"; };
 		47FD0C5E178F244700737579 /* TTBrowser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTBrowser.h; sourceTree = "<group>"; };
 		47FD0C5F178F244700737579 /* TTBrowser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTBrowser.m; sourceTree = "<group>"; };
 		47FD0C69178F301200737579 /* TTTabContents.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTTabContents.h; sourceTree = "<group>"; };
@@ -1355,6 +1363,10 @@
 				47D872E61778D4AD0052DB29 /* TTCurrencyBox.m */,
 				47BEA744178487F30020F6BE /* TTStatusBox.h */,
 				47BEA745178487F30020F6BE /* TTStatusBox.m */,
+				47E04D6F179DA65C00AEABAE /* TTFeeBox.h */,
+				47E04D70179DA65C00AEABAE /* TTFeeBox.m */,
+				47E04D73179E024700AEABAE /* TTTradeExecutionBox.h */,
+				47E04D74179E024700AEABAE /* TTTradeExecutionBox.m */,
 			);
 			path = NSBox;
 			sourceTree = "<group>";
@@ -1656,6 +1668,8 @@
 				477B40261794D80700D2365D /* TTBlockChainSocketController.m in Sources */,
 				47E04D671798D33B00AEABAE /* TTGoxTransaction.m in Sources */,
 				47E04D6B1798D42800AEABAE /* TTGoxTransactionTrade.m in Sources */,
+				47E04D71179DA65C00AEABAE /* TTFeeBox.m in Sources */,
+				47E04D75179E024700AEABAE /* TTTradeExecutionBox.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1767,6 +1781,8 @@
 				477B40271794D80700D2365D /* TTBlockChainSocketController.m in Sources */,
 				47E04D681798D33B00AEABAE /* TTGoxTransaction.m in Sources */,
 				47E04D6C1798D42800AEABAE /* TTGoxTransactionTrade.m in Sources */,
+				47E04D72179DA65C00AEABAE /* TTFeeBox.m in Sources */,
+				47E04D76179E024700AEABAE /* TTTradeExecutionBox.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

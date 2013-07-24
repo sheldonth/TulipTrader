@@ -260,7 +260,7 @@ static NSFont* titleFontBold;
         [self setBoxType:NSBoxCustom];
         [self setCornerRadius:2.f];
         [self setBorderWidth:2.f];
-        [self setBorderColor:[NSColor whiteColor]];
+        [self setBorderColor:[NSColor blackColor]];
         
         [self setOrdersUpdateDispatchQueue:dispatch_queue_create("com.tuliptrader.OrderBookListViewDispatch", NULL)];
         

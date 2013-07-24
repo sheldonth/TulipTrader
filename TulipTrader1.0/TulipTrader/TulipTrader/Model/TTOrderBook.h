@@ -58,6 +58,15 @@ typedef enum{
 
 @end
 
+@protocol TTOrderBookAccountEventDelegate <NSObject>
+
+-(void)settlementEventObserved:(NSDictionary *)eventData;
+-(void)walletStateObserved:(NSDictionary *)walletDataDictionary;
+
+@end
+
+
+
 @interface TTOrderBook : NSObject <TTSocketControllerDelegate>
 
 @property(nonatomic, retain)NSArray* bids;
@@ -69,6 +78,7 @@ typedef enum{
 
 @property(nonatomic)id<TTOrderBookDelegate>delegate;
 @property(nonatomic)id<TTOrderBookEventDelegate>eventDelegate;
+@property(nonatomic)id<TTOrderBookAccountEventDelegate>accountEventDelegate;
 
 -(TTDepthOrder*)insideBuy;
 -(TTDepthOrder*)insideSell;

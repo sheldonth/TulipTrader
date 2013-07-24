@@ -20,6 +20,7 @@
 #import "TTGoxWallet.h"
 #import "AFHTTPRequestOperation.h"
 #import "TTGoxTransaction.h"
+#import "TTTradeExecutionBox.h"
 //#import "TTDepthOrder.h"
 
 #define kTTMTGOXAPIV1 @"http://data.mtgox.com/api/1/"
@@ -169,34 +170,34 @@
     }];
 }
 
--(void)placeOrder:(TTOrderType)orderType amountInteger:(NSInteger)amountInteger placementType:(TTOrderPlacementType)placementType priceInteger:(NSInteger)priceInteger withCompletion:(void (^)(BOOL success, NSDictionary* callbackData))completionBlock withFailBlock:(void (^)(NSError* error))failBlock
+-(void)placeOrder:(TTAccountWindowExecutionState)executionState amountInteger:(NSInteger)amountInteger placementType:(TTAccountWindowExecutionType)placementType priceInteger:(NSInteger)priceInteger withCompletion:(void (^)(BOOL success, NSDictionary* callbackData))completionBlock withFailBlock:(void (^)(NSError* error))failBlock
 {
     NSDictionary* paramDic;
-    switch (orderType) {
-        case TTOrderTypeBid:
+    switch (executionState) {
+        case TTAccountWindowExecutionStateBuying:
         {
             switch (placementType) {
-                case TTOrderPlacementTypeLimit:
+                case TTAccountWindowExecutionTypeLimit:
                     paramDic = @{@"type" : @"bid", @"amount_int": @(amountInteger), @"price_int" : @(priceInteger)};
                     break;
                     
-                case TTOrderPlacementTypeMarket:
-                case TTOrderPlacementTypeNone:
+                case TTAccountWindowExecutionTypeMarket:
+                case TTAccountWindowExecutionTypeNone:
                 default:
                     paramDic = @{@"type" : @"bid", @"amount_int": @(amountInteger)};
                     break;
             }
             break;
         }
-        case TTOrderTypeAsk:
+        case TTAccountWindowExecutionStateSelling:
         {
             switch (placementType) {
-                case TTOrderPlacementTypeLimit:
+                case TTAccountWindowExecutionTypeLimit:
                     paramDic = @{@"type" : @"ask", @"amount_int" : @(amountInteger), @"price_int" : @(priceInteger)};
                     break;
                     
-                case TTOrderPlacementTypeMarket:
-                case TTOrderPlacementTypeNone:
+                case TTAccountWindowExecutionTypeMarket:
+                case TTAccountWindowExecutionTypeNone:
                 default:
                     paramDic = @{@"type" : @"ask", @"amount_int" : @(amountInteger)};
                     break;
@@ -225,6 +226,46 @@
     }];
 }
 
+-(void)getQuoteForExecutionState:(TTAccountWindowExecutionState)executionState amount:(NSInteger)amountInteger withCompletion:(void (^)(NSNumber* cost))completion failBlock:(void (^)())failBlock
+{
+    NSDictionary* paramDic = nil;
+    switch (executionState) {
+        case TTAccountWindowExecutionStateBuying:
+            paramDic = @{@"type": @"bid", @"amount" : @(amountInteger)};
+            break;
+            
+        case TTAccountWindowExecutionStateSelling:
+            paramDic = @{@"type": @"ask", @"amount" : @(amountInteger)};
+            break;
+            
+        case TTAccountWindowExecutionStateNone:
+        default:
+            paramDic = nil;
+            break;
+    }
+    
+    [self.networkSecure postPath:RUStringWithFormat(@"BTCUSD/money/order/quote") parameters:paramDic success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSString* s = [[NSString alloc]initWithData:responseObject encoding:NSUTF8StringEncoding];
+        NSDictionary* d = [s objectFromJSONString];
+        NSNumber* n = [[d objectForKey:@"data"]objectForKey:@"amount"];
+        completion(n);
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        failBlock(error);
+    }];
+}
+
+-(void)getAccountWebSocketKeyWithCompletion:(void (^)(NSString* accountKey))completion failBlock:(void (^)(NSError* e))failBlock
+{
+    [self.networkSecure postPath:@"BTCUSD/money/idkey" parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSString* s = [[NSString alloc]initWithData:(NSData*)responseObject encoding:NSUTF8StringEncoding];
+        NSDictionary* d = [s objectFromJSONString];
+        NSString* accountKey = [d objectForKey:@"data"];
+        completion(accountKey);
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        failBlock(error);
+    }];
+}
+
 //-(void)getOrdersWithCompletion:(void (^)(NSArray* orders))completionBlock withFailBlock:(void (^)(NSError* e))failBlock
 //{
 //    [self.networkSecure postPath:@"BTCUSD/money/orders" parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
@@ -241,19 +282,6 @@
 //        failBlock(error);
 //    }];
 //}
-
-
--(void)getAccountWebSocketKeyWithCompletion:(void (^)(NSString* accountKey))completion failBlock:(void (^)(NSError* e))failBlock
-{
-    [self.networkSecure postPath:@"BTCUSD/money/idkey" parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        NSString* s = [[NSString alloc]initWithData:(NSData*)responseObject encoding:NSUTF8StringEncoding];
-        NSDictionary* d = [s objectFromJSONString];
-        NSString* accountKey = [d objectForKey:@"data"];
-        completion(accountKey);
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        failBlock(error);
-    }];
-}
 
 //-(void)updateLatestTradesForCurrency:(TTGoxCurrency)currency
 //{

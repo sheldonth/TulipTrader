@@ -21,6 +21,8 @@
 -(void)socketController:(TTSocketController*)socketController tradeObserved:(TTTrade*)theTrade;
 -(void)socketController:(TTSocketController*)socketController tickerObserved:(TTTicker*)theTicker;
 -(void)socketController:(TTSocketController*)socketController orderBookDeltaObserved:(TTDepthOrder*)orderBookDelta;
+-(void)socketController:(TTSocketController*)socketController walletStateObserved:(NSDictionary*)walletDataDictionary;
+-(void)socketController:(TTSocketController*)socketController settlementEventObserved:(NSDictionary*)eventData;
 
 @end
 

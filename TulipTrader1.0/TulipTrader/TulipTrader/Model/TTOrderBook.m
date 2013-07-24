@@ -269,6 +269,18 @@ TTDepthUpdate* updateObjectAfterRemovingDepthOrder(NSArray* array, TTDepthOrder*
     [self.eventDelegate orderBook:self hasNewEvent:theTrade];
 }
 
+-(void)socketController:(TTSocketController *)socketController settlementEventObserved:(NSDictionary *)eventData
+{
+    if (self.accountEventDelegate)
+        [self.accountEventDelegate settlementEventObserved:eventData];
+}
+
+-(void)socketController:(TTSocketController *)socketController walletStateObserved:(NSDictionary *)walletDataDictionary
+{
+    if (self.accountEventDelegate)
+        [self.accountEventDelegate walletStateObserved:walletDataDictionary];
+}
+
 -(id)initWithCurrency:(TTCurrency)currency
 {
     self = [super init];

@@ -26,10 +26,12 @@ typedef enum{
 
 typedef enum{
     kTTGoxMarketNone = 0,
-    kTTGoxMarketDepth = 1,
-    kTTGoxMarketTrade = 2,
-    kTTGoxMarketTicker = 3,
-    kTTGoxMarketLag = 4
+    kTTGoxMarketDepth,
+    kTTGoxMarketTrade,
+    kTTGoxMarketTicker,
+    kTTGoxMarketLag,
+    kTTGoxMarketUserOrder,
+    kTTGoxMarketMarketWalletData,
 }kTTGoxMarketDataType;
 
 @interface TTGoxSocketController()
@@ -50,6 +52,8 @@ NSString* const kTTGoxDepthKey = @"depth";
 NSString* const kTTGoxTickerKey = @"ticker";
 NSString* const kTTGoxTradeKey = @"trade";
 NSString* const kTTGoxLagKey = @"lag";
+NSString* const kTTGoxUserOrderKey = @"user_order";
+NSString* const kTTGoxWalletKey = @"wallet";
 
 #define kTTSubscribeToLag 0
 
@@ -150,11 +154,21 @@ NSString* const kTTGoxSocketDepthChannelID  = @"24e67e0d-1cad-4cc0-9e7a-f8523ef4
                     [self.delegate socketController:self tradeObserved:t];
                     break;
                 }
-                case kTTGoxMarketNone:
-                    RUDLog(@"kTTGoxMarketNone");
+                case kTTGoxMarketMarketWalletData:
+                {
+                    [self.delegate socketController:self walletStateObserved:[responseDictionary objectForKey:kTTGoxWalletKey]];
                     break;
+                }
                     
+                case kTTGoxMarketUserOrder:
+                {
+                    [self.delegate socketController:self settlementEventObserved:[responseDictionary objectForKey:kTTGoxUserOrderKey]];
+                    break;
+                }
+                    
+                case kTTGoxMarketNone:
                 default:
+                    RUDLog(@"Message Type Private had unknown type");
                     break;
             }
             break;
@@ -197,8 +211,15 @@ kTTGoxMarketDataType TTGoxMarketDataType(NSString* typeString)
         return kTTGoxMarketTrade;
     else if ([typeString isEqualToString:kTTGoxLagKey])
         return kTTGoxMarketLag;
+    else if ([typeString isEqualToString:kTTGoxWalletKey])
+        return kTTGoxMarketMarketWalletData;
+    else if ([typeString isEqualToString:kTTGoxUserOrderKey])
+        return kTTGoxMarketUserOrder;
     else
+    {
+        RUDLog(@"None on string: %@", typeString);
         return kTTGoxMarketNone;
+    }
 }
 
 

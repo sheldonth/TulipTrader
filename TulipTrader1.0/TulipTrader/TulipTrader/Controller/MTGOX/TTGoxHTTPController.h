@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "RUSingleton.h"
 #import "TTHTTPController.h"
+#import "TTTradeExecutionBox.h"
 
 @class TTGoxWallet;
 
@@ -17,12 +18,6 @@ typedef enum{
     TTOrderTypeBid,
     TTOrderTypeAsk
 }TTOrderType;
-
-typedef enum{
-    TTOrderPlacementTypeNone = 0,
-    TTOrderPlacementTypeLimit,
-    TTOrderPlacementTypeMarket
-}TTOrderPlacementType;
 
 @interface TTGoxHTTPController : TTHTTPController
 
@@ -46,8 +41,10 @@ typedef enum{
 
 -(void)getTransactionsForWallet:(TTGoxWallet*)wallet withCompletion:(void (^)(TTGoxWallet* wallet))completionBlock withFailBlock:(void (^)(NSError* e))failBlock;
 
--(void)placeOrder:(TTOrderType)orderType amountInteger:(NSInteger)amountInteger placementType:(TTOrderPlacementType)placementType priceInteger:(NSInteger)priceInteger withCompletion:(void (^)(BOOL success, NSDictionary* callbackData))completionBlock withFailBlock:(void (^)(NSError* error))failBlock;
+-(void)placeOrder:(TTAccountWindowExecutionState)executionState amountInteger:(NSInteger)amountInteger placementType:(TTAccountWindowExecutionType)placementType priceInteger:(NSInteger)priceInteger withCompletion:(void (^)(BOOL success, NSDictionary* callbackData))completionBlock withFailBlock:(void (^)(NSError* error))failBlock;
 
 -(void)getAccountWebSocketKeyWithCompletion:(void (^)(NSString* accountKey))completion failBlock:(void (^)(NSError* e))failBlock;
+
+-(void)getQuoteForExecutionState:(TTAccountWindowExecutionState)executionState amount:(NSInteger)amountInteger withCompletion:(void (^)(NSNumber* cost))completion failBlock:(void (^)())failBlock;
 
 @end

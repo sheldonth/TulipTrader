@@ -102,21 +102,21 @@
         
         [self addSubview:_currencyBox];
         
-        [self setWebView:[[WebView alloc]initWithFrame:NSZeroRect frameName:@"SheldonsFrame" groupName:@"TulipTrader"]];
-        
-        [self addSubview:_webView];
-        
-        [_webView reload:self];
+//        [self setWebView:[[WebView alloc]initWithFrame:NSZeroRect frameName:@"SheldonsFrame" groupName:@"TulipTrader"]];
+//        
+//        [self addSubview:_webView];
+//        
+//        [_webView reload:self];
         
 //        [self setGraphView:[[TTVerticalOBGraphView alloc]initWithFrame:NSZeroRect]];
         
 //        [self addSubview:_graphView];
         
-        //        [self setVerticalOBView:[[TTVerticalOBView alloc]initWithFrame:(NSRect){0, statusBarHeight, graphWidth, CGRectGetHeight(contentRect) - (currencyBoxHeight + statusBarHeight)}]];
+//        [self setVerticalOBView:[[TTVerticalOBView alloc]initWithFrame:(NSRect){0, statusBarHeight, graphWidth, CGRectGetHeight(contentRect) - (currencyBoxHeight + statusBarHeight)}]];
         
-        //        [self.verticalOBView setChartingProcedure:TTDepthViewChartingProcedureSampling];
+//        [self.verticalOBView setChartingProcedure:TTDepthViewChartingProcedureSampling];
         
-        //        [self.contentView addSubview:_verticalOBView];
+//        [self.contentView addSubview:_verticalOBView];
         
         [self setBidOrderBookListView:[[TTOrderBookListView alloc]initWithFrame:NSZeroRect]];
         
@@ -152,7 +152,7 @@
     
     CGFloat statusBarHeight = floorf(CGRectGetHeight(frameRect) / 20);
     
-    CGFloat graphWidth = floorf(CGRectGetWidth(frameRect) / 3) * 2;
+    CGFloat graphWidth = floorf(CGRectGetWidth(frameRect) / 2);
     
     CGFloat graphHeight = floorf(CGRectGetHeight(frameRect) - (currencyBoxHeight + statusBarHeight));
     
@@ -161,9 +161,9 @@
 //    [_graphView setFrame:(NSRect){0, statusBarHeight, graphWidth, graphHeight}];
     [_webView setFrame:(NSRect){0, statusBarHeight, graphWidth, graphHeight}];
     
-    [_bidOrderBookListView setFrame:(NSRect){graphWidth, statusBarHeight - 5, graphWidth / 2, graphHeight / 2}];
+    [_bidOrderBookListView setFrame:(NSRect){graphWidth, statusBarHeight - 5, graphWidth, graphHeight / 2}];
     
-    [_askOrderBookListView setFrame:(NSRect){graphWidth, CGRectGetMaxY(_bidOrderBookListView.frame) + 5, graphWidth / 2, graphHeight / 2}];
+    [_askOrderBookListView setFrame:(NSRect){graphWidth, CGRectGetMaxY(_bidOrderBookListView.frame) + 5, graphWidth, graphHeight / 2}];
     
     [_statusBox setFrame:(NSRect){0, 0, CGRectGetWidth(frameRect), statusBarHeight - 10}];
 }
