@@ -83,9 +83,10 @@ static NSDateFormatter* accountTableDateFormatter;
 
 -(void)settlementEventObserved:(NSDictionary *)eventData
 {
-    [self.settlementsArray insertObject:eventData atIndex:0];
-    [self.accountSettlementsTableView reloadData];
-//    [self.accountSettlementsTableView insertRowsAtIndexes:[NSIndexSet indexSetWithIndex:0] withAnimation:NSTableViewAnimationSlideLeft];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.settlementsArray insertObject:eventData atIndex:0];
+        [self.accountSettlementsTableView insertRowsAtIndexes:[NSIndexSet indexSetWithIndex:0] withAnimation:NSTableViewAnimationSlideLeft];
+    });
 }
 
 -(void)walletStateObserved:(NSDictionary *)walletDataDictionary

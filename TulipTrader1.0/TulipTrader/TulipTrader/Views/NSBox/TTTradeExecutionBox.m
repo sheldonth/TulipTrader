@@ -229,7 +229,10 @@ static NSFont* accountActionsFont;
     if (amountFloatResult)
     {
         [_httpController placeOrder:self.executionState amountInteger:(amountFloatResult * 100000000) placementType:self.executionType priceInteger:(priceFloatResult * 100000) withCompletion:^(BOOL success, NSDictionary *callbackData) {
-            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.orderAmountTextField setStringValue:@""];
+                [self.orderPriceTextField setStringValue:@""];
+            });
         } withFailBlock:^(NSError *error) {
             
         }];
