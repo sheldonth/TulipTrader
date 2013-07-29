@@ -34,6 +34,24 @@
 
 @implementation TTGoxHTTPController
 
+#pragma mark - C methods
+
+TTGoxTransactionType transactionForIdentifier(NSString* identifier)
+{
+    if ([identifier isEqualToString:@"fee"])
+        return TTGoxTransactionTypeFee;
+    else if ([identifier isEqualToString:@"earned"])
+        return TTGoxTransactionTypeBitcoinSale;
+    else if ([identifier isEqualToString:@"spent"])
+        return TTGoxTransactionTypeBitcoinPurchase;
+    else if ([identifier isEqualToString:@"deposit"])
+        return TTGoxTransactionTypeDeposit;
+    else if([identifier isEqualToString:@"withdrawal"])
+        return TTGoxTransactionTypeWithdrawal;
+    else
+        return TTGoxTransactionTypeNone;
+}
+
 -(id)init
 {
     self = [super init];
@@ -130,7 +148,6 @@
     }];
 }
 
-
 -(void)getTransactionsForWallet:(TTGoxWallet*)wallet withCompletion:(void (^)(TTGoxWallet* wallet))completionBlock withFailBlock:(void (^)(NSError* e))failBlock
 {
     [self getTransactionsForWallet:wallet atPage:0 recursivelyAppendingToMutableArray:nil withCompletion:completionBlock withFailBlock:failBlock];
@@ -149,12 +166,85 @@
     
     [self.networkSecure postPath:RUStringWithFormat(@"money/wallet/history") parameters:paramDic success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSString* a = [[NSString alloc]initWithData:(NSData *)responseObject encoding:NSUTF8StringEncoding];
+        
         NSDictionary* responseDictionary = [a objectFromJSONString];
+        
         NSDictionary* dataResults = [responseDictionary objectForKey:@"data"];
+        
         NSArray* transactions = [dataResults objectForKey:@"result"];
+        
         [transactions enumerateObjectsUsingBlock:^(NSDictionary* obj, NSUInteger idx, BOOL *stop) {
-            TTGoxTransaction* t = [TTGoxTransaction transactionFromDictionary:obj];
-            [array addObject:t];
+            
+            NSArray* linkArray = [obj objectForKey:@"Link"];
+            
+            NSString* idString = [linkArray objectAtIndex:2];
+            
+            NSNumber* transactionID = @(idString.doubleValue);
+            
+            NSInteger indexOfTransaction = [array indexOfObjectPassingTest:^BOOL(TTGoxTransaction* obj, NSUInteger idx, BOOL *stop) {
+                if ([[obj linkIDNumber]isEqualToNumber:transactionID])
+                {
+                    *stop = YES;
+                    return YES;
+                }
+                return NO;
+            }];
+            
+            TTGoxTransaction* pendingTransaction;
+            
+            if (indexOfTransaction == NSNotFound)
+            {
+                pendingTransaction = [TTGoxTransaction new];
+                [array addObject:pendingTransaction];
+                [pendingTransaction setLinkIDNumber:transactionID];
+            }
+            else
+            {
+                pendingTransaction = [array objectAtIndex:indexOfTransaction];
+            }
+            
+            TTGoxTransactionType transType = transactionForIdentifier([obj objectForKey:@"Type"]);
+            switch (transType) {
+                // We have to hit purchase OR sale for each linkID number.
+                case TTGoxTransactionTypeBitcoinSale:
+                case TTGoxTransactionTypeBitcoinPurchase:
+                {
+                    if (!pendingTransaction.trade)
+                    {
+                        TTGoxTransactionTrade* trade = [TTGoxTransactionTrade newTransactionTradeFromDictionary:[obj objectForKey:@"Trade"]];
+                        [pendingTransaction setTrade:trade];
+                    }
+                    [pendingTransaction setTransactionValue:[TTTick newTickfromDictionary:[obj objectForKey:@"Value"]]];
+                    [pendingTransaction setLinkUniqueKey:[linkArray objectAtIndex:0]];
+                    [pendingTransaction setLinkType:[linkArray objectAtIndex:1]];
+                    [pendingTransaction setTransactionType:transType];
+                    [pendingTransaction setTransactionInfoString:[obj objectForKey:@"Info"]];
+                    [pendingTransaction setTransactionIndex:[obj objectForKey:@"Index"]];
+                    [pendingTransaction setTransactionDate:[NSDate dateWithTimeIntervalSince1970:[[obj objectForKey:@"Date"]doubleValue]]];
+                    break;
+                }
+                    
+                case TTGoxTransactionTypeDeposit:
+                case TTGoxTransactionTypeWithdrawal:
+                {
+                    RUDLog(@"!");
+                    break;
+                }
+                case TTGoxTransactionTypeFee:
+                {
+                    [pendingTransaction setFeePaidValue:[TTTick newTickfromDictionary:[obj objectForKey:@"Value"]]];
+                    [pendingTransaction setBalance:[TTTick newTickfromDictionary:[obj objectForKey:@"Balance"]]];
+                    [pendingTransaction setFeeInfoString:[obj objectForKey:@"Info"]];
+                    [pendingTransaction setFeeIndex:[obj objectForKey:@"Index"]];
+                    [pendingTransaction setFeeDate:[NSDate dateWithTimeIntervalSince1970:[[obj objectForKey:@"Date"]doubleValue]]];
+                    break;
+                }
+                    
+                case TTGoxTransactionTypeNone:
+                default:
+                    break;
+            }
+            
         }];
         NSNumber* currentPage = [dataResults objectForKey:@"current_page"];
         NSNumber* maxPage = [dataResults objectForKey:@"max_page"];

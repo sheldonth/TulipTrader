@@ -55,22 +55,22 @@ static NSFont* titleFontBold;
                 case TTDepthOrderUpdateTypeInsert:
                     if (self.invertsDataSource)
                     {
-                        [self.tableView insertRowsAtIndexes:[NSIndexSet indexSetWithIndex:self.orders.count - 1 - index] withAnimation:NSTableViewAnimationSlideDown];
+                        [self.tableView insertRowsAtIndexes:[NSIndexSet indexSetWithIndex:self.orders.count - 1 - index] withAnimation:(NSTableViewAnimationSlideLeft | NSTableViewAnimationEffectGap)];
                     }
                     else
                     {
-                        [self.tableView insertRowsAtIndexes:[NSIndexSet indexSetWithIndex:index] withAnimation:NSTableViewAnimationSlideDown];
+                        [self.tableView insertRowsAtIndexes:[NSIndexSet indexSetWithIndex:index] withAnimation:(NSTableViewAnimationSlideLeft | NSTableViewAnimationEffectGap)];
                     }
                     break;
                     
                 case TTDepthOrderUpdateTypeRemove:
                     if (self.invertsDataSource)
                     {
-                        [self.tableView removeRowsAtIndexes:[NSIndexSet indexSetWithIndex:self.orders.count - index] withAnimation:NSTableViewAnimationSlideUp];
+                        [self.tableView removeRowsAtIndexes:[NSIndexSet indexSetWithIndex:self.orders.count - index] withAnimation:(NSTableViewAnimationSlideRight | NSTableViewAnimationEffectGap)];
                     }
                     else
                     {
-                        [self.tableView removeRowsAtIndexes:[NSIndexSet indexSetWithIndex:index] withAnimation:NSTableViewAnimationSlideUp];
+                        [self.tableView removeRowsAtIndexes:[NSIndexSet indexSetWithIndex:index] withAnimation:(NSTableViewAnimationSlideRight | NSTableViewAnimationEffectGap)];
                     }
                     break;
                     

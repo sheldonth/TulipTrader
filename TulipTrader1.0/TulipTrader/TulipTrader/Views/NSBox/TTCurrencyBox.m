@@ -153,7 +153,7 @@ NSString* stringForTick(TTTick* tick)
         [self setBuyLabel:[[JNWLabel alloc]initWithFrame:NSZeroRect]];
         [_buyLabel setFont:valueLabelFont];
         [_buyLabel setTextAlignment:NSCenterTextAlignment];
-        [_buyLabel setText:@"BUY"];
+        [_buyLabel setText:@"BUYING"];
         [self.contentView addSubview:_buyLabel];
         
         [self setBuyValueLabel:[[JNWLabel alloc]initWithFrame:NSZeroRect]];
@@ -165,7 +165,7 @@ NSString* stringForTick(TTTick* tick)
         [self setSellLabel:[[JNWLabel alloc]initWithFrame:NSZeroRect]];
         [_sellLabel setFont:valueLabelFont];
         [_sellLabel setTextAlignment:NSCenterTextAlignment];
-        [_sellLabel setText:@"SELL"];
+        [_sellLabel setText:@"SELLING"];
         [self.contentView addSubview:_sellLabel];
         
         [self setSellValueLabel:[[JNWLabel alloc]initWithFrame:NSZeroRect]];

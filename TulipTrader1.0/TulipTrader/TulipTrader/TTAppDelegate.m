@@ -77,7 +77,7 @@ NSString *const kFocusedAdvancedControlIndex = @"FocusedAdvancedControlIndex";
     CGFloat screenWidth = [[NSScreen mainScreen]frame].size.width;
     [self setAccountWindow:[[TTAccountWindow alloc]initWithContentRect:(NSRect){browserHorizontalSize, 0, screenWidth - browserHorizontalSize, browserRect.size.height} styleMask:(NSTitledWindowMask | NSClosableWindowMask | NSMiniaturizableWindowMask | NSResizableWindowMask) backing:NSBackingStoreBuffered defer:YES]];
     [self.accountWindow setTitle:@"Account"];
-    [self.accountWindow setOrderbook:self.browser.orderBook];
+    [self.accountWindow setOrderBook:self.browser.orderBook];
     [self.accountWindow setAnimationBehavior:NSWindowAnimationBehaviorDocumentWindow];
     [self.accountWindow makeKeyAndOrderFront:self];
 }

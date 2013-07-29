@@ -47,6 +47,8 @@
 
 @end
 
+static CGSize sharedLabelSize;
+
 @implementation TTTradeExecutionBox
 
 static NSFont* accountActionsFont;
@@ -56,6 +58,7 @@ static NSFont* accountActionsFont;
     if (self == [TTTradeExecutionBox class])
     {
         accountActionsFont = [NSFont fontWithName:@"Menlo" size:14.f];
+        sharedLabelSize = (CGSize){100, 20};
     }
 }
 
@@ -260,7 +263,7 @@ static NSFont* accountActionsFont;
 {
     self = [super initWithFrame:frame];
     if (self) {
-        [self setBuyActionButton:[[NSButton alloc]initWithFrame:(NSRect){35, CGRectGetHeight(frame) - 50, 80, 30}]];
+        [self setBuyActionButton:[[NSButton alloc]initWithFrame:NSZeroRect]];
         [_buyActionButton setButtonType:NSPushOnPushOffButton];
         [_buyActionButton setTarget:self];
         [_buyActionButton setAction:@selector(buyActionButtonPressed:)];
@@ -269,7 +272,7 @@ static NSFont* accountActionsFont;
         [_buyActionButton setState:NSOnState];
         [self.contentView addSubview:_buyActionButton];
         
-        [self setSellActionButton:[[NSButton alloc]initWithFrame:(NSRect){CGRectGetMaxX(_buyActionButton.frame), CGRectGetHeight(frame) - 50, 80, 30}]];
+        [self setSellActionButton:[[NSButton alloc]initWithFrame:NSZeroRect]];
         [_sellActionButton setButtonType:NSPushOnPushOffButton];
         [_sellActionButton setTarget:self];
         [_sellActionButton setAction:@selector(sellActionButtonPressed:)];
@@ -277,7 +280,7 @@ static NSFont* accountActionsFont;
         [_sellActionButton setTitle:@"Sell"];
         [self.contentView addSubview:_sellActionButton];
         
-        [self setMarketOrderButton:[[NSButton alloc]initWithFrame:(NSRect){CGRectGetMinX(_buyActionButton.frame), CGRectGetHeight(frame) - 85, 80, 30}]];
+        [self setMarketOrderButton:[[NSButton alloc]initWithFrame:NSZeroRect]];
         [_marketOrderButton setButtonType:NSPushOnPushOffButton];
         [_marketOrderButton setTarget:self];
         [_marketOrderButton setAction:@selector(marketOrderButtonPressed:)];
@@ -286,7 +289,7 @@ static NSFont* accountActionsFont;
         [_marketOrderButton setState:NSOnState];
         [self.contentView addSubview:_marketOrderButton];
         
-        [self setLimitOrderButton:[[NSButton alloc]initWithFrame:(NSRect){CGRectGetMaxX(_marketOrderButton.frame), CGRectGetHeight(frame) - 85, 80, 30}]];
+        [self setLimitOrderButton:[[NSButton alloc]initWithFrame:NSZeroRect]];
         [_limitOrderButton setButtonType:NSPushOnPushOffButton];
         [_limitOrderButton setTarget:self];
         [_limitOrderButton setAction:@selector(limitOrderButtonPressed:)];
@@ -294,17 +297,17 @@ static NSFont* accountActionsFont;
         [_limitOrderButton setTitle:@"Limit"];
         [self.contentView addSubview:_limitOrderButton];
         
-        [self setOrderAmountlabel:[[JNWLabel alloc]initWithFrame:(NSRect){0, CGRectGetMinY(_sellActionButton.frame) - 74, 80, 25}]];
+        [self setOrderAmountlabel:[[JNWLabel alloc]initWithFrame:NSZeroRect]];
         [_orderAmountlabel setText:@"Amount:"];
         [_orderAmountlabel setTextAlignment:NSRightTextAlignment];
         [self.contentView addSubview:_orderAmountlabel];
         
-        [self setOrderPriceLabel:[[JNWLabel alloc]initWithFrame:(NSRect){0, CGRectGetMinY(_orderAmountlabel.frame) - 30, 80, 25}]];
+        [self setOrderPriceLabel:[[JNWLabel alloc]initWithFrame:NSZeroRect]];
         [_orderPriceLabel setTextAlignment:NSRightTextAlignment];
         [_orderPriceLabel setText:@"Price:"];
         [self.contentView addSubview:_orderPriceLabel];
         
-        [self setOrderAmountTextField:[[NSTextField alloc]initWithFrame:(NSRect){CGRectGetMaxX(_orderAmountlabel.frame) + 20, CGRectGetMinY(_sellActionButton.frame) - 80, 120, 45}]];
+        [self setOrderAmountTextField:[[NSTextField alloc]initWithFrame:NSZeroRect]];
         [_orderAmountTextField setAlignment:NSCenterTextAlignment];
         [_orderAmountTextField.cell setPlaceholderString:@"0 BTC"];
         [_orderAmountTextField.cell setBezelStyle:NSTextFieldRoundedBezel];
@@ -315,7 +318,7 @@ static NSFont* accountActionsFont;
         [_orderAmountTextField setDelegate:self];
         [self.contentView addSubview:_orderAmountTextField];
         
-        [self setOrderPriceTextField:[[NSTextField alloc]initWithFrame:(NSRect){CGRectGetMaxX(_orderPriceLabel.frame) + 20, CGRectGetMinY(_orderPriceLabel.frame) + 3, 120, 25}]];
+        [self setOrderPriceTextField:[[NSTextField alloc]initWithFrame:NSZeroRect]];
         [_orderPriceTextField setAlignment:NSCenterTextAlignment];
         [_orderPriceTextField.cell setPlaceholderString:@"$0.00"];
         [_orderPriceTextField setBezeled:YES];
@@ -326,59 +329,58 @@ static NSFont* accountActionsFont;
         [_orderPriceTextField.cell setBezelStyle:NSTextFieldRoundedBezel];
         [self.contentView addSubview:_orderPriceTextField];
         
-        [self setTradeExecutionButton:[[NSButton alloc]initWithFrame:(NSRect){127, 5, 117, 26}]];
+        [self setTradeExecutionButton:[[NSButton alloc]initWithFrame:NSZeroRect]];
         [_tradeExecutionButton setTitle:@"EXECUTE"];
         [_tradeExecutionButton setBordered:YES];
         [_tradeExecutionButton setTarget:self];
         [_tradeExecutionButton setAction:@selector(executeTransation)];
         [self.contentView addSubview:_tradeExecutionButton];
         
-        [self setQuoteButton:[[NSButton alloc]initWithFrame:(NSRect){5, 5, 117, 26}]];
+        [self setQuoteButton:[[NSButton alloc]initWithFrame:NSZeroRect]];
         [_quoteButton setTitle:@"QUOTE"];
         [_quoteButton setTarget:self];
         [_quoteButton setAction:@selector(quoteButtonPressed:)];
         [self.contentView addSubview:_quoteButton];
         
-        CGSize sharedLabelSize = (CGSize){100, 20};
         NSMutableArray* labelArrays = [NSMutableArray array];
         
-        [self setPriceLabel:[[JNWLabel alloc]initWithFrame:(NSRect){(CGRectGetWidth(frame) / 2) + 15, CGRectGetHeight(frame) - 40, sharedLabelSize}]];
+        [self setPriceLabel:[[JNWLabel alloc]initWithFrame:NSZeroRect]];
         [labelArrays addObject:_priceLabel];
         [self.contentView addSubview:_priceLabel];
         
-        [self setPriceValueLabel:[[JNWLabel alloc]initWithFrame:(NSRect){CGRectGetMaxX(_priceLabel.frame), CGRectGetMinY(_priceLabel.frame), sharedLabelSize}]];
+        [self setPriceValueLabel:[[JNWLabel alloc]initWithFrame:NSZeroRect]];
         [labelArrays addObject:_priceValueLabel];
         [self.contentView addSubview:_priceValueLabel];
         
-        [self setQuantityLabel:[[JNWLabel alloc]initWithFrame:(NSRect){CGRectGetMinX(_priceLabel.frame), CGRectGetMinY(_priceLabel.frame) - 30, sharedLabelSize}]];
+        [self setQuantityLabel:[[JNWLabel alloc]initWithFrame:NSZeroRect]];
         [labelArrays addObject:_quantityLabel];
         [self.contentView addSubview:_quantityLabel];
         
-        [self setQuantityValueLabel:[[JNWLabel alloc]initWithFrame:(NSRect){CGRectGetMaxX(_quantityLabel.frame), CGRectGetMinY(_priceLabel.frame) - 30, sharedLabelSize}]];
+        [self setQuantityValueLabel:[[JNWLabel alloc]initWithFrame:NSZeroRect]];
         [labelArrays addObject:_quantityValueLabel];
         [self.contentView addSubview:_quantityValueLabel];
         
-        [self setSlippageLabel:[[JNWLabel alloc]initWithFrame:(NSRect){CGRectGetMinX(_quantityLabel.frame), CGRectGetMinY(_quantityLabel.frame) - 30, sharedLabelSize}]];
+        [self setSlippageLabel:[[JNWLabel alloc]initWithFrame:NSZeroRect]];
         [labelArrays addObject:_slippageLabel];
         [self.contentView addSubview:_slippageLabel];
         
-        [self setSlippageValueLabel:[[JNWLabel alloc]initWithFrame:(NSRect){CGRectGetMaxX(_slippageLabel.frame), CGRectGetMinY(_slippageLabel.frame), sharedLabelSize}]];
+        [self setSlippageValueLabel:[[JNWLabel alloc]initWithFrame:NSZeroRect]];
         [labelArrays addObject:_slippageValueLabel];
         [self.contentView addSubview:_slippageValueLabel];
         
-        [self setSlippagePercentageLabel:[[JNWLabel alloc]initWithFrame:(NSRect){CGRectGetMinX(_slippageLabel.frame), CGRectGetMinY(_slippageLabel.frame) - 30, sharedLabelSize}]];
+        [self setSlippagePercentageLabel:[[JNWLabel alloc]initWithFrame:NSZeroRect]];
         [labelArrays addObject:_slippagePercentageLabel];
         [self.contentView addSubview:_slippagePercentageLabel];
         
-        [self setSlippagePercentageValueLabel:[[JNWLabel alloc]initWithFrame:(NSRect){CGRectGetMaxX(_slippagePercentageLabel.frame), CGRectGetMinY(_slippagePercentageLabel.frame), sharedLabelSize}]];
+        [self setSlippagePercentageValueLabel:[[JNWLabel alloc]initWithFrame:NSZeroRect]];
         [labelArrays addObject:_slippagePercentageValueLabel];
         [self.contentView addSubview:_slippagePercentageValueLabel];
         
-        [self setServerQuoteLabel:[[JNWLabel alloc]initWithFrame:(NSRect){CGRectGetMinX(_slippagePercentageLabel.frame), CGRectGetMinY(_slippagePercentageLabel.frame) - 30, sharedLabelSize}]];
+        [self setServerQuoteLabel:[[JNWLabel alloc]initWithFrame:NSZeroRect]];
         [labelArrays addObject:_serverQuoteLabel];
         [self.contentView addSubview:_serverQuoteLabel];
         
-        [self setServerQuoteValueLabel:[[JNWLabel alloc]initWithFrame:(NSRect){CGRectGetMaxX(_serverQuoteLabel.frame), CGRectGetMinY(_serverQuoteLabel.frame), sharedLabelSize}]];
+        [self setServerQuoteValueLabel:[[JNWLabel alloc]initWithFrame:NSZeroRect]];
         [labelArrays addObject:_serverQuoteValueLabel];
         [self.contentView addSubview:_serverQuoteValueLabel];
         
@@ -400,6 +402,31 @@ static NSFont* accountActionsFont;
     }
         
     return self;
+}
+
+-(void)setFrame:(NSRect)frameRect
+{
+    [super setFrame:frameRect];
+    [_buyActionButton setFrame:(NSRect){35, CGRectGetHeight(self.frame) - 50, 80, 30}];
+    [_sellActionButton setFrame:(NSRect){CGRectGetMaxX(_buyActionButton.frame), CGRectGetHeight(self.frame) - 50, 80, 30}];
+    [_marketOrderButton setFrame:(NSRect){CGRectGetMinX(_buyActionButton.frame), CGRectGetHeight(self.frame) - 85, 80, 30}];
+    [_limitOrderButton setFrame:(NSRect){CGRectGetMaxX(_marketOrderButton.frame), CGRectGetHeight(self.frame) - 85, 80, 30}];
+    [_orderAmountlabel setFrame:(NSRect){0, CGRectGetMinY(_sellActionButton.frame) - 74, 80, 25}];
+    [_orderPriceLabel setFrame:(NSRect){0, CGRectGetMinY(_orderAmountlabel.frame) - 30, 80, 25}];
+    [_orderAmountTextField setFrame:(NSRect){CGRectGetMaxX(_orderAmountlabel.frame) + 20, CGRectGetMinY(_sellActionButton.frame) - 80, 120, 45}];
+    [_orderPriceTextField setFrame:(NSRect){CGRectGetMaxX(_orderPriceLabel.frame) + 20, CGRectGetMinY(_orderPriceLabel.frame) + 3, 120, 25}];
+    [_tradeExecutionButton setFrame:(NSRect){127, 5, 117, 26}];
+    [_quoteButton setFrame:(NSRect){5, 5, 117, 26}];
+    [_priceLabel setFrame:(NSRect){(CGRectGetWidth(self.frame) / 2) + 15, CGRectGetHeight(self.frame) - 40, sharedLabelSize}];
+    [_priceValueLabel setFrame:(NSRect){CGRectGetMaxX(_priceLabel.frame), CGRectGetMinY(_priceLabel.frame), sharedLabelSize}];
+    [_quantityLabel setFrame:(NSRect){CGRectGetMinX(_priceLabel.frame), CGRectGetMinY(_priceLabel.frame) - 30, sharedLabelSize}];
+    [_quantityValueLabel setFrame:(NSRect){CGRectGetMaxX(_quantityLabel.frame), CGRectGetMinY(_priceLabel.frame) - 30, sharedLabelSize}];
+    [_slippageLabel setFrame:(NSRect){CGRectGetMinX(_quantityLabel.frame), CGRectGetMinY(_quantityLabel.frame) - 30, sharedLabelSize}];
+    [_slippageValueLabel setFrame:(NSRect){CGRectGetMaxX(_slippageLabel.frame), CGRectGetMinY(_slippageLabel.frame), sharedLabelSize}];
+    [_slippagePercentageLabel setFrame:(NSRect){CGRectGetMinX(_slippageLabel.frame), CGRectGetMinY(_slippageLabel.frame) - 30, sharedLabelSize}];
+    [_slippagePercentageValueLabel setFrame:(NSRect){CGRectGetMaxX(_slippagePercentageLabel.frame), CGRectGetMinY(_slippagePercentageLabel.frame), sharedLabelSize}];
+    [_serverQuoteLabel setFrame:(NSRect){CGRectGetMinX(_slippagePercentageLabel.frame), CGRectGetMinY(_slippagePercentageLabel.frame) - 30, sharedLabelSize}];
+    [_serverQuoteValueLabel setFrame:(NSRect){CGRectGetMaxX(_serverQuoteLabel.frame), CGRectGetMinY(_serverQuoteLabel.frame), sharedLabelSize}];
 }
 
 - (void)drawRect:(NSRect)dirtyRect

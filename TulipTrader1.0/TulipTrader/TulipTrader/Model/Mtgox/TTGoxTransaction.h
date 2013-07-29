@@ -10,17 +10,42 @@
 #import "TTTick.h"
 #import "TTGoxTransactionTrade.h"
 
+typedef enum{
+    TTGoxTransactionTypeNone = 0,
+    TTGoxTransactionTypeBitcoinPurchase,
+    TTGoxTransactionTypeBitcoinSale,
+    TTGoxTransactionTypeFee,
+    TTGoxTransactionTypeDeposit,
+    TTGoxTransactionTypeWithdrawal
+}TTGoxTransactionType;
+
+
+
 @interface TTGoxTransaction : NSObject
 
 @property(nonatomic, retain)TTTick* balance;
-@property(nonatomic, retain)NSDate* date;
-@property(nonatomic, retain)NSNumber* index;
-@property(nonatomic, retain)NSString* infoString;
-@property(nonatomic, retain)NSArray* linkArray;
-@property(nonatomic, retain)NSString* type;
-@property(nonatomic, retain)TTGoxTransactionTrade* trade;
-@property(nonatomic, retain)TTTick* value;
 
-+(TTGoxTransaction*)transactionFromDictionary:(NSDictionary*)d;
+@property(nonatomic, retain)NSString* linkType;
+@property(nonatomic, retain)NSNumber* linkIDNumber;
+@property(nonatomic, retain)NSString* linkUniqueKey;
+
+@property(nonatomic, retain)NSString* typeString;
+@property(nonatomic, retain)TTGoxTransactionTrade* trade;
+
+@property(nonatomic, retain)TTTick* feePaidValue;
+@property(nonatomic, retain)TTTick* transactionValue;
+
+@property(nonatomic)TTGoxTransactionType transactionType;
+
+@property(nonatomic, retain)NSString* feeInfoString;
+@property(nonatomic, retain)NSString* transactionInfoString;
+
+@property(nonatomic, retain)NSDate* feeDate;
+@property(nonatomic, retain)NSDate* transactionDate;
+@property(nonatomic, retain)NSString* feeIndex;
+@property(nonatomic, retain)NSString* transactionIndex;
+
+-(NSNumber*)costBasis;
+-(NSNumber*)feeEffectivePercentageNumber;
 
 @end
