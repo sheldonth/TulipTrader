@@ -7,10 +7,22 @@
       "npm":  "1.1.65"
     },
   "dependencies": {
-    "express": "3.x",
-    "jade": "=0.27.6",
-    "stylus": "=0.29.0",
-    "coffee-script": "1.6.x"
+    "underscore": "=1.5.1",
+    "async": "=0.2.9",
+    "strftime": "=0.6.1",
+    "tafa-misc-util": "=0.1.6",
+    
+    "express": "=3.3.5",
+    "jade": "=0.36.1",
+    "stylus": "=0.36.1",
+    
+    "redis": "=0.8.4",
+    "mysql": ">=0.0.1",
+    
+    "binary": "=0.3.0",
+    
+    "stitch": "=0.3.3",
+    "coffee-script": "=1.6.3",
+    "moof": "=0.0.12"
   }
-
 }
