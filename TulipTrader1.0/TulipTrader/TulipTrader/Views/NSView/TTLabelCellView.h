@@ -12,6 +12,7 @@
 @interface TTLabelCellView : NSTableCellView
 
 @property(nonatomic, retain)NSString* valueString;
+@property(nonatomic, retain)NSColor* textColor;
 @property(nonatomic)BOOL alignsValue;
 
 @end

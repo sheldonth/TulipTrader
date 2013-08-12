@@ -1,0 +1,16 @@
+{
+  "name": "Mindfuck.fm",
+  "description": "AppServer",
+  "version": "0.0.1",
+  "engines": {
+      "node": "0.8.2",
+      "npm":  "1.1.65"
+    },
+  "dependencies": {
+    "express": "3.x",
+    "jade": "=0.27.6",
+    "stylus": "=0.29.0",
+    "coffee-script": "1.6.x"
+  }
+
+}

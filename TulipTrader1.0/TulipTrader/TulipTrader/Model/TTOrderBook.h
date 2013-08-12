@@ -83,6 +83,8 @@ typedef enum{
 -(TTDepthOrder*)insideBuy;
 -(TTDepthOrder*)insideSell;
 
+-(NSNumber*)localQuoteFromOrderBookSide:(TTOrderBookSide)side forQuantity:(NSNumber*)qty;
+
 +(TTOrderBook*)newOrderBookForMTGOXwithCurrency:(TTCurrency)currency;
 
 //-(id)objectAtInvertedBidsIndex:(NSInteger)index;

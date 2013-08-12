@@ -12,22 +12,20 @@
 {
     NSPoint valueStringPoint;
 }
+@property(nonatomic, retain)NSFont* labelFont;
+@property(nonatomic, retain)NSMutableDictionary* labelStringPropertiesDictionary;
+
 
 @end
 
 @implementation TTLabelCellView
 
-static NSFont* labelFont;
-static NSDictionary* labelStringPropertiesDictionary;
 
 +(void)initialize
 {
     if (self == [TTLabelCellView class])
     {
-        labelFont = [NSFont fontWithName:@"Menlo" size:12.f]; // Menlo is better
-        NSMutableParagraphStyle *style = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
-        [style setAlignment:NSCenterTextAlignment];
-        labelStringPropertiesDictionary = @{NSParagraphStyleAttributeName : style, NSFontAttributeName : labelFont};
+
     }
 }
 
@@ -35,41 +33,32 @@ static NSDictionary* labelStringPropertiesDictionary;
 {
     _valueString = valueString;
     [self setNeedsDisplay:YES];
-//    CGFloat characterWidth = 10.f;
-//    if (valueString.floatValue < 10.f)
-//    {
-//        valueStringPoint = (NSPoint){3 * characterWidth, 2};
-//    }
-//    else if (valueString.floatValue < 100.f)
-//    {
-//        valueStringPoint = (NSPoint){2 * characterWidth, 2};
-//    }
-//    else if (valueString.floatValue < 1000.f)
-//    {
-//        valueStringPoint = (NSPoint){1 * characterWidth, 2};
-//    }
 }
 
-//- (id)initWithFrame:(NSRect)frame
-//{
-//    self = [super initWithFrame:frame];
-//    if (self) {
-//
-//    }
-//    return self;
-//}
+- (id)initWithFrame:(NSRect)frame
+{
+    self = [super initWithFrame:frame];
+    if (self) {
+        [self setLabelFont:[NSFont fontWithName:@"Menlo" size:12.f]]; // Menlo is better
+        NSMutableParagraphStyle *style = [[NSParagraphStyle defaultParagraphStyle] mutableCopy];
+        [style setAlignment:NSCenterTextAlignment];
+        _textColor = [NSColor blackColor];
+        [self setLabelStringPropertiesDictionary:[NSMutableDictionary dictionaryWithDictionary:@{NSParagraphStyleAttributeName : style, NSFontAttributeName : self.labelFont, NSForegroundColorAttributeName : self.textColor}]];
+    }
+    return self;
+}
+
+-(void)setTextColor:(NSColor *)textColor
+{
+    _textColor = textColor;
+    [self.labelStringPropertiesDictionary setObject:self.textColor forKey:NSForegroundColorAttributeName];
+}
 
 - (void)drawRect:(NSRect)dirtyRect
 {
-//    NSBezierPath* bPath = [NSBezierPath bezierPathWithRect:(NSRect){2, 2, self.frame.size.width - 4, self.frame.size.height - 2}];
-//    [bPath setLineWidth:2.f];
-//    [[NSColor lightGrayColor]set];
-//    [bPath stroke];
-    
     if (self.valueString)
     {
-        [self.valueString drawInRect:(NSRect){2, 4, CGRectGetWidth(self.frame) - 8, CGRectGetHeight(self.frame) - 4} withAttributes:labelStringPropertiesDictionary];
-//        [self.valueString drawAtPoint:valueStringPoint withAttributes:labelStringPropertiesDictionary];
+        [self.valueString drawInRect:(NSRect){2, 4, CGRectGetWidth(self.frame) - 8, CGRectGetHeight(self.frame) - 4} withAttributes:self.labelStringPropertiesDictionary];
     }
 }
 

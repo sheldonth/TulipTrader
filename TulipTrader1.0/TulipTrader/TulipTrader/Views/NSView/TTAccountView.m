@@ -25,30 +25,19 @@
 @interface TTAccountView()
 
 @property(nonatomic, retain)TTGoxHTTPController* httpController;
-
 @property(nonatomic, retain)NSMutableArray* walletsArray;
-
 @property(nonatomic, retain)TTAccountBalancesBox* accountBalancesBox;
-
 @property(nonatomic, retain)TTFeeBox* feesBox;
-
 @property(nonatomic, retain)TTTradeExecutionBox* tradeExecutionBox;
-
 @property(nonatomic, retain)NSScrollView* accountTransactionsScrollView;
 @property(nonatomic, retain)NSTableView* accountTransactionsTableView;
-
 @property(nonatomic, retain)NSScrollView* accountSettlementsScrollView;
 @property(nonatomic, retain)NSTableView* accountSettlementsTableView;
-
 @property(nonatomic, retain)NSArray* tableColumnTitles;
-
 @property(nonatomic, retain)NSMutableArray* tableColumns;
-
 @property(nonatomic, retain)NSMutableArray* settlementsTableTableColumnsArray;
-
 @property(nonatomic, retain)NSMutableArray* settlementsArray;
 @property(nonatomic, retain)NSMutableArray* settlementTableColumnsArray;
-
 @property(nonatomic)TTCurrency currentCurrency;
 
 @end
@@ -70,11 +59,52 @@ static NSDateFormatter* accountTableDateFormatter;
     }
 }
 
+#pragma mark - C Methods
+
+NSString* stringForTransactionType(TTGoxTransactionType type)
+{
+    switch (type) {
+        case TTGoxTransactionTypeBitcoinPurchase:
+            return @"Bought";
+            break;
+            
+        case TTGoxTransactionTypeBitcoinSale:
+            return @"Sold";
+            
+        case TTGoxTransactionTypeDeposit:
+        case TTGoxTransactionTypeFee:
+        case TTGoxTransactionTypeWithdrawal:
+        case TTGoxTransactionTypeNone:
+        default:
+            return @"";
+            break;
+    }
+}
+
+NSColor* colorForTransactionType(TTGoxTransactionType type)
+{
+    switch (type) {
+        case TTGoxTransactionTypeBitcoinPurchase:
+            return [NSColor redColor];
+            break;
+            
+        case TTGoxTransactionTypeBitcoinSale:
+            return [NSColor greenColor];
+            
+        case TTGoxTransactionTypeDeposit:
+        case TTGoxTransactionTypeFee:
+        case TTGoxTransactionTypeWithdrawal:
+        case TTGoxTransactionTypeNone:
+        default:
+            return [NSColor blackColor];
+            break;
+    }
+}
+
 #pragma mark - TTOrderBookAccountEventDelegate methods
 
 -(void)settlementEventObserved:(NSDictionary *)eventData
 {
-    RUDLog(@"%@", eventData);
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.settlementsArray insertObject:eventData atIndex:0];
         [self.accountSettlementsTableView insertRowsAtIndexes:[NSIndexSet indexSetWithIndex:0] withAnimation:NSTableViewAnimationSlideLeft];
@@ -83,7 +113,6 @@ static NSDateFormatter* accountTableDateFormatter;
 
 -(void)walletStateObserved:(NSDictionary *)walletDataDictionary
 {
-    RUDLog(@"%@", walletDataDictionary);
     TTGoxWallet* w = [self walletForCurrency:currencyFromString([[walletDataDictionary objectForKey:@"balance"]objectForKey:@"currency"])];
     [w setBalance:[TTTick newTickfromDictionary:[walletDataDictionary objectForKey:@"balance"]]];
     [self setAccountValueLabels];
@@ -230,39 +259,47 @@ static NSDateFormatter* accountTableDateFormatter;
                     [cellView setValueString:[accountTableDateFormatter stringFromDate:transaction.transactionDate]];
                     break;
                     
-                case 1://@"Cost/Proceed",
-                    [cellView setValueString:[[transaction.transactionValue value]stringValue]];
+                case 1:
+                    [cellView setValueString:stringForTransactionType(transaction.transactionType)];
                     break;
                     
-                case 2://@"Fee"
+                case 2://@"Cost/Proceed",
+                    [cellView setValueString:RUStringWithFormat(@"$%.2f", [[transaction.transactionValue value]floatValue])];
+                    break;
+                    
+                case 3://@"Fee"
                     [cellView setValueString:[[transaction.feePaidValue value]stringValue]];
                     break;
                     
-                case 3://@"Acquired"
-                    [cellView setValueString:[[[[transaction trade]amount]value]stringValue]];
+                case 4://@"Acquired"
+                    [cellView setValueString:[[transaction effectiveAcquisitionAmount]stringValue]];
                     break;
                     
-                case 4:// @"Cost Basis"
+                case 5:// @"Cost Basis"
                     [cellView setValueString:[[transaction costBasis]stringValue]];
                     break;
                     
-                case 5:// Positive Value
+                case 6:// Position Value
                     switch (transaction.transactionType) {
                         case TTGoxTransactionTypeBitcoinPurchase:
-                            
+                        {
+                            float posValFloat = ((transaction.effectiveAcquisitionAmount.floatValue * (self.orderbook.lastTicker.last.value.floatValue - transaction.costBasis.floatValue)) - transaction.feePaidValue.value.floatValue);
+                            [cellView setValueString:RUStringWithFormat(@"$%.2f", posValFloat)];
                             break;
-                            
+                        }
                         case TTGoxTransactionTypeBitcoinSale:
-                            
+                        {
+                            float posValFloat = ((transaction.effectiveAcquisitionAmount.floatValue * (self.orderbook.lastTicker.last.value.floatValue - transaction.costBasis.floatValue)) - transaction.feePaidValue.value.floatValue);
+                            [cellView setValueString:RUStringWithFormat(@"$%.2f", posValFloat)];
                             break;
-                            
+                        }
                         default:
                             break;
                     }
                     break;
                     
-                case 6:
-                    [cellView setValueString:@"Action"];
+                case 7:
+                    [cellView setValueString:@""];
                     
                 default:
                     break;
@@ -376,8 +413,8 @@ static NSDateFormatter* accountTableDateFormatter;
         [_accountTransactionsTableView setAllowsMultipleSelection:YES];
         [_accountTransactionsTableView setAutoresizingMask:NSViewWidthSizable | NSViewHeightSizable];
         
-        [self setTableColumnTitles:@[@"Date", @"Cost/Proceed", @"Fee", @"Acquired", @"Cost Basis", @"Position Value", @"Action"]];
-        NSArray* columnWidthsArray = @[@(80), @(50), @(80), @(80), @(130), @(130), @(130)];
+        [self setTableColumnTitles:@[@"Date", @"Type", @"Proceed", @"Fee", @"Acquired", @"Cost Basis", @"Position Value", @"Action"]];
+        NSArray* columnWidthsArray = @[@(80), @(50), @(80), @(80), @(130), @(130), @(130), @(130)];
         [self setTableColumns:[NSMutableArray array]];
         
         [self.tableColumnTitles enumerateObjectsUsingBlock:^(NSString* title, NSUInteger idx, BOOL *stop) {

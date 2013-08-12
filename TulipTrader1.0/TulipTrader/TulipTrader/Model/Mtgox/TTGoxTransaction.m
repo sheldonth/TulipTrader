@@ -34,6 +34,14 @@
     return RUStringWithFormat(@"Fee Paid %@  Transaction Value:%@", self.feePaidValue.value, self.transactionValue.value);
 }
 
+-(NSNumber *)effectiveAcquisitionAmount
+{
+    if (self.transactionType == TTGoxTransactionTypeBitcoinSale)
+        return @(-1 * self.trade.amount.value.floatValue);
+    else
+        return @(self.trade.amount.value.floatValue);
+}
+
 //-(NSString *)description
 //{
 //    return RUStringWithFormat(@"Balance: %@ Index: %@ InfoString: %@ Type: %@ Value: %@ LinkArray: %@", self.balance.display, self.index, self.infoString, self.type, self.value.display, self.linkArray);

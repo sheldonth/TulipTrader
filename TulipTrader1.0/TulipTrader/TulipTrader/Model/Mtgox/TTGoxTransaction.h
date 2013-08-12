@@ -48,4 +48,6 @@ typedef enum{
 -(NSNumber*)costBasis;
 -(NSNumber*)feeEffectivePercentageNumber;
 
+-(NSNumber*)effectiveAcquisitionAmount;
+
 @end

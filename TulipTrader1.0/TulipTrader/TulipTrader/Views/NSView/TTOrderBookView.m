@@ -161,9 +161,9 @@
 //    [_graphView setFrame:(NSRect){0, statusBarHeight, graphWidth, graphHeight}];
     [_webView setFrame:(NSRect){0, statusBarHeight, graphWidth, graphHeight}];
     
-    [_bidOrderBookListView setFrame:(NSRect){graphWidth, statusBarHeight - 5, graphWidth, graphHeight / 2}];
+    [_bidOrderBookListView setFrame:(NSRect){0, statusBarHeight - 5, graphWidth, graphHeight}];
     
-    [_askOrderBookListView setFrame:(NSRect){graphWidth, CGRectGetMaxY(_bidOrderBookListView.frame) + 5, graphWidth, graphHeight / 2}];
+    [_askOrderBookListView setFrame:(NSRect){graphWidth, statusBarHeight - 5, graphWidth, graphHeight}];
     
     [_statusBox setFrame:(NSRect){0, 0, CGRectGetWidth(frameRect), statusBarHeight - 10}];
 }

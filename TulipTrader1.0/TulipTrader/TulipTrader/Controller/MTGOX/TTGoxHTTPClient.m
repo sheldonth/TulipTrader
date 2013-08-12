@@ -5,25 +5,6 @@
 //  Created by Sheldon Thomas on 5/28/13.
 //  Copyright (c) 2013  Sheldon Thomas. All rights reserved.
 //
-/*
- NSData* firstPart = [method dataUsingEncoding:NSUTF8StringEncoding];
- 
- //    char partTwoBytes[] = "";
- 
- NSData* secondPart = [NSData dataWithBytes:partTwoBytes length:sizeof(partTwoBytes)];
- 
- NSData* partThree = [req HTTPBody];
- 
- NSMutableData* combined = [NSMutableData dataWithData:firstPart];
- 
- [combined appendData:secondPart];
- 
- [combined appendData:partThree];
- //    const char *bytePtr = (const char *)[combined bytes];
- 
- NSString* dataString = [[NSString alloc]initWithData:combined encoding:NSUTF8StringEncoding];
- 
- */
 
 #import <CommonCrypto/CommonHMAC.h>
 #import "TTGoxHTTPClient.h"

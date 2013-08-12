@@ -201,7 +201,6 @@ TTDepthUpdate* updateObjectAfterRemovingDepthOrder(NSArray* array, TTDepthOrder*
 {
     TTDepthUpdate* update = updateObjectAfterAddingDepthOrder(self.bids, ord);
     [self setBids:update.updateArrayPointer];
-//    [self setBids:[update.updateArrayPointer sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"price" ascending:NO]]]];
     [self.delegate orderBook:self hasNewDepthUpdate:update orderBookSide:TTOrderBookSideBid];
 }
 
@@ -209,7 +208,6 @@ TTDepthUpdate* updateObjectAfterRemovingDepthOrder(NSArray* array, TTDepthOrder*
 {
     TTDepthUpdate* update = updateObjectAfterRemovingDepthOrder(self.bids, ord);
     [self setBids:update.updateArrayPointer];
-//    [self setBids:[update.updateArrayPointer sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"price" ascending:NO]]]];
     [self.delegate orderBook:self hasNewDepthUpdate:update orderBookSide:TTOrderBookSideBid];
 }
 
@@ -330,6 +328,42 @@ TTDepthUpdate* updateObjectAfterRemovingDepthOrder(NSArray* array, TTDepthOrder*
     [self.websocket addObserver:self forKeyPath:@"connectionState" options:NSKeyValueObservingOptionNew context:nil];
 }
 
+-(NSNumber *)localQuoteFromOrderBookSide:(TTOrderBookSide)side forQuantity:(NSNumber *)qty
+{
+    NSArray* arrayToExamine = nil;
+    switch (side) {
+        case TTOrderBookSideAsk:
+            arrayToExamine = self.asks;
+            break;
+            
+        case TTOrderBookSideBid:
+            arrayToExamine = self.bids;
+            break;
+        
+        case TTOrderBookSideNone:
+        default:
+            arrayToExamine = nil;
+            break;
+    }
+    
+    if (arrayToExamine)
+    {
+        __block NSInteger ordersIndex = 0;
+        __block double cumulativeCost = 0;
+        __block double cumulativeQuantity = 0;
+        while (qty.doubleValue > cumulativeQuantity) {
+            TTDepthOrder* order = [arrayToExamine objectAtIndex:ordersIndex];
+            cumulativeQuantity = cumulativeQuantity + order.amount.doubleValue;
+            cumulativeCost = cumulativeCost + (order.amount.floatValue * order.price.floatValue);
+        }
+//        if ()
+//        {
+        
+//        }
+    }
+    return @0;
+}
+
 -(TTDepthOrder *)insideBuy
 {
     @synchronized(self.bids)
@@ -382,7 +416,7 @@ TTDepthUpdate* updateObjectAfterRemovingDepthOrder(NSArray* array, TTDepthOrder*
         [self.websocket openWithCurrency:self.currency];
         
     } withFailBlock:^(NSError *e) {
-        RUDLog(@"FAIL");
+        
     }];
 }
 
