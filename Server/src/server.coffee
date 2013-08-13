@@ -1,9 +1,9 @@
 express = require 'express'
 
 {loadSettings} = require './util'
-settings = loadSettings()
+#settings = loadSettings()
 
-app = express.createServer express.Logger()
+app = express()
 app.set 'view engine', 'jade'
 app.use express.bodyParser()
 app.use app.router
