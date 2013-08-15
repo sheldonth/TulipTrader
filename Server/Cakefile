@@ -1,6 +1,10 @@
 {spawn, exec} = require 'child_process'
 {noisyExec} = require 'tafa-misc-util'
 
+task 'localMongo', () ->
+    noisyExec "mongod -f mongodb.conf"
+
 task 'dev', () ->
-  noisyExec "coffee -cwo lib src"
-  noisyExec "hotnode lib/server.js"
+    noisyExec "stylus -c -w /src/stylus /public/stylesheets"
+    noisyExec "coffee -cwo lib src"
+    noisyExec "hotnode lib/server.js"
