@@ -15,7 +15,7 @@ app.use app.router
 app.use express.static "#{__dirname}/public"
 app.use express.errorHandler {dumpExceptions: true, showStack: true}
 
-require 'router'
+router = require './router'
 
 port = process.env.port or 3000
 app.listen port, () ->

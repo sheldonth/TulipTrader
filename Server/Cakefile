@@ -5,6 +5,6 @@ task 'localMongo', () ->
     noisyExec "mongod -f mongodb.conf"
 
 task 'dev', () ->
-    noisyExec "stylus -c -w /src/stylus /public/stylesheets"
+    noisyExec "stylus -c -w src/stylus public/stylesheets"
     noisyExec "coffee -cwo lib src"
     noisyExec "hotnode lib/server.js"

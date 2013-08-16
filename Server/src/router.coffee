@@ -1,4 +1,4 @@
-account-manager = require('account-manager')
+accountmanager = require('./account-manager')
 
 module.exports = (app) ->
     app.get '/', (req, res) ->
