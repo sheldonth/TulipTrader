@@ -1,7 +1,25 @@
 
 extends layout
 
-block content
-    p this is my content
-
+block contents
+    #login-container
+        form(method="post")#login-form.well.span4
+            h1 Welcome
+            p.subheading Please Login To Your T.O.M. Account
+            label Username
+            input(type="text", name="user", id='pass-tf').span4.required
+            label Password
+            input(type="password", name="pass", id='pass-tf').span4.required
+            button(type="submit")#btn-login.btn.btn-primary
+                i.icon-eye-open.icon-white
+                |  Sign In
+            div.clear-fix
+            hr
+            div.btm-links
+                a(href='#')#forgot-password Forgot Your Password?
+                a(href='/signup')#create-account Create An Account!
+        
 block scripts
+    script(src='/vendor/jquery.min.js')
+    script(src='/vendor/jquery.form.js')
+    script(src='/vendor/bootstrap/js/bootstrap.min.js')

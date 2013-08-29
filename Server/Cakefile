@@ -1,10 +1,21 @@
 {spawn, exec} = require 'child_process'
 {noisyExec} = require 'tafa-misc-util'
 
+dbUser = 'admin'
+dbPass = 'alphaalphafoxtrot'
+dbIP = '142.4.197.18'
+dbPort = '27017'
+dbString = "mongodb://#{dbUser}:#{dbPass}@#{dbIP}:#{dbPort}/"
+dbName = "db1"
+
 task 'localMongo', () ->
     noisyExec "mongod -f mongodb.conf"
 
+task 'mongoClient',  () ->
+    console.log "mongo -u #{dbUser} -p #{dbPass} #{dbIP}:#{dbPort}/admin"
+    noisyExec "mongo -u #{dbUser} -p #{dbPass} #{dbIP}:#{dbPort}/admin"
+
 task 'dev', () ->
-    noisyExec "stylus -c -w src/stylus public/stylesheets"
+    noisyExec "stylus -c -w src/stylus -o public/stylesheets"
     noisyExec "coffee -cwo lib src"
     noisyExec "hotnode lib/server.js"

@@ -51,7 +51,7 @@ NSUInteger indexSetOfObjectWithPrice(NSArray* array, TTDepthOrder* depthOrder)
         {
             *stop = YES;
             return YES;
-        }
+        }   
         return NO;
     }];
     if (indexSet.count != 1)

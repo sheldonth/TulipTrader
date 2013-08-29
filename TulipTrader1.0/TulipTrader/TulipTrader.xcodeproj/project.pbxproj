@@ -90,7 +90,6 @@
 		4772E23D1774D87F00967847 /* SRWebSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 4772E1A71774D87F00967847 /* SRWebSocket.m */; };
 		4772E2411774D88600967847 /* infoBtn.png in Resources */ = {isa = PBXBuildFile; fileRef = 4772E2401774D88600967847 /* infoBtn.png */; };
 		4772E2421774D88600967847 /* infoBtn.png in Resources */ = {isa = PBXBuildFile; fileRef = 4772E2401774D88600967847 /* infoBtn.png */; };
-		4772E2441774D8C800967847 /* libcommonCrypto.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4772E2431774D8C800967847 /* libcommonCrypto.dylib */; };
 		4772E2461774D8D000967847 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4772E2451774D8D000967847 /* libsqlite3.dylib */; };
 		4772E2481774D8DB00967847 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4772E2471774D8DB00967847 /* QuartzCore.framework */; };
 		4772E24A1774D8DF00967847 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4772E2491774D8DF00967847 /* SystemConfiguration.framework */; };
@@ -635,7 +634,6 @@
 				4772E24A1774D8DF00967847 /* SystemConfiguration.framework in Frameworks */,
 				4772E2481774D8DB00967847 /* QuartzCore.framework in Frameworks */,
 				4772E2461774D8D000967847 /* libsqlite3.dylib in Frameworks */,
-				4772E2441774D8C800967847 /* libcommonCrypto.dylib in Frameworks */,
 				4772E0901774D6A900967847 /* Cocoa.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

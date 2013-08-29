@@ -1,0 +1,8 @@
+body{margin:0;padding:0;height:100%;background:#f2f9fe;background:-moz-radial-gradient(center,ellipse cover,#f2f9fe 0%,#d6f0fd 100%);background:-webkit-gradient(radial,center center,0,center center,100%,color-stop(0%,#f2f9fe),color-stop(100%,#d6f0fd));background:-webkit-radial-gradient(center,ellipse cover,#f2f9fe 0%,#d6f0fd 100%);background:-o-radial-gradient(center,ellipse cover,#f2f9fe 0%,#d6f0fd 100%);background:-ms-radial-gradient(center,ellipse cover,#f2f9fe 0%,#d6f0fd 100%);background:radial-gradient(center,ellipse cover,#f2f9fe 0%,#d6f0fd 100%);}
+#login-container{width:640px;height:400px;margin:160px auto;}
+#login-container label{margin:15px 0 5px 5px}
+#login-container button{width:150px;padding:6px 40px 6px 40px;float:left;margin-top:15px}
+#login-container .checkbox{margin:23px 0 0 180px}
+#login-container .btm-links{text-align:center;margin-top:10px}
+#login-container #create-account{float:right;margin-right:13px}
+#login-container #forgot-password{float:left;margin-left:10px}

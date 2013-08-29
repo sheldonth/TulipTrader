@@ -10,7 +10,7 @@
 
   app.set('port', 80);
 
-  app.set('views', __dirname + '/src/views/');
+  app.set('views', './src/views/');
 
   app.set('view engine', 'jade');
 
@@ -26,7 +26,7 @@
 
   app.use(app.router);
 
-  app.use(express["static"]("" + __dirname + "/public"));
+  app.use(express["static"]("./public"));
 
   app.use(express.errorHandler({
     dumpExceptions: true,
@@ -34,6 +34,8 @@
   }));
 
   router = require('./router');
+
+  router(app);
 
   port = process.env.port || 3000;
 

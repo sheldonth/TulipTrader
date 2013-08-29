@@ -6,9 +6,14 @@
 
   module.exports = function(app) {
     return app.get('/', function(req, res) {
-      return res.render('login', {
-        title: 'Login'
-      });
+      if ((req.cookies.username == null) || (req.cookies.password == null)) {
+        console.log('login');
+        return res.render('login', {
+          title: 'Login'
+        });
+      } else {
+        return console.log('else');
+      }
     });
   };
 
