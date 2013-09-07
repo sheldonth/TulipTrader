@@ -5,15 +5,17 @@
   accountmanager = require('./account-manager');
 
   module.exports = function(app) {
-    return app.get('/', function(req, res) {
+    app.get('/', function(req, res) {
       if ((req.cookies.username == null) || (req.cookies.password == null)) {
-        console.log('login');
         return res.render('login', {
           title: 'Login'
         });
-      } else {
-        return console.log('else');
       }
+    });
+    return app.get('/signup', function(req, res) {
+      return res.render('signup', {
+        title: "Sign Up"
+      });
     });
   };
 

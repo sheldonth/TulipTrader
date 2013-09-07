@@ -19,3 +19,4 @@ task 'dev', () ->
     noisyExec "stylus -c -w src/stylus -o public/stylesheets"
     noisyExec "coffee -cwo lib src"
     noisyExec "hotnode lib/server.js"
+
