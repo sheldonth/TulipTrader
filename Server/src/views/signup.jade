@@ -1,0 +1,28 @@
+extends layout
+
+block contents
+    #account-form-container
+        form( method="post")#account-form.form-horizontal.well.span6
+            h1
+            p#sub1.subheading Please tell us a little about yourself.
+            hr
+            fieldset
+                #name-cg.control-group
+                    label.control-label(for='name-tf') Name
+                    .controls
+                        input#name-tf.input-xlarge(type='text', name='name')
+                #email-cg.control-group
+                    label.control-label(for='email-tf') Email
+                    .controls
+                        input#email-tf.input-xlarge(type='text', name='email')
+                #username-cg.control-group
+                    label.control-label(for='username-tf') Username
+                    .controls
+                        input#username-tf.input.xlarge(type='text', name='username')
+                #pass-cg.control-group
+                    label.control-label(for='pass-tf') Password
+                    .controls
+                        input#pass-tf.input-xlarge(type='password', name='pass', value='')
+                .form-actions
+                    button(type='button')#account-form-btn1.btn Cancel
+                    button(type='submit')#account-form-btn2.btn Go
