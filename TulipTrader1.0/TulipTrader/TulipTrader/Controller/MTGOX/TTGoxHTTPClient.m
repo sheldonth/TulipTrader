@@ -13,84 +13,27 @@
 #import "RUConstants.h"
 #import "NSData+SRB64Additions.h"
 #import "TTConstants.h"
+#import "TTEncryptedKeyController.h"
+
+@interface TTGoxHTTPClient()
+
+@property(nonatomic, retain)TTEncryptedKeyController* encryptedKeyController;
+
+@end
 
 @implementation TTGoxHTTPClient
 
 #define kTTUserAgent @"Tulip Trader/1.0 (Mac OS X)"
 
 #define kTTUserDefaultsNonceKey @"TTUserDefaultNonceKey"
-#define kTTUserDefaultsMTGOXAPIKey @"MTGOX_APIKEY"
-#define kTTUserDefaultsMTGOXAPISECRET @"MTGOX_APISECRET"
 
-static NSString* apiKey;
-static NSString* apiSecret;
-
--(void)saveApiKey:(NSString*)key andSecret:(NSString*)secret
-{
-    [[NSUserDefaults standardUserDefaults]setSecretObject:key forKey:kTTUserDefaultsMTGOXAPIKey];
-    [[NSUserDefaults standardUserDefaults]setSecretObject:secret forKey:kTTUserDefaultsMTGOXAPISECRET];
-}
-
--(BOOL)loadKeys
-{
-    [[NSUserDefaults standardUserDefaults]setSecret:kTTSecureUserDefaultsSecretKey];
-    NSString* apiK = [[NSUserDefaults standardUserDefaults]secretStringForKey:kTTUserDefaultsMTGOXAPIKey];
-    NSString* apiS = [[NSUserDefaults standardUserDefaults]secretStringForKey:kTTUserDefaultsMTGOXAPISECRET];
-    apiKey = [apiK copy];
-    apiSecret = [apiS copy];
-    if (apiK && apiS)
-        return YES;
-    else
-    {
-        apiK = nil;
-        apiS = nil;
-        return NO;
-    }
-    
-}
-
--(NSArray*)validateInputString:(NSString*)inputStr
-{
-    NSArray* a = [inputStr componentsSeparatedByString:@"/"];
-    if (a.count == 2)
-        return a;
-    else
-    {
-        NSLog(@"Bad Input Format");
-        return nil;
-    }
-}
-
--(void)promptForKeysWithInformativeText:(NSString*)informative
-{
-    NSAlert* a = [NSAlert alertWithMessageText:@"No Exchange Keys Found" defaultButton:@"Exit" alternateButton:@"Check Keys" otherButton:nil informativeTextWithFormat:@"%@", informative];
-    NSTextField* input = [[NSTextField alloc]initWithFrame:(NSRect){0, 0, 200, 24}];
-    [input setStringValue:@"APIKey"];
-    [a setAccessoryView:input];
-    NSInteger returnInt = [a runModal];
-    if (returnInt == NSAlertDefaultReturn)
-    {
-        [[NSApplication sharedApplication]terminate:self];
-    }
-    else if (returnInt == NSAlertAlternateReturn)
-    {
-        
-    }
-    else
-    {
-
-    }
-}
 
 -(id)initWithBaseURL:(NSURL *)url
 {
     self = [super initWithBaseURL:url];
     if (self)
     {
-        if (![self loadKeys])
-        {
-            [self promptForKeysWithInformativeText:@"Enter your MtGox.com keys in the form: \nAPIKEY/APISECRET"];
-        }
+        [self setEncryptedKeyController:[[TTEncryptedKeyController alloc]init]];
     }
     return self;
 }
@@ -150,13 +93,13 @@ NSString* HMAC_Out(NSString *msg, NSString *sec)
     
     [req setValue:kTTUserAgent forHTTPHeaderField:@"User-Agent"];
     
-    [req setValue:apiKey forHTTPHeaderField:@"Rest-Key"];
+    [req setValue:self.encryptedKeyController.apiKey forHTTPHeaderField:@"Rest-Key"];
     
     NSString* reqBodyString = [[NSString alloc]initWithData:[req HTTPBody] encoding:NSUTF8StringEncoding];
     
     NSString* hmacMessage = [NSString stringWithFormat:@"%@\0%@", path, reqBodyString];
     
-    NSMutableString* hmacVal = [NSMutableString stringWithString:HMAC_Out(hmacMessage, apiSecret)];
+    NSMutableString* hmacVal = [NSMutableString stringWithString:HMAC_Out(hmacMessage, self.encryptedKeyController.apiSecret)];
     
     [req setValue:hmacVal forHTTPHeaderField:@"Rest-Sign"];
     

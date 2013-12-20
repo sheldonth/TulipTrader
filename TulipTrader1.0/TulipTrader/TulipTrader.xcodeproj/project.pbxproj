@@ -13,6 +13,7 @@
 		474A922B179882E1007F0A22 /* arrow_right.png in Resources */ = {isa = PBXBuildFile; fileRef = 474A9227179882E1007F0A22 /* arrow_right.png */; };
 		474A922D17989DAF007F0A22 /* tradeexecutionbtn.png in Resources */ = {isa = PBXBuildFile; fileRef = 474A922C17989DAF007F0A22 /* tradeexecutionbtn.png */; };
 		474A922E17989DAF007F0A22 /* tradeexecutionbtn.png in Resources */ = {isa = PBXBuildFile; fileRef = 474A922C17989DAF007F0A22 /* tradeexecutionbtn.png */; };
+		475701D9186409A500E3BD6E /* TTEncryptedKeyController.m in Sources */ = {isa = PBXBuildFile; fileRef = 475701D8186409A500E3BD6E /* TTEncryptedKeyController.m */; };
 		4772E0901774D6A900967847 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4772E08F1774D6A900967847 /* Cocoa.framework */; };
 		4772E09A1774D6A900967847 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4772E0981774D6A900967847 /* InfoPlist.strings */; };
 		4772E09C1774D6A900967847 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 4772E09B1774D6A900967847 /* main.m */; };
@@ -326,6 +327,8 @@
 		474A9227179882E1007F0A22 /* arrow_right.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = arrow_right.png; sourceTree = "<group>"; };
 		474A922C17989DAF007F0A22 /* tradeexecutionbtn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tradeexecutionbtn.png; sourceTree = "<group>"; };
 		475701D41863EFBD00E3BD6E /* TTConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTConstants.h; sourceTree = "<group>"; };
+		475701D7186409A500E3BD6E /* TTEncryptedKeyController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTEncryptedKeyController.h; sourceTree = "<group>"; };
+		475701D8186409A500E3BD6E /* TTEncryptedKeyController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTEncryptedKeyController.m; sourceTree = "<group>"; };
 		4772E08C1774D6A900967847 /* TulipTrader.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TulipTrader.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4772E08F1774D6A900967847 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		4772E0921774D6A900967847 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
@@ -1039,6 +1042,8 @@
 				4772E2661774F15F00967847 /* TTHTTPController.m */,
 				47D872D81778A72B0052DB29 /* TTCurrencyController.h */,
 				47D872D91778A72B0052DB29 /* TTCurrencyController.m */,
+				475701D7186409A500E3BD6E /* TTEncryptedKeyController.h */,
+				475701D8186409A500E3BD6E /* TTEncryptedKeyController.m */,
 			);
 			path = Generic;
 			sourceTree = "<group>";
@@ -1627,6 +1632,7 @@
 				4772E1C01774D87F00967847 /* FMDatabasePool.m in Sources */,
 				4772E1C21774D87F00967847 /* FMDatabaseQueue.m in Sources */,
 				4772E1C41774D87F00967847 /* FMResultSet.m in Sources */,
+				475701D9186409A500E3BD6E /* TTEncryptedKeyController.m in Sources */,
 				4772E1C61774D87F00967847 /* JNWLabel+Accessibility.m in Sources */,
 				4772E1C81774D87F00967847 /* JNWLabel.m in Sources */,
 				4772E1CC1774D87F00967847 /* JSONKit.m in Sources */,
