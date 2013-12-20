@@ -7,45 +7,76 @@
 //
 
 #import <CommonCrypto/CommonHMAC.h>
+#import <SecureNSUserDefaults/NSUserDefaults+SecureAdditions.h>
 #import "TTGoxHTTPClient.h"
 #import "NSData+Base64.h"
 #import "RUConstants.h"
 #import "NSData+SRB64Additions.h"
+#import "TTConstants.h"
 
 @implementation TTGoxHTTPClient
 
 #define kTTUserAgent @"Tulip Trader/1.0 (Mac OS X)"
 
 #define kTTUserDefaultsNonceKey @"TTUserDefaultNonceKey"
+#define kTTUserDefaultsMTGOXAPIKey @"MTGOX_APIKEY"
+#define kTTUserDefaultsMTGOXAPISECRET @"MTGOX_APISECRET"
 
-static NSString* APIKEY;
-static NSString* APISECRET;
+static NSString* apiKey;
+static NSString* apiSecret;
 
-NSString* const kTTMTGoxAPIKeyKey = @"MTGOXUserAPIKey";
-NSString* const kTTMTGoxAPISecretKey = @"MTGOXUserAPISecret";
-
-+(void)initialize
+-(BOOL)saveApiKey:(NSString*)key andSecret:(NSString*)secret
 {
-    NSString* encryptedPath = [[NSBundle mainBundle]pathForResource:@"Encrypted" ofType:@"f"];
-    if ([[NSFileManager defaultManager]fileExistsAtPath:encryptedPath])
-    {
-        // Read data at encrypted path.
-        NSData *encryptedData = [NSData dataWithContentsOfFile:[[NSBundle mainBundle]pathForResource:@"Encrypted" ofType:@"blob"]];
-        // Somehow decrypt it
-    }
-//    else
-//    {
-//        
-//    }
+    
+}
+
+-(BOOL)loadKeys
+{
+    [[NSUserDefaults standardUserDefaults]setSecret:kTTSecureUserDefaultsSecretKey];
+    NSString* apiK = [[NSUserDefaults standardUserDefaults]secretStringForKey:kTTUserDefaultsMTGOXAPIKey];
+    NSString* apiS = [[NSUserDefaults standardUserDefaults]secretStringForKey:kTTUserDefaultsMTGOXAPISECRET];
+    apiKey = [apiK copy];
+    apiSecret = [apiS copy];
+    if (apiK && apiS)
+        return YES;
     else
     {
-//        APIKEY = [d objectForKey:kTTMTGoxAPIKeyKey];
-//        APISECRET = [d objectForKey:kTTMTGoxAPISecretKey];
-        if (!APIKEY)
-            RUDLog(@"No API KEY!");
-        if (!APISECRET)
-            RUDLog(@"NO API SECRET!");
+        apiK = nil;
+        apiS = nil;
+        return NO;
     }
+    
+}
+
+-(void)promptForKeys
+{
+    NSAlert* a = [NSAlert alertWithMessageText:@"No Exchange Keys Found" defaultButton:@"Exit" alternateButton:@"Check Keys" otherButton:nil informativeTextWithFormat:@"Enter your MtGox.com keys in the form: \nAPIKEY/APISECRET"];
+    NSTextField* input = [[NSTextField alloc]initWithFrame:(NSRect){0, 0, 200, 24}];
+    [input setStringValue:@"APIKey"];
+    [a setAccessoryView:input];
+    NSInteger returnInt = [a runModal];
+    if (returnInt == NSAlertDefaultReturn)
+    {
+        [[NSApplication sharedApplication]terminate:self];
+    }
+    else if (returnInt == NSAlertAlternateReturn)
+    {
+        
+    }
+    else
+    {
+        NSLog(@"Got this return value %li", (long)returnInt);
+    }
+}
+
+-(id)initWithBaseURL:(NSURL *)url
+{
+    self = [super initWithBaseURL:url];
+    if (self)
+    {
+        
+    }
+    return self;
 }
 
 NSString* currentDateTonce()
@@ -103,13 +134,13 @@ NSString* HMAC_Out(NSString *msg, NSString *sec)
     
     [req setValue:kTTUserAgent forHTTPHeaderField:@"User-Agent"];
     
-    [req setValue:APIKEY forHTTPHeaderField:@"Rest-Key"];
+    [req setValue:apiKey forHTTPHeaderField:@"Rest-Key"];
     
     NSString* reqBodyString = [[NSString alloc]initWithData:[req HTTPBody] encoding:NSUTF8StringEncoding];
     
     NSString* hmacMessage = [NSString stringWithFormat:@"%@\0%@", path, reqBodyString];
     
-    NSMutableString* hmacVal = [NSMutableString stringWithString:HMAC_Out(hmacMessage, APISECRET)];
+    NSMutableString* hmacVal = [NSMutableString stringWithString:HMAC_Out(hmacMessage, apiSecret)];
     
     [req setValue:hmacVal forHTTPHeaderField:@"Rest-Sign"];
     
