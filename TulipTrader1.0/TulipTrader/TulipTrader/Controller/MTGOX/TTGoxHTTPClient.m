@@ -26,16 +26,21 @@ NSString* const kTTMTGoxAPISecretKey = @"MTGOXUserAPISecret";
 
 +(void)initialize
 {
-    NSDictionary* d = [[NSDictionary alloc]initWithContentsOfFile:[[NSBundle mainBundle]pathForResource:@"UserData" ofType:@"plist"]];
-    if (!d)
+    NSString* encryptedPath = [[NSBundle mainBundle]pathForResource:@"Encrypted" ofType:@"f"];
+    if ([[NSFileManager defaultManager]fileExistsAtPath:encryptedPath])
     {
-        NSAlert* a = [NSAlert alertWithMessageText:@"No UserData plist was found." defaultButton:@"Ok" alternateButton:@"Open plist File (not implemented yet)" otherButton:nil informativeTextWithFormat:@"You cannot authenticate with exchanges without first entering your access credentials in the UserData.plist file."];
-        [a runModal];
+        // Read data at encrypted path.
+        NSData *encryptedData = [NSData dataWithContentsOfFile:[[NSBundle mainBundle]pathForResource:@"Encrypted" ofType:@"blob"]];
+        // Somehow decrypt it
     }
+//    else
+//    {
+//        
+//    }
     else
     {
-        APIKEY = [d objectForKey:kTTMTGoxAPIKeyKey];
-        APISECRET = [d objectForKey:kTTMTGoxAPISecretKey];
+//        APIKEY = [d objectForKey:kTTMTGoxAPIKeyKey];
+//        APISECRET = [d objectForKey:kTTMTGoxAPISecretKey];
         if (!APIKEY)
             RUDLog(@"No API KEY!");
         if (!APISECRET)
