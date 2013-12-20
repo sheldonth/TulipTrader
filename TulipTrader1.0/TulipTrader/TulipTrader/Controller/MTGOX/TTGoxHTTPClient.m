@@ -25,9 +25,10 @@
 static NSString* apiKey;
 static NSString* apiSecret;
 
--(BOOL)saveApiKey:(NSString*)key andSecret:(NSString*)secret
+-(void)saveApiKey:(NSString*)key andSecret:(NSString*)secret
 {
-    
+    [[NSUserDefaults standardUserDefaults]setSecretObject:key forKey:kTTUserDefaultsMTGOXAPIKey];
+    [[NSUserDefaults standardUserDefaults]setSecretObject:secret forKey:kTTUserDefaultsMTGOXAPISECRET];
 }
 
 -(BOOL)loadKeys
@@ -48,9 +49,21 @@ static NSString* apiSecret;
     
 }
 
--(void)promptForKeys
+-(NSArray*)validateInputString:(NSString*)inputStr
 {
-    NSAlert* a = [NSAlert alertWithMessageText:@"No Exchange Keys Found" defaultButton:@"Exit" alternateButton:@"Check Keys" otherButton:nil informativeTextWithFormat:@"Enter your MtGox.com keys in the form: \nAPIKEY/APISECRET"];
+    NSArray* a = [inputStr componentsSeparatedByString:@"/"];
+    if (a.count == 2)
+        return a;
+    else
+    {
+        NSLog(@"Bad Input Format");
+        return nil;
+    }
+}
+
+-(void)promptForKeysWithInformativeText:(NSString*)informative
+{
+    NSAlert* a = [NSAlert alertWithMessageText:@"No Exchange Keys Found" defaultButton:@"Exit" alternateButton:@"Check Keys" otherButton:nil informativeTextWithFormat:@"%@", informative];
     NSTextField* input = [[NSTextField alloc]initWithFrame:(NSRect){0, 0, 200, 24}];
     [input setStringValue:@"APIKey"];
     [a setAccessoryView:input];
@@ -65,7 +78,7 @@ static NSString* apiSecret;
     }
     else
     {
-        NSLog(@"Got this return value %li", (long)returnInt);
+
     }
 }
 
@@ -74,7 +87,10 @@ static NSString* apiSecret;
     self = [super initWithBaseURL:url];
     if (self)
     {
-        
+        if (![self loadKeys])
+        {
+            [self promptForKeysWithInformativeText:@"Enter your MtGox.com keys in the form: \nAPIKEY/APISECRET"];
+        }
     }
     return self;
 }
