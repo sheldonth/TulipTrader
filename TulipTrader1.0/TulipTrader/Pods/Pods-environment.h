@@ -12,9 +12,21 @@
 #define COCOAPODS_VERSION_MINOR_CocoaSecurity 2
 #define COCOAPODS_VERSION_PATCH_CocoaSecurity 2
 
+// MASPreferences
+#define COCOAPODS_POD_AVAILABLE_MASPreferences
+#define COCOAPODS_VERSION_MAJOR_MASPreferences 1
+#define COCOAPODS_VERSION_MINOR_MASPreferences 1
+#define COCOAPODS_VERSION_PATCH_MASPreferences 0
+
 // SecureNSUserDefaults
 #define COCOAPODS_POD_AVAILABLE_SecureNSUserDefaults
 #define COCOAPODS_VERSION_MAJOR_SecureNSUserDefaults 1
 #define COCOAPODS_VERSION_MINOR_SecureNSUserDefaults 0
 #define COCOAPODS_VERSION_PATCH_SecureNSUserDefaults 0
+
+// SocketRocket
+#define COCOAPODS_POD_AVAILABLE_SocketRocket
+#define COCOAPODS_VERSION_MAJOR_SocketRocket 0
+#define COCOAPODS_VERSION_MINOR_SocketRocket 3
+#define COCOAPODS_VERSION_PATCH_SocketRocket 1
 

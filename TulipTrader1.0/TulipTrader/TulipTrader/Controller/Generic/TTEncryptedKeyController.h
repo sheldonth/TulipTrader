@@ -13,5 +13,6 @@
 @property(readonly) NSString* apiKey;
 @property(readonly) NSString* apiSecret;
 
+-(void)loadKeysWithCompletionBlock:(void (^) (NSNumber* result))completionBlock;
 
 @end

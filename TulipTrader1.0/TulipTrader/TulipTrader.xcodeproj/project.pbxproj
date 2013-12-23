@@ -83,12 +83,6 @@
 		4772E1D91774D87F00967847 /* NSString+RUUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 4772E1181774D87F00967847 /* NSString+RUUtil.m */; };
 		4772E1F61774D87F00967847 /* RUDeallocHook.m in Sources */ = {isa = PBXBuildFile; fileRef = 4772E13E1774D87F00967847 /* RUDeallocHook.m */; };
 		4772E1F71774D87F00967847 /* RUDeallocHook.m in Sources */ = {isa = PBXBuildFile; fileRef = 4772E13E1774D87F00967847 /* RUDeallocHook.m */; };
-		4772E2381774D87F00967847 /* base64.c in Sources */ = {isa = PBXBuildFile; fileRef = 4772E1A11774D87F00967847 /* base64.c */; };
-		4772E2391774D87F00967847 /* base64.c in Sources */ = {isa = PBXBuildFile; fileRef = 4772E1A11774D87F00967847 /* base64.c */; };
-		4772E23A1774D87F00967847 /* NSData+SRB64Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4772E1A41774D87F00967847 /* NSData+SRB64Additions.m */; };
-		4772E23B1774D87F00967847 /* NSData+SRB64Additions.m in Sources */ = {isa = PBXBuildFile; fileRef = 4772E1A41774D87F00967847 /* NSData+SRB64Additions.m */; };
-		4772E23C1774D87F00967847 /* SRWebSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 4772E1A71774D87F00967847 /* SRWebSocket.m */; };
-		4772E23D1774D87F00967847 /* SRWebSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 4772E1A71774D87F00967847 /* SRWebSocket.m */; };
 		4772E2411774D88600967847 /* infoBtn.png in Resources */ = {isa = PBXBuildFile; fileRef = 4772E2401774D88600967847 /* infoBtn.png */; };
 		4772E2421774D88600967847 /* infoBtn.png in Resources */ = {isa = PBXBuildFile; fileRef = 4772E2401774D88600967847 /* infoBtn.png */; };
 		4772E2461774D8D000967847 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 4772E2451774D8D000967847 /* libsqlite3.dylib */; };
@@ -261,10 +255,6 @@
 		47BEA71F177963210020F6BE /* TTVerticalOBView.m in Sources */ = {isa = PBXBuildFile; fileRef = 47BEA71D177963210020F6BE /* TTVerticalOBView.m */; };
 		47BEA722177B41E10020F6BE /* TTOrderBookListView.m in Sources */ = {isa = PBXBuildFile; fileRef = 47BEA721177B41E10020F6BE /* TTOrderBookListView.m */; };
 		47BEA723177B41E10020F6BE /* TTOrderBookListView.m in Sources */ = {isa = PBXBuildFile; fileRef = 47BEA721177B41E10020F6BE /* TTOrderBookListView.m */; };
-		47BEA72C1781CDC50020F6BE /* MASPreferencesWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 47BEA7291781CDC50020F6BE /* MASPreferencesWindow.xib */; };
-		47BEA72D1781CDC50020F6BE /* MASPreferencesWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 47BEA7291781CDC50020F6BE /* MASPreferencesWindow.xib */; };
-		47BEA72E1781CDC50020F6BE /* MASPreferencesWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 47BEA72B1781CDC50020F6BE /* MASPreferencesWindowController.m */; };
-		47BEA72F1781CDC50020F6BE /* MASPreferencesWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = 47BEA72B1781CDC50020F6BE /* MASPreferencesWindowController.m */; };
 		47BEA7341781D2980020F6BE /* GeneralPreferencesView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 47BEA7311781D2980020F6BE /* GeneralPreferencesView.xib */; };
 		47BEA7351781D2980020F6BE /* GeneralPreferencesView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 47BEA7311781D2980020F6BE /* GeneralPreferencesView.xib */; };
 		47BEA7361781D2980020F6BE /* GeneralPreferencesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 47BEA7331781D2980020F6BE /* GeneralPreferencesViewController.m */; };
@@ -417,13 +407,6 @@
 		4772E1431774D87F00967847 /* RUSingleton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RUSingleton.h; sourceTree = "<group>"; };
 		4772E1441774D87F00967847 /* RUStaticVariableSynthesization.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RUStaticVariableSynthesization.h; sourceTree = "<group>"; };
 		4772E1451774D87F00967847 /* RUSynthesizeUserDefaultMethods.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RUSynthesizeUserDefaultMethods.h; sourceTree = "<group>"; };
-		4772E1A11774D87F00967847 /* base64.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = base64.c; sourceTree = "<group>"; };
-		4772E1A21774D87F00967847 /* base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = base64.h; sourceTree = "<group>"; };
-		4772E1A31774D87F00967847 /* NSData+SRB64Additions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+SRB64Additions.h"; sourceTree = "<group>"; };
-		4772E1A41774D87F00967847 /* NSData+SRB64Additions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+SRB64Additions.m"; sourceTree = "<group>"; };
-		4772E1A51774D87F00967847 /* SocketRocket-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SocketRocket-Prefix.pch"; sourceTree = "<group>"; };
-		4772E1A61774D87F00967847 /* SRWebSocket.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRWebSocket.h; sourceTree = "<group>"; };
-		4772E1A71774D87F00967847 /* SRWebSocket.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRWebSocket.m; sourceTree = "<group>"; };
 		4772E2401774D88600967847 /* infoBtn.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = infoBtn.png; sourceTree = "<group>"; };
 		4772E2431774D8C800967847 /* libcommonCrypto.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libcommonCrypto.dylib; path = usr/lib/system/libcommonCrypto.dylib; sourceTree = SDKROOT; };
 		4772E2451774D8D000967847 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
@@ -578,10 +561,6 @@
 		47BEA71D177963210020F6BE /* TTVerticalOBView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTVerticalOBView.m; sourceTree = "<group>"; };
 		47BEA720177B41E10020F6BE /* TTOrderBookListView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TTOrderBookListView.h; sourceTree = "<group>"; };
 		47BEA721177B41E10020F6BE /* TTOrderBookListView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TTOrderBookListView.m; sourceTree = "<group>"; };
-		47BEA7281781CDC50020F6BE /* MASPreferencesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MASPreferencesViewController.h; sourceTree = "<group>"; };
-		47BEA7291781CDC50020F6BE /* MASPreferencesWindow.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MASPreferencesWindow.xib; sourceTree = "<group>"; };
-		47BEA72A1781CDC50020F6BE /* MASPreferencesWindowController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MASPreferencesWindowController.h; sourceTree = "<group>"; };
-		47BEA72B1781CDC50020F6BE /* MASPreferencesWindowController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MASPreferencesWindowController.m; sourceTree = "<group>"; };
 		47BEA7311781D2980020F6BE /* GeneralPreferencesView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = GeneralPreferencesView.xib; sourceTree = "<group>"; };
 		47BEA7321781D2980020F6BE /* GeneralPreferencesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GeneralPreferencesViewController.h; sourceTree = "<group>"; };
 		47BEA7331781D2980020F6BE /* GeneralPreferencesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeneralPreferencesViewController.m; sourceTree = "<group>"; };
@@ -708,7 +687,6 @@
 		4772E0951774D6A900967847 /* TulipTrader */ = {
 			isa = PBXGroup;
 			children = (
-				4772E26D1774FBC000967847 /* UserData */,
 				4772E2541774DA6700967847 /* Model */,
 				4772E2531774D9A300967847 /* Windows */,
 				4772E2521774D99700967847 /* Views */,
@@ -805,14 +783,12 @@
 			isa = PBXGroup;
 			children = (
 				47742857178E39BE00515BD1 /* Chromium-Tabs */,
-				47BEA7271781CDC50020F6BE /* MASPreferences */,
 				4772E0E01774D87F00967847 /* AFNetworking */,
 				4772E0F41774D87F00967847 /* Base64 */,
 				4772E0F71774D87F00967847 /* FMDB */,
 				4772E1021774D87F00967847 /* JNWLabel */,
 				4772E1071774D87F00967847 /* JSONKit */,
 				4772E10F1774D87F00967847 /* ResplendentUtilities */,
-				4772E1A01774D87F00967847 /* SocketRocket */,
 			);
 			path = Library;
 			sourceTree = "<group>";
@@ -949,20 +925,6 @@
 			path = Misc;
 			sourceTree = "<group>";
 		};
-		4772E1A01774D87F00967847 /* SocketRocket */ = {
-			isa = PBXGroup;
-			children = (
-				4772E1A11774D87F00967847 /* base64.c */,
-				4772E1A21774D87F00967847 /* base64.h */,
-				4772E1A31774D87F00967847 /* NSData+SRB64Additions.h */,
-				4772E1A41774D87F00967847 /* NSData+SRB64Additions.m */,
-				4772E1A51774D87F00967847 /* SocketRocket-Prefix.pch */,
-				4772E1A61774D87F00967847 /* SRWebSocket.h */,
-				4772E1A71774D87F00967847 /* SRWebSocket.m */,
-			);
-			path = SocketRocket;
-			sourceTree = "<group>";
-		};
 		4772E23E1774D88600967847 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
@@ -1046,13 +1008,6 @@
 				475701D8186409A500E3BD6E /* TTEncryptedKeyController.m */,
 			);
 			path = Generic;
-			sourceTree = "<group>";
-		};
-		4772E26D1774FBC000967847 /* UserData */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = UserData;
 			sourceTree = "<group>";
 		};
 		47742762178C67D600515BD1 /* NSScrollView */ = {
@@ -1346,17 +1301,6 @@
 			path = NSView;
 			sourceTree = "<group>";
 		};
-		47BEA7271781CDC50020F6BE /* MASPreferences */ = {
-			isa = PBXGroup;
-			children = (
-				47BEA7281781CDC50020F6BE /* MASPreferencesViewController.h */,
-				47BEA7291781CDC50020F6BE /* MASPreferencesWindow.xib */,
-				47BEA72A1781CDC50020F6BE /* MASPreferencesWindowController.h */,
-				47BEA72B1781CDC50020F6BE /* MASPreferencesWindowController.m */,
-			);
-			path = MASPreferences;
-			sourceTree = "<group>";
-		};
 		47BEA7301781D2980020F6BE /* Preferences */ = {
 			isa = PBXGroup;
 			children = (
@@ -1483,7 +1427,6 @@
 				4772E1CA1774D87F00967847 /* CHANGELOG.md in Resources */,
 				4772E1CE1774D87F00967847 /* README.md in Resources */,
 				4772E2411774D88600967847 /* infoBtn.png in Resources */,
-				47BEA72C1781CDC50020F6BE /* MASPreferencesWindow.xib in Resources */,
 				47BEA7341781D2980020F6BE /* GeneralPreferencesView.xib in Resources */,
 				47BEA73D1781D83E0020F6BE /* RulesPreferencesViewController.xib in Resources */,
 				47742755178A089B00515BD1 /* accountsMan.png in Resources */,
@@ -1525,7 +1468,6 @@
 				4772E1CB1774D87F00967847 /* CHANGELOG.md in Resources */,
 				4772E1CF1774D87F00967847 /* README.md in Resources */,
 				4772E2421774D88600967847 /* infoBtn.png in Resources */,
-				47BEA72D1781CDC50020F6BE /* MASPreferencesWindow.xib in Resources */,
 				47BEA7351781D2980020F6BE /* GeneralPreferencesView.xib in Resources */,
 				47BEA73E1781D83E0020F6BE /* RulesPreferencesViewController.xib in Resources */,
 				47742756178A089B00515BD1 /* accountsMan.png in Resources */,
@@ -1640,9 +1582,6 @@
 				4772E1D61774D87F00967847 /* NSManagedObject+Utility.m in Sources */,
 				4772E1D81774D87F00967847 /* NSString+RUUtil.m in Sources */,
 				4772E1F61774D87F00967847 /* RUDeallocHook.m in Sources */,
-				4772E2381774D87F00967847 /* base64.c in Sources */,
-				4772E23A1774D87F00967847 /* NSData+SRB64Additions.m in Sources */,
-				4772E23C1774D87F00967847 /* SRWebSocket.m in Sources */,
 				4772E2571774DA7C00967847 /* TTCurrency.m in Sources */,
 				4772E25B1774DD9F00967847 /* TTOrderBook.m in Sources */,
 				4772E2631774E7E200967847 /* TTSocketController.m in Sources */,
@@ -1656,7 +1595,6 @@
 				47D872E71778D4AD0052DB29 /* TTCurrencyBox.m in Sources */,
 				47BEA71E177963210020F6BE /* TTVerticalOBView.m in Sources */,
 				47BEA722177B41E10020F6BE /* TTOrderBookListView.m in Sources */,
-				47BEA72E1781CDC50020F6BE /* MASPreferencesWindowController.m in Sources */,
 				47BEA7361781D2980020F6BE /* GeneralPreferencesViewController.m in Sources */,
 				47BEA73B1781D83E0020F6BE /* RulesPreferencesViewController.m in Sources */,
 				47BEA74217834EA40020F6BE /* TTLabelCellView.m in Sources */,
@@ -1755,9 +1693,6 @@
 				4772E1D71774D87F00967847 /* NSManagedObject+Utility.m in Sources */,
 				4772E1D91774D87F00967847 /* NSString+RUUtil.m in Sources */,
 				4772E1F71774D87F00967847 /* RUDeallocHook.m in Sources */,
-				4772E2391774D87F00967847 /* base64.c in Sources */,
-				4772E23B1774D87F00967847 /* NSData+SRB64Additions.m in Sources */,
-				4772E23D1774D87F00967847 /* SRWebSocket.m in Sources */,
 				4772E2581774DA7C00967847 /* TTCurrency.m in Sources */,
 				4772E25C1774DD9F00967847 /* TTOrderBook.m in Sources */,
 				4772E2641774E7E200967847 /* TTSocketController.m in Sources */,
@@ -1771,7 +1706,6 @@
 				47D872E81778D4AD0052DB29 /* TTCurrencyBox.m in Sources */,
 				47BEA71F177963210020F6BE /* TTVerticalOBView.m in Sources */,
 				47BEA723177B41E10020F6BE /* TTOrderBookListView.m in Sources */,
-				47BEA72F1781CDC50020F6BE /* MASPreferencesWindowController.m in Sources */,
 				47BEA7371781D2980020F6BE /* GeneralPreferencesViewController.m in Sources */,
 				47BEA73C1781D83E0020F6BE /* RulesPreferencesViewController.m in Sources */,
 				47BEA74317834EA40020F6BE /* TTLabelCellView.m in Sources */,

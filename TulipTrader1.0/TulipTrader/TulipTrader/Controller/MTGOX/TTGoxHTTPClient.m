@@ -14,10 +14,12 @@
 #import "NSData+SRB64Additions.h"
 #import "TTConstants.h"
 #import "TTEncryptedKeyController.h"
+#import "TTAppDelegate.h"
+
 
 @interface TTGoxHTTPClient()
 
-@property(nonatomic, retain)TTEncryptedKeyController* encryptedKeyController;
+@property(nonatomic)TTAppDelegate* appDelegate;
 
 @end
 
@@ -33,7 +35,7 @@
     self = [super initWithBaseURL:url];
     if (self)
     {
-        [self setEncryptedKeyController:[[TTEncryptedKeyController alloc]init]];
+        [self setAppDelegate:(TTAppDelegate*)[[NSApplication sharedApplication]delegate]];
     }
     return self;
 }
@@ -93,13 +95,13 @@ NSString* HMAC_Out(NSString *msg, NSString *sec)
     
     [req setValue:kTTUserAgent forHTTPHeaderField:@"User-Agent"];
     
-    [req setValue:self.encryptedKeyController.apiKey forHTTPHeaderField:@"Rest-Key"];
+    [req setValue:_appDelegate.encryptedKeyController.apiKey forHTTPHeaderField:@"Rest-Key"];
     
     NSString* reqBodyString = [[NSString alloc]initWithData:[req HTTPBody] encoding:NSUTF8StringEncoding];
     
     NSString* hmacMessage = [NSString stringWithFormat:@"%@\0%@", path, reqBodyString];
     
-    NSMutableString* hmacVal = [NSMutableString stringWithString:HMAC_Out(hmacMessage, self.encryptedKeyController.apiSecret)];
+    NSMutableString* hmacVal = [NSMutableString stringWithString:HMAC_Out(hmacMessage, _appDelegate.encryptedKeyController.apiSecret)];
     
     [req setValue:hmacVal forHTTPHeaderField:@"Rest-Sign"];
     

@@ -40,63 +40,12 @@
     
 }
 
--(NSArray*)validateInputString:(NSString*)inputStr
+-(void)loadKeysWithCompletionBlock:(void (^) (NSNumber* result))completionBlock
 {
-    NSArray* a = [inputStr componentsSeparatedByString:@"/"];
-    if (a.count == 2)
-        return a;
-    else
-    {
-        NSLog(@"Bad Input Format");
-        return nil;
-    }
+    BOOL result = [self loadKeys];
+    completionBlock(@(result));
 }
 
--(void)promptForKeysWithInformativeText:(NSString*)informative andCompletionBlock:(void (^) (void))completionBlock
-{
-    NSAlert* a = [NSAlert alertWithMessageText:@"No Exchange Keys Found" defaultButton:@"Exit" alternateButton:@"Check Keys" otherButton:nil informativeTextWithFormat:@"%@", informative];
-    NSTextField* input = [[NSTextField alloc]initWithFrame:(NSRect){0, 0, 200, 24}];
-    [input setStringValue:@"APIKey"];
-    [a setAccessoryView:input];
-    NSInteger returnInt = [a runModal];
-    if (returnInt == NSAlertDefaultReturn)
-    {
-        [[NSApplication sharedApplication]terminate:self];
-    }
-    else if (returnInt == NSAlertAlternateReturn)
-    {
-        NSArray* sepArr = [input.stringValue componentsSeparatedByString:@"/"];
-        if (sepArr.count == 2)
-        {
-            // @TODO horrible validation.
-            [self saveApiKey:[sepArr objectAtIndex:0] andSecret:[sepArr objectAtIndex:1]];
-            completionBlock();
-        }
-        else
-        {
-            [input setStringValue:nil];
-        }
-    }
-    else
-    {
-        
-    }
-}
-
-
--(id)init
-
-{
-    self = [super init];
-    if (self)
-    {
-        if (![self loadKeys])
-            [self promptForKeysWithInformativeText:@"Informative Text" andCompletionBlock:^{
-                
-            }];
-    }
-    return self;
-}
 
 
 @end

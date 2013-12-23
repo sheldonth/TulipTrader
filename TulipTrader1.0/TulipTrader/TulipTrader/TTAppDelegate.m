@@ -9,7 +9,6 @@
 #import "TTAppDelegate.h"
 #import "TTOrderBook.h"
 #import "TTOrderBookWindow.h"
-#import "MASPreferencesWindowController.h"
 #import "GeneralPreferencesViewController.h"
 #import "RulesPreferencesViewController.h"
 #import "AccountPreferencesViewController.h"
@@ -17,6 +16,7 @@
 #import "CTBrowserWindowController.h"
 #import "RUConstants.h"
 #import "TTAccountWindow.h"
+#import <MASPreferencesWindowController.h>
 
 @interface TTAppDelegate()
 
@@ -24,6 +24,7 @@
 @property(nonatomic, retain)MASPreferencesWindowController* preferencesWindowController;
 @property(nonatomic, retain)TTBrowser* browser;
 @property(nonatomic, retain)TTAccountWindow* accountWindow;
+
 
 @end
 
@@ -56,7 +57,7 @@ NSString *const kFocusedAdvancedControlIndex = @"FocusedAdvancedControlIndex";
     [[NSUserDefaults standardUserDefaults] setInteger:focusedAdvancedControlIndex forKey:kFocusedAdvancedControlIndex];
 }
 
--(void)showPreferences:(id)sender
+-(void)showPreferences:(id)sender displayingPanelAtIndex:(NSInteger)panelIndex
 {
     if (!self.preferencesWindowController)
     {
@@ -68,6 +69,12 @@ NSString *const kFocusedAdvancedControlIndex = @"FocusedAdvancedControlIndex";
         _preferencesWindowController = [[MASPreferencesWindowController alloc]initWithViewControllers:@[generalViewController,rulesViewController, accountsViewController] title:title];
     }
     [self.preferencesWindowController showWindow:nil];
+    [self.preferencesWindowController selectControllerAtIndex:panelIndex];
+}
+
+-(void)showPreferences:(id)sender
+{
+    [self showPreferences:sender displayingPanelAtIndex:0];
 }
 
 -(void)showAccount
@@ -95,13 +102,6 @@ NSString *const kFocusedAdvancedControlIndex = @"FocusedAdvancedControlIndex";
 -(void)didFinishSelectionForWindow:(TTNewOrderBookWindow *)window currencies:(NSArray *)currencies
 {
     [window close];
-//    NSScreen* mainScreen = [NSScreen mainScreen];
-//    NSRect orderBookWindowRect = (NSRect){0, 0, floorf((CGRectGetWidth(mainScreen.frame) * 3) / 4), CGRectGetHeight(mainScreen.frame) - 45};
-//    TTOrderBookWindow* orderBookWindow = [[TTOrderBookWindow alloc]initWithContentRect:orderBookWindowRect styleMask:(NSTitledWindowMask | NSClosableWindowMask | NSMiniaturizableWindowMask | NSResizableWindowMask) backing:NSBackingStoreBuffered defer:YES currencies:currencies];
-//    if (!self.orderBookWindows)
-//        [self setOrderBookWindows:[NSMutableArray array]];
-//    [self.orderBookWindows addObject:orderBookWindow];
-//    [orderBookWindow makeKeyAndOrderFront:self];
 }
 
 #pragma mark - Private Methods
@@ -121,8 +121,18 @@ NSString *const kFocusedAdvancedControlIndex = @"FocusedAdvancedControlIndex";
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {
-    [self showBrowser];
-    [self showAccount];
+    [self setEncryptedKeyController:[[TTEncryptedKeyController alloc]init]];
+    [_encryptedKeyController loadKeysWithCompletionBlock:^(NSNumber *result) {
+        if (result.boolValue)
+        {
+            [self showBrowser];
+            [self showAccount];
+        }
+        else
+        {
+            [self showBrowser];
+        }
+    }];
 }
 
 // Returns the directory the application uses to store the Core Data store file. This code uses a directory named "net.tuliptrader.TulipTrader" in the user's Application Support directory.
