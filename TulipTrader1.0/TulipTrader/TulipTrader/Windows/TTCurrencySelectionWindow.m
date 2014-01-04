@@ -6,14 +6,14 @@
 //  Copyright (c) 2013 Sheldon Thomas. All rights reserved.
 //
 
-#import "TTNewOrderBookWindow.h"
+#import "TTCurrencySelectionWindow.h"
 #import "JNWLabel.h"
 #import "RUConstants.h"
 #import "TTGoxCurrencyController.h"
 #import "TTCurrencyController.h"
 #import <Carbon/Carbon.h>
 
-@interface TTNewOrderBookWindow()
+@interface TTCurrencySelectionWindow()
 
 @property(nonatomic, retain)JNWLabel* titleLabel;
 @property(nonatomic, retain)JNWLabel* versionLabel;
@@ -24,7 +24,7 @@
 
 @end
 
-@implementation TTNewOrderBookWindow
+@implementation TTCurrencySelectionWindow
 
 #pragma mark - NSWindowDelegate methods
 

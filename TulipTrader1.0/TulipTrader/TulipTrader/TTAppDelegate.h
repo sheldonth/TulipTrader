@@ -7,10 +7,10 @@
 //
 
 #import <Cocoa/Cocoa.h>
-#import "TTNewOrderBookWindow.h"
+#import "TTCurrencySelectionWindow.h"
 #import "TTEncryptedKeyController.h"
 
-@interface TTAppDelegate : NSObject <NSApplicationDelegate, TTNewOrderBookWindowDelegate>
+@interface TTAppDelegate : NSObject <NSApplicationDelegate, TTCurrencySelectionWindowDelegate>
 
 @property (readonly, strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 @property (readonly, strong, nonatomic) NSManagedObjectModel *managedObjectModel;

@@ -12,17 +12,14 @@
 #import "GeneralPreferencesViewController.h"
 #import "RulesPreferencesViewController.h"
 #import "AccountPreferencesViewController.h"
-#import "TTBrowser.h"
-#import "CTBrowserWindowController.h"
 #import "RUConstants.h"
 #import "TTAccountWindow.h"
 #import <MASPreferencesWindowController.h>
 
 @interface TTAppDelegate()
 
-@property(nonatomic, retain)TTNewOrderBookWindow* orderBookWindow;
+@property(nonatomic, retain)TTCurrencySelectionWindow* orderBookWindow;
 @property(nonatomic, retain)MASPreferencesWindowController* preferencesWindowController;
-@property(nonatomic, retain)TTBrowser* browser;
 @property(nonatomic, retain)TTAccountWindow* accountWindow;
 
 
@@ -79,27 +76,24 @@ NSString *const kFocusedAdvancedControlIndex = @"FocusedAdvancedControlIndex";
 
 -(void)showAccount
 {
-    NSRect browserRect = [self.browser.windowController.window frame];
-    CGFloat browserHorizontalSize = browserRect.origin.x + browserRect.size.width;
-    CGFloat screenWidth = [[NSScreen mainScreen]frame].size.width;
-    [self setAccountWindow:[[TTAccountWindow alloc]initWithContentRect:(NSRect){browserHorizontalSize, 0, screenWidth - browserHorizontalSize, browserRect.size.height} styleMask:(NSTitledWindowMask | NSClosableWindowMask | NSMiniaturizableWindowMask | NSResizableWindowMask) backing:NSBackingStoreBuffered defer:YES]];
-    [self.accountWindow setTitle:@"Account"];
-    [self.accountWindow setOrderBook:self.browser.orderBook];
-    [self.accountWindow setAnimationBehavior:NSWindowAnimationBehaviorDocumentWindow];
-    [self.accountWindow makeKeyAndOrderFront:self];
+//    NSRect browserRect = [self.browser.windowController.window frame];
+//    CGFloat browserHorizontalSize = browserRect.origin.x + browserRect.size.width;
+//    CGFloat screenWidth = [[NSScreen mainScreen]frame].size.width;
+//    [self setAccountWindow:[[TTAccountWindow alloc]initWithContentRect:(NSRect){browserHorizontalSize, 0, screenWidth - browserHorizontalSize, browserRect.size.height} styleMask:(NSTitledWindowMask | NSClosableWindowMask | NSMiniaturizableWindowMask | NSResizableWindowMask) backing:NSBackingStoreBuffered defer:YES]];
+//    [self.accountWindow setTitle:@"Account"];
+//    [self.accountWindow setOrderBook:self.browser.orderBook];
+//    [self.accountWindow setAnimationBehavior:NSWindowAnimationBehaviorDocumentWindow];
+//    [self.accountWindow makeKeyAndOrderFront:self];
 }
 
 -(void)showBrowser
 {
-    [self setBrowser:[[TTBrowser alloc]initWithCurrencies:nil]];
-    [_browser setWindowController:[[CTBrowserWindowController alloc]initWithBrowser:_browser]];
-    [_browser addBlankTabInForeground:YES];
-    [self.browser.windowController showWindow:self];
+    
 }
 
 #pragma mark - TTNewOrderBookWindowDelegate
 
--(void)didFinishSelectionForWindow:(TTNewOrderBookWindow *)window currencies:(NSArray *)currencies
+-(void)didFinishSelectionForWindow:(TTCurrencySelectionWindow *)window currencies:(NSArray *)currencies
 {
     [window close];
 }
@@ -108,10 +102,10 @@ NSString *const kFocusedAdvancedControlIndex = @"FocusedAdvancedControlIndex";
 
 -(void)presentCurrencySelectionScreen
 {
-    NSRect r = [[NSScreen mainScreen]visibleFrame];
     if (!self.orderBookWindow)
     {
-        [self setOrderBookWindow:[[TTNewOrderBookWindow alloc]initWithContentRect:(NSRect){CGRectGetMidX(r) - (defaultWelcomeWindowSize.width / 2), CGRectGetHeight(r) - (defaultWelcomeWindowSize.height + 150), defaultWelcomeWindowSize} styleMask:(NSTitledWindowMask | NSClosableWindowMask | NSMiniaturizableWindowMask | NSResizableWindowMask) backing:NSBackingStoreBuffered defer:YES]];
+        NSRect r = [[NSScreen mainScreen]visibleFrame];
+        [self setOrderBookWindow:[[TTCurrencySelectionWindow alloc]initWithContentRect:(NSRect){CGRectGetMidX(r) - (defaultWelcomeWindowSize.width / 2), CGRectGetHeight(r) - (defaultWelcomeWindowSize.height + 150), defaultWelcomeWindowSize} styleMask:(NSTitledWindowMask | NSClosableWindowMask | NSMiniaturizableWindowMask | NSResizableWindowMask) backing:NSBackingStoreBuffered defer:YES]];
     }
     [self.orderBookWindow setOrderBookWindowDelegate:self];
     [self.orderBookWindow makeKeyAndOrderFront:self];

@@ -27,17 +27,22 @@
     [[NSUserDefaults standardUserDefaults]setSecret:kTTSecureUserDefaultsSecretKey];
     NSString* apiK = [[NSUserDefaults standardUserDefaults]secretStringForKey:kTTUserDefaultsMTGOXAPIKey];
     NSString* apiS = [[NSUserDefaults standardUserDefaults]secretStringForKey:kTTUserDefaultsMTGOXAPISECRET];
-    _apiKey = [apiK copy];
-    _apiSecret = [apiS copy];
-    if (apiK && apiS)
-        return YES;
+    if (apiK)
+    {
+        _apiKey = [apiK copy];
+        if (_apiSecret)
+        {
+            _apiSecret = [apiS copy];
+            return YES;
+        }
+        return NO;
+    }
     else
     {
         apiK = nil;
         apiS = nil;
         return NO;
     }
-    
 }
 
 -(void)loadKeysWithCompletionBlock:(void (^) (NSNumber* result))completionBlock
