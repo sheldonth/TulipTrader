@@ -88,7 +88,7 @@ NSString *const kFocusedAdvancedControlIndex = @"FocusedAdvancedControlIndex";
 
 -(void)showBrowser
 {
-    
+    NSLog(@"!");
 }
 
 #pragma mark - TTNewOrderBookWindowDelegate

@@ -9,7 +9,7 @@
 #import "TTOERatesController.h"
 #import "TTCurrency.h"
 #import "RUConstants.h"
-#import "JSONKit.h"
+//#import "JSONKit.h"
 
 @interface TTOERatesController ()
 
@@ -131,8 +131,10 @@ NSURL* urlForDataWithBaseCurrency(TTCurrency baseCurrency)
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection
 {
-    NSString* responseJsonStr = [[NSString alloc]initWithData:_requestData encoding:NSUTF8StringEncoding];
-    NSDictionary* dict = [responseJsonStr objectFromJSONString];
+//    NSString* responseJsonStr = [[NSString alloc]initWithData:_requestData encoding:NSUTF8StringEncoding];
+//    NSDictionary* dict = [responseJsonStr objectFromJSONString];
+    NSError* e = nil;
+    NSDictionary* dict = [NSJSONSerialization JSONObjectWithData:_requestData options:0 error:&e];
     NSNumber* n = [dict objectForKey:@"timestamp"];
     NSDate* d = [NSDate dateWithTimeIntervalSince1970:[n doubleValue]];
     [self setLastLoadedDate:d];

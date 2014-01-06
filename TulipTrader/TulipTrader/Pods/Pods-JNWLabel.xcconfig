@@ -1,0 +1,1 @@
+PODS_JNWLABEL_OTHER_LDFLAGS = -framework QuartzCore

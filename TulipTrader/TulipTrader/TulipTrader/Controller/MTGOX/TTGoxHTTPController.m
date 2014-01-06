@@ -12,7 +12,7 @@
 #import "TTDepthOrder.h"
 //#import "Trade.h"
 #import "RUConstants.h"
-#import "JSONKit.h"
+//#import "JSONKit.h"
 //#import "TTAPIControlBoxView.h"
 #import "TTAppDelegate.h"
 #import "TTGoxHTTPClient.h"
@@ -66,8 +66,10 @@ TTGoxTransactionType transactionForIdentifier(NSString* identifier)
 {
     NSString* path = @"BTCUSD/money/info";
     [self.networkSecure postPath:path parameters:@{@"test": @"object"} success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        NSString* str = [[NSString alloc]initWithData:responseObject encoding:NSUTF8StringEncoding];
-        NSDictionary* d = [str objectFromJSONString];
+//        NSString* str = [[NSString alloc]initWithData:responseObject encoding:NSUTF8StringEncoding];
+//        NSDictionary* d = [str objectFromJSONString];
+        NSError* e = nil;
+        NSDictionary* d = [NSJSONSerialization JSONObjectWithData:responseObject options:0 error:&e];
         if (![[d objectForKey:@"result"]isEqualToString:@"success"])
             failBlock(nil);
         else
@@ -80,8 +82,10 @@ TTGoxTransactionType transactionForIdentifier(NSString* identifier)
 -(void)getFullDepthForCurrency:(TTCurrency)currency withCompletion:(void (^)(NSArray *bids, NSArray *asks, NSDictionary *maxMinTicks))completionBlock withFailBlock:(void (^)(NSError* error))failBlock
 {
     [self.networkSecure postPath:RUStringWithFormat(@"BTC%@/money/depth/full", stringFromCurrency(currency)) parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        NSString* a = [[NSString alloc]initWithData:(NSData*)responseObject encoding:NSUTF8StringEncoding];
-        NSDictionary* responseDictionary = [a objectFromJSONString];
+//        NSString* a = [[NSString alloc]initWithData:(NSData*)responseObject encoding:NSUTF8StringEncoding];
+//        NSDictionary* responseDictionary = [a objectFromJSONString];
+        NSError* e = nil;
+        NSDictionary* responseDictionary = [NSJSONSerialization JSONObjectWithData:responseObject options:0 error:&e];
         NSDictionary* data = [responseDictionary objectForKey:@"data"];
         
         NSMutableArray* bidObjects = [NSMutableArray array];
@@ -116,8 +120,10 @@ TTGoxTransactionType transactionForIdentifier(NSString* identifier)
 -(void)getDepthForCurrency:(TTCurrency)currency withCompletion:(void (^)(NSArray *bids, NSArray *asks, NSDictionary *maxMinTicks))completionBlock withFailBlock:(void (^)(NSError* error))failBlock
 {
     [self.networkSecure postPath:RUStringWithFormat(@"BTC%@/money/depth/fetch", stringFromCurrency(currency)) parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        NSString* a = [[NSString alloc]initWithData:(NSData*)responseObject encoding:NSUTF8StringEncoding];
-        NSDictionary* responseDictionary = [a objectFromJSONString];
+//        NSString* a = [[NSString alloc]initWithData:(NSData*)responseObject encoding:NSUTF8StringEncoding];
+//        NSDictionary* responseDictionary = [a objectFromJSONString];
+        NSError* e = nil;
+        NSDictionary* responseDictionary = [NSJSONSerialization JSONObjectWithData:responseObject options:0 error:&e];
         NSDictionary* data = [responseDictionary objectForKey:@"data"];
 
         NSMutableArray* bidObjects = [NSMutableArray array];
@@ -165,9 +171,11 @@ TTGoxTransactionType transactionForIdentifier(NSString* identifier)
         array = [NSMutableArray array];
     
     [self.networkSecure postPath:RUStringWithFormat(@"money/wallet/history") parameters:paramDic success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        NSString* a = [[NSString alloc]initWithData:(NSData *)responseObject encoding:NSUTF8StringEncoding];
+//        NSString* a = [[NSString alloc]initWithData:(NSData *)responseObject encoding:NSUTF8StringEncoding];
         
-        NSDictionary* responseDictionary = [a objectFromJSONString];
+//        NSDictionary* responseDictionary = [a objectFromJSONString];
+        NSError* e = nil;
+        NSDictionary* responseDictionary = [NSJSONSerialization JSONObjectWithData:responseObject options:0 error:&e];
         
         NSDictionary* dataResults = [responseDictionary objectForKey:@"data"];
         
@@ -304,8 +312,10 @@ TTGoxTransactionType transactionForIdentifier(NSString* identifier)
             break;
     }
     [self.networkSecure postPath:@"BTCUSD/money/order/add" parameters:paramDic success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        NSString* result = [[NSString alloc]initWithData:responseObject encoding:NSUTF8StringEncoding];
-        NSDictionary* d = [result objectFromJSONString];
+//        NSString* result = [[NSString alloc]initWithData:responseObject encoding:NSUTF8StringEncoding];
+//        NSDictionary* d = [result objectFromJSONString];
+        NSError* e = nil;
+        NSDictionary* d = [NSJSONSerialization JSONObjectWithData:responseObject options:0 error:&e];
         NSString* resultStr = [d objectForKey:@"result"];
         if ([resultStr isEqualToString:@"success"])
             completionBlock(YES, d);
@@ -335,8 +345,10 @@ TTGoxTransactionType transactionForIdentifier(NSString* identifier)
     }
     
     [self.networkSecure postPath:RUStringWithFormat(@"BTCUSD/money/order/quote") parameters:paramDic success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        NSString* s = [[NSString alloc]initWithData:responseObject encoding:NSUTF8StringEncoding];
-        NSDictionary* d = [s objectFromJSONString];
+//        NSString* s = [[NSString alloc]initWithData:responseObject encoding:NSUTF8StringEncoding];
+//        NSDictionary* d = [s objectFromJSONString];
+        NSError* e = nil;
+        NSDictionary* d = [NSJSONSerialization JSONObjectWithData:responseObject options:0 error:&e];
         NSNumber* n = [[d objectForKey:@"data"]objectForKey:@"amount"];
         completion(n);
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
@@ -347,8 +359,10 @@ TTGoxTransactionType transactionForIdentifier(NSString* identifier)
 -(void)getAccountWebSocketKeyWithCompletion:(void (^)(NSString* accountKey))completion failBlock:(void (^)(NSError* e))failBlock
 {
     [self.networkSecure postPath:@"BTCUSD/money/idkey" parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        NSString* s = [[NSString alloc]initWithData:(NSData*)responseObject encoding:NSUTF8StringEncoding];
-        NSDictionary* d = [s objectFromJSONString];
+//        NSString* s = [[NSString alloc]initWithData:(NSData*)responseObject encoding:NSUTF8StringEncoding];
+//        NSDictionary* d = [s objectFromJSONString];
+        NSError* e = nil;
+        NSDictionary* d = [NSJSONSerialization JSONObjectWithData:responseObject options:0 error:&e];
         NSString* accountKey = [d objectForKey:@"data"];
         completion(accountKey);
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {

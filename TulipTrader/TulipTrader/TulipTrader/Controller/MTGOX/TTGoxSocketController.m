@@ -9,7 +9,7 @@
 
 #import "TTGoxSocketController.h"
 #import "RUConstants.h"
-#import "JSONKit.h"
+//#import "JSONKit.h"
 #import "TTGoxHTTPController.h"
 #import "RUClassOrNilUtil.h"
 #import "TTTicker.h"
@@ -88,14 +88,18 @@ NSString* const kTTGoxSocketDepthChannelID  = @"24e67e0d-1cad-4cc0-9e7a-f8523ef4
 {
     NSDictionary* d = @{@"channel" : channelID, @"op" : @"mtgox.subscribe"};
     
-    [self write:[d JSONString]];
+//    [self write:[d JSONString]];
+    NSError* e = nil;
+    [self writeData:[NSJSONSerialization dataWithJSONObject:d options:0 error:&e]];
 }
 
 -(void)subscribeToKeyID:(NSString*)channelID
 {
     NSDictionary* d = @{@"key" : channelID, @"op" : @"mtgox.subscribe"};
     
-    [self write:[d JSONString]];
+//    [self write:[d JSONString]];
+    NSError* e = nil;
+    [self writeData:[NSJSONSerialization dataWithJSONObject:d options:0 error:&e]];
 }
 
 -(BOOL)usesWebsocketURL

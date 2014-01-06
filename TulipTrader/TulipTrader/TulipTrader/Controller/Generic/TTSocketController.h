@@ -44,6 +44,7 @@ typedef enum{
 
 -(void)openWithCurrency:(TTCurrency)currency;
 -(void)write:(NSString*)utfString;
+-(void)writeData:(NSData*)d;
 
 -(NSString*)websocketURL;
 -(NSString*)socketIOURL;

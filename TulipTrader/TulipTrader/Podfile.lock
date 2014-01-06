@@ -1,7 +1,6 @@
 PODS:
   - CocoaSecurity (1.2.2)
   - JNWLabel (1.0)
-  - JSONKit (1.5pre)
   - MASPreferences (1.1)
   - SecureNSUserDefaults (1.0.0):
     - CocoaSecurity (~> 1.2.1)
@@ -9,7 +8,6 @@ PODS:
 
 DEPENDENCIES:
   - JNWLabel (~> 1.0)
-  - JSONKit (~> 1.5pre)
   - MASPreferences (~> 1.1)
   - SecureNSUserDefaults (~> 1.0.0)
   - SocketRocket (~> 0.3.1-beta2)
@@ -17,9 +15,8 @@ DEPENDENCIES:
 SPEC CHECKSUMS:
   CocoaSecurity: f53058286161eca4483a8e7370d7c99e85e4a592
   JNWLabel: db96e58de46a863b622275e45847af5be7aa59c9
-  JSONKit: 409734ab3407fce90ef7eaa95d7168f38d9a6601
   MASPreferences: 103fda1283c701dfed5503edbe24b1ab504ed6d9
   SecureNSUserDefaults: 4bce99f87ef50cca20146dfe50a34288eb3ff24f
   SocketRocket: 7ac946bcce46287a791dfff3c1f8daa692821dae
 
-COCOAPODS: 0.19.1
+COCOAPODS: 0.28.0

@@ -8,7 +8,7 @@
 
 #import "TTSocketController.h"
 #import "RUConstants.h"
-#import "JSONKit.h"
+//#import "JSONKit.h"
 
 NSString* const kTTWebsocketFrameOpenNSString = @"{";
 NSString* const kTTWebsocketFrameCloseNSString = @"}";
@@ -72,6 +72,11 @@ NSString* const kTTWebsocketFrameCloseNSString = @"}";
     [_socketConn open];
 }
 
+-(void)writeData:(NSData*)d
+{
+    [_socketConn send:d];
+}
+
 -(void)write:(NSString *)utfString
 {
     [_socketConn send:[utfString dataUsingEncoding:NSUTF8StringEncoding]];
@@ -89,9 +94,9 @@ NSString* const kTTWebsocketFrameCloseNSString = @"}";
     
     if (![stringFromUnichar(firstCharacter) isEqualToString:kTTWebsocketFrameOpenNSString] && ![stringFromUnichar(lastCharacter)isEqualToString:kTTWebsocketFrameCloseNSString])
         [NSException raise:@"TTBadMessageFrameUnichar" format:@"Message frame open/close was bad"];
-    
-    NSDictionary* keyValues = [mutableStringMessage objectFromJSONString];
-    
+    NSError* e = nil;
+//    NSDictionary* keyValues = [mutableStringMessage objectFromJSONString];
+    NSDictionary* keyValues = [NSJSONSerialization JSONObjectWithData:[mutableStringMessage dataUsingEncoding:NSUTF8StringEncoding] options:0 error:&e];
     return keyValues;
 }
 
